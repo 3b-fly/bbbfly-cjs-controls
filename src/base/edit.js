@@ -69,7 +69,7 @@ bbbfly.edit._normalizeButtons = function(def){
  * @class
  * @type control
  * @extends ngEdit
- * @implements bbbfly.hint.Hintify
+ * @implements bbbfly.hint.Hintified
  *
  * @description
  *   Implements {@link bbbfly.hint.Hintified|Hintified} interface

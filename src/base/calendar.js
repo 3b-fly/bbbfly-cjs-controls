@@ -14,7 +14,6 @@ var bbbfly = bbbfly || {};
  * @type control
  * @extends ngEditDate
  * @extends bbbfly.Edit
- * @implements bbbfly.Edit
  *
  * @description
  *   Implements {@link bbbfly.Edit|Edit} features
@@ -38,7 +37,6 @@ bbbfly.EditDate = function(def,ref,parent){
  * @type control
  * @extends ngEditTime
  * @extends bbbfly.Edit
- * @implements bbbfly.Edit
  *
  * @description
  *   Implements {@link bbbfly.Edit|Edit} features

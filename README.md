@@ -39,15 +39,15 @@
 
   1. Go to MyProject 🡪 Properties 🡪 Controls.js
   2. Click "Add Library..." button
-  3. Paste [https://raw.githubusercontent.com/3b-fly/bbbfly-cjs/master/build/](https://raw.githubusercontent.com/3b-fly/bbbfly-cjs/master/build/) into "Library path / URL" field.
+  3. Paste [https://raw.githubusercontent.com/3b-fly/bbbfly-cjs-controls/master/build/](https://raw.githubusercontent.com/3b-fly/bbbfly-cjs-controls/master/build/) into "Library path / URL" field.
   4. Click "Add" button
   5. Choose type of library intallation
   6. Click "Add" button to finish
 
 - **Controls.js Form Editor**
 
-  1. Download [bbbfly-cjs](https://github.com//3b-fly/bbbfly-cjs/archive/master.zip)
-  2. Unzip build directory into your libraries location and rename it to "bbbfly-cjs".
+  1. Download [bbbfly-cjs-controls](https://github.com//3b-fly/bbbfly-cjs-controls/archive/master.zip)
+  2. Unzip build directory into your libraries location and rename it to "bbbfly-cjs-controls".
   3. Go to Options 🡪 Project Files
   4. Click "Add Library..." button
   5. Fill path to unzipped directory into "Library path / URL" field.

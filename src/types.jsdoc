@@ -1,11 +1,7 @@
 /**
- * @fileOverview Types set.
- * @author 3b-fly [support@3b-fly.eu]
- * @copyright Jan Nejedly 2015
- * @version 1.0.1
+ * @fileOverview Types definition.
+ * @private
  */
-
-/** @namespace bbbfly */
 
 /** @typedef {integer} px */
 /** @typedef {string} percentage */

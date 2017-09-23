@@ -13,7 +13,7 @@ var bbbfly = bbbfly || {};
  * @class
  * @type control
  * @extends ngButton
- * @implements bbbfly.hint.Hintify
+ * @implements bbbfly.hint.Hintified
  *
  * @description
  *   Implements {@link bbbfly.hint.Hintified|Hintified} interface
@@ -35,7 +35,7 @@ bbbfly.Button = function(def,ref,parent){
  * @class
  * @type control
  * @extends ngCheckBox
- * @implements bbbfly.hint.Hintify
+ * @implements bbbfly.hint.Hintified
  *
  * @description
  *   Implements {@link bbbfly.hint.Hintified|Hintified} interface
@@ -57,7 +57,7 @@ bbbfly.CheckBox = function(def,ref,parent){
  * @class
  * @type control
  * @extends ngRadioButton
- * @implements bbbfly.hint.Hintify
+ * @implements bbbfly.hint.Hintified
  *
  * @description
  *   Implements {@link bbbfly.hint.Hintified|Hintified} interface
