@@ -1,0 +1,68 @@
+/**
+ * @fileOverview Packages definition.
+ * @private
+ */
+
+/** @namespace bbbfly */
+
+/**
+ * @package button
+ *
+ * @version 2.0.0
+ *
+ * @requires {@link http://controlsjs.com/|controls.js (5.0.0): Controls.js}
+ */
+
+/**
+ * @package calendar
+ *
+ * @version 2.0.0
+ *
+ * @requires {@link http://controlsjs.com/|controls.js (5.0.0): Controls.js}
+ * @requires {@link package:edit|bbbfly-cjs-controls (2.0.0): edit}
+ */
+
+/**
+ * @package edit
+ *
+ * @version 2.0.0
+ *
+ * @requires {@link http://controlsjs.com/|controls.js (5.0.0): Controls.js}
+ * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.0): crossbrowser}
+ */
+
+/**
+ * @package hint
+ *
+ * @version 2.0.0
+ *
+ * @requires {@link http://controlsjs.com/|controls.js (5.0.0): Controls.js}
+ */
+
+/**
+ * @package list
+ *
+ * @version 2.0.0
+ *
+ * @requires {@link http://controlsjs.com/|controls.js (5.0.0): Controls.js}
+ * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.0): crossbrowser}
+ */
+
+/**
+ * @package menu
+ *
+ * @version 2.0.0
+ *
+ * @requires {@link http://controlsjs.com/|controls.js (5.0.0): Controls.js}
+ * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.0): crossbrowser}
+ */
+
+/**
+ * @package search
+ *
+ * @version 2.0.0
+ *
+ * @requires {@link http://controlsjs.com/|controls.js (5.0.0): Controls.js}
+ * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.0): crossbrowser}
+ * @requires {@link package:edit|bbbfly-cjs-controls (2.0.0): edit}
+ */

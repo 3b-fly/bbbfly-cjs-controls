@@ -1,0 +1,57 @@
+/**
+ * @fileOverview Types set.
+ * @author 3b-fly [support@3b-fly.eu]
+ * @copyright Jan Nejedly 2015
+ * @version 1.0.1
+ */
+
+/** @namespace bbbfly */
+
+/** @typedef {integer} px */
+/** @typedef {string} percentage */
+/** @typedef {string} color */
+/** @typedef {string} resource */
+/** @typedef {string} url */
+
+/**
+ * @typedef {object} bounds
+ * @property {px|percentage|null} [T=undefined]
+ * @property {px|percentage|null} [R=undefined]
+ * @property {px|percentage|null} [B=undefined]
+ * @property {px|percentage|null} [L=undefined]
+ * @property {px|percentage|null} [W=undefined]
+ * @property {px|percentage|null} [H=undefined]
+ */
+
+/**
+ * @typedef {object} image
+ * @property {px} L
+ * @property {px} T
+ * @property {px} W
+ * @property {px} H
+ * @property {url} Src
+ */
+
+/**
+ * @typedef {object} frame
+ * @property {image} LeftTop
+ * @property {image} RightTop
+ * @property {image} LeftBottom
+ * @property {image} RightBottom
+ * @property {image} Left
+ * @property {image} Top
+ * @property {image} Right
+ * @property {image} Bottom
+ */
+
+/**
+ * @typedef {object} anchor
+ * @property {px} [L=undefined]
+ * @property {px} [T=undefined]
+ * @property {px} [R=undefined]
+ * @property {px} [B=undefined]
+ * @property {px} HX
+ * @property {px} HY
+ * @property {image} Img
+ */
+

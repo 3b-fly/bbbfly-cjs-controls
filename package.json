@@ -1,0 +1,19 @@
+{
+  "name": "bbbfly-cjs-controls",
+  "version": "2.0.0",
+  "description": "3b-fly's controls for Controls.js",
+  "releaseyear": "2017",
+  "author": {
+    "name": "Jan Nejedly",
+    "email": "support@3b-fly.eu"
+  },
+  "license": "see license in 'LICENSE' file",
+  "dependencies": {
+    "grunt": "~0.4.5",
+    "grunt-banner": "~0.6.0",
+    "grunt-closure-tools": "~1.0.0",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-copy": "~1.0.0",
+    "grunt-stripcomments": "~0.7.2"
+  }
+}

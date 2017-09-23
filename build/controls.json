@@ -1,0 +1,152 @@
+{
+  "Lib": "bbbfly-cjs-controls",
+  "Version": "2.0.0",
+  "Name": "3b-fly's controls for Controls.js",
+  "Copyright": "Jan Nejedly",
+  "RequiredLibraries": {
+    "controls.js": "5.0.0",
+    "bbbfly-cjs": "2.0.0",
+    "bbbfly-cjs-controls": "2.0.0"
+  },
+  "Packages": {
+    "hint": {
+      "DebugFiles": [
+        "debug/base/hint.js"
+      ],
+      "ReleaseFiles": [
+        "release/base/hint.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        }
+      }
+    },
+    "button": {
+      "DebugFiles": [
+        "debug/base/button.js"
+      ],
+      "ReleaseFiles": [
+        "release/base/button.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        }
+      }
+    },
+    "edit": {
+      "DebugFiles": [
+        "debug/base/edit.js"
+      ],
+      "ReleaseFiles": [
+        "release/base/edit.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        },
+        "bbbfly-cjs": {
+          "Packages": [
+            "crossbrowser"
+          ]
+        }
+      }
+    },
+    "search": {
+      "DebugFiles": [
+        "debug/base/search.js",
+        "debug/base/lang/search_cs.js",
+        "debug/base/lang/search_en.js"
+      ],
+      "ReleaseFiles": [
+        "release/base/search.js",
+        "release/base/lang/search_cs.js",
+        "release/base/lang/search_en.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        },
+        "bbbfly-cjs": {
+          "Packages": [
+            "crossbrowser"
+          ]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": [
+            "edit"
+          ]
+        }
+      }
+    },
+    "calendar": {
+      "DebugFiles": [
+        "debug/base/calendar.js"
+      ],
+      "ReleaseFiles": [
+        "release/base/calendar.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": [
+            "edit"
+          ]
+        }
+      }
+    },
+    "list": {
+      "DebugFiles": [
+        "debug/base/list.js"
+      ],
+      "ReleaseFiles": [
+        "release/base/list.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        },
+        "bbbfly-cjs": {
+          "Packages": [
+            "crossbrowser"
+          ]
+        }
+      }
+    },
+    "menu": {
+      "DebugFiles": [
+        "debug/base/menu.js"
+      ],
+      "ReleaseFiles": [
+        "release/base/menu.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        },
+        "bbbfly-cjs": {
+          "Packages": [
+            "crossbrowser"
+          ]
+        }
+      }
+    }
+  }
+}
