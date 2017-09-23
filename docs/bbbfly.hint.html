@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Namespace: hint</title>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/jaguar.css">
+    <link type="text/css" rel="stylesheet" href="styles/prism.css">
+</head>
+<body>
+<div id="wrap" class="clearfix">
+<style type="text/css">::-webkit-scrollbar {
+  width: 8px;
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: gray;
+  border-radius: 4px;
+}
+.navigation {
+  position: fixed;
+  left: 0px;
+  width: 367px;
+  height: 100%;
+  background-color: #1a1a1a;
+}
+.navigation .icon {
+  display: block;
+  width: 32px;
+  height: 32px;
+  outline: 0;
+  opacity: 0.5;
+  -moz-opacity: 0.5;
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=50);
+}
+.navigation .icon:hover {
+  opacity: 1;
+  -moz-opacity: 1;
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=100);
+}
+.navigation .applicationName {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 10px;
+  margin: 0px 0px 0px 63px;
+  padding: 10px 15px;
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.navigation .applicationName a {
+  outline: 0;
+  color: #ffffff;
+  text-decoration: none;
+}
+.navigation .applicationName a:hover,
+.navigation .applicationName a:focus {
+  color: #cccccc;
+  text-decoration: underline;
+}
+.navigation .icons {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 60px;
+  height: 32px;
+  padding: 0px 15px;
+  margin-left: 63px;
+}
+.navigation .icons .icon.index,
+.navigation .icons .icon.tutorials {
+  float: left;
+  margin-right: 5px;
+}
+.navigation .icons .icon.files,
+.navigation .icons .icon.packages,
+.navigation .icons .icon.globals {
+  float: right;
+  margin-left: 5px;
+}
+.navigation .search {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 102px;
+  padding: 0px 15px;
+  margin-left: 63px;
+}
+.navigation .search input {
+  width: 90%;
+  padding: 4px 5% 4px 5%;
+  font-size: 12px;
+  line-height: 20px;
+  border: 1px solid #555555;
+  background-color: #333333;
+  color: #ffffff;
+  display: none;
+}
+.navigation .list {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 147px;
+  bottom: 0px;
+  overflow: auto;
+  padding: 0px 15px;
+  margin-left: 63px;
+}
+.navigation li.item {
+  border-top: 1px solid #333333;
+}
+.navigation li.item a {
+  outline: 0;
+  color: #bbbbbb;
+  text-decoration: none;
+}
+.navigation li.item a:hover,
+.navigation li.item a:focus {
+  color: #fff;
+}
+.navigation li.item .title {
+  cursor: default;
+  position: relative;
+  display: block;
+  font-size: 13px;
+  padding: 8px 0px;
+  min-height: 17px;
+}
+.navigation li.item .title a {
+  outline: 0;
+  color: #e1e1e1;
+  text-decoration: none;
+}
+.navigation li.item .title a:hover,
+.navigation li.item .title a:focus {
+  color: #fff;
+}
+.navigation li.item .title .type-signature {
+  position: relative;
+  display: block;
+  border-radius: 3px;
+  font-size: 11px;
+  padding: 2px 5px;
+  float: right;
+  margin-left: 6px;
+  border: 1px solid #808080;
+  color: #808080;
+}
+.navigation li.item .title .type-signature.static {
+  border-width: 0px;
+  background-color: #779c34;
+  color: #000000;
+}
+.navigation li.item .title .type-signature.abstract {
+  border-width: 0px;
+  background-color: #d96629;
+  color: #000000;
+}
+.navigation li.item .title .type-signature.module,
+.navigation li.item .title .type-signature.namespace {
+  border-width: 0px;
+  background-color: #913d9e;
+  color: #000000;
+}
+.navigation li.item .title .type-signature.number,
+.navigation li.item .title .type-signature.integer,
+.navigation li.item .title .type-signature.float,
+.navigation li.item .title .type-signature.boolean,
+.navigation li.item .title .type-signature.array,
+.navigation li.item .title .type-signature.string {
+  border-width: 0px;
+  background-color: #808080;
+  color: #000000;
+}
+.navigation li.item .title .type-signature.object,
+.navigation li.item .title .type-signature.class {
+  border-width: 0px;
+  background-color: #3978ae;
+  color: #000000;
+}
+.navigation li.item .title .type-signature.control {
+  border-width: 0px;
+  background-color: #b19915;
+  color: #000000;
+}
+.navigation li.item .subtitle {
+  cursor: default;
+  font-size: 10px;
+  font-weight: bold;
+  color: #779c34;
+  display: block;
+}
+.navigation li.item .itemMembers {
+  margin-bottom: 10px;
+}
+.navigation li.item .itemMembers li {
+  margin-top: 2px;
+}
+.navigation li.item ul > li {
+  font-size: 11px;
+  padding-left: 8px;
+}
+.navigation .socialLinks {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 32px;
+  padding: 102px 15px 15px 15px;
+  border-right: 1px solid #333333;
+}
+.navigation .socialLinks .icon {
+  margin-bottom: 10px;
+}
+</style>
+<div class="navigation">
+  <h3 class="applicationName">
+    bbbfly-cjs-controls
+  </h3>
+  <div class="icons">
+    <a href="index.html" class="icon index">
+      <img src="icons/navigation/home.png" alt="Index" title="Index"/>
+    </a>
+      <a href="files.html" class="icon files">
+        <img src="icons/navigation/file.png" alt="Files" title="Files"/>
+      </a>
+      <a href="packages.html" class="icon packages">
+        <img src="icons/navigation/package.png" alt="Packages" title="Packages"/>
+      </a>
+      <a href="global.html" class="icon globals">
+        <img src="icons/navigation/global.png" alt="Globals" title="Globals"/>
+      </a>
+  </div>
+  <div class="search">
+    <input id="nav-search" type="text" placeholder="Search Documentations"/>
+  </div>
+  <ul id="nav-list" class="list">
+<li class="item" data-name="bbbfly">
+  <span class="title">
+    <a href="bbbfly.html">bbbfly</a>
+        <span class="type-signature namespace">
+          namespace
+        </span>
+  </span>
+    <ul class="sublist">
+<li class="item" data-name="bbbfly.hint">
+  <span class="title">
+    <a href="bbbfly.hint.html">bbbfly.hint</a>
+        <span class="type-signature namespace">
+          namespace
+        </span>
+  </span>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Interfaces</span>
+        <li data-name="bbbfly.hint.Hintified">
+          <a href="bbbfly.hint.Hintified.html">Hintified</a>
+        </li>
+    </ul>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.hint.Hintify">
+          <a href="bbbfly.hint.html#.Hintify">Hintify</a>
+        </li>
+    </ul>
+</li>
+<li class="item" data-name="bbbfly.Button">
+  <span class="title">
+    <a href="bbbfly.Button.html">bbbfly.Button</a>
+        <span class="type-signature control">
+          control
+        </span>
+        <span class="type-signature class">
+          class
+        </span>
+  </span>
+</li>
+<li class="item" data-name="bbbfly.CheckBox">
+  <span class="title">
+    <a href="bbbfly.CheckBox.html">bbbfly.CheckBox</a>
+        <span class="type-signature control">
+          control
+        </span>
+        <span class="type-signature class">
+          class
+        </span>
+  </span>
+</li>
+<li class="item" data-name="bbbfly.DropDownList">
+  <span class="title">
+    <a href="bbbfly.DropDownList.html">bbbfly.DropDownList</a>
+        <span class="type-signature control">
+          control
+        </span>
+        <span class="type-signature class">
+          class
+        </span>
+  </span>
+    <ul class="members itemMembers">
+      <span class="subtitle">Properties</span>
+        <li data-name="ShowIcon">
+          <a href="bbbfly.DropDownList.html#property:ShowIcon">ShowIcon</a>
+        </li>
+        <li data-name="DefaultIconImg">
+          <a href="bbbfly.DropDownList.html#property:DefaultIconImg">DefaultIconImg</a>
+        </li>
+    </ul>
+</li>
+<li class="item" data-name="bbbfly.Edit">
+  <span class="title">
+    <a href="bbbfly.Edit.html">bbbfly.Edit</a>
+        <span class="type-signature control">
+          control
+        </span>
+        <span class="type-signature class">
+          class
+        </span>
+  </span>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Interfaces</span>
+        <li data-name="bbbfly.Edit.Button">
+          <a href="bbbfly.Edit.Button.html">Button</a>
+        </li>
+    </ul>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.Edit#GetButton">
+          <a href="bbbfly.Edit.html#GetButton">GetButton</a>
+        </li>
+        <li data-name="bbbfly.Edit#SetFocusAfter">
+          <a href="bbbfly.Edit.html#SetFocusAfter">SetFocusAfter</a>
+        </li>
+        <li data-name="bbbfly.Edit#SetFocusBefore">
+          <a href="bbbfly.Edit.html#SetFocusBefore">SetFocusBefore</a>
+        </li>
+    </ul>
+</li>
+<li class="item" data-name="bbbfly.EditDate">
+  <span class="title">
+    <a href="bbbfly.EditDate.html">bbbfly.EditDate</a>
+        <span class="type-signature control">
+          control
+        </span>
+        <span class="type-signature class">
+          class
+        </span>
+  </span>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.EditDate#GetButton">
+          <a href="bbbfly.EditDate.html#GetButton">GetButton</a>
+        </li>
+        <li data-name="bbbfly.EditDate#SetFocusAfter">
+          <a href="bbbfly.EditDate.html#SetFocusAfter">SetFocusAfter</a>
+        </li>
+        <li data-name="bbbfly.EditDate#SetFocusBefore">
+          <a href="bbbfly.EditDate.html#SetFocusBefore">SetFocusBefore</a>
+        </li>
+    </ul>
+</li>
+<li class="item" data-name="bbbfly.EditTime">
+  <span class="title">
+    <a href="bbbfly.EditTime.html">bbbfly.EditTime</a>
+        <span class="type-signature control">
+          control
+        </span>
+        <span class="type-signature class">
+          class
+        </span>
+  </span>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.EditTime#GetButton">
+          <a href="bbbfly.EditTime.html#GetButton">GetButton</a>
+        </li>
+        <li data-name="bbbfly.EditTime#SetFocusAfter">
+          <a href="bbbfly.EditTime.html#SetFocusAfter">SetFocusAfter</a>
+        </li>
+        <li data-name="bbbfly.EditTime#SetFocusBefore">
+          <a href="bbbfly.EditTime.html#SetFocusBefore">SetFocusBefore</a>
+        </li>
+    </ul>
+</li>
+<li class="item" data-name="bbbfly.List">
+  <span class="title">
+    <a href="bbbfly.List.html">bbbfly.List</a>
+        <span class="type-signature control">
+          control
+        </span>
+        <span class="type-signature class">
+          class
+        </span>
+  </span>
+    <ul class="members itemMembers">
+      <span class="subtitle">Properties</span>
+        <li data-name="DefaultIndent">
+          <a href="bbbfly.List.html#property:DefaultIndent">DefaultIndent</a>
+        </li>
+        <li data-name="ListIndent">
+          <a href="bbbfly.List.html#property:ListIndent">ListIndent</a>
+        </li>
+        <li data-name="Invalid">
+          <a href="bbbfly.List.html#property:Invalid">Invalid</a>
+        </li>
+        <li data-name="HighlightClass">
+          <a href="bbbfly.List.html#property:HighlightClass">HighlightClass</a>
+        </li>
+        <li data-name="HighlightInterval">
+          <a href="bbbfly.List.html#property:HighlightInterval">HighlightInterval</a>
+        </li>
+        <li data-name="HighlightFlashCnt">
+          <a href="bbbfly.List.html#property:HighlightFlashCnt">HighlightFlashCnt</a>
+        </li>
+        <li data-name="Columns">
+          <a href="bbbfly.List.html#property:Columns">Columns</a>
+        </li>
+        <li data-name="Items">
+          <a href="bbbfly.List.html#property:Items">Items</a>
+        </li>
+    </ul>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.List#CollapseItems">
+          <a href="bbbfly.List.html#CollapseItems">CollapseItems</a>
+        </li>
+        <li data-name="bbbfly.List#DoSetInvalid">
+          <a href="bbbfly.List.html#DoSetInvalid">DoSetInvalid</a>
+        </li>
+        <li data-name="bbbfly.List#ExpandItems">
+          <a href="bbbfly.List.html#ExpandItems">ExpandItems</a>
+        </li>
+        <li data-name="bbbfly.List#ExpandToItem">
+          <a href="bbbfly.List.html#ExpandToItem">ExpandToItem</a>
+        </li>
+        <li data-name="bbbfly.List#GetExpanded">
+          <a href="bbbfly.List.html#GetExpanded">GetExpanded</a>
+        </li>
+        <li data-name="bbbfly.List#HighlightItem">
+          <a href="bbbfly.List.html#HighlightItem">HighlightItem</a>
+        </li>
+        <li data-name="bbbfly.List#ScrollToItem">
+          <a href="bbbfly.List.html#ScrollToItem">ScrollToItem</a>
+        </li>
+        <li data-name="bbbfly.List#SetInvalid">
+          <a href="bbbfly.List.html#SetInvalid">SetInvalid</a>
+        </li>
+    </ul>
+    <ul class="events itemMembers">
+      <span class="subtitle">Events</span>
+        <li data-name="OnSetInvalid">
+          <a href="bbbfly.List.html#event:OnSetInvalid">OnSetInvalid</a>
+        </li>
+    </ul>
+</li>
+<li class="item" data-name="bbbfly.ListSearchBox">
+  <span class="title">
+    <a href="bbbfly.ListSearchBox.html">bbbfly.ListSearchBox</a>
+        <span class="type-signature control">
+          control
+        </span>
+        <span class="type-signature class">
+          class
+        </span>
+  </span>
+    <ul class="members itemMembers">
+      <span class="subtitle">Properties</span>
+        <li data-name="ListID">
+          <a href="bbbfly.ListSearchBox.html#property:ListID">ListID</a>
+        </li>
+        <li data-name="DownImg">
+          <a href="bbbfly.ListSearchBox.html#property:DownImg">DownImg</a>
+        </li>
+        <li data-name="UpImg">
+          <a href="bbbfly.ListSearchBox.html#property:UpImg">UpImg</a>
+        </li>
+    </ul>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.ListSearchBox#ClearSearch">
+          <a href="bbbfly.ListSearchBox.html#ClearSearch">ClearSearch</a>
+        </li>
+        <li data-name="bbbfly.ListSearchBox#CompareItem">
+          <a href="bbbfly.ListSearchBox.html#CompareItem">CompareItem</a>
+        </li>
+        <li data-name="bbbfly.ListSearchBox#DoSearch">
+          <a href="bbbfly.ListSearchBox.html#DoSearch">DoSearch</a>
+        </li>
+        <li data-name="bbbfly.ListSearchBox#GetButton">
+          <a href="bbbfly.ListSearchBox.html#GetButton">GetButton</a>
+        </li>
+        <li data-name="bbbfly.ListSearchBox#Search">
+          <a href="bbbfly.ListSearchBox.html#Search">Search</a>
+        </li>
+        <li data-name="bbbfly.ListSearchBox#SetFocusAfter">
+          <a href="bbbfly.ListSearchBox.html#SetFocusAfter">SetFocusAfter</a>
+        </li>
+        <li data-name="bbbfly.ListSearchBox#SetFocusBefore">
+          <a href="bbbfly.ListSearchBox.html#SetFocusBefore">SetFocusBefore</a>
+        </li>
+        <li data-name="bbbfly.ListSearchBox#SetSearchList">
+          <a href="bbbfly.ListSearchBox.html#SetSearchList">SetSearchList</a>
+        </li>
+        <li data-name="bbbfly.ListSearchBox#SetSearchResults">
+          <a href="bbbfly.ListSearchBox.html#SetSearchResults">SetSearchResults</a>
+        </li>
+    </ul>
+    <ul class="events itemMembers">
+      <span class="subtitle">Events</span>
+        <li data-name="OnNoSearchResults">
+          <a href="bbbfly.ListSearchBox.html#event:OnNoSearchResults">OnNoSearchResults</a>
+        </li>
+        <li data-name="OnSearch">
+          <a href="bbbfly.ListSearchBox.html#event:OnSearch">OnSearch</a>
+        </li>
+        <li data-name="OnSearchResults">
+          <a href="bbbfly.ListSearchBox.html#event:OnSearchResults">OnSearchResults</a>
+        </li>
+    </ul>
+</li>
+<li class="item" data-name="bbbfly.Menu">
+  <span class="title">
+    <a href="bbbfly.Menu.html">bbbfly.Menu</a>
+        <span class="type-signature control">
+          control
+        </span>
+        <span class="type-signature class">
+          class
+        </span>
+  </span>
+    <ul class="members itemMembers">
+      <span class="subtitle">Properties</span>
+        <li data-name="Items">
+          <a href="bbbfly.Menu.html#property:Items">Items</a>
+        </li>
+    </ul>
+</li>
+<li class="item" data-name="bbbfly.RadioButton">
+  <span class="title">
+    <a href="bbbfly.RadioButton.html">bbbfly.RadioButton</a>
+        <span class="type-signature control">
+          control
+        </span>
+        <span class="type-signature class">
+          class
+        </span>
+  </span>
+</li>
+<li class="item" data-name="bbbfly.SearchBox">
+  <span class="title">
+    <a href="bbbfly.SearchBox.html">bbbfly.SearchBox</a>
+        <span class="type-signature control">
+          control
+        </span>
+        <span class="type-signature class">
+          class
+        </span>
+  </span>
+    <ul class="members itemMembers">
+      <span class="subtitle">Properties</span>
+        <li data-name="MaxResultItems">
+          <a href="bbbfly.SearchBox.html#property:MaxResultItems">MaxResultItems</a>
+        </li>
+        <li data-name="ResultNameProperty">
+          <a href="bbbfly.SearchBox.html#property:ResultNameProperty">ResultNameProperty</a>
+        </li>
+        <li data-name="MoreItemsText_part1">
+          <a href="bbbfly.SearchBox.html#property:MoreItemsText_part1">MoreItemsText_part1</a>
+        </li>
+        <li data-name="MoreItemsText_part2">
+          <a href="bbbfly.SearchBox.html#property:MoreItemsText_part2">MoreItemsText_part2</a>
+        </li>
+    </ul>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.SearchBox#ClearSearch">
+          <a href="bbbfly.SearchBox.html#ClearSearch">ClearSearch</a>
+        </li>
+        <li data-name="bbbfly.SearchBox#DoSearch">
+          <a href="bbbfly.SearchBox.html#DoSearch">DoSearch</a>
+        </li>
+        <li data-name="bbbfly.SearchBox#GetButton">
+          <a href="bbbfly.SearchBox.html#GetButton">GetButton</a>
+        </li>
+        <li data-name="bbbfly.SearchBox#Search">
+          <a href="bbbfly.SearchBox.html#Search">Search</a>
+        </li>
+        <li data-name="bbbfly.SearchBox#SetFocusAfter">
+          <a href="bbbfly.SearchBox.html#SetFocusAfter">SetFocusAfter</a>
+        </li>
+        <li data-name="bbbfly.SearchBox#SetFocusBefore">
+          <a href="bbbfly.SearchBox.html#SetFocusBefore">SetFocusBefore</a>
+        </li>
+        <li data-name="bbbfly.SearchBox#SetSearchResults">
+          <a href="bbbfly.SearchBox.html#SetSearchResults">SetSearchResults</a>
+        </li>
+    </ul>
+    <ul class="events itemMembers">
+      <span class="subtitle">Events</span>
+        <li data-name="OnNoSearchResults">
+          <a href="bbbfly.SearchBox.html#event:OnNoSearchResults">OnNoSearchResults</a>
+        </li>
+        <li data-name="OnSearch">
+          <a href="bbbfly.SearchBox.html#event:OnSearch">OnSearch</a>
+        </li>
+        <li data-name="OnSearchResults">
+          <a href="bbbfly.SearchBox.html#event:OnSearchResults">OnSearchResults</a>
+        </li>
+    </ul>
+</li>
+<li class="item" data-name="bbbfly.SearchEdit">
+  <span class="title">
+    <a href="bbbfly.SearchEdit.html">bbbfly.SearchEdit</a>
+        <span class="type-signature control">
+          control
+        </span>
+        <span class="type-signature class">
+          class
+        </span>
+  </span>
+    <ul class="members itemMembers">
+      <span class="subtitle">Properties</span>
+        <li data-name="HintMessages">
+          <a href="bbbfly.SearchEdit.html#property:HintMessages">HintMessages</a>
+        </li>
+        <li data-name="HintMessages.noresults">
+          <a href="bbbfly.SearchEdit.html#property:HintMessages.noresults">HintMessages.noresults</a>
+        </li>
+        <li data-name="SearchImg">
+          <a href="bbbfly.SearchEdit.html#property:SearchImg">SearchImg</a>
+        </li>
+    </ul>
+    <ul class="typedefs itemMembers">
+      <span class="subtitle">Typedefs</span>
+        <li data-name="bbbfly.SearchEdit.searchResults">
+          <a href="bbbfly.SearchEdit.html#.searchResults">searchResults</a>
+        </li>
+    </ul>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.SearchEdit#ClearSearch">
+          <a href="bbbfly.SearchEdit.html#ClearSearch">ClearSearch</a>
+        </li>
+        <li data-name="bbbfly.SearchEdit#DoSearch">
+          <a href="bbbfly.SearchEdit.html#DoSearch">DoSearch</a>
+        </li>
+        <li data-name="bbbfly.SearchEdit#GetButton">
+          <a href="bbbfly.SearchEdit.html#GetButton">GetButton</a>
+        </li>
+        <li data-name="bbbfly.SearchEdit#Search">
+          <a href="bbbfly.SearchEdit.html#Search">Search</a>
+        </li>
+        <li data-name="bbbfly.SearchEdit#SetFocusAfter">
+          <a href="bbbfly.SearchEdit.html#SetFocusAfter">SetFocusAfter</a>
+        </li>
+        <li data-name="bbbfly.SearchEdit#SetFocusBefore">
+          <a href="bbbfly.SearchEdit.html#SetFocusBefore">SetFocusBefore</a>
+        </li>
+        <li data-name="bbbfly.SearchEdit#SetSearchResults">
+          <a href="bbbfly.SearchEdit.html#SetSearchResults">SetSearchResults</a>
+        </li>
+    </ul>
+    <ul class="events itemMembers">
+      <span class="subtitle">Events</span>
+        <li data-name="OnNoSearchResults">
+          <a href="bbbfly.SearchEdit.html#event:OnNoSearchResults">OnNoSearchResults</a>
+        </li>
+        <li data-name="OnSearch">
+          <a href="bbbfly.SearchEdit.html#event:OnSearch">OnSearch</a>
+        </li>
+        <li data-name="OnSearchResults">
+          <a href="bbbfly.SearchEdit.html#event:OnSearchResults">OnSearchResults</a>
+        </li>
+    </ul>
+</li>
+    </ul>
+</li>
+  </ul>
+  <div class="socialLinks">
+        <a href="mailto:support@3b-fly.eu" class="icon social">
+          <img
+            src="icons/social/email.png"
+            alt="Email"
+            title="Email"
+          />
+        </a>
+        <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls" class="icon social">
+          <img
+            src="icons/social/github.png"
+            alt="GitHub"
+            title="GitHub"
+          />
+        </a>
+  </div>
+</div>
+<script>(function(){
+  var searchBox = document.getElementById('nav-search');
+  var searchList = document.getElementById('nav-list');
+  if(!searchBox || !searchList){return;}
+  var onKeyUp = function(){
+    searchBox.search();
+  };
+  searchBox.search = function(){
+    var value = (searchBox.value)
+      ? searchBox.value.trim().toLowerCase()
+      : null;
+    var testElm = function(elm){
+      if(
+        (typeof elm.hasAttribute !== 'function')
+        || !elm.hasAttribute('data-name')
+      ){return undefined;}
+      var name = elm.getAttribute('data-name').trim().toLowerCase();
+      return (!value || (name.indexOf(value) > -1));
+    };
+    var searchInChildren = function(parent){
+      var containsVisible = undefined;
+      if(parent.children && (parent.children.length > 0)){
+        for(var i in parent.children){
+          var child = parent.children[i];
+          var matches = searchInChildren(child) || testElm(child);
+          if(typeof matches !== 'undefined'){
+            if(matches){containsVisible = true;}
+            else if(typeof containsVisible === 'undefined'){
+              containsVisible = false;
+            }
+            child.style.display = (matches) ? 'block' : 'none';
+          }
+        }
+      }
+      return containsVisible;
+    };
+    searchInChildren(searchList);
+  };
+  if(searchBox.addEventListener){
+    searchBox.addEventListener('keyup',onKeyUp);
+    searchBox.style.display = 'block';
+    searchBox.search();
+  }
+  else if(searchBox.attachEvent){
+    searchBox.attachEvent('onkeyup',onKeyUp);
+    searchBox.style.display = 'block';
+    searchBox.search();
+  }
+})();</script>
+    <div class="main">
+<section class="kind-namespace">
+<header>
+    <h1 class="name">
+          <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
+        hint
+  <span class="types">
+      <span class="type-signature namespace">
+        namespace
+      </span>
+  </span>
+    </h1>
+</header>
+<article>
+    <div class="container-overview">
+<dl class="details">
+</dl>
+    </div>
+        <h3>In Packages</h3>
+        <ul>
+              <li><a href="packages.html#package:hint">hint</a></li>
+        </ul>
+        <h3>Interfaces</h3>
+        <ul>
+            <li><a href="bbbfly.hint.Hintified.html">Hintified</a></li>
+        </ul>
+        <h3>Methods</h3>
+        <dl>
+<dt>
+    <div class="nameContainer">
+        <h4 id=".Hintify">
+  <span class="attribs">
+      <span class="type-signature static">
+        static
+      </span>
+  </span>
+          bbbfly.hint.Hintify
+          <span class="signature">(<span class="optional">def</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{object}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/hint.js#L127">base/hint.js, line 127</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Modifies passed defintion to make control  implement <a href="bbbfly.hint.Hintified.html">Hintified</a> interface.</div>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">def</span>
+                </td>
+            <td class="type">
+<span class="param-type">object</span>
+            </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Control definition
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        object
+            </td>
+            <td class="description last">Control definition</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+        </dl>
+</article>
+</section>
+        <footer>
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.4</a> on Sat Sep 23 2017 09:45:45 GMT+0200 (Central Europe Daylight Time)
+            <br/>Content icons made by <a target="_blank" href="http://www.freepik.com">Freepik</a> from <a target="_blank" href="http://www.flaticon.com">www.flaticon.com</a>
+        </footer>
+    </div>
+</div>
+</body>
+</html>

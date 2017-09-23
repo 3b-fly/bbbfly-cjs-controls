@@ -1,0 +1,35 @@
+{
+  "source": {
+    "include": [
+      "../README.md",
+      "../src/types.jsdoc",
+      "../src/controls.jsdoc",
+      "../src/base/button.js",
+      "../src/base/calendar.js",
+      "../src/base/edit.js",
+      "../src/base/hint.js",
+      "../src/base/list.js",
+      "../src/base/menu.js",
+      "../src/base/search.js",
+      "../src/base/lang/search_cs.js",
+      "../src/base/lang/search_en.js"
+    ]
+  },
+  "plugins": [
+    "../../controlsjs-jsdoc/plugins/controlsjs"
+  ],
+  "opts": {
+    "template": "../../controlsjs-jsdoc",
+    "destination": "./"
+  },
+  "templates": {
+    "applicationName": "bbbfly-cjs-controls",
+    "sourceLinks": {
+      "../src/": "https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/%path%#L%lineno%"
+    },
+    "socialLinks": {
+      "Email": "mailto:support@3b-fly.eu",
+      "GitHub": "https://github.com/3b-fly/bbbfly-cjs-controls"
+    }
+  }
+}
