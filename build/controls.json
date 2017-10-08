@@ -9,21 +9,6 @@
     "bbbfly-cjs-controls": "2.0.0"
   },
   "Packages": {
-    "hint": {
-      "DebugFiles": [
-        "debug/base/hint.js"
-      ],
-      "ReleaseFiles": [
-        "release/base/hint.js"
-      ],
-      "Libraries": {
-        "controls.js": {
-          "Packages": [
-            "Controls.js"
-          ]
-        }
-      }
-    },
     "button": {
       "DebugFiles": [
         "debug/base/button.js"
@@ -35,6 +20,26 @@
         "controls.js": {
           "Packages": [
             "Controls.js"
+          ]
+        }
+      }
+    },
+    "calendar": {
+      "DebugFiles": [
+        "debug/base/calendar.js"
+      ],
+      "ReleaseFiles": [
+        "release/base/calendar.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": [
+            "edit"
           ]
         }
       }
@@ -59,16 +64,16 @@
         }
       }
     },
-    "search": {
+    "file": {
       "DebugFiles": [
-        "debug/base/search.js",
-        "debug/base/lang/search_cs.js",
-        "debug/base/lang/search_en.js"
+        "debug/special/file.js",
+        "debug/special/lang/file_cs.js",
+        "debug/special/lang/file_en.js"
       ],
       "ReleaseFiles": [
-        "release/base/search.js",
-        "release/base/lang/search_cs.js",
-        "release/base/lang/search_en.js"
+        "release/special/file.js",
+        "release/special/lang/file_cs.js",
+        "release/special/lang/file_en.js"
       ],
       "Libraries": {
         "controls.js": {
@@ -80,30 +85,20 @@
           "Packages": [
             "crossbrowser"
           ]
-        },
-        "bbbfly-cjs-controls": {
-          "Packages": [
-            "edit"
-          ]
         }
       }
     },
-    "calendar": {
+    "hint": {
       "DebugFiles": [
-        "debug/base/calendar.js"
+        "debug/base/hint.js"
       ],
       "ReleaseFiles": [
-        "release/base/calendar.js"
+        "release/base/hint.js"
       ],
       "Libraries": {
         "controls.js": {
           "Packages": [
             "Controls.js"
-          ]
-        },
-        "bbbfly-cjs-controls": {
-          "Packages": [
-            "edit"
           ]
         }
       }
@@ -144,6 +139,35 @@
         "bbbfly-cjs": {
           "Packages": [
             "crossbrowser"
+          ]
+        }
+      }
+    },
+    "search": {
+      "DebugFiles": [
+        "debug/base/search.js",
+        "debug/base/lang/search_cs.js",
+        "debug/base/lang/search_en.js"
+      ],
+      "ReleaseFiles": [
+        "release/base/search.js",
+        "release/base/lang/search_cs.js",
+        "release/base/lang/search_en.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        },
+        "bbbfly-cjs": {
+          "Packages": [
+            "crossbrowser"
+          ]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": [
+            "edit"
           ]
         }
       }

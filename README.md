@@ -23,6 +23,8 @@
   - bbbfly.EditTime
 - **edit**
   - bbbfly.Edit
+- **file**
+  - bbbfly.FileUploader
 - **list**
   - bbbfly.List
   - bbbfly.DropDownList
