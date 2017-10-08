@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: RadioButton</title>
+    <title>Class: FileUploader</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -786,7 +786,7 @@
 <header>
     <h1 class="name">
           <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
-        RadioButton
+        FileUploader
   <span class="types">
       <span class="type-signature class">
         class
@@ -801,18 +801,18 @@
     <div class="container-overview">
 <dt>
     <div class="nameContainer">
-        <h2 id="RadioButton">
+        <h2 id="FileUploader">
           new 
-          bbbfly.RadioButton
+          bbbfly.FileUploader
           <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/button.js#L72">base/button.js, line 72</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L249">special/file.js, line 249</a>
         </div>
     </div>
 </dt>
 <dd>
-      <div class="description">Implements <a href="bbbfly.hint.Hintified.html">Hintified</a> interface  if <a href="packages.html#package:hint">hint</a> package is inluded.</div>
+      <div class="description">File uploader with build in progress panel,  better single file upload handling  and more error reporting types.</div>
         <h3>Parameters</h3>
 <table class="params">
     <thead>
@@ -858,7 +858,172 @@
             </td>
             <td class="description last">
                         <span class="optional">optional</span>
-                Parent DIV element or it's ID
+                Parent DIV element or its ID
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <h3>Properties</h3>
+    <table class="props" my="test">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr id="property:ErrorLevel">
+                    <td class="name">
+                      <span class="param-name">ErrorLevel</span>
+                    </td>
+                <td class="type">
+<span class="param-type"><a href="bbbfly.FileUploader.html#.error">bbbfly.FileUploader.error</a></span>
+                </td>
+                    <td class="default">
+                        grouped
+                    </td>
+                <td class="description last">
+                  Upload error reporting precision.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</dl>
+<dl class="details">
+</dl>
+</dd>
+    </div>
+        <h3>Extends</h3>
+        <ul>
+            <li>ngFileUploader</li>
+        </ul>
+        <h3>In Packages</h3>
+        <ul>
+              <li><a href="packages.html#package:file">file</a></li>
+        </ul>
+        <h3>Members</h3>
+        <dl>
+<dt>
+  <div class="nameContainer">
+    <h4 class="name" id=".error">
+  <span class="attribs">
+      <span class="type-signature static">
+        static
+      </span>
+  </span>
+      error
+  <span class="types">
+      <span class="type-signature enum">
+        enum
+      </span>
+      <span class="type-signature integer">
+        integer
+      </span>
+  </span>
+    </h4>
+  </div>
+</dt>
+<dd class="member-content">
+    <div class="description">Possible values for ErrorLevel</div>
+<dl class="details">
+    <table class="props" my="test">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr id="property:minimal">
+                    <td class="name">
+                      <span class="param-name">minimal</span>
+                    </td>
+                <td class="type">
+<span class="param-type">integer</span>
+                </td>
+                    <td class="default">
+                        1
+                    </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:grouped">
+                    <td class="name">
+                      <span class="param-name">grouped</span>
+                    </td>
+                <td class="type">
+<span class="param-type">integer</span>
+                </td>
+                    <td class="default">
+                        2
+                    </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:fulllog">
+                    <td class="name">
+                      <span class="param-name">fulllog</span>
+                    </td>
+                <td class="type">
+<span class="param-type">integer</span>
+                </td>
+                    <td class="default">
+                        4
+                    </td>
+                <td class="description last">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</dl>
+<dl class="details">
+</dl>
+</dd>
+        </dl>
+        <h3>Methods</h3>
+        <dl>
+<dt>
+    <div class="nameContainer">
+        <h4 id="DoShowError">
+  <span class="attribs">
+      <span class="type-signature abstract">
+        abstract
+      </span>
+  </span>
+          DoShowError
+          <span class="signature">(text)</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L330">special/file.js, line 330</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Use this method to implement error message.</div>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">text</span>
+                </td>
+            <td class="type">
+<span class="param-type">string</span>
+            </td>
+            <td class="description last">
+                Message
             </td>
         </tr>
 	</tbody>
@@ -866,19 +1031,48 @@
 <dl class="details">
 </dl>
 </dd>
+        </dl>
+        <h3>Events</h3>
+        <dl>
+<dt>
+    <div class="nameContainer">
+        <h4 id="event:OnFilesChanged">
+          OnFilesChanged
+          <span class="signature">(items)</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L313">special/file.js, line 313</a>
+        </div>
     </div>
-        <h3>Extends</h3>
-        <ul>
-            <li>ngRadioButton</li>
-        </ul>
-        <h3>Implements</h3>
-        <ul>
-            <li><a href="bbbfly.hint.Hintified.html">bbbfly.hint.Hintified</a></li>
-        </ul>
-        <h3>In Packages</h3>
-        <ul>
-              <li><a href="packages.html#package:button">button</a></li>
-        </ul>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">items</span>
+                </td>
+            <td class="type">
+<span class="param-type">array</span>
+            </td>
+            <td class="description last">
+                File list items
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+</dd>
+        </dl>
 </article>
 </section>
         <footer>

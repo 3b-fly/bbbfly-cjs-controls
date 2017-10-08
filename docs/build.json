@@ -12,7 +12,11 @@
       "../src/base/menu.js",
       "../src/base/search.js",
       "../src/base/lang/search_cs.js",
-      "../src/base/lang/search_en.js"
+      "../src/base/lang/search_en.js",
+
+      "../src/special/file.js",
+      "../src/special/lang/file_cs.js",
+      "../src/special/lang/file_en.js"
     ]
   },
   "plugins": [
