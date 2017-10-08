@@ -33,7 +33,7 @@
 - **search**
   - bbbfly.SearchEdit
   - bbbfly.SearchBox
-  - bbbfly.tSearchBox
+  - bbbfly.ListSearchBox
 
 ### Usage
 
