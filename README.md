@@ -12,8 +12,7 @@
 
 ### Packages
 
-- **hint** - Provides simple control hints definition.
-
+- **hint** - Provides simple control hints definition.<br/><br/>
 - **button**
   - bbbfly.Button
   - bbbfly.CheckBox
@@ -34,6 +33,9 @@
   - bbbfly.SearchEdit
   - bbbfly.SearchBox
   - bbbfly.ListSearchBox
+- **wrapper**
+  - bbbfly.WrapperPanel
+  - bbbfly.WrapperGroup
 
 ### Usage
 

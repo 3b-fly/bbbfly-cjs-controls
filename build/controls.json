@@ -171,6 +171,21 @@
           ]
         }
       }
+    },
+    "wrapper": {
+      "DebugFiles": [
+        "debug/base/wrapper.js"
+      ],
+      "ReleaseFiles": [
+        "release/base/wrapper.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        }
+      }
     }
   }
 }

@@ -32,6 +32,15 @@
  */
 
 /**
+ * @package file
+ *
+ * @version 2.0.0
+ *
+ * @requires {@link http://controlsjs.com/|controls.js (5.0.0): Controls.js}
+ * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.0): crossbrowser}
+ */
+
+/**
  * @package hint
  *
  * @version 2.0.0
@@ -68,10 +77,9 @@
  */
 
 /**
- * @package file
+ * @package wrapper
  *
  * @version 2.0.0
  *
  * @requires {@link http://controlsjs.com/|controls.js (5.0.0): Controls.js}
- * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.0): crossbrowser}
  */

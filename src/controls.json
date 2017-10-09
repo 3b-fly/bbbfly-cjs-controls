@@ -142,6 +142,19 @@
           "Packages": ["edit"]
         }
       }
+    },
+    "wrapper": {
+      "DebugFiles": [
+        "base/wrapper.js"
+      ],
+      "ReleaseFiles": [
+        "base/wrapper.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": ["Controls.js"]
+        }
+      }
     }
   }
 }
