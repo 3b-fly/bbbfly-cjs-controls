@@ -13,6 +13,7 @@
       "../src/base/search.js",
       "../src/base/lang/search_cs.js",
       "../src/base/lang/search_en.js",
+      "../src/base/wrapper.js",
 
       "../src/special/file.js",
       "../src/special/lang/file_cs.js",
