@@ -196,7 +196,7 @@ bbbfly.fileuploader._fileNameExtsToString = function(fileNames){
 bbbfly.fileuploader._hasFilesToRemove = function(){
   if(this.SelectFileType === ngFupSelect_None){
     var list = this.Controls.ListFiles;
-    return (list.Items.length > 0);
+    return (list && (list.Items.length > 0));
   }
   return this.HasFilesToRemove.callParent();
 };
@@ -205,7 +205,7 @@ bbbfly.fileuploader._hasFilesToRemove = function(){
 bbbfly.fileuploader._getFilesToRemove = function(){
   if(this.SelectFileType === ngFupSelect_None){
     var list = this.Controls.ListFiles;
-    return list.Items;
+    return (list) ? list.Items : new Array();
   }
   return this.GetFilesToRemove.callParent();
 };
