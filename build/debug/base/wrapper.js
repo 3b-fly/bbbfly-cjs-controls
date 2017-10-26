@@ -405,5 +405,5 @@ ngUserControls['bbbfly_wrapper'] = {
  *   this to define their minimal distance from other child controls
  *   and their float direction.
  *
- * @property {bbbfly.warapper.wrapOptions} [WrapOptions=undefined]
+ * @property {bbbfly.wrapper.wrapOptions} [WrapOptions=undefined]
  */
