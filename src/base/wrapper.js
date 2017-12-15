@@ -412,7 +412,7 @@ bbbfly.WrapperPanel = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'ngPanel',ref, parent);
+  return ngCreateControlAsType(def,'ngPanel',ref,parent);
 };
 
 /**
@@ -458,7 +458,7 @@ bbbfly.WrapperGroup = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'ngGroup',ref, parent);
+  return ngCreateControlAsType(def,'ngGroup',ref,parent);
 };
 
 /**
