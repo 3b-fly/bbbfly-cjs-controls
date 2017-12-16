@@ -324,16 +324,6 @@ bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
     wrapper.OnAutoSized();
   }
 };
-bbbfly.wrapper._maxFrameDimension = function(frame,parts,dimName){
-  var maxDim = 0;
-  for(var i in parts){
-    var part = frame[parts[i]];
-    if(part && (typeof part[dimName] === 'number')){
-      if(part[dimName] > maxDim){maxDim = part[dimName];}
-    }
-  }
-  return maxDim;
-};
 bbbfly.WrapperPanel = function(def,ref,parent){
   def = def || {};
 
