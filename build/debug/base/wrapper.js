@@ -289,24 +289,17 @@ bbbfly.wrapper._canPlaceStretchCtrls = function(wrapper,ctrls,vars,opts){
 bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
   var dimension = (vars.value.position.start + vars.value.position.end);
 
-  var frame = wrapper.Frame;
-  if(frame){
+  var cPanel = wrapper.ControlsPanel;
+  if(cPanel && cPanel.Bounds){
+
     switch(opts.Orientation){
       case bbbfly.wrapper.orientation.vertical:
-        dimension += bbbfly.wrapper._maxFrameDimension(
-          frame,['LeftTop','Top','RightTop'],'H'
-        );
-        dimension += bbbfly.wrapper._maxFrameDimension(
-          frame,['LeftBottom','Bottom','RightBottom'],'H'
-        );
+        if(typeof cPanel.Bounds.T === 'number'){dimension += cPanel.Bounds.T;}
+        if(typeof cPanel.Bounds.B === 'number'){dimension += cPanel.Bounds.B;}
       break;
       case bbbfly.wrapper.orientation.horizontal:
-        dimension += bbbfly.wrapper._maxFrameDimension(
-          frame,['LeftTop','Left','LeftBottom'],'W'
-        );
-        dimension += bbbfly.wrapper._maxFrameDimension(
-          frame,['RightTop','Right','RightBottom'],'W'
-        );
+        if(typeof cPanel.Bounds.L === 'number'){dimension += cPanel.Bounds.L;}
+        if(typeof cPanel.Bounds.R === 'number'){dimension += cPanel.Bounds.R;}
       break;
       default: return;
     }
@@ -357,7 +350,7 @@ bbbfly.WrapperPanel = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'ngPanel',ref, parent);
+  return ngCreateControlAsType(def,'ngPanel',ref,parent);
 };
 bbbfly.WrapperGroup = function(def,ref,parent){
   def = def || {};
@@ -375,7 +368,7 @@ bbbfly.WrapperGroup = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'ngGroup',ref, parent);
+  return ngCreateControlAsType(def,'ngGroup',ref,parent);
 };
 bbbfly.wrapper.orientation = {
   vertical: 1,
