@@ -24,6 +24,9 @@
   - bbbfly.Edit
 - **file**
   - bbbfly.FileUploader
+- **grid**
+  - bbbfly.GridPanel
+  - bbbfly.GridGroup
 - **list**
   - bbbfly.List
   - bbbfly.DropDownList

@@ -75,6 +75,19 @@
         }
       }
     },
+    "grid": {
+      "DebugFiles": [
+        "base/grid.js"
+      ],
+      "ReleaseFiles": [
+        "base/grid.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": ["Controls.js"]
+        }
+      }
+    },
     "hint": {
       "DebugFiles": [
         "base/hint.js"
