@@ -31,6 +31,10 @@ bbbfly.grid._onUpdated = function(){
 
     var columnWidth = Math.floor(gridWidth / columnsCnt);
 
+    if(typeof this.MaxColumnWidth === 'number'){
+      columnWidth = Math.min(columnWidth,this.MaxColumnWidth);
+    }
+
     var colIndex = 0;
     var rowIndex = 0;
 
@@ -63,8 +67,15 @@ bbbfly.grid._onUpdated = function(){
         var item = row[k];
 
         var itemLeft = (item._GridColumn * columnWidth);
-        var itemWidth = ((item._GridColumn + 1) === columnsCnt)
-          ? (gridWidth - itemLeft) : columnWidth;
+        var itemWidth = columnWidth;
+
+        if((item._GridColumn + 1) === columnsCnt){
+          itemWidth = (gridWidth - itemLeft);
+
+          if(typeof this.MaxColumnWidth === 'number'){
+            itemWidth = Math.min(itemWidth,this.MaxColumnWidth);
+          }
+        }
 
         var itemBounds = {
           T: gridHeight,
@@ -114,10 +125,12 @@ bbbfly.grid._onUpdated = function(){
 bbbfly.GridPanel = function(def,ref,parent){
   def = def || {};
 
-  ng_MergeDef(def, {
+  ng_MergeDef(def,{
+    ScrollBars: ssAuto,
     Data: {
       AutoSize: true,
       MinColumnWidth: 200,
+      MaxColumnWidth: 400,
       _Rows: new Array(),
       _Columns: new Array()
     },
@@ -132,10 +145,12 @@ bbbfly.GridPanel = function(def,ref,parent){
 bbbfly.GridGroup = function(def,ref,parent){
   def = def || {};
 
-  ng_MergeDef(def, {
+  ng_MergeDef(def,{
+    ScrollBars: ssNone,
     Data: {
       AutoSize: true,
       MinColumnWidth: 200,
+      MaxColumnWidth: 400,
       _Rows: new Array(),
       _Columns: new Array()
     },
