@@ -22,6 +22,7 @@
   - bbbfly.EditTime
 - **edit**
   - bbbfly.Edit
+  - bbbfly.Memo
 - **file**
   - bbbfly.FileUploader
 - **grid**

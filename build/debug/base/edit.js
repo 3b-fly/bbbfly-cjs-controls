@@ -7,6 +7,7 @@
 
 var bbbfly = bbbfly || {};
 bbbfly.edit = {};
+bbbfly.memo = {};
 bbbfly.edit._onReadOnlyChanged = function(edit,readOnly){
   var ddButton = this.DropDownButton;
   if(ddButton && (ddButton.Visible !== !readOnly)){
@@ -51,9 +52,12 @@ bbbfly.edit._normalizeButtons = function(def){
     def.Buttons = new Array();
   }
 };
+bbbfly.memo._onGetClassName = function(memo,part){
+  return part+(memo.Invalid ? 'Invalid' : '');
+};
 bbbfly.Edit = function(def,ref,parent,parentType){
   def = def || {};
-  ng_MergeDef(def, {
+  ng_MergeDef(def,{
     Buttons: null,
     Events: {
       OnReadOnlyChanged: bbbfly.edit._onReadOnlyChanged
@@ -71,10 +75,28 @@ bbbfly.Edit = function(def,ref,parent,parentType){
   if(!parentType){parentType = 'ngEdit';}
   return ngCreateControlAsType(def,parentType,ref,parent);
 };
+bbbfly.Memo = function(def,ref,parent){
+  def = def || {};
+
+  ng_MergeDef(def,{
+    Events: {
+      OnGetClassName: bbbfly.memo._onGetClassName
+    },
+    Methods: {
+      SetFocusBefore: bbbfly.edit._setFocusBefore,
+      SetFocusAfter: bbbfly.edit._setFocusAfter
+    }
+  });
+
+  if(bbbfly.hint){bbbfly.hint.Hintify(def);}
+
+  return ngCreateControlAsType(def,'ngMemo',ref,parent);
+};
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_edit'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.Edit',bbbfly.Edit);
+    ngRegisterControlType('bbbfly.Memo',bbbfly.Memo);
   }
 };
 

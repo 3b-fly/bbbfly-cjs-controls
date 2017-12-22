@@ -10,6 +10,8 @@
 var bbbfly = bbbfly || {};
 /** @ignore */
 bbbfly.edit = {};
+/** @ignore */
+bbbfly.memo = {};
 
 /** @ignore */
 bbbfly.edit._onReadOnlyChanged = function(edit,readOnly){
@@ -65,6 +67,11 @@ bbbfly.edit._normalizeButtons = function(def){
   }
 };
 
+/** @ignore */
+bbbfly.memo._onGetClassName = function(memo,part){
+  return part+(memo.Invalid ? 'Invalid' : '');
+};
+
 /**
  * @class
  * @type control
@@ -73,13 +80,14 @@ bbbfly.edit._normalizeButtons = function(def){
  *
  * @description
  *   Implements {@link bbbfly.hint.Hintified|Hintified} interface
- *   if {@link package:hint|hint} package is inluded.
+ *   if {@link package:hint|hint} package is included.
  *
  * @inpackage edit
  *
  * @param {bbbfly.Edit.definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
+ * @param {string} [parentType='ngMemo'] - Ancestor type
  */
 bbbfly.Edit = function(def,ref,parent,parentType){
   def = def || {};
@@ -88,7 +96,7 @@ bbbfly.Edit = function(def,ref,parent,parentType){
    * @memberof bbbfly.Edit
    * @property {array|object} [Buttons=null] - Define buttons as object to allow their merging
    */
-  ng_MergeDef(def, {
+  ng_MergeDef(def,{
     Buttons: null,
     Events: {
       /** @private */
@@ -136,11 +144,66 @@ bbbfly.Edit = function(def,ref,parent,parentType){
   return ngCreateControlAsType(def,parentType,ref,parent);
 };
 
+/**
+ * @class
+ * @type control
+ * @extends ngMemo
+ * @implements bbbfly.hint.Hintified
+ *
+ * @description
+ *   Implements {@link bbbfly.hint.Hintified|Hintified} interface
+ *   if {@link package:hint|hint} package is included.
+ *
+ * @inpackage edit
+ *
+ * @param {object} [def=undefined] - Descendant definition
+ * @param {object} [ref=undefined] - Reference owner
+ * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
+ */
+bbbfly.Memo = function(def,ref,parent){
+  def = def || {};
+
+  ng_MergeDef(def,{
+    Events: {
+      /** @private */
+      OnGetClassName: bbbfly.memo._onGetClassName
+    },
+    Methods: {
+      /**
+       * @function
+       * @name SetFocusBefore
+       * @memberof bbbfly.Memo#
+       * @description
+       *   Focus memo with caret at the text begining.
+       *
+       * @see {@link bbbfly.Memo#SetFocusAfter|SetFocusAfter()}
+       */
+      SetFocusBefore: bbbfly.edit._setFocusBefore,
+
+      /**
+       * @function
+       * @name SetFocusAfter
+       * @memberof bbbfly.Memo#
+       * @description
+       *   Focus memo with caret at the text end.
+       *
+       * @see {@link bbbfly.Memo#SetFocusBefore|SetFocusBefore()}
+       */
+      SetFocusAfter: bbbfly.edit._setFocusAfter
+    }
+  });
+
+  if(bbbfly.hint){bbbfly.hint.Hintify(def);}
+
+  return ngCreateControlAsType(def,'ngMemo',ref,parent);
+};
+
 /** @ignore */
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_edit'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.Edit',bbbfly.Edit);
+    ngRegisterControlType('bbbfly.Memo',bbbfly.Memo);
   }
 };
 
