@@ -126,11 +126,10 @@ bbbfly.GridPanel = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
-    ScrollBars: ssAuto,
     Data: {
       AutoSize: true,
       MinColumnWidth: 200,
-      MaxColumnWidth: 400,
+      MaxColumnWidth: undefined,
       _Rows: new Array(),
       _Columns: new Array()
     },
@@ -138,6 +137,10 @@ bbbfly.GridPanel = function(def,ref,parent){
       OnUpdated: bbbfly.grid._onUpdated,
       OnAutoSized: null
     }
+  });
+
+  ng_MergeDef(def,{
+    ScrollBars: (def.Data.AutoSize ? ssNone : ssAuto)
   });
 
   return ngCreateControlAsType(def,'ngPanel',ref,parent);
@@ -150,13 +153,19 @@ bbbfly.GridGroup = function(def,ref,parent){
     Data: {
       AutoSize: true,
       MinColumnWidth: 200,
-      MaxColumnWidth: 400,
+      MaxColumnWidth: undefined,
       _Rows: new Array(),
       _Columns: new Array()
     },
     Events: {
       OnUpdate: bbbfly.grid._onUpdate,
       OnAutoSized: null
+    }
+  });
+
+  ng_MergeDef(def,{
+    ControlsPanel: {
+      ScrollBars: (def.Data.AutoSize ? ssNone : ssAuto)
     }
   });
 
