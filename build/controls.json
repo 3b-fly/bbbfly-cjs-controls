@@ -9,6 +9,26 @@
     "bbbfly-cjs-controls": "2.0.0"
   },
   "Packages": {
+    "bar": {
+      "DebugFiles": [
+        "debug/base/bar.js"
+      ],
+      "ReleaseFiles": [
+        "release/base/bar.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        },
+        "bbbfly-cjs": {
+          "Packages": [
+            "crossbrowser"
+          ]
+        }
+      }
+    },
     "button": {
       "DebugFiles": [
         "debug/base/button.js"

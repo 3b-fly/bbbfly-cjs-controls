@@ -10,6 +10,22 @@
   },
   "Packages": {
 
+    "bar": {
+      "DebugFiles": [
+        "base/bar.js"
+      ],
+      "ReleaseFiles": [
+        "base/bar.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": ["Controls.js"]
+        },
+        "bbbfly-cjs": {
+          "Packages": ["crossbrowser"]
+        }
+      }
+    },
     "button": {
       "DebugFiles": [
         "base/button.js"

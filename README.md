@@ -13,6 +13,8 @@
 ### Packages
 
 - **hint** - Provides simple control hints definition.<br/><br/>
+- **bar**
+  - bbbfly.ToolBar
 - **button**
   - bbbfly.Button
   - bbbfly.CheckBox
