@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: EditDate</title>
+    <title>Class: Memo</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -1025,7 +1025,7 @@
 <header>
     <h1 class="name">
           <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
-        EditDate
+        Memo
   <span class="types">
       <span class="type-signature class">
         class
@@ -1040,18 +1040,18 @@
     <div class="container-overview">
 <dt>
     <div class="nameContainer">
-        <h2 id="EditDate">
+        <h2 id="Memo">
           new 
-          bbbfly.EditDate
+          bbbfly.Memo
           <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/calendar.js#L28">base/calendar.js, line 28</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L163">base/edit.js, line 163</a>
         </div>
     </div>
 </dt>
 <dd>
-      <div class="description">Implements <a href="bbbfly.Edit.html">Edit</a> features  if <a href="packages.html#package:edit">edit</a> package is inluded.</div>
+      <div class="description">Implements <a href="bbbfly.hint.Hintified.html">Hintified</a> interface  if <a href="packages.html#package:hint">hint</a> package is included.</div>
         <h3>Parameters</h3>
 <table class="params">
     <thead>
@@ -1067,7 +1067,7 @@
                   <span class="param-name">def</span>
                 </td>
             <td class="type">
-<span class="param-type"><a href="bbbfly.Edit.definition.html">bbbfly.Edit.definition</a></span>
+<span class="param-type">object</span>
             </td>
             <td class="description last">
                         <span class="optional">optional</span>
@@ -1108,127 +1108,58 @@
     </div>
         <h3>Extends</h3>
         <ul>
-            <li>ngEditDate</li>
-            <li><a href="bbbfly.Edit.html">bbbfly.Edit</a></li>
+            <li>ngMemo</li>
+        </ul>
+        <h3>Implements</h3>
+        <ul>
+            <li><a href="bbbfly.hint.Hintified.html">bbbfly.hint.Hintified</a></li>
         </ul>
         <h3>In Packages</h3>
         <ul>
-              <li><a href="packages.html#package:calendar">calendar</a></li>
+              <li><a href="packages.html#package:edit">edit</a></li>
         </ul>
         <h3>Methods</h3>
         <dl>
 <dt>
-    <div class="nameContainer inherited">
-        <h4 id="GetButton">
-  <span class="attribs">
-      <span class="type-signature inherited">
-        <a href="bbbfly.Edit.html#GetButton">inherited</a>
-      </span>
-  </span>
-          GetButton
-          <span class="signature">(buttonId)</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="bbbfly.Edit.Button.html">bbbfly.Edit.Button</a>|null}</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L106">base/edit.js, line 106</a>
-        </div>
-    </div>
-</dt>
-<dd>
-        <h5>Parameters:</h5>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
-        <tr>
-                <td class="name">
-                  <span class="param-name">buttonId</span>
-                </td>
-            <td class="type">
-<span class="param-type">string</span>
-            </td>
-            <td class="description last">
-                Required button's ButtonId
-            </td>
-        </tr>
-	</tbody>
-</table>
-<dl class="details">
-</dl>
-    <h5>Returns:</h5>
-<table class="params">
-    <thead>
-    <tr>
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="type">
-                        <a href="bbbfly.Edit.Button.html">bbbfly.Edit.Button</a>
-                         | 
-                        null
-            </td>
-            <td class="description last">- Button with passes ButtonId</td>
-        </tr>
-    </tbody>
-</table>
-</dd>
-<dt>
-    <div class="nameContainer inherited">
+    <div class="nameContainer">
         <h4 id="SetFocusAfter">
-  <span class="attribs">
-      <span class="type-signature inherited">
-        <a href="bbbfly.Edit.html#SetFocusAfter">inherited</a>
-      </span>
-  </span>
           SetFocusAfter
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L127">base/edit.js, line 127</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L183">base/edit.js, line 183</a>
         </div>
     </div>
 </dt>
 <dd>
-      <div class="description">Focus edit with caret at the text end.</div>
+      <div class="description">Focus memo with caret at the text end.</div>
 <dl class="details">
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
       <ul class="dummy">
-          <li><a href="bbbfly.Edit.html#SetFocusBefore">SetFocusBefore()</a></li>
+          <li><a href="bbbfly.Memo.html#SetFocusBefore">SetFocusBefore()</a></li>
       </ul>
     </dd>
 </dl>
 </dd>
 <dt>
-    <div class="nameContainer inherited">
+    <div class="nameContainer">
         <h4 id="SetFocusBefore">
-  <span class="attribs">
-      <span class="type-signature inherited">
-        <a href="bbbfly.Edit.html#SetFocusBefore">inherited</a>
-      </span>
-  </span>
           SetFocusBefore
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L116">base/edit.js, line 116</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L172">base/edit.js, line 172</a>
         </div>
     </div>
 </dt>
 <dd>
-      <div class="description">Focus edit with caret at the text begining.</div>
+      <div class="description">Focus memo with caret at the text begining.</div>
 <dl class="details">
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
       <ul class="dummy">
-          <li><a href="bbbfly.Edit.html#SetFocusAfter">SetFocusAfter()</a></li>
+          <li><a href="bbbfly.Memo.html#SetFocusAfter">SetFocusAfter()</a></li>
       </ul>
     </dd>
 </dl>

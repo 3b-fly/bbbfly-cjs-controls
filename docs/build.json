@@ -4,6 +4,7 @@
       "../README.md",
       "../src/types.jsdoc",
       "../src/controls.jsdoc",
+      "../src/base/bar.js",
       "../src/base/button.js",
       "../src/base/calendar.js",
       "../src/base/edit.js",
