@@ -201,8 +201,8 @@ bbbfly.ToolBar = function(def,ref,parent){
       Vertical: false,
       VPadding: 0,
       HPadding: 0,
-      VAlign: bbbfly.wrapper.valign.top,
-      HAlign: bbbfly.wrapper.halign.left,
+      VAlign: bbbfly.ToolBar.valign.top,
+      HAlign: bbbfly.ToolBar.halign.left,
       Wrapable: true,
 
       Invalid: false,
@@ -247,3 +247,21 @@ bbbfly.ToolBar.halign = {
   left: 'left',
   right: 'right'
 };
+
+/**
+ * @interface ChildControl
+ * @memberOf bbbfly.ToolBar
+ * @description
+ *   {@link bbbfly.ToolBar|ToolBar} child controls can implement
+ *   this to modify how toolbar handles them.
+ *
+ * @property {boolean} [ToolBarIgnore=false] - Do not place control by toolbar
+ * @property {boolean} [ToolBarAutoUpdate=true] - If toolbar should update afrer control updated
+ * @property {px} [ToolBarIndent=0] - Modify control position by this value after placed
+ * @property {px} [ToolBarHPadding=undefined] - Overwrite horizontel space after control (used in horizontal ToolBar)
+ * @property {px} [ToolBarVPadding=undefined] - Overwrite vertical space after control (used in vertical ToolBar)
+ * @property {px} [ToolBarWidth=undefined] - Consider control having this width for placement purpose
+ * @property {px} [ToolBarHeight=undefined] - Consider control having this height for placement purpose
+ * @property {boolean} [ToolBarBreak=false] - Break line/column before control
+ * @property {boolean} [ToolBarNoWrap=false]
+ */
