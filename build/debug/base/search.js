@@ -250,8 +250,8 @@ bbbfly.listsearchbox._doSearch = function(text){
 bbbfly.listsearchbox._compareItem = function(list,item,text){
   var itemText = null;
 
-  if(typeof this.OnGetItemText === 'function'){
-    itemText = this.OnGetItemText(list,item);
+  if(typeof this.GetItemText === 'function'){
+    itemText = this.GetItemText(list,item);
   }
   else if(typeof list.OnGetText === 'function'){
     itemText = list.OnGetText(list,item);
@@ -484,14 +484,14 @@ bbbfly.ListSearchBox = function(def,ref,parent){
       OnTextChanged: bbbfly.listsearchbox._onTextChanged,
       OnKeyUp: bbbfly.listsearchbox._onKeyUp,
       OnNoSearchResults: bbbfly.listsearchbox._onNoSearchResults,
-      OnSearchResults: bbbfly.listsearchbox._onSearchResults,
-      OnGetItemText: null
+      OnSearchResults: bbbfly.listsearchbox._onSearchResults
     },
     Methods: {
       SetSearchList: bbbfly.listsearchbox._setSearchList,
       ClearSearch: bbbfly.listsearchbox._clearSearch,
       DoSearch: bbbfly.listsearchbox._doSearch,
-      CompareItem: bbbfly.listsearchbox._compareItem
+      CompareItem: bbbfly.listsearchbox._compareItem,
+      GetItemText: null
     }
   });
 
