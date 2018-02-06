@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file
  * @author Jan Nejedly [support@3b-fly.eu]
  * @copyright Jan Nejedly
@@ -734,7 +734,7 @@ bbbfly.ListSearchBox = function(def,ref,parent){
        * @function
        * @abstract
        * @name GetItemText
-       * @memberof bbbfly.ListSearchEdit#
+       * @memberof bbbfly.ListSearchBox#
        * @description Return text which should be searched in.
        *
        * @param {bbbfly.List} list
