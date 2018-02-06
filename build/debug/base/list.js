@@ -247,7 +247,7 @@ bbbfly.dropdownlist._onReadOnlyChanged = function(edit,readOnly){
 };
 bbbfly.List = function(def,ref,parent){
   def = def || {};
-  ng_MergeDef(def, {
+  ng_MergeDef(def,{
     Data: {
       DefaultIndent: 20,
       ListIndent: 20,
@@ -280,12 +280,12 @@ bbbfly.List = function(def,ref,parent){
   bbbfly.list._normalizeColumns(def);
   bbbfly.list._normalizeItems(def);
 
-  return ngCreateControlAsType(def,'ngList',ref, parent);
+  return ngCreateControlAsType(def,'ngList',ref,parent);
 };
 bbbfly.DropDownList = function(def,ref,parent){
   def = def || {};
 
-  ng_MergeDef(def, {
+  ng_MergeDef(def,{
     Data: {
       ShowIcon: false,
       DefaultIconImg: null
@@ -317,7 +317,7 @@ bbbfly.DropDownList = function(def,ref,parent){
     });
   }
 
-  return ngCreateControlAsType(def,'ngDropDownList',ref, parent);
+  return ngCreateControlAsType(def,'ngDropDownList',ref,parent);
 };
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_list'] = {
