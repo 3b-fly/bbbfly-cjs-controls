@@ -336,6 +336,18 @@
           <a href="bbbfly.DropDownList.html#property:DefaultIconImg">DefaultIconImg</a>
         </li>
     </ul>
+    <ul class="typedefs itemMembers">
+      <span class="subtitle">Typedefs</span>
+        <li data-name="bbbfly.DropDownList.ListItem">
+          <a href="bbbfly.DropDownList.html#.ListItem">ListItem</a>
+        </li>
+    </ul>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.DropDownList#GetIconImg">
+          <a href="bbbfly.DropDownList.html#GetIconImg">GetIconImg</a>
+        </li>
+    </ul>
 </li>
 <li class="item" data-name="bbbfly.Edit">
   <span class="title">
@@ -517,11 +529,11 @@
   </span>
     <ul class="members itemMembers">
       <span class="subtitle">Properties</span>
-        <li data-name="DefaultIndent">
-          <a href="bbbfly.List.html#property:DefaultIndent">DefaultIndent</a>
-        </li>
         <li data-name="ListIndent">
           <a href="bbbfly.List.html#property:ListIndent">ListIndent</a>
+        </li>
+        <li data-name="DefaultIndent">
+          <a href="bbbfly.List.html#property:DefaultIndent">DefaultIndent</a>
         </li>
         <li data-name="Invalid">
           <a href="bbbfly.List.html#property:Invalid">Invalid</a>
@@ -1055,7 +1067,7 @@
           <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L307">base/list.js, line 307</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L327">base/list.js, line 327</a>
         </div>
     </div>
 </dt>
@@ -1122,20 +1134,6 @@
         </tr>
         </thead>
         <tbody>
-            <tr id="property:DefaultIndent">
-                    <td class="name">
-                      <span class="param-name">DefaultIndent</span>
-                    </td>
-                <td class="type">
-<span class="param-type">integer</span>
-                </td>
-                    <td class="default">
-                        20
-                    </td>
-                <td class="description last">
-                  First level indent
-                </td>
-            </tr>
             <tr id="property:ListIndent">
                     <td class="name">
                       <span class="param-name">ListIndent</span>
@@ -1144,7 +1142,21 @@
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
-                        20
+                        0
+                    </td>
+                <td class="description last">
+                  First level indent
+                </td>
+            </tr>
+            <tr id="property:DefaultIndent">
+                    <td class="name">
+                      <span class="param-name">DefaultIndent</span>
+                    </td>
+                <td class="type">
+<span class="param-type">integer</span>
+                </td>
+                    <td class="default">
+                        10
                     </td>
                 <td class="description last">
                   Each other tree level indent
@@ -1262,7 +1274,7 @@
           <span class="signature">(items)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L368">base/list.js, line 368</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L388">base/list.js, line 388</a>
         </div>
     </div>
 </dt>
@@ -1329,7 +1341,7 @@
           <span class="signature">(invalid, <span class="optional">update</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L420">base/list.js, line 420</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L440">base/list.js, line 440</a>
         </div>
     </div>
 </dt>
@@ -1410,7 +1422,7 @@
           <span class="signature">(items)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L356">base/list.js, line 356</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L376">base/list.js, line 376</a>
         </div>
     </div>
 </dt>
@@ -1472,7 +1484,7 @@
           <span class="signature">(item)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L389">base/list.js, line 389</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L409">base/list.js, line 409</a>
         </div>
     </div>
 </dt>
@@ -1527,7 +1539,7 @@
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{Array.&lt;object>}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L345">base/list.js, line 345</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L365">base/list.js, line 365</a>
         </div>
     </div>
 </dt>
@@ -1566,7 +1578,7 @@
           <span class="signature">(item)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L398">base/list.js, line 398</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L418">base/list.js, line 418</a>
         </div>
     </div>
 </dt>
@@ -1621,7 +1633,7 @@
           <span class="signature">(item)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L380">base/list.js, line 380</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L400">base/list.js, line 400</a>
         </div>
     </div>
 </dt>
@@ -1676,7 +1688,7 @@
           <span class="signature">(invalid, <span class="optional">update</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L407">base/list.js, line 407</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L427">base/list.js, line 427</a>
         </div>
     </div>
 </dt>
@@ -1759,7 +1771,7 @@
           <span class="signature">(list, invalid, update)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L327">base/list.js, line 327</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L347">base/list.js, line 347</a>
         </div>
     </div>
 </dt>
@@ -1840,7 +1852,7 @@
 </article>
 </section>
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.4</a> on Tue Feb 06 2018 23:07:47 GMT+0100 (Central Europe Standard Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.4</a> on Sat Mar 17 2018 16:18:15 GMT+0100 (Central Europe Standard Time)
             <br/>Content icons made by <a target="_blank" href="http://www.freepik.com">Freepik</a> from <a target="_blank" href="http://www.flaticon.com">www.flaticon.com</a>
         </footer>
     </div>
