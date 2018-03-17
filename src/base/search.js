@@ -291,7 +291,7 @@ bbbfly.listsearchbox._compareItem = function(list,item,text){
   var itemText = null;
 
   if(typeof this.GetItemText === 'function'){
-    itemText = this.GetItemText(list,item);
+    itemText = this.GetItemText(item);
   }
   else if(typeof list.OnGetText === 'function'){
     itemText = list.OnGetText(list,item);
@@ -737,7 +737,6 @@ bbbfly.ListSearchBox = function(def,ref,parent){
        * @memberof bbbfly.ListSearchBox#
        * @description Return text which should be searched in.
        *
-       * @param {bbbfly.List} list
        * @param {ngListItem} item
        * @return {string} Searchable item text
        */
