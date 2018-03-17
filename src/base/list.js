@@ -211,7 +211,18 @@ bbbfly.list._highlightItem = function(item){
 
 /** @ignore */
 bbbfly.list._onCalcIndent = function(list,item,id,level){
-  return list.DefaultIndent + (level * list.ListIndent);
+  var indent = 0;
+  if(level > 0){
+    if(typeof list.DefaultIndent === 'number'){
+      indent += level*list.DefaultIndent;
+    }
+
+    if(typeof item.Indent === 'number'){
+      indent += item.Indent;
+    }
+  }
+  indent += list.CalcItemIndent(item);
+  return indent;
 };
 
 /** @ignore */
@@ -304,8 +315,8 @@ bbbfly.dropdownlist._onReadOnlyChanged = function(edit,readOnly){
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
- * @property {integer} [DefaultIndent=20] - First level indent
- * @property {integer} [ListIndent=20] - Each other tree level indent
+ * @property {integer} [ListIndent=0] - First level indent
+ * @property {integer} [DefaultIndent=10] - Each other tree level indent
  * @property {boolean} [Invalid=false] - If list is invalid
  * @property {string} [HighlightClass='highlight'] - Highlighted item CSS class
  * @property {integer} [HighlightInterval=300] - Interval between highlight flashes
@@ -317,8 +328,8 @@ bbbfly.List = function(def,ref,parent){
   def = def || {};
   ng_MergeDef(def,{
     Data: {
-      DefaultIndent: 20,
-      ListIndent: 20,
+      ListIndent: 0,
+      DefaultIndent: 10,
       Invalid: false,
       HighlightClass: 'highlight',
       HighlightInterval: 300,
@@ -519,7 +530,7 @@ bbbfly.DropDownList = function(def,ref,parent){
     ng_MergeDef(def,{
       Data: { LeftImg: def.Data.DefaultIconImg }
     });
-
+    
     def.Buttons.unshift(btnDef);
   }
 
