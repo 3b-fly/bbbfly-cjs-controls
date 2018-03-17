@@ -189,7 +189,18 @@ bbbfly.list._highlightItem = function(item){
   return false;
 };
 bbbfly.list._onCalcIndent = function(list,item,id,level){
-  return list.DefaultIndent + (level * list.ListIndent);
+  var indent = 0;
+  if(level > 0){
+    if(typeof list.DefaultIndent === 'number'){
+      indent += level*list.DefaultIndent;
+    }
+
+    if(typeof item.Indent === 'number'){
+      indent += item.Indent;
+    }
+  }
+  indent += list.CalcItemIndent(item);
+  return indent;
 };
 bbbfly.list._setInvalid = function(invalid,update){
   invalid = (invalid !== false);
@@ -232,11 +243,18 @@ bbbfly.dropdownlist._onDropDownChanged = function(){
   this.Owner.DropDownButton.Check(this.Visible);
 };
 bbbfly.dropdownlist._onListItemChanged = function(edit,list,item){
-  if(edit.ShowIcon && edit.Icon){
-    edit.Icon.Img = (item && item.Image) ? item.Image : edit.DefaultIconImg;
-    edit.Update();
+  if(this.Icon){
+    this.Icon.LeftImg = this.GetIconImg(item);
+    this.Update();
   }
   return true;
+};
+bbbfly.dropdownlist._getIconImg = function(item){
+  if(item){
+    if(item.EditIconImg){return item.EditIconImg;}
+    else if(item.Image){return item.Image;}
+  }
+  return this.DefaultIconImg;
 };
 bbbfly.dropdownlist._onReadOnlyChanged = function(edit,readOnly){
   var ddButton = this.DropDownButton;
@@ -249,8 +267,8 @@ bbbfly.List = function(def,ref,parent){
   def = def || {};
   ng_MergeDef(def,{
     Data: {
-      DefaultIndent: 20,
-      ListIndent: 20,
+      ListIndent: 0,
+      DefaultIndent: 10,
       Invalid: false,
       HighlightClass: 'highlight',
       HighlightInterval: 300,
@@ -288,7 +306,15 @@ bbbfly.DropDownList = function(def,ref,parent){
   ng_MergeDef(def,{
     Data: {
       ShowIcon: false,
-      DefaultIconImg: null
+      DefaultIconImg: null,
+      IconBtnDef: {
+         Type: 'ngButton',
+        Data: { ButtonAlign: 'left' },
+        OnCreated: bbbfly.dropdownlist._onIconCreated,
+        Events: {
+          OnClick: bbbfly.dropdownlist._onIconClick
+        }
+      }
     },
     DropDown: {
       Type: 'bbbfly.List',
@@ -301,20 +327,20 @@ bbbfly.DropDownList = function(def,ref,parent){
       OnReadOnlyChanged: bbbfly.dropdownlist._onReadOnlyChanged
     },
     Methods: {
-      SetFocus: bbbfly.dropdownlist._setFocus
+      SetFocus: bbbfly.dropdownlist._setFocus,
+        GetIconImg: bbbfly.dropdownlist._getIconImg
     }
   });
 
   if(def.Data.ShowIcon){
-    if(!def.Buttons){def.Buttons = new Array();}
-    def.Buttons.unshift({
-      Type: 'ngButton',
-      Data: { ButtonAlign: 'left' },
-      OnCreated: bbbfly.dropdownlist._onIconCreated,
-      Events: {
-        OnClick: bbbfly.dropdownlist._onIconClick
-      }
+    if(!Array.isArray(def.Buttons)){def.Buttons = new Array();}
+    var btnDef = ng_CopyVar(def.Data.IconBtnDef);
+
+    ng_MergeDef(def,{
+      Data: { LeftImg: def.Data.DefaultIconImg }
     });
+    
+    def.Buttons.unshift(btnDef);
   }
 
   return ngCreateControlAsType(def,'ngDropDownList',ref,parent);
@@ -326,3 +352,10 @@ ngUserControls['bbbfly_list'] = {
     ngRegisterControlType('bbbfly.DropDownList',bbbfly.DropDownList);
   }
 };
+
+/**
+ * @typedef {ngListItem} ListItem
+ * @memberOf bbbfly.DropDownList
+ *
+ * @property {integer} EditIconImg - Icon shown in edit when item is selected
+ */
