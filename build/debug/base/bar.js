@@ -23,11 +23,12 @@ bbbfly.toolbar._setControlsPanelProps = function(){
 };
 bbbfly.toolbar._setControlsPanelClassName = function(){
   if(!this.ControlsPanel){return;}
-  var node = this.ControlsPanel.Elm();
 
   var cn = this.BaseClassName + 'ControlsPanel';
-  if(this.Invalid){cn += 'Invalid';}
+  if(!this.Enabled){cn += 'Disabled';}
+  else if(this.Invalid){cn += 'Invalid';}
 
+  var node = this.ControlsPanel.Elm();
   this.ControlsPanel.BaseClassName = cn;
   if(node){node.className = cn;}
 };
@@ -172,6 +173,9 @@ bbbfly.toolbar._setInvalid = function(invalid,update){
 bbbfly.toolbar._doSetInvalid = function(invalid,update){
   this.SetControlsPanelClassName();
 };
+bbbfly.toolbar._onEnabledChanged = function(){
+  this.SetControlsPanelClassName();
+};
 bbbfly.toolbar._callControlsPanelFunction = function(funcName,args){
   var func = (this.ControlsPanel) ? this.ControlsPanel[funcName] : null;
 
@@ -211,6 +215,7 @@ bbbfly.ToolBar = function(def,ref,parent){
     },
     ControlsPanel: null,
     Events: {
+      OnEnabledChanged: bbbfly.toolbar._onEnabledChanged,
       OnSetInvalid: null
     },
     Methods: {
