@@ -91,8 +91,36 @@ bbbfly.toolbar._update = function(recursive){
   return this.Update.callParent(recursive);
 };
 bbbfly.toolbar._doUpdate = function(node){
+  this.DoUpdateFrame(node);
+  this.DoUpdateControlsPanel(node);
+  return true;
+};
+bbbfly.toolbar._onControlsPanelUpdated = function(){
+  var toolBar = this.Owner;
+  if(toolBar && toolBar.AutoSize){
+    var bounds = {};
+
+    if(toolBar.Vertical){
+      bounds.W = this.Bounds.W;
+      if(toolBar._FrameDims){
+        bounds.W += toolBar._FrameDims.L + toolBar._FrameDims.R;
+      }
+    }
+    else{
+      bounds.H = this.Bounds.H;
+      if(toolBar._FrameDims){
+        bounds.H += toolBar._FrameDims.T + toolBar._FrameDims.B;
+      }
+    }
+
+    toolBar.SetBounds(bounds);
+    toolBar.DoUpdateFrame();
+  }
+};
+bbbfly.toolbar._doUpdateFrame = function(node){
+  if(typeof node === 'undefined'){node = this.Elm();}
   var frameNode = document.getElementById(this.ID + '_F');
-  if(!frameNode){return true;}
+  if(!node || !frameNode){return;}
 
   var html = new ngStringBuilder();
 
@@ -118,39 +146,30 @@ bbbfly.toolbar._doUpdate = function(node){
     R: frame.Right.W,
     B: frame.Bottom.H
   };
-
-  if(this.ControlsPanel){
-    var bounds = ng_CopyVar(this._FrameDims);
-    if(this.AutoSize){
-      if(this.Vertical){bounds.R = null;}
-      else{bounds.B = null;}
-    }
-
-    this.ControlsPanel.SetBounds(bounds);
-  }
-
-  return true;
 };
-bbbfly.toolbar._onControlsPanelUpdated = function(){
-  var toolBar = this.Owner;
-  if(toolBar && toolBar.AutoSize){
-    var bounds = {};
+bbbfly.toolbar._doUpdateControlsPanel = function(node){
+  if(typeof node === 'undefined'){node = this.Elm();}
+  if(!node || !this.ControlsPanel){return;}
 
-    if(toolBar.Vertical){
-      bounds.W = this.Bounds.W;
-      if(toolBar._FrameDims){
-        bounds.W += toolBar._FrameDims.L + toolBar._FrameDims.R;
-      }
-    }
-    else{
-      bounds.H = this.Bounds.H;
-      if(toolBar._FrameDims){
-        bounds.H += toolBar._FrameDims.T + toolBar._FrameDims.B;
-      }
-    }
+  var dims = Object.isObject(this._FrameDims)
+    ? this._FrameDims: { T:0, L:0, R:0, B:0 };
 
-    toolBar.SetBounds(bounds);
-  }
+  var bounds = {
+    T: dims.T,
+    L: dims.L,
+    R: null,
+    B: null
+  };
+
+  ng_BeginMeasureElement(node);
+  var w = ng_ClientWidth(node);
+  var h = ng_ClientHeight(node);
+  ng_EndMeasureElement(node);
+
+  bounds.W = (w - dims.L - dims.R);
+  bounds.H = (h - dims.T - dims.B);
+
+  this.ControlsPanel.SetBounds(bounds);
 };
 bbbfly.toolbar._doUpdateImages = function(){
   ngc_ChangeBox(this.ID,0,this.Enabled,this.Frame);
@@ -223,6 +242,8 @@ bbbfly.ToolBar = function(def,ref,parent){
       DoUpdate: bbbfly.toolbar._doUpdate,
       DoCreate: bbbfly.toolbar._doCreate,
       DoRelease: bbbfly.toolbar._doRelease,
+      DoUpdateFrame: bbbfly.toolbar._doUpdateFrame,
+      DoUpdateControlsPanel: bbbfly.toolbar._doUpdateControlsPanel,
       DoUpdateImages: bbbfly.toolbar._doUpdateImages,
       SetControlsPanelProps: bbbfly.toolbar._setControlsPanelProps,
       SetControlsPanelClassName: bbbfly.toolbar._setControlsPanelClassName,
