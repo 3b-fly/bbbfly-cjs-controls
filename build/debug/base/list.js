@@ -235,9 +235,12 @@ bbbfly.dropdownlist._onIconCreated = function(icon){
   return true;
 };
 bbbfly.dropdownlist._onIconClick = function(){
-  var list = this.Owner.DropDownControl;
-  if(list.Visible){this.Owner.HideDropDown();}
-  else{this.Owner.DropDown();}
+  var edit = this.Owner;
+  if(!edit.Enabled || edit.ReadOnly){return;}
+
+  var list = edit.DropDownControl;
+  if(list.Visible){edit.HideDropDown();}
+  else{edit.DropDown();}
 };
 bbbfly.dropdownlist._onDropDownChanged = function(){
   this.Owner.DropDownButton.Check(this.Visible);
@@ -257,7 +260,7 @@ bbbfly.dropdownlist._getIconImg = function(item){
   return this.DefaultIconImg;
 };
 bbbfly.dropdownlist._onReadOnlyChanged = function(edit,readOnly){
-  var ddButton = this.DropDownButton;
+  var ddButton = edit.DropDownButton;
   if(ddButton && (ddButton.Visible !== !readOnly)){
     ddButton.SetVisible(!readOnly);
   }
@@ -309,7 +312,10 @@ bbbfly.DropDownList = function(def,ref,parent){
       DefaultIconImg: null,
       IconBtnDef: {
          Type: 'ngButton',
-        Data: { ButtonAlign: 'left' },
+        Data: {
+          Cursor: 'default',
+          ButtonAlign: 'left'
+        },
         OnCreated: bbbfly.dropdownlist._onIconCreated,
         Events: {
           OnClick: bbbfly.dropdownlist._onIconClick
@@ -339,7 +345,7 @@ bbbfly.DropDownList = function(def,ref,parent){
     ng_MergeDef(def,{
       Data: { LeftImg: def.Data.DefaultIconImg }
     });
-    
+
     def.Buttons.unshift(btnDef);
   }
 

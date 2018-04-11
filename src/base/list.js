@@ -267,9 +267,12 @@ bbbfly.dropdownlist._onIconCreated = function(icon){
 
 /** @ignore */
 bbbfly.dropdownlist._onIconClick = function(){
-  var list = this.Owner.DropDownControl;
-  if(list.Visible){this.Owner.HideDropDown();}
-  else{this.Owner.DropDown();}
+  var edit = this.Owner;
+  if(!edit.Enabled || edit.ReadOnly){return;}
+
+  var list = edit.DropDownControl;
+  if(list.Visible){edit.HideDropDown();}
+  else{edit.DropDown();}
 };
 
 /** @ignore */
@@ -297,7 +300,7 @@ bbbfly.dropdownlist._getIconImg = function(item){
 
 /** @ignore */
 bbbfly.dropdownlist._onReadOnlyChanged = function(edit,readOnly){
-  var ddButton = this.DropDownButton;
+  var ddButton = edit.DropDownButton;
   if(ddButton && (ddButton.Visible !== !readOnly)){
     ddButton.SetVisible(!readOnly);
   }
@@ -486,7 +489,10 @@ bbbfly.DropDownList = function(def,ref,parent){
       /** @private */
       IconBtnDef: {
          Type: 'ngButton',
-        Data: { ButtonAlign: 'left' },
+        Data: {
+          Cursor: 'default',
+          ButtonAlign: 'left'
+        },
         OnCreated: bbbfly.dropdownlist._onIconCreated,
         Events: {
           OnClick: bbbfly.dropdownlist._onIconClick
@@ -530,7 +536,7 @@ bbbfly.DropDownList = function(def,ref,parent){
     ng_MergeDef(def,{
       Data: { LeftImg: def.Data.DefaultIconImg }
     });
-    
+
     def.Buttons.unshift(btnDef);
   }
 
