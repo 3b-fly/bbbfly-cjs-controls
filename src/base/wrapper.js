@@ -71,10 +71,12 @@ bbbfly.wrapper._onUpdated = function(){
 
   for(var i in childControls){
     childCtrl = childControls[i];
-    childOpts = bbbfly.wrapper._getWrapOptions(childCtrl,opts);
-
-    if(!childCtrl.Visible){continue;}
     if(this._Stretcher && (childCtrl === this._Stretcher)){continue;}
+
+    bbbfly.wrapper._trackChildControl(this,childCtrl);
+    if(!childCtrl.Visible){continue;}
+
+    childOpts = bbbfly.wrapper._getWrapOptions(childCtrl,opts);
 
     switch(childOpts.Float){
       case bbbfly.wrapper.float[vars.float.start]:
@@ -148,7 +150,8 @@ bbbfly.wrapper._getWrapperOptions = function(ctrl){
     PaddingTop: null,
     PaddingBottom: null,
     PaddingLeft: null,
-    PaddingRight: null
+    PaddingRight: null,
+    TrackChanges: false
   });
   return opts;
 },
@@ -163,7 +166,8 @@ bbbfly.wrapper._getWrapOptions = function(ctrl,opts){
     MarginTop: undefined,
     MarginBottom: undefined,
     MarginLeft: undefined,
-    MarginRight: undefined
+    MarginRight: undefined,
+    TrackChanges: opts.TrackChanges
   };
   switch(opts.Orientation){
     case bbbfly.wrapper.orientation.vertical:
@@ -177,6 +181,65 @@ bbbfly.wrapper._getWrapOptions = function(ctrl,opts){
   ng_MergeDef(childOpts,defOpts);
   return childOpts;
 },
+
+/** @ignore */
+bbbfly.wrapper._trackChildControl = function(wrapper,ctrl){
+  if(
+    !ctrl
+    || (typeof ctrl.AddEvent !== 'function')
+    || (typeof ctrl._trackedBounds !== 'undefined')
+  ){return;}
+
+  ctrl.AddEvent('OnVisibleChanged',
+    bbbfly.wrapper._onChildControlVisibleChanged,true
+  );
+  ctrl.AddEvent('OnUpdated',
+    bbbfly.wrapper._onChildControlUpdated,true
+  );
+  ctrl._parentWrapper = wrapper;
+  ctrl._trackedBounds = null;
+};
+
+/** @ignore */
+bbbfly.wrapper._onChildControlVisibleChanged = function(){
+  var opts = bbbfly.wrapper._getWrapperOptions(this._parentWrapper);
+  var childOpts = bbbfly.wrapper._getWrapOptions(this,opts);
+  if(!childOpts.TrackChanges){return;}
+
+  if(childOpts.Float){this._parentWrapper.Update(false);}
+};
+
+/** @ignore */
+bbbfly.wrapper._onChildControlUpdated = function(){
+  var opts = bbbfly.wrapper._getWrapperOptions(this._parentWrapper);
+  var childOpts = bbbfly.wrapper._getWrapOptions(this,opts);
+  if(!childOpts.TrackChanges){return;}
+
+  var ctrlBounds = this.Bounds ? ng_CopyVar(this.Bounds) : {};
+  var lastBounds = this._trackedBounds ? this._trackedBounds : {};
+  this._trackedBounds = ctrlBounds;
+
+  switch(childOpts.Float){
+    case bbbfly.wrapper.float.top:
+    case bbbfly.wrapper.float.bottom:
+      if(
+        (opts.Orientation === bbbfly.wrapper.orientation.vertical)
+        && (ctrlBounds.H !== lastBounds.H)
+      ){
+        this._parentWrapper.Update(false);
+      }
+    break;
+    case bbbfly.wrapper.float.left:
+    case bbbfly.wrapper.float.right:
+      if(
+        (opts.Orientation === bbbfly.wrapper.orientation.horizontal)
+        && (ctrlBounds.W !== lastBounds.W)
+      ){
+        this._parentWrapper.Update(false);
+      }
+    break;
+  }
+};
 
 /** @ignore */
 bbbfly.wrapper._setMargin = function(vars,direction,opts,type){
@@ -330,22 +393,23 @@ bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
     }
   }
 
+  var autoSized = false;
   switch(opts.Orientation){
     case bbbfly.wrapper.orientation.vertical:
-      if(wrapper.Bounds.H !== dimension){
-        wrapper.SetBounds({ H:dimension });
+      if(wrapper.SetBounds({ H:dimension })){
+        autoSized = true;
         wrapper.Update();
       }
     break;
     case bbbfly.wrapper.orientation.horizontal:
-      if(wrapper.Bounds.W !== dimension){
-        wrapper.SetBounds({ W:dimension });
+      if(wrapper.SetBounds({ W:dimension })){
+        autoSized = true;
         wrapper.Update();
       }
     break;
   }
 
-  if(typeof wrapper.OnAutoSized === 'function'){
+  if(autoSized && (typeof wrapper.OnAutoSized === 'function')){
     wrapper.OnAutoSized();
   }
 };
@@ -485,6 +549,7 @@ ngUserControls['bbbfly_wrapper'] = {
  * @property {px} [PaddingBottom=null] - used with vertical orientation
  * @property {px} [PaddingLeft=null] - used with horizontal orientation
  * @property {px} [PaddingRight=null] - used with horizontal orientation
+ * @property {boolean} [TrackChanges=false] - If track child control changes
  */
 
 /**
@@ -494,6 +559,7 @@ ngUserControls['bbbfly_wrapper'] = {
  * @property {px} [MarginBottom=undefined] - used with vertical orientation
  * @property {px} [MarginLeft=undefined] - used with horizontal orientation
  * @property {px} [MarginRight=undefined] - used with horizontal orientation
+ * @property {boolean} [TrackChanges=false] - Overrides wrapper option
  */
 
 /**
