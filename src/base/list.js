@@ -19,8 +19,11 @@ bbbfly.list._normalizeColumns = function(def){
     if(Object.isObject(def.Data.Columns)){
       var columns = new Array();
       for(var id in def.Data.Columns){
-        var col = def.Data.Columns[id];
-        var column = new ngListCol(id,col.Caption,col.Align,col.Width);
+        var column = def.Data.Columns[id];
+        ng_MergeVar(column,{
+          ID: id,
+          Align: 'left'
+        });
         columns.push(column);
       }
       def.Data.Columns = columns;
