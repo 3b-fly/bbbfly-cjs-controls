@@ -2,7 +2,7 @@
  * @author Jan Nejedly support@3b-fly.eu
  * @copyright Jan Nejedly
  * @version 2.0.0
- * @license see license in 'LICENSE' file
+ * @license see license in 'LICENSE_GPLv3_with_commercial_exception' file
  */
 var bbbfly=bbbfly||{};bbbfly.grid={};
 bbbfly.grid._onUpdated=function(){var b=this.ControlsPanel?this.ControlsPanel:this,c=b.ChildControls;this._Rows=[];this._Columns=[];if(c&&0<c.length){var a=b.Elm();ng_BeginMeasureElement(a);b=ng_ClientWidth(a);ng_EndMeasureElement(a);var f=c.length,h="number"===typeof this.MinColumnWidth?Math.floor(b/this.MinColumnWidth):1,k=Math.ceil(f/h);h=Math.ceil(f/k);1>h&&(h=1);f=Math.floor(b/h);"number"===typeof this.MaxColumnWidth&&(f=Math.min(f,this.MaxColumnWidth));var d=0,e=0;for(l in c)a=c[l],this._Rows[e]||

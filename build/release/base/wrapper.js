@@ -2,7 +2,7 @@
  * @author Jan Nejedly support@3b-fly.eu
  * @copyright Jan Nejedly
  * @version 2.0.0
- * @license see license in 'LICENSE' file
+ * @license see license in 'LICENSE_GPLv3_with_commercial_exception' file
  */
 var bbbfly=bbbfly||{};bbbfly.wrapper={};bbbfly.wrapper._onCreated=function(a){if(!a._Stretcher){var b=a.ControlsPanel?a.ControlsPanel:a,c={Type:"ngPanel"};a._Stretcher=ngCreateControl(c,void 0,b.ID);a._Stretcher&&(c.parent=b.ID,c.id=a._Stretcher.ID,ngAddChildControl(b,a._Stretcher),a._Stretcher.Create(c))}};
 bbbfly.wrapper._onUpdated=function(){var a=this.ControlsPanel?this.ControlsPanel.ChildControls:this.ChildControls;if(a){var b=bbbfly.wrapper._getWrapperOptions(this),c={value:{position:{start:0,end:0},margin:{start:null,end:null}}};switch(b.Orientation){case bbbfly.wrapper.orientation.vertical:c.float={start:"top",end:"bottom",stretch:"stretch"};c.direction={start:"top",end:"bottom"};c.padding={start:"PaddingBottom",end:"PaddingTop"};c.margin={start:"MarginTop",end:"MarginBottom"};break;case bbbfly.wrapper.orientation.horizontal:c.float=

@@ -2,7 +2,7 @@
  * @author Jan Nejedly support@3b-fly.eu
  * @copyright Jan Nejedly
  * @version 2.0.0
- * @license see license in 'LICENSE' file
+ * @license see license in 'LICENSE_GPLv3_with_commercial_exception' file
  */
 var bbbfly=bbbfly||{};bbbfly.fileuploader={};bbbfly.fileuploader._onItemsChanged=function(a,c){a=this.ParentControl;var b=0<c.length;this.SetInvalid(!b);this.Owner.BtnRemoveFiles.SetEnabled(b);"function"===typeof a.OnFilesChanged&&a.OnFilesChanged(c)};bbbfly.fileuploader._onShowWaiting=function(a){a=a.Controls.ProgressPanel;a.Controls.ProgressBar.SetPosition(0);a.SetVisible(!0)};bbbfly.fileuploader._onHideWaiting=function(a){(a=a.Controls.ProgressPanel)&&a.SetVisible(!1)};
 bbbfly.fileuploader._onUploadProgress=function(a,c){a=a.Controls.ProgressPanel.Controls.ProgressBar;"number"!==typeof c&&(c=0);a.SetPosition(c)};bbbfly.fileuploader._onGetAddBtnText=function(){return 1<this.Owner.Owner.MaxFilesCount?ngTxt("bbbfly_fileuploader_add_more"):ngTxt("bbbfly_fileuploader_add_one")};bbbfly.fileuploader._onGetRemoveBtnText=function(){return 1<this.Owner.Owner.MaxFilesCount?ngTxt("bbbfly_fileuploader_remove_more"):ngTxt("bbbfly_fileuploader_remove_one")};

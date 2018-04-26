@@ -2,7 +2,7 @@
  * @author Jan Nejedly support@3b-fly.eu
  * @copyright Jan Nejedly
  * @version 2.0.0
- * @license see license in 'LICENSE' file
+ * @license see license in 'LICENSE_GPLv3_with_commercial_exception' file
  */
 var bbbfly=bbbfly||{};bbbfly.list={};bbbfly.dropdownlist={};bbbfly.list._normalizeColumns=function(a){if(a.Data.Columns){if(Object.isObject(a.Data.Columns)){var b=[],c;for(c in a.Data.Columns){var d=a.Data.Columns[c];ng_MergeVar(d,{ID:c,Align:"left"});b.push(d)}a.Data.Columns=b}}else a.Data.Columns=[]};
 bbbfly.list._normalizeItems=function(a){var b=function(a){if(Array.isArray(a))return a;if(Object.isObject(a)){var c=[],g;for(g in a){var h=a[g];0<c.length&&c.push({Text:"-"});for(var k in h){var e=h[k];e.Items&&(e.Items=b(e.Items));c.push(e)}}return c}return[]};a.Data.Items=b(a.Data.Items)};bbbfly.list._getExpanded=function(){var a=[];this.Scan(function(b,c){c.Items&&!c.Collapsed&&(a[c.ID]=c);return!0});return a};
