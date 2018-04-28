@@ -19,7 +19,7 @@ bbbfly.listsearchbox = {};
 
 /** @ignore */
 bbbfly.search._normalizeText = function(text){
-  text = text.trim().toLowerCase().replace(
+  text = String.trim(text).toLowerCase().replace(
     /[.*+?^${}()|[\]\\]/g, "\\$&"
   );
 
