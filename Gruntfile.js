@@ -24,11 +24,18 @@ module.exports = function(grunt) {
         }]
       },
       license: {
-        files: [{
-          src: licenseName,
-          dest: buildPath,
-          expand: true
-        }]
+        files: [
+          {
+            src: licenseName,
+            dest: buildPath+'/debug',
+            expand: true
+          },
+          {
+            src: licenseName,
+            dest: buildPath+'/release',
+            expand: true
+          }
+        ]
       }
     },
     closureCompiler: {
