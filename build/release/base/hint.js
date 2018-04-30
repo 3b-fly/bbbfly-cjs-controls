@@ -1,9 +1,10 @@
-/**
+/*!
  * @author Jan Nejedly support@3b-fly.eu
  * @copyright Jan Nejedly
  * @version 2.0.0
- * @license see license in 'LICENSE_GPLv3_with_commercial_exception' file
- */
+ * @license see license in 'LICENSE' file
+*/
+
 var bbbfly=bbbfly||{};bbbfly.hint={hintified:{}};
 bbbfly.hint.hintified._showHint=function(a,c){if("string"!==typeof a)return!1;var b=this._Hints[a];if(!b){b={Data:{HintId:a}};this.HintDefs&&this.HintDefs[a]&&ng_MergeDef(b,this.HintDefs[a]);this.HintDef&&ng_MergeDef(b,this.HintDef);if("function"===typeof this.OnCreateHint&&!this.OnCreateHint(this,a,b))return!1;b=ngCreateTextHint(b,"");b.Owner=this;this._Hints[a]=b}if(b){var d=this.HintMessages&&this.HintMessages[a]?this.HintMessages[a]:null;b.SetText("string"===typeof c?c:ngTxt(d))}return"function"!==
 typeof this.OnShowHint||this.OnShowHint(this,a,b)?(b=this._Hints[a])?(a=this.Elm(),ng_BeginMeasureElement(a),"number"===typeof this.HintXR?this.HintX=ng_ClientWidth(a)-this.HintXR:"number"===typeof this.HintXL&&(this.HintX=this.HintXL),"number"===typeof this.HintYB?this.HintY=ng_ClientHeight(a)-this.HintYB:"number"===typeof this.HintYT&&(this.HintY=this.HintYT),ng_EndMeasureElement(a),b.PopupCtrl(this,b.Anchor?b.Anchor:"auto"),!0):!1:!1};

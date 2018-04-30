@@ -1,9 +1,10 @@
-/**
+/*!
  * @author Jan Nejedly support@3b-fly.eu
  * @copyright Jan Nejedly
  * @version 2.0.0
- * @license see license in 'LICENSE_GPLv3_with_commercial_exception' file
- */
+ * @license see license in 'LICENSE' file
+*/
+
 var bbbfly=bbbfly||{};bbbfly.toolbar={};bbbfly.toolbar._setControlsPanelProps=function(){this.ControlsPanel&&this.ControlsPanel.CtrlInheritsFrom("ngToolBar")&&ng_MergeVarReplace(this.ControlsPanel,{AutoSize:this.AutoSize,Vertical:this.Vertical,VPadding:this.VPadding,HPadding:this.HPadding,VAlign:this.VAlign,HAlign:this.HAlign,Wrapable:this.Wrapable},!0)};
 bbbfly.toolbar._setControlsPanelClassName=function(){if(this.ControlsPanel){var a=this.BaseClassName+"ControlsPanel";this.Enabled?this.Invalid&&(a+="Invalid"):a+="Disabled";var b=this.ControlsPanel.Elm();this.ControlsPanel.BaseClassName=a;b&&(b.className=a)}};
 bbbfly.toolbar._doCreate=function(a,b,c){var d={ControlsPanel:Object.isObject(a.ControlsPanel)?a.ControlsPanel:{}};ng_MergeDef(d,{ControlsPanel:{L:0,T:0,R:0,B:0,Type:"ngToolBar",id:this.ID+"_P",ScrollBars:ssAuto,Controls:a.Controls,ModifyControls:a.ModifyControls,Events:{OnUpdated:bbbfly.toolbar._onControlsPanelUpdated}},FramePanel:{Type:"ngPanel",id:this.ID+"_F",ScrollBars:ssDefault,style:{position:"absolute",zIndex:800}}});a.ParentReferences||(this.Controls={},this.Controls.Owner=this,b=this.Controls);

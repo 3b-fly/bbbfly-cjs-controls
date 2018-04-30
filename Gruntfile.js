@@ -1,7 +1,6 @@
 module.exports = function(grunt) {
   var srcPath = 'src';
   var buildPath = 'build';
-  var licenseName = 'LICENSE_GPLv3_with_commercial_exception';
 
   var packageJSON = grunt.file.readJSON('package.json');
   var controlsJSON = grunt.file.readJSON(srcPath+'/controls.json');
@@ -26,12 +25,12 @@ module.exports = function(grunt) {
       license: {
         files: [
           {
-            src: licenseName,
+            src: 'LICENSE',
             dest: buildPath+'/debug',
             expand: true
           },
           {
-            src: licenseName,
+            src: 'LICENSE',
             dest: buildPath+'/release',
             expand: true
           }
@@ -69,12 +68,7 @@ module.exports = function(grunt) {
     },
     usebanner: {
       options: {
-        banner: '/**\n' +
-          ' * @author <%= pkg.author.name %> <%= pkg.author.email %>\n' +
-          ' * @copyright <%= pkg.author.name %>\n' +
-          ' * @version <%= pkg.version %>\n' +
-          ' * @license <%= pkg.license %>\n' +
-          ' */'
+        banner: grunt.file.read('HEADER')
       },
       files: {
         cwd: buildPath,

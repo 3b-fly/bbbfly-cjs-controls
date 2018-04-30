@@ -1,9 +1,10 @@
-/**
+/*!
  * @author Jan Nejedly support@3b-fly.eu
  * @copyright Jan Nejedly
  * @version 2.0.0
- * @license see license in 'LICENSE_GPLv3_with_commercial_exception' file
- */
+ * @license see license in 'LICENSE' file
+*/
+
 var bbbfly=bbbfly||{};bbbfly.search={};bbbfly.searchedit={};bbbfly.searchbox={};bbbfly.listsearchbox={};
 bbbfly.search._normalizeText=function(a){a=String.trim(a).toLowerCase().replace(/[.*+?^${}()|[\]\\]/g,"\\$&");for(var b="",c=0;c<a.length;c++){var d=a.charAt(c),e="\u00e1\u00e4\u0105\u0103\u010d\u0107\u010f\u0111\u00e9\u011b\u0119\u00ed\u013a\u013e\u0142\u0144\u0148\u00f3\u00f4\u0151\u00f6\u0155\u0159\u0161\u015b\u015f\u0165\u0163\u00fa\u016f\u0171\u00fc\u00fd\u017e\u017a\u017c".indexOf(d);b=-1!==e?b+"aaaaccddeeeilllnnoooorrsssttuuuuyzzz".charAt(e):b+d}return b};
 bbbfly.searchedit._search=function(a){"string"===typeof a&&this.SetText(a);if("function"===typeof this.OnSearch&&!this.OnSearch(a))return!1;a=this.GetText();return"function"===typeof this.DoSearch?this.DoSearch(a):!1};bbbfly.searchedit._clearSearch=function(){this.SetText("");"function"===typeof this.HideHint&&this.HideHint("noresults");this.SetFocus(!1)};
