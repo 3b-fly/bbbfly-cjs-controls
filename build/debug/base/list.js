@@ -249,6 +249,12 @@ bbbfly.dropdownlist._onIconClick = function(){
 bbbfly.dropdownlist._onDropDownChanged = function(){
   this.Owner.DropDownButton.Check(this.Visible);
 };
+bbbfly.dropdownlist._onListItemGetText = function(edit,list,item,text){
+  if(typeof list.OnGetText === 'function'){
+    return list.OnGetText(list,item);
+  }
+  return text;
+};
 bbbfly.dropdownlist._onListItemChanged = function(edit,list,item){
   if(this.Icon){
     this.Icon.LeftImg = this.GetIconImg(item);
@@ -333,6 +339,7 @@ bbbfly.DropDownList = function(def,ref,parent){
       }
     },
     Events: {
+      OnListItemGetText: bbbfly.dropdownlist._onListItemGetText,
       OnListItemChanged: bbbfly.dropdownlist._onListItemChanged,
       OnReadOnlyChanged: bbbfly.dropdownlist._onReadOnlyChanged
     },
