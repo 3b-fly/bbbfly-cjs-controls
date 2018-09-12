@@ -19,6 +19,10 @@ bbbfly.fileuploader._onItemsChanged = function(list,items){
     uploader.OnFilesChanged(items);
   }
 };
+
+bbbfly.fileuploader._onAddFileEnabledChanged = function(){
+  this.Owner.DragAndDropPanel.SetVisible(this.Enabled);
+};
 bbbfly.fileuploader._onShowWaiting = function(uploader){
   var progressPanel = uploader.Controls.ProgressPanel;
   var bar = progressPanel.Controls.ProgressBar;
@@ -70,6 +74,7 @@ bbbfly.fileuploader._showError = function(data){
     break;
     case bbbfly.FileUploader.error.grouped:
       var errors = {};
+
       for(var i in data){
         var item = data[i];
         if(typeof item !== 'object'){continue;}
@@ -77,9 +82,9 @@ bbbfly.fileuploader._showError = function(data){
         var fileName = item.Name;
         var error = item.Error;
 
-        if(fileName && error && error.Message){
+        if(error && error.Message){
           if(!errors[error.Message]){errors[error.Message] = new Array();}
-          errors[error.Message].push(fileName);
+          errors[error.Message].push(fileName ? fileName : true);
         }
       }
 
@@ -151,7 +156,6 @@ bbbfly.fileuploader._showError = function(data){
       }
     break;
   }
-
   this.DoShowError(message);
 };
 bbbfly.fileuploader._fileNameExtsToString = function(fileNames){
@@ -214,7 +218,8 @@ bbbfly.FileUploader = function(def,ref,parent){
         Controls: {
           BtnAddFile: {
             Events: {
-              OnGetText: bbbfly.fileuploader._onGetAddBtnText
+              OnGetText: bbbfly.fileuploader._onGetAddBtnText,
+              OnEnabledChanged: bbbfly.fileuploader._onAddFileEnabledChanged
             }
           },
           BtnRemoveFiles: {
