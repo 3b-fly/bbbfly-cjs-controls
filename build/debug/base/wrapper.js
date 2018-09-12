@@ -174,8 +174,9 @@ bbbfly.wrapper._getWrapOptions = function(ctrl,opts){
 bbbfly.wrapper._trackChildControl = function(wrapper,ctrl){
   if(
     !ctrl
-    || (typeof ctrl.AddEvent !== 'function')
     || (typeof ctrl._trackedBounds !== 'undefined')
+    || (typeof ctrl._trackedFloat !== 'undefined')
+    || (typeof ctrl.AddEvent !== 'function')
   ){return;}
 
   ctrl.AddEvent('OnVisibleChanged',
@@ -186,6 +187,7 @@ bbbfly.wrapper._trackChildControl = function(wrapper,ctrl){
   );
   ctrl._parentWrapper = wrapper;
   ctrl._trackedBounds = null;
+  ctrl._trackedFloat = null;
 };
 bbbfly.wrapper._onChildControlVisibleChanged = function(){
   var opts = bbbfly.wrapper._getWrapperOptions(this._parentWrapper);
@@ -203,21 +205,34 @@ bbbfly.wrapper._onChildControlUpdated = function(){
   var lastBounds = this._trackedBounds ? this._trackedBounds : {};
   this._trackedBounds = ctrlBounds;
 
-  switch(childOpts.Float){
-    case bbbfly.wrapper.float.top:
-    case bbbfly.wrapper.float.bottom:
+  var ctrlFloat = childOpts.Float;
+  var lastFloat = this._trackedFloat;
+  this._trackedFloat = ctrlFloat;
+
+  if(ctrlFloat !== lastFloat){
+    this._parentWrapper.Update(false);
+    return;
+  }
+
+  switch(opts.Orientation){
+    case bbbfly.wrapper.orientation.vertical:
+      if(ctrlBounds.H === lastBounds.H){return;}
+
       if(
-        (opts.Orientation === bbbfly.wrapper.orientation.vertical)
-        && (ctrlBounds.H !== lastBounds.H)
+        (childOpts.Float === bbbfly.wrapper.float.top)
+        || (childOpts.Float === bbbfly.wrapper.float.bottom)
+        || (childOpts.Float === bbbfly.wrapper.float.stretch)
       ){
         this._parentWrapper.Update(false);
       }
     break;
-    case bbbfly.wrapper.float.left:
-    case bbbfly.wrapper.float.right:
+    case bbbfly.wrapper.orientation.horizontal:
+      if(ctrlBounds.W === lastBounds.W){return;}
+
       if(
-        (opts.Orientation === bbbfly.wrapper.orientation.horizontal)
-        && (ctrlBounds.W !== lastBounds.W)
+        (childOpts.Float === bbbfly.wrapper.float.left)
+        || (childOpts.Float === bbbfly.wrapper.float.right)
+        || (childOpts.Float === bbbfly.wrapper.float.stretch)
       ){
         this._parentWrapper.Update(false);
       }
