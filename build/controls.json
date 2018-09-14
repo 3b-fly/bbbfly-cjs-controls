@@ -138,6 +138,21 @@
         }
       }
     },
+    "image": {
+      "DebugFiles": [
+        "debug/base/image.js"
+      ],
+      "ReleaseFiles": [
+        "release/base/image.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        }
+      }
+    },
     "list": {
       "DebugFiles": [
         "debug/base/list.js"

@@ -30,6 +30,8 @@
 - **grid**
   - `bbbfly.GridPanel`
   - `bbbfly.GridGroup`
+- **image**
+  - `bbbfly.ImagePreview`
 - **list**
   - `bbbfly.List`
   - `bbbfly.DropDownList`

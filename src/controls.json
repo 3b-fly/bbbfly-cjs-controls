@@ -117,6 +117,19 @@
         }
       }
     },
+    "image": {
+      "DebugFiles": [
+        "base/image.js"
+      ],
+      "ReleaseFiles": [
+        "base/image.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": ["Controls.js"]
+        }
+      }
+    },
     "list": {
       "DebugFiles": [
         "base/list.js"
