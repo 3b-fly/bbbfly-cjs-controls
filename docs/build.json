@@ -10,6 +10,7 @@
       "../src/base/edit.js",
       "../src/base/grid.js",
       "../src/base/hint.js",
+      "../src/base/image.js",
       "../src/base/list.js",
       "../src/base/menu.js",
       "../src/base/search.js",

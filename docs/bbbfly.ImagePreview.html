@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Interface: Button</title>
+    <title>Class: ImagePreview</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -1065,16 +1065,87 @@
   }
 })();</script>
     <div class="main">
-<section class="kind-interface">
+<section class="kind-class">
 <header>
     <h1 class="name">
-          <span class="ancestors"><a href="bbbfly.html">bbbfly</a><a href="bbbfly.Edit.html">.Edit</a>.</span>
-        Button
+          <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
+        ImagePreview
+  <span class="types">
+      <span class="type-signature class">
+        class
+      </span>
+      <span class="type-signature control">
+        control
+      </span>
+  </span>
     </h1>
 </header>
 <article>
     <div class="container-overview">
-            <div class="description">Any <a href="bbbfly.Edit.html">Edit</a> child button can implement this interface.</div>
+<dt>
+    <div class="nameContainer">
+        <h2 id="ImagePreview">
+          new 
+          bbbfly.ImagePreview
+          <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
+        </h2>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/image.js#L83">base/image.js, line 83</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Displays image of any dimensions.</div>
+        <h3>Parameters</h3>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">def</span>
+                </td>
+            <td class="type">
+<span class="param-type">object</span>
+            </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Descendant definition
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">ref</span>
+                </td>
+            <td class="type">
+<span class="param-type">object</span>
+            </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Reference owner
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">parent</span>
+                </td>
+            <td class="type">
+<span class="param-type">object</span>
+|
+<span class="param-type">string</span>
+            </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Parent DIV element or its ID
+            </td>
+        </tr>
+	</tbody>
+</table>
 <dl class="details">
     <h3>Properties</h3>
     <table class="props" my="test">
@@ -1087,19 +1158,18 @@
         </tr>
         </thead>
         <tbody>
-            <tr id="property:ButtonId">
+            <tr id="property:ImgUrl">
                     <td class="name">
-                      <span class="param-name">ButtonId</span>
+                      <span class="param-name">ImgUrl</span>
                     </td>
                 <td class="type">
-<span class="param-type">string</span>
+<span class="param-type"><a href="global.html#url">url</a></span>
                 </td>
                     <td class="default">
                         null
                     </td>
                 <td class="description last">
-                        <span class="optional">optional</span>
-                  ID unique per edit
+                  Image url
                 </td>
             </tr>
         </tbody>
@@ -1107,7 +1177,57 @@
 </dl>
 <dl class="details">
 </dl>
+</dd>
     </div>
+        <h3>Extends</h3>
+        <ul>
+            <li>ngGroup</li>
+        </ul>
+        <h3>In Packages</h3>
+        <ul>
+              <li><a href="packages.html#package:image">image</a></li>
+        </ul>
+        <h3>Methods</h3>
+        <dl>
+<dt>
+    <div class="nameContainer">
+        <h4 id="SetImage">
+          SetImage
+          <span class="signature">(url)</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/image.js#L97">base/image.js, line 97</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">url</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="global.html#url">url</a></span>
+            </td>
+            <td class="description last">
+                Image url
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+</dd>
+        </dl>
 </article>
 </section>
         <footer>
