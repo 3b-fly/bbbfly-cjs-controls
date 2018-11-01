@@ -318,20 +318,23 @@ bbbfly.wrapper._positionCtrl = function(ctrl,vars,direction,opts){
   }
 },
 bbbfly.wrapper._positionStretcher = function(ctrl,vars,direction,opts){
+  var margin = vars.value.margin[direction];
+  var dim = ((typeof margin === 'number') && (margin > 0)) ? 1 : 0;
+
   switch(opts.Orientation){
     case bbbfly.wrapper.orientation.vertical:
-      var bounds = {T:undefined,B:undefined,H:0,L:0,R:0,W:undefined};
+      var bounds = {T:undefined,B:undefined,H:dim,L:0,R:0,W:undefined};
       switch(direction){
-        case 'start': bounds.T = vars.value.position.start; break;
-        case 'end': bounds.B = vars.value.position.end; break;
+        case 'start': bounds.T = (vars.value.position.start - dim); break;
+        case 'end': bounds.B = (vars.value.position.end - dim); break;
       }
       ctrl.SetBounds(bounds);
     break;
     case bbbfly.wrapper.orientation.horizontal:
-      var bounds = {L:undefined,R:undefined,W:0,T:0,B:0,H:undefined};
+      var bounds = {L:undefined,R:undefined,W:dim,T:0,B:0,H:undefined};
       switch(direction){
-        case 'start': bounds.L = vars.value.position.start; break;
-        case 'end': bounds.R = vars.value.position.end; break;
+        case 'start': bounds.L = (vars.value.position.start - dim); break;
+        case 'end': bounds.R = (vars.value.position.end - dim); break;
       }
       ctrl.SetBounds(bounds);
     break;
