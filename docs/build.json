@@ -2,6 +2,7 @@
   "source": {
     "include": [
       "../README.md",
+      "../package.json",
       "../src/types.jsdoc",
       "../src/controls.jsdoc",
       "../src/base/bar.js",
