@@ -31,11 +31,14 @@ bbbfly.wrapper._onCreated = function(wrapper){
 
 /** @ignore */
 bbbfly.wrapper._onUpdated = function(){
-  var childControls = this.ControlsPanel
-    ? this.ControlsPanel.ChildControls : this.ChildControls;
+  var childParent = this.ControlsPanel ? this.ControlsPanel : this;
+  var childParentNode = childParent.Elm();
+
+  var childControls = childParent.ChildControls;
   if(!childControls){return;}
 
   var opts = bbbfly.wrapper._getWrapperOptions(this);
+  var size = null;
 
   var vars = {
     value: {
@@ -50,12 +53,20 @@ bbbfly.wrapper._onUpdated = function(){
       vars.direction = {start:'top',end:'bottom'};
       vars.padding = {start:'PaddingBottom',end:'PaddingTop'};
       vars.margin = {start:'MarginTop',end:'MarginBottom'};
+
+      if(!this._handlingSizeChange && childParentNode){
+        size = ng_ClientWidth(childParentNode);
+      }
     break;
     case bbbfly.wrapper.orientation.horizontal:
       vars.float = {start:'left',end:'right',stretch:'stretch'};
       vars.direction = {start:'left',end:'right'};
       vars.padding = {start:'PaddingRight',end:'PaddingLeft'};
       vars.margin = {start:'MarginLeft',end:'MarginRight'};
+
+      if(!this._handlingSizeChange && childParentNode){
+        size = ng_ClientHeight(childParentNode);
+      }
     break;
     default: return;
   }
@@ -136,6 +147,25 @@ bbbfly.wrapper._onUpdated = function(){
         bbbfly.wrapper._positionStretcher(this._Stretcher,vars,'end',opts);
         this._Stretcher.SetVisible(true);
       }
+    }
+  }
+
+  if(childParentNode && !this._handlingSizeChange){
+    var finalSize = null;
+
+    switch(opts.Orientation){
+      case bbbfly.wrapper.orientation.vertical:
+        finalSize = ng_ClientWidth(childParentNode);
+      break;
+      case bbbfly.wrapper.orientation.horizontal:
+        finalSize = ng_ClientHeight(childParentNode);
+      break;
+    }
+
+    if(finalSize !== size){
+      this._handlingSizeChange = true;
+      this.Update();
+      this._handlingSizeChange = false;
     }
   }
 };
