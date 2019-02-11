@@ -23,7 +23,7 @@ bbbfly.grid._onUpdated = function(){
     ng_EndMeasureElement(node);
 
     var itemsCnt = childControls.length;
-    var columnsCnt = (typeof this.MinColumnWidth === 'number')
+    var columnsCnt = Number.isNumber(this.MinColumnWidth)
       ? Math.floor(gridWidth / this.MinColumnWidth) : 1;
 
     var itemsPerColumn = Math.ceil(itemsCnt / columnsCnt);
@@ -32,7 +32,7 @@ bbbfly.grid._onUpdated = function(){
 
     var columnWidth = Math.floor(gridWidth / columnsCnt);
 
-    if(typeof this.MaxColumnWidth === 'number'){
+    if(Number.isNumber(this.MaxColumnWidth)){
       columnWidth = Math.min(columnWidth,this.MaxColumnWidth);
     }
 
@@ -73,7 +73,7 @@ bbbfly.grid._onUpdated = function(){
         if((item._GridColumn + 1) === columnsCnt){
           itemWidth = (gridWidth - itemLeft);
 
-          if(typeof this.MaxColumnWidth === 'number'){
+          if(Number.isNumber(this.MaxColumnWidth)){
             itemWidth = Math.min(itemWidth,this.MaxColumnWidth);
           }
         }
@@ -89,7 +89,7 @@ bbbfly.grid._onUpdated = function(){
         }
 
         var itemHeight = item.Bounds.H;
-        if(typeof itemHeight !== 'number'){
+        if(!Number.isNumber(itemHeight)){
           var node = item.Elm();
           ng_BeginMeasureElement(node);
           itemHeight = ng_ClientHeight(node);
@@ -108,8 +108,8 @@ bbbfly.grid._onUpdated = function(){
       var cPanel = this.ControlsPanel;
       if(cPanel && cPanel.Bounds){
 
-        if(typeof cPanel.Bounds.T === 'number'){gridHeight += cPanel.Bounds.T;}
-        if(typeof cPanel.Bounds.B === 'number'){gridHeight += cPanel.Bounds.B;}
+        if(Number.isNumber(cPanel.Bounds.T)){gridHeight += cPanel.Bounds.T;}
+        if(Number.isNumber(cPanel.Bounds.B)){gridHeight += cPanel.Bounds.B;}
       }
 
       if(this.SetBounds({ H: gridHeight })){

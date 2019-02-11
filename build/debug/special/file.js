@@ -38,7 +38,7 @@ bbbfly.fileuploader._onUploadProgress = function(uploader,progress){
   var progressPanel = uploader.Controls.ProgressPanel;
   var bar = progressPanel.Controls.ProgressBar;
 
-  if(typeof progress !== 'number'){progress = 0;}
+  if(!Number.isNumber(progress)){progress = 0;}
   bar.SetPosition(progress);
 };
 bbbfly.fileuploader._onGetAddBtnText = function(){
@@ -162,7 +162,7 @@ bbbfly.fileuploader._fileNameExtsToString = function(fileNames){
   var exts = new Array();
   for(var i in fileNames){
     var name = fileNames[i];
-    var ext = (typeof name === 'string')
+    var ext = String.isString(name)
       ? name.substring(name.indexOf(".")) : '';
     if(!exts[ext]){exts[ext] = 1;}
     else{exts[ext]++;}
@@ -190,7 +190,7 @@ bbbfly.fileuploader._getFilesToRemove = function(){
   return this.GetFilesToRemove.callParent();
 };
 bbbfly.fileuploader._maxSize = function(value){
-  if(typeof value === 'number'){
+  if(Number.isNumber(value)){
     var units = new Array('B','kB','MB','GB');
     for(var i in units){
       if(value < 1000){return '('+(Math.floor(value*10)/10)+units[i]+')';}
@@ -200,7 +200,7 @@ bbbfly.fileuploader._maxSize = function(value){
   return '';
 };
 bbbfly.fileuploader._maxCnt = function(value){
-  return (typeof value === 'number') ? ' ('+Math.floor(value)+')' : '';
+  return Number.isNumber(value) ? ' ('+Math.floor(value)+')' : '';
 };
 bbbfly.FileUploader = function(def,ref,parent){
   def = def || {};

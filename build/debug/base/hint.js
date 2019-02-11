@@ -11,7 +11,7 @@ bbbfly.hint = {
   hintified: {}
 };
 bbbfly.hint.hintified._showHint = function(hintId,message){
-  if(typeof hintId !== 'string'){return false;}
+  if(!String.isString(hintId)){return false;}
 
   var hint = this._Hints[hintId];
   if(!hint){
@@ -37,7 +37,7 @@ bbbfly.hint.hintified._showHint = function(hintId,message){
   if(hint){
     var resId = (this.HintMessages && this.HintMessages[hintId])
       ? this.HintMessages[hintId] : null;
-    hint.SetText((typeof message === 'string') ? message : ngTxt(resId));
+    hint.SetText(String.isString(message) ? message : ngTxt(resId));
   }
 
   if(
@@ -50,17 +50,17 @@ bbbfly.hint.hintified._showHint = function(hintId,message){
     var node = this.Elm();
     ng_BeginMeasureElement(node);
 
-    if((typeof this.HintXR === 'number')){
+    if(Number.isNumber(this.HintXR)){
       this.HintX = ng_ClientWidth(node) - this.HintXR;
     }
-    else if((typeof this.HintXL === 'number')){
+    else if(Number.isNumber(this.HintXL)){
       this.HintX = this.HintXL;
     }
 
-    if((typeof this.HintYB === 'number')){
+    if(Number.isNumber(this.HintYB)){
       this.HintY = ng_ClientHeight(node) - this.HintYB;
     }
-    else if((typeof this.HintYT === 'number')){
+    else if(Number.isNumber(this.HintYT)){
       this.HintY = this.HintYT;
     }
 

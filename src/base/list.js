@@ -173,8 +173,8 @@ bbbfly.list._highlightItem = function(item){
   var flashCnt = this.HighlightFlashCnt;
 
   if(
-    (typeof hlClass === 'string')
-    && (typeof interval === 'number') && (typeof flashCnt === 'number')
+    String.isString(hlClass)
+    && Number.isNumber(interval) && Number.isNumber(flashCnt)
   ){
     var itemId = this.ItemId(item);
     var itemNode = document.getElementById(this.ID+'_'+itemId);
@@ -216,11 +216,11 @@ bbbfly.list._highlightItem = function(item){
 bbbfly.list._onCalcIndent = function(list,item,id,level){
   var indent = 0;
   if(level > 0){
-    if(typeof list.DefaultIndent === 'number'){
+    if(Number.isNumber(list.DefaultIndent)){
       indent += level*list.DefaultIndent;
     }
 
-    if(typeof item.Indent === 'number'){
+    if(Number.isNumber(item.Indent)){
       indent += item.Indent;
     }
   }

@@ -33,7 +33,7 @@ bbbfly.search._normalizeText = function(text){
   return normalized;
 };
 bbbfly.searchedit._search = function(text){
-  if(typeof text === 'string'){this.SetText(text);}
+  if(String.isString(text)){this.SetText(text);}
 
   if((typeof this.OnSearch === 'function') && !this.OnSearch(text)){
     return false;
@@ -105,10 +105,10 @@ bbbfly.searchbox._onSearchResults = function(results){
       if(!result){break;}
       itemsCnt ++;
 
-      var resultNameProperty = (typeof this.ResultNameProperty === 'string')
+      var resultNameProperty = String.isString(this.ResultNameProperty)
         ? this.ResultNameProperty : 'text';
 
-      var resultText = (typeof result[resultNameProperty] === 'string')
+      var resultText = String.isString(result[resultNameProperty])
         ? result[resultNameProperty] : '';
       items.push({
         Text: resultText,
@@ -119,11 +119,11 @@ bbbfly.searchbox._onSearchResults = function(results){
       var moreText = '';
       var moreCnt = results.count - itemsCnt;
 
-      if(typeof this.MoreItemsText_part1 === 'string'){
+      if(String.isString(this.MoreItemsText_part1)){
         moreText += ngTxt(this.MoreItemsText_part1);
       }
       moreText += moreCnt;
-      if(typeof this.MoreItemsText_part2 === 'string'){
+      if(String.isString(this.MoreItemsText_part2)){
         moreText += ngTxt(this.MoreItemsText_part2);
       }
 
@@ -261,7 +261,7 @@ bbbfly.listsearchbox._compareItem = function(list,item,text){
     itemText = item.Text;
   }
 
-  if(typeof itemText !== 'string'){return false;}
+  if(!String.isString(itemText)){return false;}
 
   itemText = bbbfly.search._normalizeText(itemText);
   var exp = new RegExp('^(.*)'+text+'(.*)$');

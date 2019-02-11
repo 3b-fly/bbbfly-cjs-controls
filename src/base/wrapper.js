@@ -299,9 +299,9 @@ bbbfly.wrapper._setMargin = function(vars,direction,opts,type){
     case 'value': newVal = vars.value.margin[revDir]; break;
   }
 
-  if(typeof newVal === 'number'){
+  if(Number.isNumber(newVal)){
     var oldVal = vars.value.margin[direction];
-    if((typeof oldVal !== 'number') || (newVal > oldVal)){
+    if(!Number.isNumber(oldVal) || (newVal > oldVal)){
       vars.value.margin[direction] = newVal;
     }
   }
@@ -312,7 +312,7 @@ bbbfly.wrapper._setMargin = function(vars,direction,opts,type){
 /** @ignore */
 bbbfly.wrapper._addMargin = function(vars,direction){
   var addVal = vars.value.margin[direction];
-  if(typeof addVal === 'number'){
+  if(Number.isNumber(addVal)){
     switch(direction){
       case 'start': vars.value.position.end += addVal; break;
       case 'end': vars.value.position.start += addVal; break;
@@ -323,7 +323,7 @@ bbbfly.wrapper._addMargin = function(vars,direction){
 /** @ignore */
 bbbfly.wrapper._overwriteMargin = function(vars,direction,opts,type){
   var newVal = opts[vars[type][direction]];
-  vars.value.margin[direction] = (typeof newVal === 'number') ? newVal : null;
+  vars.value.margin[direction] = Number.isNumber(newVal) ? newVal : null;
 },
 
 /** @ignore */
@@ -367,7 +367,7 @@ bbbfly.wrapper._positionCtrl = function(ctrl,vars,direction,opts){
     case 'start':
     case 'end':
       var dimBound = ctrl.Bounds[boundNames.dim];
-      if(typeof dimBound === 'number'){position[direction] += dimBound;}
+      if(Number.isNumber(dimBound)){position[direction] += dimBound;}
     break;
   }
 },
@@ -375,7 +375,7 @@ bbbfly.wrapper._positionCtrl = function(ctrl,vars,direction,opts){
 /** @ignore */
 bbbfly.wrapper._positionStretcher = function(ctrl,vars,direction,opts){
   var margin = vars.value.margin[direction];
-  var dim = ((typeof margin === 'number') && (margin > 0)) ? 1 : 0;
+  var dim = (Number.isNumber(margin) && (margin > 0)) ? 1 : 0;
 
   switch(opts.Orientation){
     case bbbfly.wrapper.orientation.vertical:
@@ -430,12 +430,12 @@ bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
 
     switch(opts.Orientation){
       case bbbfly.wrapper.orientation.vertical:
-        if(typeof cPanel.Bounds.T === 'number'){dimension += cPanel.Bounds.T;}
-        if(typeof cPanel.Bounds.B === 'number'){dimension += cPanel.Bounds.B;}
+        if(Number.isNumber(cPanel.Bounds.T)){dimension += cPanel.Bounds.T;}
+        if(Number.isNumber(cPanel.Bounds.B)){dimension += cPanel.Bounds.B;}
       break;
       case bbbfly.wrapper.orientation.horizontal:
-        if(typeof cPanel.Bounds.L === 'number'){dimension += cPanel.Bounds.L;}
-        if(typeof cPanel.Bounds.R === 'number'){dimension += cPanel.Bounds.R;}
+        if(Number.isNumber(cPanel.Bounds.L)){dimension += cPanel.Bounds.L;}
+        if(Number.isNumber(cPanel.Bounds.R)){dimension += cPanel.Bounds.R;}
       break;
       default: return;
     }

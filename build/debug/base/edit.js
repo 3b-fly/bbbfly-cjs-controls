@@ -33,7 +33,7 @@ bbbfly.edit._setFocusBefore = function(){
 bbbfly.edit._setFocusAfter = function(){
   var text = this.GetText();
   this.SetFocus(true);
-  this.SetCaretPos((typeof text === 'string') ? text.length : 0);
+  this.SetCaretPos(String.isString(text) ? text.length : 0);
 };
 bbbfly.edit._normalizeButtons = function(def){
   if(def.Buttons){

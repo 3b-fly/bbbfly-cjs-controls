@@ -9,8 +9,8 @@
 var bbbfly = bbbfly || {};
 bbbfly.imagepreview = {};
 bbbfly.imagepreview._getImageNode = function(ctrl){
-  if(!ctrl || (typeof ctrl.ID !== 'string')){return null;}
-  
+  if(!ctrl || !String.isString(ctrl.ID)){return null;}
+
   var imgId = ctrl.ID+'_IMG';
   var imgNode = document.getElementById(imgId);
 
@@ -29,9 +29,9 @@ bbbfly.imagepreview._getImageNode = function(ctrl){
     imgNode = document.getElementById(imgId);
     if(imgNode){
       imgNode.onload = function() {
-        this.style.marginLeft = (typeof this.width === 'number')
+        this.style.marginLeft = Number.isNumber(this.width)
           ? -(this.width/2)+'px' : '0px';
-        this.style.marginTop = (typeof this.height === 'number')
+        this.style.marginTop = Number.isNumber(this.height)
           ? -(this.height/2)+'px' : '0px';
       };
     }
@@ -45,12 +45,12 @@ bbbfly.imagepreview._setImage = function(url){
   if(!imgNode){return;}
 
   imgNode.src = '';
-  if(typeof url === 'string'){
+  if(String.isString(url)){
     imgNode.src = url;
   }
 };
 bbbfly.imagepreview._onCreated = function(preview){
-  if(typeof preview.ImgUrl === 'string'){
+  if(String.isString(preview.ImgUrl)){
     preview.SetImage(preview.ImgUrl);
   }
   return true;
