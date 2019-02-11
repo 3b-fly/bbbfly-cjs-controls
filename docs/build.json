@@ -19,6 +19,8 @@
       "../src/base/lang/search_en.js",
       "../src/base/wrapper.js",
 
+      "../src/map/map.js",
+
       "../src/special/file.js",
       "../src/special/lang/file_cs.js",
       "../src/special/lang/file_en.js"
