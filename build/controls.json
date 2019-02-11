@@ -173,6 +173,26 @@
         }
       }
     },
+    "map": {
+      "DebugFiles": [
+        "debug/map/map.js"
+      ],
+      "ReleaseFiles": [
+        "release/map/map.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        },
+        "bbbfly-cjs": {
+          "Packages": [
+            "crossbrowser"
+          ]
+        }
+      }
+    },
     "menu": {
       "DebugFiles": [
         "debug/base/menu.js"

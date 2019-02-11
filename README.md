@@ -35,6 +35,8 @@
 - **list**
   - `bbbfly.List`
   - `bbbfly.DropDownList`
+- **map**
+  - `bbbfly.Map`
 - **menu**
   - `bbbfly.Menu`
 - **search**
