@@ -7,9 +7,8 @@
 
 
 var bbbfly = bbbfly || {};
-bbbfly.map = {
-  map: {}
-};
+bbbfly.map = bbbfly.map || {};
+bbbfly.map.map = {};
 bbbfly.map.map._onCreated = function(map){
   map.CreateMap();
   return true;
@@ -38,7 +37,7 @@ bbbfly.map.map._createMap = function(){
     markerZoomAnimation: true
   };
 
-  if(this.MaxBounds){
+  if(Object.isObject(this.MaxBounds) || Array.isArray(this.MaxBounds)){
     options.maxBounds = this.MaxBounds;
   }
   if(Number.isNumber(this.MinZoom)){
@@ -48,9 +47,13 @@ bbbfly.map.map._createMap = function(){
   if(Number.isNumber(this.MaxZoom)){
     options.maxZoom = this.MaxZoom;
   }
+  if(String.isString(this.Crs)){
+    options.crs = L.CRS[this.Crs];
+  }
 
   var map = this.DoCreateMap(options);
   if(!map){return false;}
+  this.AddLayers(this.Layers);
   if(map.getZoom && this.OnZoomChanged){
     this.OnZoomChanged(map.getZoom());
   }
@@ -149,14 +152,6 @@ bbbfly.map.map._zoomOut = function(zoomBy){
   }
   return false;
 };
-bbbfly.map.map._setCenter = function(coordinates){
-  return this.SetView(coordinates,null);
-};
-bbbfly.map.map._getCenter = function(){
-  var map = this.GetMap();
-  if(map){return map.getCenter();}
-  return null;
-};
 bbbfly.map.map._onMapZoomEnd = function(event){
   var map = event.target;
   if(map && (typeof map.getZoom === 'function')){
@@ -166,6 +161,120 @@ bbbfly.map.map._onMapZoomEnd = function(event){
       widget.OnZoomChanged(map.getZoom());
     }
   }
+};
+bbbfly.map.map._setCenter = function(coordinates){
+  return this.SetView(coordinates,null);
+};
+bbbfly.map.map._getCenter = function(){
+  var map = this.GetMap();
+  if(map){return map.getCenter();}
+  return null;
+};
+bbbfly.map.map._addLayers = function(defs){
+  if(!Array.isArray(defs)){return false;}
+
+  for(var i in defs){
+    if(!this.AddLayer(defs[i])){
+      return false;
+    }
+  }
+  return true;
+};
+bbbfly.map.map._addLayer = function(def){
+  if(!Object.isObject(def) || !String.isString(def.Url)){return false;}
+
+  var map = this.GetMap();
+  if(!map){return false;}
+
+  var iface = this.LayerInterface(def.Type);
+  if(!Object.isObject(iface)){return false;}
+
+  ng_MergeVar(def,this.DefaultLayer);
+
+  var options = {};
+  if(Object.isObject(iface.map)){
+    for(var defProp in def){
+      var optProp = iface.map[defProp];
+      if(optProp){options[optProp] = def[defProp];}
+    }
+  }
+
+  if(Object.isObject(iface.options)){
+    ng_MergeVar(options,iface.options);
+  }
+
+  var layer = null;
+  switch(iface.type){
+    case 'L.ImageOverlay':
+      layer = L.tileLayer.wms(options.url,options.bounds,options);
+    break;
+    case 'L.TileLayer':
+      layer = L.tileLayer(options.url,options);
+    break;
+    case 'L.TileLayer.wms':
+      layer = L.tileLayer.wms(options.url,options);
+    break;
+    case 'L.esri.TiledMapLayer':
+      layer = L.esri.tiledMapLayer(options);
+    break;
+    case 'L.esri.DynamicMapLayer':
+      layer = L.esri.dynamicMapLayer(options);
+    break;
+  }
+
+  if(layer){
+    if(String.isString(def.Id)){this.RemoveLayer(def.Id);}
+    else{def.Id = '_L'+(this._layerId++);}
+
+    layer.addTo(map);
+    this._layers[def.Id] = layer;
+    return true;
+  }
+  return false;
+};
+bbbfly.map.map._removeLayers = function(ids){
+  if(Array.isArray(ids)){
+    for(var i in ids){
+      if(!this.RemoveLayer(ids[i])){
+        return false;
+      }
+    }
+  }
+  else{
+    for(var id in this._layers){
+      if(!this.RemoveLayer(id)){
+        return false;
+      }
+    }
+  }
+  return true;
+};
+bbbfly.map.map._removeLayer = function(id){
+  if(String.isString(id)){return false;}
+
+  var layer = this._layers[id];
+  if(layer){
+    delete this._layers[id];
+    if(typeof layer.remove === 'function'){
+      layer.remove();
+    }
+    return true;
+  }
+  return false;
+};
+bbbfly.map.map._layerInterface = function(iname,iface){
+  if(!String.isString(iname)){return;}
+
+  var ifc = bbbfly.Map[iname];
+  if(!Object.isObject(ifc)){return;}
+
+  if(Object.isObject(iface)){ng_MergeVar(iface,ifc);}
+  else{iface = ifc;}
+
+  if(ifc.extends){
+    this.LayerInterface(ifc.extends,iface);
+  }
+  return iface;
 };
 bbbfly.Map = function(def,ref,parent){
   def = def || {};
@@ -177,7 +286,19 @@ bbbfly.Map = function(def,ref,parent){
       MinZoom: null,
       MaxZoom: null,
       Animate: true,
-      _map: null
+      Crs: bbbfly.Map.crs.PseudoMercator,
+
+      DefaultLayer: {
+        ZIndex: 1,
+        Opacity: 1,
+        ClassName: '',
+        CrossOrigin: false
+      },
+
+      Layers: [],
+      _map: null,
+      _layers: {},
+      _layerId: 1
     },
     OnCreated: bbbfly.map.map._onCreated,
     ControlsPanel: {
@@ -196,6 +317,7 @@ bbbfly.Map = function(def,ref,parent){
     },
     Methods: {
       Dispose: bbbfly.map.map._dispose,
+      LayerInterface: bbbfly.map.map._layerInterface,
       GetMap: bbbfly.map.map._getMap,
       CreateMap: bbbfly.map.map._createMap,
       DoCreateMap: bbbfly.map.map._doCreateMap,
@@ -210,15 +332,115 @@ bbbfly.Map = function(def,ref,parent){
       ZoomIn: bbbfly.map.map._zoomIn,
       ZoomOut: bbbfly.map.map._zoomOut,
       SetCenter: bbbfly.map.map._setCenter,
-      GetCenter: bbbfly.map.map._getCenter
+      GetCenter: bbbfly.map.map._getCenter,
+      AddLayers: bbbfly.map.map._addLayers,
+      AddLayer: bbbfly.map.map._addLayer,
+      RemoveLayers: bbbfly.map.map._removeLayers,
+      RemoveLayer: bbbfly.map.map._removeLayer
     }
   });
 
   return ngCreateControlAsType(def,'ngGroup',ref,parent);
 };
+bbbfly.Map.layer = {
+  image: 'ImageLayer',
+  tile: 'TileLayer',
+  wms: 'WMSLayer',
+
+  arcgis_online: 'ArcGISOnlineLayer',
+  arcgis_server: 'ArcGISServerLayer',
+  arcgis_enterprise: 'ArcGISEnterpriseLayer'
+};
+bbbfly.Map.crs = {
+  WorldMercator: 'EPSG3395',
+  PseudoMercator: 'EPSG3857',
+  WGS84: 'EPSG4326'
+};
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_map'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.Map',bbbfly.Map);
+  }
+};
+
+bbbfly.Map.Layer = {
+  map: {
+    Url: 'url',
+    CrossOrigin: 'crossOrigin',
+
+    ZIndex: 'zIndex',
+    Opacity: 'opacity',
+    ClassName: 'className',
+    Attribution: 'attribution'
+  },
+  options: {
+    crossOrigin: false,
+
+    zIndex: 1,
+    opacity: 1,
+    className: ''
+  }
+};
+bbbfly.Map.ImageLayer = {
+  extends: 'Layer',
+  type: 'L.ImageOverlay',
+  map: {
+    ErrorUrl: 'errorOverlayUrl',
+    Bounds: 'bounds'
+  }
+};
+bbbfly.Map.TileLayer = {
+  extends: 'Layer',
+  type: 'L.TileLayer',
+  map: {
+    ErrorUrl: 'errorTileUrl',
+    Bounds: 'bounds',
+    MinZoom: 'minZoom',
+    MaxZoom: 'maxZoom',
+    TileSize: 'tileSize'
+  },
+  options: {
+    minZoom: 1,
+    maxZoom: 18,
+    tileSize: 256,
+    detectRetina : true
+  }
+};
+bbbfly.Map.WMSLayer = {
+  extends: 'TileLayer',
+  type: 'L.TileLayer.wms',
+  map: {
+    Layers: 'layers',
+    Styles: 'styles',
+    Format: 'format',
+    Version: 'version',
+    Transparent: 'transparent',
+    Crs: 'crs'
+  },
+  options: {
+    format: 'image/png32',
+    version: '1.3.0',
+    transparent: true
+  }
+};
+bbbfly.Map.ArcGISOnlineLayer = {
+  extends: 'TileLayer',
+  type: 'L.esri.TiledMapLayer'
+};
+bbbfly.Map.ArcGISServerLayer = {
+  extends: 'TileLayer',
+  type: 'L.esri.TiledMapLayer'
+};
+bbbfly.Map.ArcGISEnterpriseLayer = {
+  extends: 'ImageLayer',
+  type: 'L.esri.DynamicMapLayer',
+  map: {
+    Format: 'format',
+    Layers: 'layers',
+    Transparent: 'transparent'
+  },
+  options: {
+    format: 'png32',
+    transparent: true
   }
 };

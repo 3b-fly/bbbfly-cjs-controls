@@ -51,3 +51,18 @@
  * @property {image} Img
  */
 
+/**
+ * @typedef {L.Layer} mapLayer
+ * @description {@link http://leafletjs.com/reference-1.4.0.html#layer|Leaflet layer.}
+ */
+
+/**
+ * @typedef {L.LatLng|array} mapPoint
+ * @description {@link http://leafletjs.com/reference-1.4.0.html#latlng|Leaflet point.}
+ */
+
+/**
+ * @typedef {L.LatLngBounds|array} mapBounds
+ * @description {@link http://leafletjs.com/reference-1.4.0.html#latlngbounds|Leaflet bounds.}
+ */
+

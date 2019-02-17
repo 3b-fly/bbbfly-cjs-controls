@@ -9,9 +9,9 @@
 /** @ignore */
 var bbbfly = bbbfly || {};
 /** @ignore */
-bbbfly.map = {
-  map: {}
-};
+bbbfly.map = bbbfly.map || {};
+/** @ignore */
+bbbfly.map.map = {};
 
 /** @ignore */
 bbbfly.map.map._onCreated = function(map){
@@ -52,7 +52,7 @@ bbbfly.map.map._createMap = function(){
     markerZoomAnimation: true
   };
 
-  if(this.MaxBounds){
+  if(Object.isObject(this.MaxBounds) || Array.isArray(this.MaxBounds)){
     options.maxBounds = this.MaxBounds;
   }
   if(Number.isNumber(this.MinZoom)){
@@ -62,9 +62,15 @@ bbbfly.map.map._createMap = function(){
   if(Number.isNumber(this.MaxZoom)){
     options.maxZoom = this.MaxZoom;
   }
+  if(String.isString(this.Crs)){
+    options.crs = L.CRS[this.Crs];
+  }
 
   var map = this.DoCreateMap(options);
   if(!map){return false;}
+
+  //add layers
+  this.AddLayers(this.Layers);
 
   //propagate initial state
   if(map.getZoom && this.OnZoomChanged){
@@ -189,6 +195,18 @@ bbbfly.map.map._zoomOut = function(zoomBy){
 };
 
 /** @ignore */
+bbbfly.map.map._onMapZoomEnd = function(event){
+  var map = event.target;
+  if(map && (typeof map.getZoom === 'function')){
+
+    var widget = map.Owner;
+    if(widget && (typeof widget.OnZoomChanged === 'function')){
+      widget.OnZoomChanged(map.getZoom());
+    }
+  }
+};
+
+/** @ignore */
 bbbfly.map.map._setCenter = function(coordinates){
   return this.SetView(coordinates,null);
 };
@@ -201,15 +219,120 @@ bbbfly.map.map._getCenter = function(){
 };
 
 /** @ignore */
-bbbfly.map.map._onMapZoomEnd = function(event){
-  var map = event.target;
-  if(map && (typeof map.getZoom === 'function')){
+bbbfly.map.map._addLayers = function(defs){
+  if(!Array.isArray(defs)){return false;}
 
-    var widget = map.Owner;
-    if(widget && (typeof widget.OnZoomChanged === 'function')){
-      widget.OnZoomChanged(map.getZoom());
+  for(var i in defs){
+    if(!this.AddLayer(defs[i])){
+      return false;
     }
   }
+  return true;
+};
+
+
+/** @ignore */
+bbbfly.map.map._addLayer = function(def){
+  if(!Object.isObject(def) || !String.isString(def.Url)){return false;}
+
+  var map = this.GetMap();
+  if(!map){return false;}
+
+  var iface = this.LayerInterface(def.Type);
+  if(!Object.isObject(iface)){return false;}
+
+  ng_MergeVar(def,this.DefaultLayer);
+
+  var options = {};
+  if(Object.isObject(iface.map)){
+    for(var defProp in def){
+      var optProp = iface.map[defProp];
+      if(optProp){options[optProp] = def[defProp];}
+    }
+  }
+
+  if(Object.isObject(iface.options)){
+    ng_MergeVar(options,iface.options);
+  }
+
+  var layer = null;
+  switch(iface.type){
+    case 'L.ImageOverlay':
+      layer = L.tileLayer.wms(options.url,options.bounds,options);
+    break;
+    case 'L.TileLayer':
+      layer = L.tileLayer(options.url,options);
+    break;
+    case 'L.TileLayer.wms':
+      layer = L.tileLayer.wms(options.url,options);
+    break;
+    case 'L.esri.TiledMapLayer':
+      layer = L.esri.tiledMapLayer(options);
+    break;
+    case 'L.esri.DynamicMapLayer':
+      layer = L.esri.dynamicMapLayer(options);
+    break;
+  }
+
+  if(layer){
+    if(String.isString(def.Id)){this.RemoveLayer(def.Id);}
+    else{def.Id = '_L'+(this._layerId++);}
+
+    layer.addTo(map);
+    this._layers[def.Id] = layer;
+    return true;
+  }
+  return false;
+};
+
+/** @ignore */
+bbbfly.map.map._removeLayers = function(ids){
+  if(Array.isArray(ids)){
+    for(var i in ids){
+      if(!this.RemoveLayer(ids[i])){
+        return false;
+      }
+    }
+  }
+  else{
+    for(var id in this._layers){
+      if(!this.RemoveLayer(id)){
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+/** @ignore */
+bbbfly.map.map._removeLayer = function(id){
+  if(String.isString(id)){return false;}
+
+  var layer = this._layers[id];
+  if(layer){
+    delete this._layers[id];
+    if(typeof layer.remove === 'function'){
+      layer.remove();
+    }
+    return true;
+  }
+  return false;
+};
+
+/** @ignore */
+bbbfly.map.map._layerInterface = function(iname,iface){
+  if(!String.isString(iname)){return;}
+
+  var ifc = bbbfly.Map[iname];
+  if(!Object.isObject(ifc)){return;}
+
+  if(Object.isObject(iface)){ng_MergeVar(iface,ifc);}
+  else{iface = ifc;}
+
+  if(ifc.extends){
+    this.LayerInterface(ifc.extends,iface);
+  }
+  return iface;
 };
 
 /**
@@ -226,11 +349,19 @@ bbbfly.map.map._onMapZoomEnd = function(event){
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *
- * @property {L.LatLngBounds} [MaxBounds=null]
- *   {@link http://leafletjs.com/reference-1.4.0.html#latlngbounds|Map pan limitation}
+ * @property {mapBounds} [MaxBounds=null] - Keep map within these bounds
  * @property {number} [MinZoom=null] - Map minimal zoom level
  * @property {number} [MaxZoom=null] - Map maximal zoom level
  * @property {number} [Animate=true] - If map animation is allowed
+ * @property {bbbfly.Map.crs} [Crs=PseudoMercator] - Default map coordinate reference system
+ *
+ * @property {object} DefaultLayer - Default layer definition
+ * @property {number} [DefaultLayer.ZIndex=1] - Layer z-index
+ * @property {number} [DefaultLayer.Opacity=1] - Layer opacity
+ * @property {string} [DefaultLayer.ClassName=''] - Layer element CSS class name
+ * @property {boolean} [DefaultLayer.CrossOrigin=false] - Will be added to tile requests
+ *
+ * @property {bbbfly.Map.Layer[]} [Layers=[]] - Map layers definition
  */
 bbbfly.Map = function(def,ref,parent){
   def = def || {};
@@ -242,9 +373,23 @@ bbbfly.Map = function(def,ref,parent){
       MinZoom: null,
       MaxZoom: null,
       Animate: true,
+      Crs: bbbfly.Map.crs.PseudoMercator,
+
+      DefaultLayer: {
+        ZIndex: 1,
+        Opacity: 1,
+        ClassName: '',
+        CrossOrigin: false
+      },
+
+      Layers: [],
 
       /** @private */
-      _map: null
+      _map: null,
+      /** @private */
+      _layers: {},
+      /** @private */
+      _layerId: 1
     },
     OnCreated: bbbfly.map.map._onCreated,
     ControlsPanel: {
@@ -279,6 +424,8 @@ bbbfly.Map = function(def,ref,parent){
     Methods: {
       /** @private */
       Dispose: bbbfly.map.map._dispose,
+      /** @private */
+      LayerInterface: bbbfly.map.map._layerInterface,
 
       /**
        * @function
@@ -328,7 +475,7 @@ bbbfly.Map = function(def,ref,parent){
        * @memberof bbbfly.Map#
        * @description Set maximal map bounds
        *
-       * @param {L.LatLngBounds} bounds
+       * @param {mapBounds} bounds - Maximal bounds
        * @return {boolean} If bounds were set.
        */
       SetMaxBounds: bbbfly.map.map._setMaxBounds,
@@ -344,7 +491,7 @@ bbbfly.Map = function(def,ref,parent){
       SetMinZoom: bbbfly.map.map._setMinZoom,
       /**
        * @function
-       * @name SetMaxBounds
+       * @name SetMaxZoom
        * @memberof bbbfly.Map#
        * @description Set maximal map zoom level
        *
@@ -369,8 +516,8 @@ bbbfly.Map = function(def,ref,parent){
        * @memberof bbbfly.Map#
        * @description Set map position and zoom level
        *
-       * @param {L.LatLng|null} coordinates
-       * @param {number|null} zoom - Zoom level
+       * @param {mapPoint} coordinates - Center point
+       * @param {number} zoom - Zoom level
        * @return {boolean} If view was set
        *
        * @see {@link bbbfly.Map#SetZoom|SetZoom()}
@@ -450,7 +597,7 @@ bbbfly.Map = function(def,ref,parent){
        * @memberof bbbfly.Map#
        * @description Set map position
        *
-       * @param {L.LatLng} coordinates
+       * @param {mapPoint} coordinates - Center point
        * @return {boolean} If center was set
        *
        * @see {@link bbbfly.Map#SetView|SetView()}
@@ -463,16 +610,86 @@ bbbfly.Map = function(def,ref,parent){
        * @memberof bbbfly.Map#
        * @description Get map position
        *
-       * @return {L.LatLng|null} coordinates
+       * @return {mapPoint|null} Center point
        *
        * @see {@link bbbfly.Map#SetView|SetView()}
        * @see {@link bbbfly.Map#SetCenter|SetCenter()}
        */
-      GetCenter: bbbfly.map.map._getCenter
+      GetCenter: bbbfly.map.map._getCenter,
+      /**
+       * @function
+       * @name AddLayers
+       * @memberof bbbfly.Map#
+       *
+       * @description Add new layers
+       *
+       * @param {bbbfly.Map.Layer[]} defs
+       * @return {boolean} - If all layers were added
+       */
+      AddLayers: bbbfly.map.map._addLayers,
+      /**
+       * @function
+       * @name AddLayer
+       * @memberof bbbfly.Map#
+       *
+       * @description Add new layer
+       *
+       * @param {bbbfly.Map.Layer} def
+       * @return {boolean} - If layer was added
+       */
+      AddLayer: bbbfly.map.map._addLayer,
+      /**
+       * @function
+       * @name RemoveLayers
+       * @memberof bbbfly.Map#
+       *
+       * @description Remove layers
+       *
+       * @param {string[]} [ids=undefined] - All layers will be removed if no ID is passed
+       * @return {boolean} - If all layers were removed
+       */
+      RemoveLayers: bbbfly.map.map._removeLayers,
+      /**
+       * @function
+       * @name RemoveLayer
+       * @memberof bbbfly.Map#
+       *
+       * @description Remove layer
+       *
+       * @param {string} id
+       * @return {boolean} - If layer was removed
+       */
+      RemoveLayer: bbbfly.map.map._removeLayer
     }
   });
 
   return ngCreateControlAsType(def,'ngGroup',ref,parent);
+};
+
+/**
+ * @enum {string}
+ * @description
+ *   Supported map layer types
+ */
+bbbfly.Map.layer = {
+  image: 'ImageLayer',
+  tile: 'TileLayer',
+  wms: 'WMSLayer',
+
+  arcgis_online: 'ArcGISOnlineLayer',
+  arcgis_server: 'ArcGISServerLayer',
+  arcgis_enterprise: 'ArcGISEnterpriseLayer'
+};
+
+/**
+ * @enum {string}
+ * @description
+ *   Supported coordinate reference systems
+ */
+bbbfly.Map.crs = {
+  WorldMercator: 'EPSG3395',
+  PseudoMercator: 'EPSG3857',
+  WGS84: 'EPSG4326'
 };
 
 /** @ignore */
@@ -480,5 +697,193 @@ ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_map'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.Map',bbbfly.Map);
+  }
+};
+
+/**
+ * @interface Layer
+ * @memberOf bbbfly.Map
+ *
+ * @description
+ *   Ancestor for all Leaflet layer definitions
+ *
+ * @property {string} Id
+ * @property {bbbfly.Map.layer} Type
+ * @property {url} Url - Url used for tile requests
+ * @property {boolean|string} [CrossOrigin=undefined] - Will be added to tile requests
+ *
+ * @property {number} [ZIndex=undefined] - Layer z-index
+ * @property {number} [Opacity=undefined] - Layer opacity
+ * @property {string} [ClassName=undefined] - Layer element CSS class name
+ * @property {string} [Attribution=undefined] - Layer copyright attribution
+ */
+
+bbbfly.Map.Layer = {
+  map: {
+    Url: 'url',
+    CrossOrigin: 'crossOrigin',
+
+    ZIndex: 'zIndex',
+    Opacity: 'opacity',
+    ClassName: 'className',
+    Attribution: 'attribution'
+  },
+  options: {
+    crossOrigin: false,
+
+    zIndex: 1,
+    opacity: 1,
+    className: ''
+  }
+};
+
+/**
+ * @interface ImageLayer
+ * @extends bbbfly.Map.Layer
+ * @memberOf bbbfly.Map
+ *
+ * @description
+ *   {@link https://leafletjs.com/reference-1.4.0.html#imageoverlay|L.ImageOverlay}
+ *   instance will be added to map
+ *
+ *@property {bbbfly.Map.layer} Type=image
+ * @property {url} [ErrorUrl=undefined] - Url used when tile request has failed
+ * @property {mapBounds} Bounds - Place image within bounds
+ */
+bbbfly.Map.ImageLayer = {
+  extends: 'Layer',
+  type: 'L.ImageOverlay',
+  map: {
+    ErrorUrl: 'errorOverlayUrl',
+    Bounds: 'bounds'
+  }
+};
+
+/**
+ * @interface TileLayer
+ * @extends bbbfly.Map.Layer
+ * @memberOf bbbfly.Map
+ *
+ * @description
+ *   {@link https://leafletjs.com/reference-1.4.0.html#tilelayer|L.TileLayer}
+ *   instance will be added to map
+ *
+ * @property {bbbfly.Map.layer} Type=tile
+ * @property {url} [ErrorUrl=undefined] - Url used when tile request has failed
+ * @property {mapBounds} [Bounds=undefined] - Display layer only in bounds
+ * @property {number} [MinZoom=1] - Display layer from zoom level
+ * @property {number} [MaxZoom=18] - Display layer to zoom level
+ * @property {px} [TileSize=256] - Tile width and height
+ */
+bbbfly.Map.TileLayer = {
+  extends: 'Layer',
+  type: 'L.TileLayer',
+  map: {
+    ErrorUrl: 'errorTileUrl',
+    Bounds: 'bounds',
+    MinZoom: 'minZoom',
+    MaxZoom: 'maxZoom',
+    TileSize: 'tileSize'
+  },
+  options: {
+    minZoom: 1,
+    maxZoom: 18,
+    tileSize: 256,
+    detectRetina : true
+  }
+};
+
+/**
+ * @interface WMSLayer
+ * @extends bbbfly.Map.TileLayer
+ * @memberOf bbbfly.Map
+ *
+ * @description
+ *   {@link https://leafletjs.com/reference-1.4.0.html#tilelayer-wms|L.TileLayer.wms}
+ *   instance will be added to map
+ *
+ * @property {bbbfly.Map.layer} Type=wms
+ * @property {string} Layers - Comma-separated WMS layers
+ * @property {string} [Styles=undefined] - Comma-separated WMS styles
+ * @property {string} [Format='image/png32'] - WMS image format
+ * @property {string} [Version='1.3.0'] - WMS service version
+ * @property {boolean} [Transparent=true] - Allow WMS image transparency
+ * @property {bbbfly.Map.crs} [crs=undefined] - CRS to use instead of map CRS.
+ */
+bbbfly.Map.WMSLayer = {
+  extends: 'TileLayer',
+  type: 'L.TileLayer.wms',
+  map: {
+    Layers: 'layers',
+    Styles: 'styles',
+    Format: 'format',
+    Version: 'version',
+    Transparent: 'transparent',
+    Crs: 'crs'
+  },
+  options: {
+    format: 'image/png32',
+    version: '1.3.0',
+    transparent: true
+  }
+};
+
+/**
+ * @interface ArcGISOnlineLayer
+ * @extends bbbfly.Map.TileLayer
+ * @memberOf bbbfly.Map
+ *
+ * @description
+ *   {@link https://esri.github.io/esri-leaflet/api-reference/layers/tiled-map-layer.html|L.esri.TiledMapLayer}
+ *   instance will be added to map
+ *
+ * @property {bbbfly.Map.layer} Type=arcgis_online
+ */
+bbbfly.Map.ArcGISOnlineLayer = {
+  extends: 'TileLayer',
+  type: 'L.esri.TiledMapLayer'
+};
+
+/**
+ * @interface ArcGISServerLayer
+ * @extends bbbfly.Map.TileLayer
+ * @memberOf bbbfly.Map
+ *
+ * @description
+ *   {@link https://esri.github.io/esri-leaflet/api-reference/layers/tiled-map-layer.html|L.esri.TiledMapLayer}
+ *   instance will be added to map
+ *
+ * @property {bbbfly.Map.layer} Type=arcgis_server
+ */
+bbbfly.Map.ArcGISServerLayer = {
+  extends: 'TileLayer',
+  type: 'L.esri.TiledMapLayer'
+};
+
+/**
+ * @interface ArcGISEnterpriseLayer
+ * @extends bbbfly.Map.ImageLayer
+ * @memberOf bbbfly.Map
+ *
+ * @description
+ *   {@link https://esri.github.io/esri-leaflet/api-reference/layers/dynamic-map-layer.html|L.esri.DynamicMapLayer}
+ *   instance will be added to map
+ *
+ * @property {bbbfly.Map.layer} Type=arcgis_enterprise
+ * @property {string} [Format='png32'] - Service image format
+ * @property {array} Layers - An array of service layer IDs
+ * @property {boolean} [Transparent=true] - Allow service image transparency
+ */
+bbbfly.Map.ArcGISEnterpriseLayer = {
+  extends: 'ImageLayer',
+  type: 'L.esri.DynamicMapLayer',
+  map: {
+    Format: 'format',
+    Layers: 'layers',
+    Transparent: 'transparent'
+  },
+  options: {
+    format: 'png32',
+    transparent: true
   }
 };
