@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Namespace: hint</title>
+    <title>Interface: ArcGISEnterpriseLayer</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -712,18 +712,6 @@
         <li data-name="DefaultLayer">
           <a href="bbbfly.Map.html#property:DefaultLayer">DefaultLayer</a>
         </li>
-        <li data-name="DefaultLayer.ZIndex">
-          <a href="bbbfly.Map.html#property:DefaultLayer.ZIndex">DefaultLayer.ZIndex</a>
-        </li>
-        <li data-name="DefaultLayer.Opacity">
-          <a href="bbbfly.Map.html#property:DefaultLayer.Opacity">DefaultLayer.Opacity</a>
-        </li>
-        <li data-name="DefaultLayer.ClassName">
-          <a href="bbbfly.Map.html#property:DefaultLayer.ClassName">DefaultLayer.ClassName</a>
-        </li>
-        <li data-name="DefaultLayer.CrossOrigin">
-          <a href="bbbfly.Map.html#property:DefaultLayer.CrossOrigin">DefaultLayer.CrossOrigin</a>
-        </li>
         <li data-name="Layers">
           <a href="bbbfly.Map.html#property:Layers">Layers</a>
         </li>
@@ -1217,96 +1205,94 @@
   }
 })();</script>
     <div class="main">
-<section class="kind-namespace">
+<section class="kind-interface">
 <header>
     <h1 class="name">
-          <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
-        hint
-  <span class="types">
-      <span class="type-signature namespace">
-        namespace
-      </span>
-  </span>
+          <span class="ancestors"><a href="bbbfly.html">bbbfly</a><a href="bbbfly.Map.html">.Map</a>.</span>
+        ArcGISEnterpriseLayer
     </h1>
 </header>
 <article>
     <div class="container-overview">
+            <div class="description"><a target="_blank" href="https://esri.github.io/esri-leaflet/api-reference/layers/dynamic-map-layer.html">L.esri.DynamicMapLayer</a>  instance will be added to map</div>
 <dl class="details">
-</dl>
-    </div>
-        <h3>In Packages</h3>
-        <ul>
-              <li><a href="packages.html#package:hint">hint</a></li>
-        </ul>
-        <h3>Interfaces</h3>
-        <ul>
-            <li><a href="bbbfly.hint.Hintified.html">Hintified</a></li>
-        </ul>
-        <h3>Methods</h3>
-        <dl>
-<dt>
-    <div class="nameContainer">
-        <h4 id=".Hintify">
-  <span class="attribs">
-      <span class="type-signature static">
-        static
-      </span>
-  </span>
-          bbbfly.hint.Hintify
-          <span class="signature">(<span class="optional">def</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{object}</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/hint.js#L127">base/hint.js, line 127</a>
-        </div>
-    </div>
-</dt>
-<dd>
-      <div class="description">Modifies passed defintion to make control  implement <a href="bbbfly.hint.Hintified.html">Hintified</a> interface.</div>
-        <h5>Parameters:</h5>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
+    <h3>Properties</h3>
+    <table class="props" my="test">
+        <thead>
         <tr>
-                <td class="name">
-                  <span class="param-name">def</span>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr id="property:Type">
+                    <td class="name">
+                      <span class="param-name">Type</span>
+                    </td>
+                <td class="type">
+<span class="param-type"><a href="bbbfly.Map.html#.layer">bbbfly.Map.layer</a></span>
                 </td>
-            <td class="type">
-<span class="param-type">object</span>
-            </td>
-            <td class="description last">
+                    <td class="default">
+                        arcgis_enterprise
+                    </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:Format">
+                    <td class="name">
+                      <span class="param-name">Format</span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                    <td class="default">
+                        'png32'
+                    </td>
+                <td class="description last">
                         <span class="optional">optional</span>
-                Control definition
-            </td>
-        </tr>
-	</tbody>
-</table>
+                  Service image format
+                </td>
+            </tr>
+            <tr id="property:Layers">
+                    <td class="name">
+                      <span class="param-name">Layers</span>
+                    </td>
+                <td class="type">
+<span class="param-type">array</span>
+                </td>
+                    <td class="default">
+                    </td>
+                <td class="description last">
+                  An array of service layer IDs
+                </td>
+            </tr>
+            <tr id="property:Transparent">
+                    <td class="name">
+                      <span class="param-name">Transparent</span>
+                    </td>
+                <td class="type">
+<span class="param-type">boolean</span>
+                </td>
+                    <td class="default">
+                        true
+                    </td>
+                <td class="description last">
+                        <span class="optional">optional</span>
+                  Allow service image transparency
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</dl>
 <dl class="details">
 </dl>
-    <h5>Returns:</h5>
-<table class="params">
-    <thead>
-    <tr>
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="type">
-                        object
-            </td>
-            <td class="description last">Control definition</td>
-        </tr>
-    </tbody>
-</table>
-</dd>
-        </dl>
+    </div>
+        <h3>Extends</h3>
+        <ul>
+            <li><a href="bbbfly.Map.ImageLayer.html">bbbfly.Map.ImageLayer</a></li>
+        </ul>
 </article>
 </section>
         <footer>

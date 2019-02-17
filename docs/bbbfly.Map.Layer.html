@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: GridPanel</title>
+    <title>Interface: Layer</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -712,18 +712,6 @@
         <li data-name="DefaultLayer">
           <a href="bbbfly.Map.html#property:DefaultLayer">DefaultLayer</a>
         </li>
-        <li data-name="DefaultLayer.ZIndex">
-          <a href="bbbfly.Map.html#property:DefaultLayer.ZIndex">DefaultLayer.ZIndex</a>
-        </li>
-        <li data-name="DefaultLayer.Opacity">
-          <a href="bbbfly.Map.html#property:DefaultLayer.Opacity">DefaultLayer.Opacity</a>
-        </li>
-        <li data-name="DefaultLayer.ClassName">
-          <a href="bbbfly.Map.html#property:DefaultLayer.ClassName">DefaultLayer.ClassName</a>
-        </li>
-        <li data-name="DefaultLayer.CrossOrigin">
-          <a href="bbbfly.Map.html#property:DefaultLayer.CrossOrigin">DefaultLayer.CrossOrigin</a>
-        </li>
         <li data-name="Layers">
           <a href="bbbfly.Map.html#property:Layers">Layers</a>
         </li>
@@ -1217,87 +1205,16 @@
   }
 })();</script>
     <div class="main">
-<section class="kind-class">
+<section class="kind-interface">
 <header>
     <h1 class="name">
-          <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
-        GridPanel
-  <span class="types">
-      <span class="type-signature class">
-        class
-      </span>
-      <span class="type-signature control">
-        control
-      </span>
-  </span>
+          <span class="ancestors"><a href="bbbfly.html">bbbfly</a><a href="bbbfly.Map.html">.Map</a>.</span>
+        Layer
     </h1>
 </header>
 <article>
     <div class="container-overview">
-<dt>
-    <div class="nameContainer">
-        <h2 id="GridPanel">
-          new 
-          bbbfly.GridPanel
-          <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
-        </h2>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/grid.js#L149">base/grid.js, line 149</a>
-        </div>
-    </div>
-</dt>
-<dd>
-      <div class="description">Panel which places its child controls in columns grid.</div>
-        <h3>Parameters</h3>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
-        <tr>
-                <td class="name">
-                  <span class="param-name">def</span>
-                </td>
-            <td class="type">
-<span class="param-type">object</span>
-            </td>
-            <td class="description last">
-                        <span class="optional">optional</span>
-                Descendant definition
-            </td>
-        </tr>
-        <tr>
-                <td class="name">
-                  <span class="param-name">ref</span>
-                </td>
-            <td class="type">
-<span class="param-type">object</span>
-            </td>
-            <td class="description last">
-                        <span class="optional">optional</span>
-                Reference owner
-            </td>
-        </tr>
-        <tr>
-                <td class="name">
-                  <span class="param-name">parent</span>
-                </td>
-            <td class="type">
-<span class="param-type">object</span>
-|
-<span class="param-type">string</span>
-            </td>
-            <td class="description last">
-                        <span class="optional">optional</span>
-                Parent DIV element or its ID
-            </td>
-        </tr>
-	</tbody>
-</table>
+            <div class="description">Ancestor for all Leaflet layer definitions</div>
 <dl class="details">
     <h3>Properties</h3>
     <table class="props" my="test">
@@ -1305,47 +1222,101 @@
         <tr>
             <th>Name</th>
             <th>Type</th>
-            <th>Default</th>
             <th class="last">Description</th>
         </tr>
         </thead>
         <tbody>
-            <tr id="property:AutoSize">
+            <tr id="property:Id">
                     <td class="name">
-                      <span class="param-name">AutoSize</span>
+                      <span class="param-name">Id</span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:Type">
+                    <td class="name">
+                      <span class="param-name">Type</span>
+                    </td>
+                <td class="type">
+<span class="param-type"><a href="bbbfly.Map.html#.layer">bbbfly.Map.layer</a></span>
+                </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:Url">
+                    <td class="name">
+                      <span class="param-name">Url</span>
+                    </td>
+                <td class="type">
+<span class="param-type"><a href="global.html#url">url</a></span>
+                </td>
+                <td class="description last">
+                  Url used for tile requests
+                </td>
+            </tr>
+            <tr id="property:CrossOrigin">
+                    <td class="name">
+                      <span class="param-name">CrossOrigin</span>
                     </td>
                 <td class="type">
 <span class="param-type">boolean</span>
+|
+<span class="param-type">string</span>
                 </td>
-                    <td class="default">
-                        true
-                    </td>
                 <td class="description last">
+                        <span class="optional">optional</span>
+                  Will be added to tile requests
                 </td>
             </tr>
-            <tr id="property:MinColumnWidth">
+            <tr id="property:ZIndex">
                     <td class="name">
-                      <span class="param-name">MinColumnWidth</span>
+                      <span class="param-name">ZIndex</span>
                     </td>
                 <td class="type">
-<span class="param-type"><a href="global.html#px">px</a></span>
+<span class="param-type">number</span>
                 </td>
-                    <td class="default">
-                        200
-                    </td>
                 <td class="description last">
+                        <span class="optional">optional</span>
+                  Layer z-index
                 </td>
             </tr>
-            <tr id="property:MaxColumnWidth">
+            <tr id="property:Opacity">
                     <td class="name">
-                      <span class="param-name">MaxColumnWidth</span>
+                      <span class="param-name">Opacity</span>
                     </td>
                 <td class="type">
-<span class="param-type"><a href="global.html#px">px</a></span>
+<span class="param-type">number</span>
                 </td>
-                    <td class="default">
-                    </td>
                 <td class="description last">
+                        <span class="optional">optional</span>
+                  Layer opacity
+                </td>
+            </tr>
+            <tr id="property:ClassName">
+                    <td class="name">
+                      <span class="param-name">ClassName</span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                <td class="description last">
+                        <span class="optional">optional</span>
+                  Layer element CSS class name
+                </td>
+            </tr>
+            <tr id="property:Attribution">
+                    <td class="name">
+                      <span class="param-name">Attribution</span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                <td class="description last">
+                        <span class="optional">optional</span>
+                  Layer copyright attribution
                 </td>
             </tr>
         </tbody>
@@ -1353,34 +1324,7 @@
 </dl>
 <dl class="details">
 </dl>
-</dd>
     </div>
-        <h3>Extends</h3>
-        <ul>
-            <li>ngPanel</li>
-        </ul>
-        <h3>In Packages</h3>
-        <ul>
-              <li><a href="packages.html#package:grid">grid</a></li>
-        </ul>
-        <h3>Events</h3>
-        <dl>
-<dt>
-    <div class="nameContainer">
-        <h4 id="event:OnAutoSized">
-          OnAutoSized
-          <span class="signature">()</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/grid.js#L166">base/grid.js, line 166</a>
-        </div>
-    </div>
-</dt>
-<dd>
-<dl class="details">
-</dl>
-</dd>
-        </dl>
 </article>
 </section>
         <footer>

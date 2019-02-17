@@ -691,6 +691,12 @@
   </span>
     <ul class="members itemMembers">
       <span class="subtitle">Properties</span>
+        <li data-name="Crs">
+          <a href="bbbfly.Map.html#property:Crs">Crs</a>
+        </li>
+        <li data-name="BoundsPadding">
+          <a href="bbbfly.Map.html#property:BoundsPadding">BoundsPadding</a>
+        </li>
         <li data-name="MaxBounds">
           <a href="bbbfly.Map.html#property:MaxBounds">MaxBounds</a>
         </li>
@@ -703,9 +709,66 @@
         <li data-name="Animate">
           <a href="bbbfly.Map.html#property:Animate">Animate</a>
         </li>
+        <li data-name="DefaultLayer">
+          <a href="bbbfly.Map.html#property:DefaultLayer">DefaultLayer</a>
+        </li>
+        <li data-name="DefaultLayer.ZIndex">
+          <a href="bbbfly.Map.html#property:DefaultLayer.ZIndex">DefaultLayer.ZIndex</a>
+        </li>
+        <li data-name="DefaultLayer.Opacity">
+          <a href="bbbfly.Map.html#property:DefaultLayer.Opacity">DefaultLayer.Opacity</a>
+        </li>
+        <li data-name="DefaultLayer.ClassName">
+          <a href="bbbfly.Map.html#property:DefaultLayer.ClassName">DefaultLayer.ClassName</a>
+        </li>
+        <li data-name="DefaultLayer.CrossOrigin">
+          <a href="bbbfly.Map.html#property:DefaultLayer.CrossOrigin">DefaultLayer.CrossOrigin</a>
+        </li>
+        <li data-name="Layers">
+          <a href="bbbfly.Map.html#property:Layers">Layers</a>
+        </li>
+    </ul>
+    <ul class="members itemMembers">
+      <span class="subtitle">Members</span>
+        <li data-name="bbbfly.Map.crs">
+          <a href="bbbfly.Map.html#.crs">crs</a>
+        </li>
+        <li data-name="bbbfly.Map.layer">
+          <a href="bbbfly.Map.html#.layer">layer</a>
+        </li>
+    </ul>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Interfaces</span>
+        <li data-name="bbbfly.Map.ArcGISEnterpriseLayer">
+          <a href="bbbfly.Map.ArcGISEnterpriseLayer.html">ArcGISEnterpriseLayer</a>
+        </li>
+        <li data-name="bbbfly.Map.ArcGISOnlineLayer">
+          <a href="bbbfly.Map.ArcGISOnlineLayer.html">ArcGISOnlineLayer</a>
+        </li>
+        <li data-name="bbbfly.Map.ArcGISServerLayer">
+          <a href="bbbfly.Map.ArcGISServerLayer.html">ArcGISServerLayer</a>
+        </li>
+        <li data-name="bbbfly.Map.ImageLayer">
+          <a href="bbbfly.Map.ImageLayer.html">ImageLayer</a>
+        </li>
+        <li data-name="bbbfly.Map.Layer">
+          <a href="bbbfly.Map.Layer.html">Layer</a>
+        </li>
+        <li data-name="bbbfly.Map.TileLayer">
+          <a href="bbbfly.Map.TileLayer.html">TileLayer</a>
+        </li>
+        <li data-name="bbbfly.Map.WMSLayer">
+          <a href="bbbfly.Map.WMSLayer.html">WMSLayer</a>
+        </li>
     </ul>
     <ul class="methods itemMembers">
       <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.Map#AddLayer">
+          <a href="bbbfly.Map.html#AddLayer">AddLayer</a>
+        </li>
+        <li data-name="bbbfly.Map#AddLayers">
+          <a href="bbbfly.Map.html#AddLayers">AddLayers</a>
+        </li>
         <li data-name="bbbfly.Map#CreateMap">
           <a href="bbbfly.Map.html#CreateMap">CreateMap</a>
         </li>
@@ -718,6 +781,9 @@
         <li data-name="bbbfly.Map#EnableAnimation">
           <a href="bbbfly.Map.html#EnableAnimation">EnableAnimation</a>
         </li>
+        <li data-name="bbbfly.Map#FitBounds">
+          <a href="bbbfly.Map.html#FitBounds">FitBounds</a>
+        </li>
         <li data-name="bbbfly.Map#GetCenter">
           <a href="bbbfly.Map.html#GetCenter">GetCenter</a>
         </li>
@@ -727,14 +793,20 @@
         <li data-name="bbbfly.Map#GetZoom">
           <a href="bbbfly.Map.html#GetZoom">GetZoom</a>
         </li>
+        <li data-name="bbbfly.Map#RemoveLayer">
+          <a href="bbbfly.Map.html#RemoveLayer">RemoveLayer</a>
+        </li>
+        <li data-name="bbbfly.Map#RemoveLayers">
+          <a href="bbbfly.Map.html#RemoveLayers">RemoveLayers</a>
+        </li>
         <li data-name="bbbfly.Map#SetCenter">
           <a href="bbbfly.Map.html#SetCenter">SetCenter</a>
         </li>
         <li data-name="bbbfly.Map#SetMaxBounds">
           <a href="bbbfly.Map.html#SetMaxBounds">SetMaxBounds</a>
         </li>
-        <li data-name="bbbfly.Map#SetMaxBounds">
-          <a href="bbbfly.Map.html#SetMaxBounds">SetMaxBounds</a>
+        <li data-name="bbbfly.Map#SetMaxZoom">
+          <a href="bbbfly.Map.html#SetMaxZoom">SetMaxZoom</a>
         </li>
         <li data-name="bbbfly.Map#SetMinZoom">
           <a href="bbbfly.Map.html#SetMinZoom">SetMinZoom</a>
@@ -1590,6 +1662,63 @@
 </dd>
 <dt>
   <div class="nameContainer">
+    <h4 class="name" id="mapBounds">
+      mapBounds
+  <span class="types">
+      <span class="type-signature l.latlngbounds">
+        L.LatLngBounds
+      </span>
+      <span class="type-signature array">
+        array
+      </span>
+  </span>
+    </h4>
+  </div>
+</dt>
+<dd class="member-content">
+    <div class="description"><a target="_blank" href="http://leafletjs.com/reference-1.4.0.html#latlngbounds">Leaflet bounds.</a></div>
+<dl class="details">
+</dl>
+</dd>
+<dt>
+  <div class="nameContainer">
+    <h4 class="name" id="mapLayer">
+      mapLayer
+  <span class="types">
+      <span class="type-signature l.layer">
+        L.Layer
+      </span>
+  </span>
+    </h4>
+  </div>
+</dt>
+<dd class="member-content">
+    <div class="description"><a target="_blank" href="http://leafletjs.com/reference-1.4.0.html#layer">Leaflet layer.</a></div>
+<dl class="details">
+</dl>
+</dd>
+<dt>
+  <div class="nameContainer">
+    <h4 class="name" id="mapPoint">
+      mapPoint
+  <span class="types">
+      <span class="type-signature l.latlng">
+        L.LatLng
+      </span>
+      <span class="type-signature array">
+        array
+      </span>
+  </span>
+    </h4>
+  </div>
+</dt>
+<dd class="member-content">
+    <div class="description"><a target="_blank" href="http://leafletjs.com/reference-1.4.0.html#latlng">Leaflet point.</a></div>
+<dl class="details">
+</dl>
+</dd>
+<dt>
+  <div class="nameContainer">
     <h4 class="name" id="percentage">
       percentage
   <span class="types">
@@ -1656,7 +1785,7 @@
 </article>
 </section>
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.4</a> on Mon Feb 11 2019 21:08:45 GMT+0100 (Central Europe Standard Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.4</a> on Sun Feb 17 2019 20:20:18 GMT+0100 (Central Europe Standard Time)
             <br/>Content icons made by <a target="_blank" href="http://www.freepik.com">Freepik</a> from <a target="_blank" href="http://www.flaticon.com">www.flaticon.com</a>
         </footer>
     </div>
