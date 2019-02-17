@@ -88,6 +88,26 @@ bbbfly.map.map._setMaxBounds = function(bounds){
   if(map){map.setMaxBounds(bounds);}
   return true;
 };
+bbbfly.map.map._fitBounds = function(bounds,padding){
+  var map = this.GetMap();
+  if(!map){return false;}
+
+  if(!bounds && this.MaxBounds){bounds = this.MaxBounds;}
+  if(!padding && this.BoundsPadding){padding = this.BoundsPadding;}
+
+  if(bounds && bounds.isValid && bounds.isValid()){
+    if(!Number.isNumber(padding)){padding = 0;}
+
+    map.fitBounds(bounds,{
+      padding: [padding,padding],
+      animate: !!this.Animate
+    });
+
+    return true;
+  }
+
+  return false;
+};
 bbbfly.map.map._setMinZoom = function(zoom){
   if(Number.isNumber(zoom)){
     this.MinZoom = zoom;
@@ -282,11 +302,13 @@ bbbfly.Map = function(def,ref,parent){
   ng_MergeDef(def,{
     ParentReferences: false,
     Data: {
+      Crs: bbbfly.Map.crs.PseudoMercator,
+      BoundsPadding: 1,
+
       MaxBounds: null,
       MinZoom: null,
       MaxZoom: null,
       Animate: true,
-      Crs: bbbfly.Map.crs.PseudoMercator,
 
       DefaultLayer: {
         ZIndex: 1,
@@ -323,6 +345,7 @@ bbbfly.Map = function(def,ref,parent){
       DoCreateMap: bbbfly.map.map._doCreateMap,
       DestroyMap: bbbfly.map.map._destroyMap,
       SetMaxBounds: bbbfly.map.map._setMaxBounds,
+      FitBounds: bbbfly.map.map._fitBounds,
       SetMinZoom: bbbfly.map.map._setMinZoom,
       SetMaxZoom: bbbfly.map.map._setMaxZoom,
       EnableAnimation: bbbfly.map.map._enableAnimation,

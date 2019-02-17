@@ -6,6 +6,11 @@
  * @inpackage map
  */
 
+//TODO: add library sources
+//TODO: add MapBox layer support
+//TODO: add examples
+//TODO: add attribution handling
+
 /** @ignore */
 var bbbfly = bbbfly || {};
 /** @ignore */
@@ -112,6 +117,28 @@ bbbfly.map.map._setMaxBounds = function(bounds){
   var map = this.GetMap();
   if(map){map.setMaxBounds(bounds);}
   return true;
+};
+
+/** @ignore */
+bbbfly.map.map._fitBounds = function(bounds,padding){
+  var map = this.GetMap();
+  if(!map){return false;}
+
+  if(!bounds && this.MaxBounds){bounds = this.MaxBounds;}
+  if(!padding && this.BoundsPadding){padding = this.BoundsPadding;}
+
+  if(bounds && bounds.isValid && bounds.isValid()){
+    if(!Number.isNumber(padding)){padding = 0;}
+
+    map.fitBounds(bounds,{
+      padding: [padding,padding],
+      animate: !!this.Animate
+    });
+
+    return true;
+  }
+
+  return false;
 };
 
 /** @ignore */
@@ -349,11 +376,13 @@ bbbfly.map.map._layerInterface = function(iname,iface){
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *
+ * @property {bbbfly.Map.crs} [Crs=PseudoMercator] - Default map coordinate reference system
+ * @property {integer} [BoundsPadding=1] - Use this padding to fit bounds
+ *
  * @property {mapBounds} [MaxBounds=null] - Keep map within these bounds
  * @property {number} [MinZoom=null] - Map minimal zoom level
  * @property {number} [MaxZoom=null] - Map maximal zoom level
  * @property {number} [Animate=true] - If map animation is allowed
- * @property {bbbfly.Map.crs} [Crs=PseudoMercator] - Default map coordinate reference system
  *
  * @property {object} DefaultLayer - Default layer definition
  * @property {number} [DefaultLayer.ZIndex=1] - Layer z-index
@@ -369,11 +398,13 @@ bbbfly.Map = function(def,ref,parent){
   ng_MergeDef(def,{
     ParentReferences: false,
     Data: {
+      Crs: bbbfly.Map.crs.PseudoMercator,
+      BoundsPadding: 1,
+
       MaxBounds: null,
       MinZoom: null,
       MaxZoom: null,
       Animate: true,
-      Crs: bbbfly.Map.crs.PseudoMercator,
 
       DefaultLayer: {
         ZIndex: 1,
@@ -479,6 +510,19 @@ bbbfly.Map = function(def,ref,parent){
        * @return {boolean} If bounds were set.
        */
       SetMaxBounds: bbbfly.map.map._setMaxBounds,
+
+      /**
+       * @function
+       * @name FitBounds
+       * @memberof bbbfly.Map#
+       * @description Pan and zoom map to fit certain bounds
+       *
+       * @param {mapBounds} bounds - Bounds to fit
+       * @param {integer} padding - Padding in all directions
+       * @return {boolean} If fit was successful.
+       */
+      FitBounds: bbbfly.map.map._fitBounds,
+
       /**
        * @function
        * @name SetMinZoom
