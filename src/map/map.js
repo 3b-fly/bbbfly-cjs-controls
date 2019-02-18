@@ -112,11 +112,27 @@ bbbfly.map.map._destroyMap = function(){
 
 /** @ignore */
 bbbfly.map.map._setMaxBounds = function(bounds){
-  this.MaxBounds = bounds;
+  if(Array.isArray(bounds)){
+    bounds = new L.latLngBounds(bounds);
+  }
 
-  var map = this.GetMap();
-  if(map){map.setMaxBounds(bounds);}
-  return true;
+  if(bounds && bounds.isValid && bounds.isValid()){
+    this.MaxBounds = bounds;
+
+    var map = this.GetMap();
+    if(map){map.setMaxBounds(bounds);}
+    return true;
+  }
+  return false;
+};
+
+/** @ignore */
+bbbfly.map.map._setBoundsPadding = function(padding){
+  if(Number.isNumber(padding)){
+    this.BoundsPadding = padding;
+    return true;
+  }
+  return false;
 };
 
 /** @ignore */
@@ -246,6 +262,14 @@ bbbfly.map.map._getCenter = function(){
 };
 
 /** @ignore */
+bbbfly.map.map._getLayer = function(id){
+  if(!String.isString(id)){return null;}
+
+  var layer = this._layers[id];
+  return (layer) ? layer : null;
+};
+
+/** @ignore */
 bbbfly.map.map._addLayers = function(defs){
   if(!Array.isArray(defs)){return false;}
 
@@ -333,7 +357,7 @@ bbbfly.map.map._removeLayers = function(ids){
 
 /** @ignore */
 bbbfly.map.map._removeLayer = function(id){
-  if(String.isString(id)){return false;}
+  if(!String.isString(id)){return false;}
 
   var layer = this._layers[id];
   if(layer){
@@ -462,41 +486,61 @@ bbbfly.Map = function(def,ref,parent){
        * @function
        * @name GetMap
        * @memberof bbbfly.Map#
-       * @description Get Leaflet map
+       *
+       * @description Get Leaflet map.
        *
        * @return {object}
        *   {@link http://leafletjs.com/reference-1.4.0.html#map-factory|Leaflet Map}
+       *
+       * @see {@link bbbfly.Map#CreateMap|CreateMap()}
+       * @see {@link bbbfly.Map#DoCreateMap|DoCreateMap()}
+       * @see {@link bbbfly.Map#DestroyMap|DestroyMap()}
        */
       GetMap: bbbfly.map.map._getMap,
       /**
        * @function
        * @name CreateMap
        * @memberof bbbfly.Map#
-       * @description Create Leaflet Map.
+       *
+       * @description Create Leaflet map.
        *
        * @return {object}
        *   {@link http://leafletjs.com/reference-1.4.0.html#map-factory|Leaflet Map}
+       *
+       * @see {@link bbbfly.Map#GetMap|GetMap()}
+       * @see {@link bbbfly.Map#DoCreateMap|DoCreateMap()}
+       * @see {@link bbbfly.Map#DestroyMap|DestroyMap()}
        */
       CreateMap: bbbfly.map.map._createMap,
       /**
        * @function
        * @name DoCreateMap
        * @memberof bbbfly.Map#
-       * @description Create Leaflet Map.
+       *
+       * @description Do reate Leaflet map from its options.
        *
        * @param {object} options
        *   {@link https://leafletjs.com/reference-1.4.0.html#map-option/|Leaflet Map options}
        * @return {object}
        *   {@link http://leafletjs.com/reference-1.4.0.html#map-factory|Leaflet Map}
+       *
+       * @see {@link bbbfly.Map#GetMap|GetMap()}
+       * @see {@link bbbfly.Map#CreateMap|CreateMap()}
+       * @see {@link bbbfly.Map#DestroyMap|DestroyMap()}
        */
       DoCreateMap: bbbfly.map.map._doCreateMap,
       /**
        * @function
        * @name DestroyMap
        * @memberof bbbfly.Map#
-       * @description Destroy Leaflet map
        *
-       * @return {boolean} If map was destroyed.
+       * @description Destroy Leaflet map.
+       *
+       * @return {boolean} If map was destroyed
+       *
+       * @see {@link bbbfly.Map#GetMap|GetMap()}
+       * @see {@link bbbfly.Map#CreateMap|CreateMap()}
+       * @see {@link bbbfly.Map#DoCreateMap|DoCreateMap()}
        */
       DestroyMap: bbbfly.map.map._destroyMap,
 
@@ -504,22 +548,45 @@ bbbfly.Map = function(def,ref,parent){
        * @function
        * @name SetMaxBounds
        * @memberof bbbfly.Map#
-       * @description Set maximal map bounds
+       *
+       * @description Set {@link bbbfly.Map#MaxBounds|maximal map bounds}.
        *
        * @param {mapBounds} bounds - Maximal bounds
-       * @return {boolean} If bounds were set.
+       * @return {boolean} If bounds were set
+       *
+       * @see {@link bbbfly.Map#FitBounds|FitBounds()}
        */
       SetMaxBounds: bbbfly.map.map._setMaxBounds,
 
       /**
        * @function
+       * @name SetBoundsPadding
+       * @memberof bbbfly.Map#
+       *
+       * @description Set {@link bbbfly.Map#BoundsPadding|map bounds padding}.
+       *
+       * @param {integer} padding - Bounds padding
+       * @return {boolean} If padding was set
+       *
+       * @see {@link bbbfly.Map#FitBounds|FitBounds()}
+       */
+      SetBoundsPadding: bbbfly.map.map._setBoundsPadding,
+
+      /**
+       * @function
        * @name FitBounds
        * @memberof bbbfly.Map#
-       * @description Pan and zoom map to fit certain bounds
+       *
+       * @description
+       *   Pan and zoom map
+       *   to fit certain {@link bbbfly.Map#MaxBounds|bounds}
+       *   with {@link bbbfly.Map#BoundsPadding|padding}.
        *
        * @param {mapBounds} bounds - Bounds to fit
        * @param {integer} padding - Padding in all directions
-       * @return {boolean} If fit was successful.
+       * @return {boolean} If fit was successful
+       *
+       * @see {@link bbbfly.Map#SetMaxBounds|SetMaxBounds()}
        */
       FitBounds: bbbfly.map.map._fitBounds,
 
@@ -527,30 +594,40 @@ bbbfly.Map = function(def,ref,parent){
        * @function
        * @name SetMinZoom
        * @memberof bbbfly.Map#
-       * @description Set minimal map zoom level
+       *
+       * @description
+       *   Set {@link bbbfly.Map#MinZoom|minimal map zoom level}.
        *
        * @param {number} zoom - Zoom level
-       * @return {boolean} If zoom was set.
+       * @return {boolean} If zoom was set
+       *
+       * @see {@link bbbfly.Map#SetMaxZoom|SetMaxZoom()}
        */
       SetMinZoom: bbbfly.map.map._setMinZoom,
       /**
        * @function
        * @name SetMaxZoom
        * @memberof bbbfly.Map#
-       * @description Set maximal map zoom level
+       *
+       * @description
+       *   Set {@link bbbfly.Map#MaxZoom|maximal map zoom level}.
        *
        * @param {number} zoom - Zoom level
-       * @return {boolean} If zoom was set.
+       * @return {boolean} If zoom was set
+       *
+       * @see {@link bbbfly.Map#SetMinZoom|SetMinZoom()}
        */
       SetMaxZoom: bbbfly.map.map._setMaxZoom,
       /**
        * @function
        * @name EnableAnimation
        * @memberof bbbfly.Map#
-       * @description Enable or disable map animation
+       *
+       * @description
+       *   Enable or disable {@link bbbfly.Map#Animate|map animation}.
        *
        * @param {boolean} enable
-       * @return {boolean} If state has changed.
+       * @return {boolean} If state has changed
        */
       EnableAnimation: bbbfly.map.map._enableAnimation,
 
@@ -558,7 +635,8 @@ bbbfly.Map = function(def,ref,parent){
        * @function
        * @name SetView
        * @memberof bbbfly.Map#
-       * @description Set map position and zoom level
+       *
+       * @description Set map position and zoom level.
        *
        * @param {mapPoint} coordinates - Center point
        * @param {number} zoom - Zoom level
@@ -577,7 +655,8 @@ bbbfly.Map = function(def,ref,parent){
        * @function
        * @name SetZoom
        * @memberof bbbfly.Map#
-       * @description Set map zoom level
+       *
+       * @description Set map zoom level.
        *
        * @param {number} zoom - Zoom level
        * @return {boolean} If zoom was set
@@ -593,7 +672,8 @@ bbbfly.Map = function(def,ref,parent){
        * @function
        * @name GetZoom
        * @memberof bbbfly.Map#
-       * @description Get map zoom level
+       *
+       * @description Get map zoom level.
        *
        * @return {number|null} zoom - Zoom level
        *
@@ -607,7 +687,8 @@ bbbfly.Map = function(def,ref,parent){
        * @function
        * @name ZoomIn
        * @memberof bbbfly.Map#
-       * @description Zoom map in
+       *
+       * @description Zoom map in.
        *
        * @param {number} zoomBy - Number of zoom levels
        * @return {boolean} If map was zoomed
@@ -623,7 +704,8 @@ bbbfly.Map = function(def,ref,parent){
        * @function
        * @name ZoomOut
        * @memberof bbbfly.Map#
-       * @description Zoom map out
+       *
+       * @description Zoom map out.
        *
        * @param {number} zoomBy - Number of zoom levels
        * @return {boolean} If map was zoomed
@@ -639,7 +721,8 @@ bbbfly.Map = function(def,ref,parent){
        * @function
        * @name SetCenter
        * @memberof bbbfly.Map#
-       * @description Set map position
+       *
+       * @description Set map position.
        *
        * @param {mapPoint} coordinates - Center point
        * @return {boolean} If center was set
@@ -652,7 +735,8 @@ bbbfly.Map = function(def,ref,parent){
        * @function
        * @name GetCenter
        * @memberof bbbfly.Map#
-       * @description Get map position
+       *
+       * @description Get map position.
        *
        * @return {mapPoint|null} Center point
        *
@@ -662,13 +746,34 @@ bbbfly.Map = function(def,ref,parent){
       GetCenter: bbbfly.map.map._getCenter,
       /**
        * @function
+       * @name GetLayer
+       * @memberof bbbfly.Map#
+       *
+       * @description Get Leaflet layer.
+       *
+       * @param {string} id
+       * @return {object} {@link https://leafletjs.com/reference-1.4.0.html#layer|L.Layer}
+       *
+       * @see {@link bbbfly.Map#AddLayers|AddLayers()}
+       * @see {@link bbbfly.Map#AddLayer|AddLayer()}
+       * @see {@link bbbfly.Map#RemoveLayers|RemoveLayers()}
+       * @see {@link bbbfly.Map#RemoveLayer|RemoveLayer()}
+       */
+      GetLayer: bbbfly.map.map._getLayer,
+      /**
+       * @function
        * @name AddLayers
        * @memberof bbbfly.Map#
        *
-       * @description Add new layers
+       * @description Add new Leaflet layers.
        *
        * @param {bbbfly.Map.Layer[]} defs
        * @return {boolean} - If all layers were added
+       *
+       * @see {@link bbbfly.Map#GetLayer|GetLayer()}
+       * @see {@link bbbfly.Map#AddLayer|AddLayer()}
+       * @see {@link bbbfly.Map#RemoveLayers|RemoveLayers()}
+       * @see {@link bbbfly.Map#RemoveLayer|RemoveLayer()}
        */
       AddLayers: bbbfly.map.map._addLayers,
       /**
@@ -676,10 +781,15 @@ bbbfly.Map = function(def,ref,parent){
        * @name AddLayer
        * @memberof bbbfly.Map#
        *
-       * @description Add new layer
+       * @description Add new Leaflet layer.
        *
        * @param {bbbfly.Map.Layer} def
        * @return {boolean} - If layer was added
+       *
+       * @see {@link bbbfly.Map#GetLayer|GetLayer()}
+       * @see {@link bbbfly.Map#AddLayers|AddLayers()}
+       * @see {@link bbbfly.Map#RemoveLayers|RemoveLayers()}
+       * @see {@link bbbfly.Map#RemoveLayer|RemoveLayer()}
        */
       AddLayer: bbbfly.map.map._addLayer,
       /**
@@ -687,10 +797,15 @@ bbbfly.Map = function(def,ref,parent){
        * @name RemoveLayers
        * @memberof bbbfly.Map#
        *
-       * @description Remove layers
+       * @description Remove Leaflet layers.
        *
        * @param {string[]} [ids=undefined] - All layers will be removed if no ID is passed
        * @return {boolean} - If all layers were removed
+       *
+       * @see {@link bbbfly.Map#GetLayer|GetLayer()}
+       * @see {@link bbbfly.Map#AddLayers|AddLayers()}
+       * @see {@link bbbfly.Map#AddLayer|AddLayer()}
+       * @see {@link bbbfly.Map#RemoveLayer|RemoveLayer()}
        */
       RemoveLayers: bbbfly.map.map._removeLayers,
       /**
@@ -698,10 +813,15 @@ bbbfly.Map = function(def,ref,parent){
        * @name RemoveLayer
        * @memberof bbbfly.Map#
        *
-       * @description Remove layer
+       * @description Remove Leaflet layer.
        *
        * @param {string} id
        * @return {boolean} - If layer was removed
+       *
+       * @see {@link bbbfly.Map#GetLayer|GetLayer()}
+       * @see {@link bbbfly.Map#AddLayers|AddLayers()}
+       * @see {@link bbbfly.Map#AddLayer|AddLayer()}
+       * @see {@link bbbfly.Map#RemoveLayers|RemoveLayers()}
        */
       RemoveLayer: bbbfly.map.map._removeLayer
     }
@@ -712,8 +832,9 @@ bbbfly.Map = function(def,ref,parent){
 
 /**
  * @enum {string}
+ *
  * @description
- *   Supported map layer types
+ *   Supported map layer types.
  */
 bbbfly.Map.layer = {
   image: 'ImageLayer',
@@ -727,8 +848,9 @@ bbbfly.Map.layer = {
 
 /**
  * @enum {string}
+ *
  * @description
- *   Supported coordinate reference systems
+ *   Supported coordinate reference systems.
  */
 bbbfly.Map.crs = {
   WorldMercator: 'EPSG3395',
@@ -749,9 +871,9 @@ ngUserControls['bbbfly_map'] = {
  * @memberOf bbbfly.Map
  *
  * @description
- *   Ancestor for all Leaflet layer definitions
+ *   Ancestor for all Leaflet layer definitions.
  *
- * @property {string} Id
+ * @property {string} Id - Layer can be accesses by this ID
  * @property {bbbfly.Map.layer} Type
  * @property {url} Url - Url used for tile requests
  * @property {boolean|string} [CrossOrigin=undefined] - Will be added to tile requests
@@ -788,7 +910,7 @@ bbbfly.Map.Layer = {
  *
  * @description
  *   {@link https://leafletjs.com/reference-1.4.0.html#imageoverlay|L.ImageOverlay}
- *   instance will be added to map
+ *   instance will be added to map.
  *
  *@property {bbbfly.Map.layer} Type=image
  * @property {url} [ErrorUrl=undefined] - Url used when tile request has failed
@@ -810,7 +932,7 @@ bbbfly.Map.ImageLayer = {
  *
  * @description
  *   {@link https://leafletjs.com/reference-1.4.0.html#tilelayer|L.TileLayer}
- *   instance will be added to map
+ *   instance will be added to map.
  *
  * @property {bbbfly.Map.layer} Type=tile
  * @property {url} [ErrorUrl=undefined] - Url used when tile request has failed
@@ -844,7 +966,7 @@ bbbfly.Map.TileLayer = {
  *
  * @description
  *   {@link https://leafletjs.com/reference-1.4.0.html#tilelayer-wms|L.TileLayer.wms}
- *   instance will be added to map
+ *   instance will be added to map.
  *
  * @property {bbbfly.Map.layer} Type=wms
  * @property {string} Layers - Comma-separated WMS layers
@@ -879,7 +1001,7 @@ bbbfly.Map.WMSLayer = {
  *
  * @description
  *   {@link https://esri.github.io/esri-leaflet/api-reference/layers/tiled-map-layer.html|L.esri.TiledMapLayer}
- *   instance will be added to map
+ *   instance will be added to map.
  *
  * @property {bbbfly.Map.layer} Type=arcgis_online
  */
@@ -895,7 +1017,7 @@ bbbfly.Map.ArcGISOnlineLayer = {
  *
  * @description
  *   {@link https://esri.github.io/esri-leaflet/api-reference/layers/tiled-map-layer.html|L.esri.TiledMapLayer}
- *   instance will be added to map
+ *   instance will be added to map.
  *
  * @property {bbbfly.Map.layer} Type=arcgis_server
  */
@@ -911,7 +1033,7 @@ bbbfly.Map.ArcGISServerLayer = {
  *
  * @description
  *   {@link https://esri.github.io/esri-leaflet/api-reference/layers/dynamic-map-layer.html|L.esri.DynamicMapLayer}
- *   instance will be added to map
+ *   instance will be added to map.
  *
  * @property {bbbfly.Map.layer} Type=arcgis_enterprise
  * @property {string} [Format='png32'] - Service image format

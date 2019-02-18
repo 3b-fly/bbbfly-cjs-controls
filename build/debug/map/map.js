@@ -82,11 +82,25 @@ bbbfly.map.map._destroyMap = function(){
   return false;
 };
 bbbfly.map.map._setMaxBounds = function(bounds){
-  this.MaxBounds = bounds;
+  if(Array.isArray(bounds)){
+    bounds = new L.latLngBounds(bounds);
+  }
 
-  var map = this.GetMap();
-  if(map){map.setMaxBounds(bounds);}
-  return true;
+  if(bounds && bounds.isValid && bounds.isValid()){
+    this.MaxBounds = bounds;
+
+    var map = this.GetMap();
+    if(map){map.setMaxBounds(bounds);}
+    return true;
+  }
+  return false;
+};
+bbbfly.map.map._setBoundsPadding = function(padding){
+  if(Number.isNumber(padding)){
+    this.BoundsPadding = padding;
+    return true;
+  }
+  return false;
 };
 bbbfly.map.map._fitBounds = function(bounds,padding){
   var map = this.GetMap();
@@ -190,6 +204,12 @@ bbbfly.map.map._getCenter = function(){
   if(map){return map.getCenter();}
   return null;
 };
+bbbfly.map.map._getLayer = function(id){
+  if(!String.isString(id)){return null;}
+
+  var layer = this._layers[id];
+  return (layer) ? layer : null;
+};
 bbbfly.map.map._addLayers = function(defs){
   if(!Array.isArray(defs)){return false;}
 
@@ -270,7 +290,7 @@ bbbfly.map.map._removeLayers = function(ids){
   return true;
 };
 bbbfly.map.map._removeLayer = function(id){
-  if(String.isString(id)){return false;}
+  if(!String.isString(id)){return false;}
 
   var layer = this._layers[id];
   if(layer){
@@ -345,6 +365,7 @@ bbbfly.Map = function(def,ref,parent){
       DoCreateMap: bbbfly.map.map._doCreateMap,
       DestroyMap: bbbfly.map.map._destroyMap,
       SetMaxBounds: bbbfly.map.map._setMaxBounds,
+      SetBoundsPadding: bbbfly.map.map._setBoundsPadding,
       FitBounds: bbbfly.map.map._fitBounds,
       SetMinZoom: bbbfly.map.map._setMinZoom,
       SetMaxZoom: bbbfly.map.map._setMaxZoom,
@@ -356,6 +377,7 @@ bbbfly.Map = function(def,ref,parent){
       ZoomOut: bbbfly.map.map._zoomOut,
       SetCenter: bbbfly.map.map._setCenter,
       GetCenter: bbbfly.map.map._getCenter,
+      GetLayer: bbbfly.map.map._getLayer,
       AddLayers: bbbfly.map.map._addLayers,
       AddLayer: bbbfly.map.map._addLayer,
       RemoveLayers: bbbfly.map.map._removeLayers,
