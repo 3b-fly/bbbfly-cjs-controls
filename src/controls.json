@@ -148,10 +148,16 @@
     },
     "map": {
       "DebugFiles": [
-        "map/map.js"
+        "map/map.js",
+        "map/libs/leaflet_1.4.0/leaflet.js",
+        "map/libs/leaflet_1.4.0/leaflet.css",
+        "map/libs/esri-leaflet_2.2.3/esri-leaflet.js"
       ],
       "ReleaseFiles": [
-        "map/map.js"
+        "map/map.js",
+        "map/libs/leaflet_1.4.0/leaflet.js",
+        "map/libs/leaflet_1.4.0/leaflet.css",
+        "map/libs/esri-leaflet_2.2.3/esri-leaflet.js"
       ],
       "Libraries": {
         "controls.js": {

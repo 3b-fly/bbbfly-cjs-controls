@@ -6,7 +6,6 @@
  * @inpackage map
  */
 
-//TODO: add library sources
 //TODO: add MapBox layer support
 //TODO: add examples
 //TODO: add attribution handling
