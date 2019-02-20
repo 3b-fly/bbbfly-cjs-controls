@@ -16,6 +16,11 @@ var bbbfly = bbbfly || {};
 bbbfly.map = bbbfly.map || {};
 /** @ignore */
 bbbfly.map.map = {};
+/** @ignore */
+bbbfly.map.layer = {
+  mapbox_tile: {},
+  mapbox_style: {}
+};
 
 /** @ignore */
 bbbfly.map.map._onCreated = function(map){
@@ -283,7 +288,7 @@ bbbfly.map.map._addLayers = function(defs){
 
 /** @ignore */
 bbbfly.map.map._addLayer = function(def){
-  if(!Object.isObject(def) || !String.isString(def.Url)){return false;}
+  if(!Object.isObject(def)){return false;}
 
   var map = this.GetMap();
   if(!map){return false;}
@@ -303,6 +308,10 @@ bbbfly.map.map._addLayer = function(def){
 
   if(Object.isObject(iface.options)){
     ng_MergeVar(options,iface.options);
+  }
+
+  if(typeof iface.onCreateOptions === 'function'){
+    iface.onCreateOptions(options);
   }
 
   var layer = null;
@@ -385,6 +394,41 @@ bbbfly.map.map._layerInterface = function(iname,iface){
   return iface;
 };
 
+/** @ignore */
+bbbfly.map.layer.mapbox_tile._oncreateOptions = function(options){
+  if(!String.isString(options.url) && String.isString(options.mapId)){
+    options.url = 'https://api.mapbox.com/v4/'
+        +options.mapId+'/{z}/{x}/{y}.png';
+
+    if(String.isString(options.accessToken)){
+      options.url += '?access_token='+options.accessToken;
+    }
+  }
+  delete(options.mapId);
+  delete(options.accessToken);
+};
+
+/** @ignore */
+bbbfly.map.layer.mapbox_style._oncreateOptions = function(options){
+  if(!String.isString(options.url) && String.isString(options.styleUrl)){
+    var parts = this.pattern.exec(options.styleUrl);
+
+    if(parts){
+      options.url = 'https://api.mapbox.com/styles/v1/'
+        +parts[1]+'/tiles/{z}/{x}/{y}{r}';
+
+      if(String.isString(options.accessToken)){
+        options.url += '?access_token='+options.accessToken;
+      }
+
+      var params = parts[3];
+      if(String.isString(params)){options.url += '&'+params;}
+    }
+  }
+  delete(options.styleUrl);
+  delete(options.accessToken);
+};
+
 /**
  * @class
  * @type control
@@ -407,13 +451,12 @@ bbbfly.map.map._layerInterface = function(iname,iface){
  * @property {number} [MaxZoom=null] - Map maximal zoom level
  * @property {number} [Animate=true] - If map animation is allowed
  *
+ * @property {bbbfly.Map.Layer[]} [Layers=[]] - Map layers definition
  * @property {object} DefaultLayer - Default layer definition
  * @property {number} [DefaultLayer.ZIndex=1] - Layer z-index
  * @property {number} [DefaultLayer.Opacity=1] - Layer opacity
  * @property {string} [DefaultLayer.ClassName=''] - Layer element CSS class name
  * @property {boolean} [DefaultLayer.CrossOrigin=false] - Will be added to tile requests
- *
- * @property {bbbfly.Map.Layer[]} [Layers=[]] - Map layers definition
  */
 bbbfly.Map = function(def,ref,parent){
   def = def || {};
@@ -842,7 +885,10 @@ bbbfly.Map.layer = {
 
   arcgis_online: 'ArcGISOnlineLayer',
   arcgis_server: 'ArcGISServerLayer',
-  arcgis_enterprise: 'ArcGISEnterpriseLayer'
+  arcgis_enterprise: 'ArcGISEnterpriseLayer',
+
+  mapbox_tile: 'MapboxTileLayer',
+  mapbox_style: 'MapboxStyleLayer'
 };
 
 /**
@@ -1051,4 +1097,42 @@ bbbfly.Map.ArcGISEnterpriseLayer = {
     format: 'png32',
     transparent: true
   }
+};
+
+/**
+ * @interface MapboxTileLayer
+ * @extends bbbfly.Map.TileLayer
+ * @memberOf bbbfly.Map
+ *
+ * @property {bbbfly.Map.layer} Type=mapbox_tile
+ * @property {string} MapId - {@link https://docs.mapbox.com/help/glossary/map-id/|Mapbox map ID}
+ * @property {string} AccessToken - {@link https://docs.mapbox.com/help/glossary/access-token/|Mapbox access token}
+ */
+bbbfly.Map.MapboxTileLayer = {
+  extends: 'TileLayer',
+  map: {
+    MapId: 'mapId',
+    AccessToken: 'accessToken'
+  },
+  onCreateOptions: bbbfly.map.layer.mapbox_tile._oncreateOptions
+};
+
+/**
+ * @interface MapboxStyleLayer
+ * @extends bbbfly.Map.TileLayer
+ * @memberOf bbbfly.Map
+ *
+ * @property {bbbfly.Map.layer} Type=mapbox_style
+ * @property {string} StyleUrl - {@link https://docs.mapbox.com/help/glossary/style-url/|Mapbox style URL}
+ * @property {string} AccessToken - {@link https://docs.mapbox.com/help/glossary/access-token/|Mapbox access token}
+ */
+bbbfly.Map.MapboxStyleLayer = {
+  extends: 'TileLayer',
+  map: {
+    StyleUrl: 'styleUrl',
+    AccessToken: 'accessToken'
+  },
+
+  pattern: new RegExp('^mapbox://styles/([\\w-]+/[a-z0-9]+)[^?]*(\\?(.*))?$'),
+  onCreateOptions: bbbfly.map.layer.mapbox_style._oncreateOptions
 };

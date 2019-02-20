@@ -9,6 +9,10 @@
 var bbbfly = bbbfly || {};
 bbbfly.map = bbbfly.map || {};
 bbbfly.map.map = {};
+bbbfly.map.layer = {
+  mapbox_tile: {},
+  mapbox_style: {}
+};
 bbbfly.map.map._onCreated = function(map){
   map.CreateMap();
   return true;
@@ -221,7 +225,7 @@ bbbfly.map.map._addLayers = function(defs){
   return true;
 };
 bbbfly.map.map._addLayer = function(def){
-  if(!Object.isObject(def) || !String.isString(def.Url)){return false;}
+  if(!Object.isObject(def)){return false;}
 
   var map = this.GetMap();
   if(!map){return false;}
@@ -241,6 +245,10 @@ bbbfly.map.map._addLayer = function(def){
 
   if(Object.isObject(iface.options)){
     ng_MergeVar(options,iface.options);
+  }
+
+  if(typeof iface.onCreateOptions === 'function'){
+    iface.onCreateOptions(options);
   }
 
   var layer = null;
@@ -315,6 +323,37 @@ bbbfly.map.map._layerInterface = function(iname,iface){
     this.LayerInterface(ifc.extends,iface);
   }
   return iface;
+};
+bbbfly.map.layer.mapbox_tile._oncreateOptions = function(options){
+  if(!String.isString(options.url) && String.isString(options.mapId)){
+    options.url = 'https://api.mapbox.com/v4/'
+        +options.mapId+'/{z}/{x}/{y}.png';
+
+    if(String.isString(options.accessToken)){
+      options.url += '?access_token='+options.accessToken;
+    }
+  }
+  delete(options.mapId);
+  delete(options.accessToken);
+};
+bbbfly.map.layer.mapbox_style._oncreateOptions = function(options){
+  if(!String.isString(options.url) && String.isString(options.styleUrl)){
+    var parts = this.pattern.exec(options.styleUrl);
+
+    if(parts){
+      options.url = 'https://api.mapbox.com/styles/v1/'
+        +parts[1]+'/tiles/{z}/{x}/{y}{r}';
+
+      if(String.isString(options.accessToken)){
+        options.url += '?access_token='+options.accessToken;
+      }
+
+      var params = parts[3];
+      if(String.isString(params)){options.url += '&'+params;}
+    }
+  }
+  delete(options.styleUrl);
+  delete(options.accessToken);
 };
 bbbfly.Map = function(def,ref,parent){
   def = def || {};
@@ -394,7 +433,10 @@ bbbfly.Map.layer = {
 
   arcgis_online: 'ArcGISOnlineLayer',
   arcgis_server: 'ArcGISServerLayer',
-  arcgis_enterprise: 'ArcGISEnterpriseLayer'
+  arcgis_enterprise: 'ArcGISEnterpriseLayer',
+
+  mapbox_tile: 'MapboxTileLayer',
+  mapbox_style: 'MapboxStyleLayer'
 };
 bbbfly.Map.crs = {
   WorldMercator: 'EPSG3395',
@@ -488,4 +530,22 @@ bbbfly.Map.ArcGISEnterpriseLayer = {
     format: 'png32',
     transparent: true
   }
+};
+bbbfly.Map.MapboxTileLayer = {
+  extends: 'TileLayer',
+  map: {
+    MapId: 'mapId',
+    AccessToken: 'accessToken'
+  },
+  onCreateOptions: bbbfly.map.layer.mapbox_tile._oncreateOptions
+};
+bbbfly.Map.MapboxStyleLayer = {
+  extends: 'TileLayer',
+  map: {
+    StyleUrl: 'styleUrl',
+    AccessToken: 'accessToken'
+  },
+
+  pattern: new RegExp('^mapbox://styles/([\\w-]+/[a-z0-9]+)[^?]*(\\?(.*))?$'),
+  onCreateOptions: bbbfly.map.layer.mapbox_style._oncreateOptions
 };
