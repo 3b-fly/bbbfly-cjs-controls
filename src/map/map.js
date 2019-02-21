@@ -6,7 +6,6 @@
  * @inpackage map
  */
 
-//TODO: add MapBox layer support
 //TODO: add examples
 //TODO: add attribution handling
 
@@ -396,37 +395,33 @@ bbbfly.map.map._layerInterface = function(iname,iface){
 
 /** @ignore */
 bbbfly.map.layer.mapbox_tile._oncreateOptions = function(options){
-  if(!String.isString(options.url) && String.isString(options.mapId)){
-    options.url = 'https://api.mapbox.com/v4/'
-        +options.mapId+'/{z}/{x}/{y}.png';
+  if(!String.isString(options.url)){
+    var r = (options.detectRetina) ? '{r}' : '';
 
-    if(String.isString(options.accessToken)){
-      options.url += '?access_token='+options.accessToken;
-    }
+    options.url = 'https://api.mapbox.com/v4/'
+      +'{mapId}/{z}/{x}/{y}'+r+'.{format}'
+      +'?access_token={accessToken}';
   }
-  delete(options.mapId);
-  delete(options.accessToken);
 };
 
 /** @ignore */
 bbbfly.map.layer.mapbox_style._oncreateOptions = function(options){
-  if(!String.isString(options.url) && String.isString(options.styleUrl)){
+  if(!String.isString(options.url)){
     var parts = this.pattern.exec(options.styleUrl);
 
-    if(parts){
+    if(Array.isArray(parts) && (parts.length === 3)){
+      var r = (options.detectRetina) ? '{r}' : '';
+
+      options.styleOwner = parts[1];
+      options.styleId = parts[2];
+      delete(options.styleUrl);
+
       options.url = 'https://api.mapbox.com/styles/v1/'
-        +parts[1]+'/tiles/{z}/{x}/{y}{r}';
-
-      if(String.isString(options.accessToken)){
-        options.url += '?access_token='+options.accessToken;
-      }
-
-      var params = parts[3];
-      if(String.isString(params)){options.url += '&'+params;}
+        +'{styleOwner}/{styleId}/tiles/{z}/{x}/{y}'+r
+        +'?access_token={accessToken}';
     }
   }
   delete(options.styleUrl);
-  delete(options.accessToken);
 };
 
 /**
@@ -1107,13 +1102,19 @@ bbbfly.Map.ArcGISEnterpriseLayer = {
  * @property {bbbfly.Map.layer} Type=mapbox_tile
  * @property {string} MapId - {@link https://docs.mapbox.com/help/glossary/map-id/|Mapbox map ID}
  * @property {string} AccessToken - {@link https://docs.mapbox.com/help/glossary/access-token/|Mapbox access token}
+ * @property {string} [Format='png32'] - 'png','png32','png64','png128','png256','jpg70','jpg80','jpg90'
  */
 bbbfly.Map.MapboxTileLayer = {
   extends: 'TileLayer',
   map: {
     MapId: 'mapId',
-    AccessToken: 'accessToken'
+    AccessToken: 'accessToken',
+    Format: 'format'
   },
+  options: {
+    format: 'png32'
+  },
+
   onCreateOptions: bbbfly.map.layer.mapbox_tile._oncreateOptions
 };
 
@@ -1125,14 +1126,21 @@ bbbfly.Map.MapboxTileLayer = {
  * @property {bbbfly.Map.layer} Type=mapbox_style
  * @property {string} StyleUrl - {@link https://docs.mapbox.com/help/glossary/style-url/|Mapbox style URL}
  * @property {string} AccessToken - {@link https://docs.mapbox.com/help/glossary/access-token/|Mapbox access token}
+ * @property {string} [Format='png32'] - Service image format
  */
 bbbfly.Map.MapboxStyleLayer = {
   extends: 'TileLayer',
   map: {
     StyleUrl: 'styleUrl',
-    AccessToken: 'accessToken'
+    AccessToken: 'accessToken',
+    Format: 'format'
+  },
+  options: {
+    tileSize: 512,
+    zoomOffset: -1,
+    minNativeZoom: 0
   },
 
-  pattern: new RegExp('^mapbox://styles/([\\w-]+/[a-z0-9]+)[^?]*(\\?(.*))?$'),
+  pattern: new RegExp('^mapbox://styles/([\\w-]+)/([a-z0-9]+).*$'),
   onCreateOptions: bbbfly.map.layer.mapbox_style._oncreateOptions
 };

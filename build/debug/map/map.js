@@ -325,35 +325,31 @@ bbbfly.map.map._layerInterface = function(iname,iface){
   return iface;
 };
 bbbfly.map.layer.mapbox_tile._oncreateOptions = function(options){
-  if(!String.isString(options.url) && String.isString(options.mapId)){
-    options.url = 'https://api.mapbox.com/v4/'
-        +options.mapId+'/{z}/{x}/{y}.png';
+  if(!String.isString(options.url)){
+    var r = (options.detectRetina) ? '{r}' : '';
 
-    if(String.isString(options.accessToken)){
-      options.url += '?access_token='+options.accessToken;
-    }
+    options.url = 'https://api.mapbox.com/v4/'
+      +'{mapId}/{z}/{x}/{y}'+r+'.{format}'
+      +'?access_token={accessToken}';
   }
-  delete(options.mapId);
-  delete(options.accessToken);
 };
 bbbfly.map.layer.mapbox_style._oncreateOptions = function(options){
-  if(!String.isString(options.url) && String.isString(options.styleUrl)){
+  if(!String.isString(options.url)){
     var parts = this.pattern.exec(options.styleUrl);
 
-    if(parts){
+    if(Array.isArray(parts) && (parts.length === 3)){
+      var r = (options.detectRetina) ? '{r}' : '';
+
+      options.styleOwner = parts[1];
+      options.styleId = parts[2];
+      delete(options.styleUrl);
+
       options.url = 'https://api.mapbox.com/styles/v1/'
-        +parts[1]+'/tiles/{z}/{x}/{y}{r}';
-
-      if(String.isString(options.accessToken)){
-        options.url += '?access_token='+options.accessToken;
-      }
-
-      var params = parts[3];
-      if(String.isString(params)){options.url += '&'+params;}
+        +'{styleOwner}/{styleId}/tiles/{z}/{x}/{y}'+r
+        +'?access_token={accessToken}';
     }
   }
   delete(options.styleUrl);
-  delete(options.accessToken);
 };
 bbbfly.Map = function(def,ref,parent){
   def = def || {};
@@ -535,17 +531,28 @@ bbbfly.Map.MapboxTileLayer = {
   extends: 'TileLayer',
   map: {
     MapId: 'mapId',
-    AccessToken: 'accessToken'
+    AccessToken: 'accessToken',
+    Format: 'format'
   },
+  options: {
+    format: 'png32'
+  },
+
   onCreateOptions: bbbfly.map.layer.mapbox_tile._oncreateOptions
 };
 bbbfly.Map.MapboxStyleLayer = {
   extends: 'TileLayer',
   map: {
     StyleUrl: 'styleUrl',
-    AccessToken: 'accessToken'
+    AccessToken: 'accessToken',
+    Format: 'format'
+  },
+  options: {
+    tileSize: 512,
+    zoomOffset: -1,
+    minNativeZoom: 0
   },
 
-  pattern: new RegExp('^mapbox://styles/([\\w-]+/[a-z0-9]+)[^?]*(\\?(.*))?$'),
+  pattern: new RegExp('^mapbox://styles/([\\w-]+)/([a-z0-9]+).*$'),
   onCreateOptions: bbbfly.map.layer.mapbox_style._oncreateOptions
 };
