@@ -1102,7 +1102,7 @@ bbbfly.Map.ArcGISEnterpriseLayer = {
  * @property {bbbfly.Map.layer} Type=mapbox_tile
  * @property {string} MapId - {@link https://docs.mapbox.com/help/glossary/map-id/|Mapbox map ID}
  * @property {string} AccessToken - {@link https://docs.mapbox.com/help/glossary/access-token/|Mapbox access token}
- * @property {string} [Format='png32'] - 'png','png32','png64','png128','png256','jpg70','jpg80','jpg90'
+ * @property {string} [Format='png32'] - png, png32, png64, png128, png256, jpg70, jpg80, jpg90
  */
 bbbfly.Map.MapboxTileLayer = {
   extends: 'TileLayer',
