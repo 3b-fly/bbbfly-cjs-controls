@@ -6,9 +6,6 @@
  * @inpackage map
  */
 
-//TODO: add examples
-//TODO: add attribution handling
-
 /** @ignore */
 var bbbfly = bbbfly || {};
 /** @ignore */
@@ -452,6 +449,25 @@ bbbfly.map.layer.mapbox_style._oncreateOptions = function(options){
  * @property {number} [DefaultLayer.Opacity=1] - Layer opacity
  * @property {string} [DefaultLayer.ClassName=''] - Layer element CSS class name
  * @property {boolean} [DefaultLayer.CrossOrigin=false] - Will be added to tile requests
+ *
+ * @example
+ * var appForm;
+ * function ngMain(){
+ *
+ *   appForm = new ngControls({
+ *     Map: {
+ *       Type: 'bbbfly.Map',
+ *       L:0,T:0,R:0,B:0,
+ *       Data: {
+ *         Layers: [
+ *           ...
+ *         ]
+ *       }
+ *     }
+ *   });
+ *
+ *   appForm.Update();
+ * }
  */
 bbbfly.Map = function(def,ref,parent){
   def = def || {};
@@ -952,9 +968,17 @@ bbbfly.Map.Layer = {
  *   {@link https://leafletjs.com/reference-1.4.0.html#imageoverlay|L.ImageOverlay}
  *   instance will be added to map.
  *
- *@property {bbbfly.Map.layer} Type=image
+ * @property {bbbfly.Map.layer} Type=image
  * @property {url} [ErrorUrl=undefined] - Url used when tile request has failed
  * @property {mapBounds} Bounds - Place image within bounds
+ *
+ * @see {@link bbbfly.Map.TileLayer|TileLayer}
+ * @see {@link bbbfly.Map.WMSLayer|WMSLayer}
+ * @see {@link bbbfly.Map.ArcGISOnlineLayer|ArcGISOnlineLayer}
+ * @see {@link bbbfly.Map.ArcGISServerLayer|ArcGISServerLayer}
+ * @see {@link bbbfly.Map.ArcGISEnterpriseLayer|ArcGISEnterpriseLayer}
+ * @see {@link bbbfly.Map.MapboxTileLayer|MapboxTileLayer}
+ * @see {@link bbbfly.Map.MapboxStyleLayer|MapboxStyleLayer}
  */
 bbbfly.Map.ImageLayer = {
   extends: 'Layer',
@@ -980,6 +1004,23 @@ bbbfly.Map.ImageLayer = {
  * @property {number} [MinZoom=1] - Display layer from zoom level
  * @property {number} [MaxZoom=18] - Display layer to zoom level
  * @property {px} [TileSize=256] - Tile width and height
+ *
+ * @see {@link bbbfly.Map.ImageLayer|ImageLayer}
+ * @see {@link bbbfly.Map.WMSLayer|WMSLayer}
+ * @see {@link bbbfly.Map.ArcGISOnlineLayer|ArcGISOnlineLayer}
+ * @see {@link bbbfly.Map.ArcGISServerLayer|ArcGISServerLayer}
+ * @see {@link bbbfly.Map.ArcGISEnterpriseLayer|ArcGISEnterpriseLayer}
+ * @see {@link bbbfly.Map.MapboxTileLayer|MapboxTileLayer}
+ * @see {@link bbbfly.Map.MapboxStyleLayer|MapboxStyleLayer}
+ *
+ * @example
+ * ...
+ * Layers: [{
+ *   Type: 'TileLayer',
+ *   Url: 'http://tile.openstreetmap.org/{z}/{x}/{y}.png',
+ *   Attribution: '&copy; OpenStreetMap contributors'
+ * }]
+ * ...
  */
 bbbfly.Map.TileLayer = {
   extends: 'Layer',
@@ -1015,6 +1056,24 @@ bbbfly.Map.TileLayer = {
  * @property {string} [Version='1.3.0'] - WMS service version
  * @property {boolean} [Transparent=true] - Allow WMS image transparency
  * @property {bbbfly.Map.crs} [crs=undefined] - CRS to use instead of map CRS.
+ *
+ * @see {@link bbbfly.Map.ImageLayer|ImageLayer}
+ * @see {@link bbbfly.Map.TileLayer|TileLayer}
+ * @see {@link bbbfly.Map.ArcGISOnlineLayer|ArcGISOnlineLayer}
+ * @see {@link bbbfly.Map.ArcGISServerLayer|ArcGISServerLayer}
+ * @see {@link bbbfly.Map.ArcGISEnterpriseLayer|ArcGISEnterpriseLayer}
+ * @see {@link bbbfly.Map.MapboxTileLayer|MapboxTileLayer}
+ * @see {@link bbbfly.Map.MapboxStyleLayer|MapboxStyleLayer}
+ *
+ * @example
+ * ...
+ * Layers: [{
+ *   Type: 'WMSLayer',
+ *   Url: 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi',
+ *   Attribution: 'Weather data &copy; 2012 IEM Nexrad',
+ *   Layers: 'nexrad-n0r-900913'
+ * }]
+ * ...
  */
 bbbfly.Map.WMSLayer = {
   extends: 'TileLayer',
@@ -1044,6 +1103,23 @@ bbbfly.Map.WMSLayer = {
  *   instance will be added to map.
  *
  * @property {bbbfly.Map.layer} Type=arcgis_online
+ *
+ * @see {@link bbbfly.Map.ImageLayer|ImageLayer}
+ * @see {@link bbbfly.Map.TileLayer|TileLayer}
+ * @see {@link bbbfly.Map.WMSLayer|WMSLayer}
+ * @see {@link bbbfly.Map.ArcGISServerLayer|ArcGISServerLayer}
+ * @see {@link bbbfly.Map.ArcGISEnterpriseLayer|ArcGISEnterpriseLayer}
+ * @see {@link bbbfly.Map.MapboxTileLayer|MapboxTileLayer}
+ * @see {@link bbbfly.Map.MapboxStyleLayer|MapboxStyleLayer}
+ *
+ * @example
+ * ...
+ * Layers: [{
+ *   Type: 'ArcGISOnlineLayer',
+ *   Url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Physical_Map/MapServer',
+ *   Attribution: 'Source: US National Park Service'
+ * }]
+ * ...
  */
 bbbfly.Map.ArcGISOnlineLayer = {
   extends: 'TileLayer',
@@ -1060,6 +1136,23 @@ bbbfly.Map.ArcGISOnlineLayer = {
  *   instance will be added to map.
  *
  * @property {bbbfly.Map.layer} Type=arcgis_server
+ *
+ * @see {@link bbbfly.Map.ImageLayer|ImageLayer}
+ * @see {@link bbbfly.Map.TileLayer|TileLayer}
+ * @see {@link bbbfly.Map.WMSLayer|WMSLayer}
+ * @see {@link bbbfly.Map.ArcGISOnlineLayer|ArcGISOnlineLayer}
+ * @see {@link bbbfly.Map.ArcGISEnterpriseLayer|ArcGISEnterpriseLayer}
+ * @see {@link bbbfly.Map.MapboxTileLayer|MapboxTileLayer}
+ * @see {@link bbbfly.Map.MapboxStyleLayer|MapboxStyleLayer}
+ *
+ * @example
+ * ...
+ * Layers: [{
+ *   Type: 'ArcGISServerLayer',
+ *   Url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Terrain_Base/MapServer/',
+ *   Attribution: 'Sources: Esri, USGS, NOAA'
+ * }]
+ * ...
  */
 bbbfly.Map.ArcGISServerLayer = {
   extends: 'TileLayer',
@@ -1079,6 +1172,23 @@ bbbfly.Map.ArcGISServerLayer = {
  * @property {string} [Format='png32'] - Service image format
  * @property {array} Layers - An array of service layer IDs
  * @property {boolean} [Transparent=true] - Allow service image transparency
+ *
+ * @see {@link bbbfly.Map.ImageLayer|ImageLayer}
+ * @see {@link bbbfly.Map.TileLayer|TileLayer}
+ * @see {@link bbbfly.Map.WMSLayer|WMSLayer}
+ * @see {@link bbbfly.Map.ArcGISOnlineLayer|ArcGISOnlineLayer}
+ * @see {@link bbbfly.Map.ArcGISServerLayer|ArcGISServerLayer}
+ * @see {@link bbbfly.Map.MapboxTileLayer|MapboxTileLayer}
+ * @see {@link bbbfly.Map.MapboxStyleLayer|MapboxStyleLayer}
+ *
+ * @example
+ * ...
+ * Layers: [{
+ *   Type: 'ArcGISEnterpriseLayer',
+ *   Url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/Hurricanes/MapServer/',
+ *   Attribution: 'unavailable'
+ * }]
+ * ...
  */
 bbbfly.Map.ArcGISEnterpriseLayer = {
   extends: 'ImageLayer',
@@ -1103,6 +1213,24 @@ bbbfly.Map.ArcGISEnterpriseLayer = {
  * @property {string} MapId - {@link https://docs.mapbox.com/help/glossary/map-id/|Mapbox map ID}
  * @property {string} AccessToken - {@link https://docs.mapbox.com/help/glossary/access-token/|Mapbox access token}
  * @property {string} [Format='png32'] - png, png32, png64, png128, png256, jpg70, jpg80, jpg90
+ *
+ * @see {@link bbbfly.Map.ImageLayer|ImageLayer}
+ * @see {@link bbbfly.Map.TileLayer|TileLayer}
+ * @see {@link bbbfly.Map.WMSLayer|WMSLayer}
+ * @see {@link bbbfly.Map.ArcGISOnlineLayer|ArcGISOnlineLayer}
+ * @see {@link bbbfly.Map.ArcGISServerLayer|ArcGISServerLayer}
+ * @see {@link bbbfly.Map.ArcGISEnterpriseLayer|ArcGISEnterpriseLayer}
+ * @see {@link bbbfly.Map.MapboxStyleLayer|MapboxStyleLayer}
+ *
+ * @example
+ * ...
+ * Layers: [{
+ *   Type: 'MapboxTileLayer',
+ *   MapId: 'mapbox.streets',
+ *   Attribution: '&copy; Mapbox &copy; OpenStreetMap',
+ *   AccessToken: 'your access token'
+ * }]
+ * ...
  */
 bbbfly.Map.MapboxTileLayer = {
   extends: 'TileLayer',
@@ -1127,6 +1255,24 @@ bbbfly.Map.MapboxTileLayer = {
  * @property {string} StyleUrl - {@link https://docs.mapbox.com/help/glossary/style-url/|Mapbox style URL}
  * @property {string} AccessToken - {@link https://docs.mapbox.com/help/glossary/access-token/|Mapbox access token}
  * @property {string} [Format='png32'] - Service image format
+ *
+ * @see {@link bbbfly.Map.ImageLayer|ImageLayer}
+ * @see {@link bbbfly.Map.TileLayer|TileLayer}
+ * @see {@link bbbfly.Map.WMSLayer|WMSLayer}
+ * @see {@link bbbfly.Map.ArcGISOnlineLayer|ArcGISOnlineLayer}
+ * @see {@link bbbfly.Map.ArcGISServerLayer|ArcGISServerLayer}
+ * @see {@link bbbfly.Map.ArcGISEnterpriseLayer|ArcGISEnterpriseLayer}
+ * @see {@link bbbfly.Map.MapboxTileLayer|MapboxTileLayer}
+ *
+ * @example
+ * ...
+ * Layers: [{
+ *   Type: 'MapboxStyleLayer',
+ *   StyleUrl: 'mapbox://styles/mapbox/emerald-v8',
+ *   Attribution: '&copy; Mapbox &copy; OpenStreetMap',
+ *   AccessToken: 'your access token'
+ * }]
+ * ...
  */
 bbbfly.Map.MapboxStyleLayer = {
   extends: 'TileLayer',
