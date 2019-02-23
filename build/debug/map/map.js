@@ -71,6 +71,9 @@ bbbfly.map.map._doCreateMap = function(options){
       map.Owner = this;
       map.on('zoomend',bbbfly.map.map._onMapZoomEnd);
 
+      map.on('layeradd',bbbfly.map.map._onMapLayersChanged);
+      map.on('layerremove',bbbfly.map.map._onMapLayersChanged);
+
       this._map = map;
       return map;
     }
@@ -192,11 +195,11 @@ bbbfly.map.map._zoomOut = function(zoomBy){
 };
 bbbfly.map.map._onMapZoomEnd = function(event){
   var map = event.target;
-  if(map && (typeof map.getZoom === 'function')){
+  if(map && map.Owner){
 
-    var widget = map.Owner;
-    if(widget && (typeof widget.OnZoomChanged === 'function')){
-      widget.OnZoomChanged(map.getZoom());
+    var mapCtrl = map.Owner;
+    if(typeof mapCtrl.OnZoomChanged === 'function'){
+      mapCtrl.OnZoomChanged(map.getZoom());
     }
   }
 };
@@ -208,6 +211,20 @@ bbbfly.map.map._getCenter = function(){
   if(map){return map.getCenter();}
   return null;
 };
+bbbfly.map.map._beginLayersChanges = function(mapCtrl){
+  if(++mapCtrl._layersChanging < 1){mapCtrl._layersChanging = 1;}
+};
+bbbfly.map.map._endLayersChanges = function(mapCtrl){
+  if(--mapCtrl._layersChanging < 0){mapCtrl._layersChanging = 0;}
+  bbbfly.map.map._layersChanged(mapCtrl);
+};
+bbbfly.map.map._layersChanged = function(mapCtrl){
+  if(mapCtrl._layersChanging > 0){return;}
+
+  if(typeof mapCtrl.OnLayersChanged === 'function'){
+    mapCtrl.OnLayersChanged();
+  }
+};
 bbbfly.map.map._getLayer = function(id){
   if(!String.isString(id)){return null;}
 
@@ -217,12 +234,18 @@ bbbfly.map.map._getLayer = function(id){
 bbbfly.map.map._addLayers = function(defs){
   if(!Array.isArray(defs)){return false;}
 
+  bbbfly.map.map._beginLayersChanges(this);
+  var result = true;
+
   for(var i in defs){
     if(!this.AddLayer(defs[i])){
-      return false;
+      result = false;
+      break;
     }
   }
-  return true;
+
+  bbbfly.map.map._endLayersChanges(this);
+  return result;
 };
 bbbfly.map.map._addLayer = function(def){
   if(!Object.isObject(def)){return false;}
@@ -281,21 +304,28 @@ bbbfly.map.map._addLayer = function(def){
   return false;
 };
 bbbfly.map.map._removeLayers = function(ids){
+  bbbfly.map.map._beginLayersChanges(this);
+  var result = true;
+
   if(Array.isArray(ids)){
     for(var i in ids){
       if(!this.RemoveLayer(ids[i])){
-        return false;
+        result = false;
+        break;
       }
     }
   }
   else{
     for(var id in this._layers){
       if(!this.RemoveLayer(id)){
-        return false;
+        result = false;
+        break;
       }
     }
   }
-  return true;
+
+  bbbfly.map.map._endLayersChanges(this);
+  return result;
 };
 bbbfly.map.map._removeLayer = function(id){
   if(!String.isString(id)){return false;}
@@ -323,6 +353,39 @@ bbbfly.map.map._layerInterface = function(iname,iface){
     this.LayerInterface(ifc.extends,iface);
   }
   return iface;
+};
+bbbfly.map.map._onMapLayersChanged = function(event){
+  if(event.target && event.target.Owner){
+    bbbfly.map.map._layersChanged(event.target.Owner);
+  }
+};
+bbbfly.map.map._getAttributions = function(){
+  var map = this.GetMap();
+  var attrs = [];
+
+  if(map){
+    map.eachLayer(
+      bbbfly.map.map._getLayerAttribution,
+      attrs
+    );
+  }
+  return attrs;
+};
+bbbfly.map.map._getLayerAttribution = function(layer){
+  if(layer && (typeof layer.getAttribution === 'function')){
+
+    var attrs = layer.getAttribution();
+    if(String.isString(attrs)){attrs = [attrs];}
+
+    if(Array.isArray(attrs)){
+      for(var i in attrs){
+        var attr = attrs[i];
+        if(String.isString(attr) && (attr !== '')){
+          this.push(attr);
+        }
+      }
+    }
+  }
 };
 bbbfly.map.layer.mapbox_tile._oncreateOptions = function(options){
   if(!String.isString(options.url)){
@@ -375,7 +438,8 @@ bbbfly.Map = function(def,ref,parent){
       Layers: [],
       _map: null,
       _layers: {},
-      _layerId: 1
+      _layerId: 1,
+      _layersChanging: 0
     },
     OnCreated: bbbfly.map.map._onCreated,
     ControlsPanel: {
@@ -390,7 +454,8 @@ bbbfly.Map = function(def,ref,parent){
     },
     Events: {
       OnUpdated: bbbfly.map.map._onUpdated,
-      OnZoomChanged: null
+      OnZoomChanged: null,
+      OnLayersChanged: null
     },
     Methods: {
       Dispose: bbbfly.map.map._dispose,
@@ -416,7 +481,8 @@ bbbfly.Map = function(def,ref,parent){
       AddLayers: bbbfly.map.map._addLayers,
       AddLayer: bbbfly.map.map._addLayer,
       RemoveLayers: bbbfly.map.map._removeLayers,
-      RemoveLayer: bbbfly.map.map._removeLayer
+      RemoveLayer: bbbfly.map.map._removeLayer,
+      GetAttributions: bbbfly.map.map._getAttributions
     }
   });
 
