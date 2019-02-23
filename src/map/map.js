@@ -1331,7 +1331,7 @@ bbbfly.Map.ArcGISEnterpriseLayer = {
  * Layers: [{
  *   Type: 'MapboxTileLayer',
  *   MapId: 'mapbox.streets',
- *   Attribution: '&copy; Mapbox &copy; OpenStreetMap',
+ *   Attribution: ['&copy; Mapbox', '&copy; OpenStreetMap'],
  *   AccessToken: 'your access token'
  * }]
  * ...
@@ -1373,7 +1373,7 @@ bbbfly.Map.MapboxTileLayer = {
  * Layers: [{
  *   Type: 'MapboxStyleLayer',
  *   StyleUrl: 'mapbox://styles/mapbox/emerald-v8',
- *   Attribution: '&copy; Mapbox &copy; OpenStreetMap',
+ *   Attribution: ['&copy; Mapbox', '&copy; OpenStreetMap'],
  *   AccessToken: 'your access token'
  * }]
  * ...
