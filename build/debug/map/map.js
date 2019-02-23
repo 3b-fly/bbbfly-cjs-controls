@@ -361,18 +361,17 @@ bbbfly.map.map._onMapLayersChanged = function(event){
 };
 bbbfly.map.map._getAttributions = function(){
   var map = this.GetMap();
-  var attrs = [];
+  var attributions = [];
 
   if(map){
-    map.eachLayer(
-      bbbfly.map.map._getLayerAttribution,
-      attrs
-    );
+    var callback = bbbfly.map.map._getLayerAttributions;
+    map.eachLayer(callback,attributions);
   }
-  return attrs;
+  return attributions;
 };
-bbbfly.map.map._getLayerAttribution = function(layer){
+bbbfly.map.map._getLayerAttributions = function(layer){
   if(layer && (typeof layer.getAttribution === 'function')){
+    var attributions = [];
 
     var attrs = layer.getAttribution();
     if(String.isString(attrs)){attrs = [attrs];}
@@ -381,9 +380,13 @@ bbbfly.map.map._getLayerAttribution = function(layer){
       for(var i in attrs){
         var attr = attrs[i];
         if(String.isString(attr) && (attr !== '')){
-          this.push(attr);
+          attributions.push(attr);
         }
       }
+    }
+
+    if(attributions.length > 0){
+      this.push(attributions);
     }
   }
 };

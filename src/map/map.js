@@ -436,20 +436,19 @@ bbbfly.map.map._onMapLayersChanged = function(event){
 /** @ignore */
 bbbfly.map.map._getAttributions = function(){
   var map = this.GetMap();
-  var attrs = [];
+  var attributions = [];
 
   if(map){
-    map.eachLayer(
-      bbbfly.map.map._getLayerAttribution,
-      attrs
-    );
+    var callback = bbbfly.map.map._getLayerAttributions;
+    map.eachLayer(callback,attributions);
   }
-  return attrs;
+  return attributions;
 };
 
 /** @ignore */
-bbbfly.map.map._getLayerAttribution = function(layer){
+bbbfly.map.map._getLayerAttributions = function(layer){
   if(layer && (typeof layer.getAttribution === 'function')){
+    var attributions = [];
 
     var attrs = layer.getAttribution();
     if(String.isString(attrs)){attrs = [attrs];}
@@ -458,9 +457,13 @@ bbbfly.map.map._getLayerAttribution = function(layer){
       for(var i in attrs){
         var attr = attrs[i];
         if(String.isString(attr) && (attr !== '')){
-          this.push(attr);
+          attributions.push(attr);
         }
       }
+    }
+
+    if(attributions.length > 0){
+      this.push(attributions);
     }
   }
 };
@@ -976,7 +979,7 @@ bbbfly.Map = function(def,ref,parent){
        *
        * @description Get all layers attributions.
        *
-       * @return {string[]} - Array of attributions
+       * @return {string[][]} - Multidimensional array of attributions
        *
        * @see {@link bbbfly.Map#event:OnLayersChanged|OnLayersChanged}
        */
@@ -1221,7 +1224,7 @@ bbbfly.Map.WMSLayer = {
  * Layers: [{
  *   Type: 'ArcGISOnlineLayer',
  *   Url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Physical_Map/MapServer',
- *   Attribution: 'Source: US National Park Service'
+ *   Attribution: '&copy; US National Park Service'
  * }]
  * ...
  */
@@ -1254,7 +1257,7 @@ bbbfly.Map.ArcGISOnlineLayer = {
  * Layers: [{
  *   Type: 'ArcGISServerLayer',
  *   Url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Terrain_Base/MapServer/',
- *   Attribution: 'Sources: Esri, USGS, NOAA'
+ *   Attribution: ['&copy; Esri', '&copy; USGS', '&copy; NOAA']
  * }]
  * ...
  */
