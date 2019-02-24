@@ -19,7 +19,7 @@ bbbfly.map.map._onCreated = function(map){
 };
 bbbfly.map.map._onUpdated = function(){
   var map = this.GetMap();
-  if(map && (typeof map.invalidateSize === 'function')){
+  if(map && Function.isFunction(map.invalidateSize)){
     map.invalidateSize();
   }
 };
@@ -44,11 +44,11 @@ bbbfly.map.map._createMap = function(){
   if(Object.isObject(this.MaxBounds) || Array.isArray(this.MaxBounds)){
     options.maxBounds = this.MaxBounds;
   }
-  if(Number.isNumber(this.MinZoom)){
+  if(Number.isInteger(this.MinZoom)){
     options.minZoom = this.MinZoom;
     options.zoom = this.MinZoom;
   }
-  if(Number.isNumber(this.MaxZoom)){
+  if(Number.isInteger(this.MaxZoom)){
     options.maxZoom = this.MaxZoom;
   }
   if(String.isString(this.Crs)){
@@ -103,7 +103,7 @@ bbbfly.map.map._setMaxBounds = function(bounds){
   return false;
 };
 bbbfly.map.map._setBoundsPadding = function(padding){
-  if(Number.isNumber(padding)){
+  if(Number.isInteger(padding)){
     this.BoundsPadding = padding;
     return true;
   }
@@ -117,7 +117,7 @@ bbbfly.map.map._fitBounds = function(bounds,padding){
   if(!padding && this.BoundsPadding){padding = this.BoundsPadding;}
 
   if(bounds && bounds.isValid && bounds.isValid()){
-    if(!Number.isNumber(padding)){padding = 0;}
+    if(!Number.isInteger(padding)){padding = 0;}
 
     map.fitBounds(bounds,{
       padding: [padding,padding],
@@ -130,7 +130,7 @@ bbbfly.map.map._fitBounds = function(bounds,padding){
   return false;
 };
 bbbfly.map.map._setMinZoom = function(zoom){
-  if(Number.isNumber(zoom)){
+  if(Number.isInteger(zoom)){
     this.MinZoom = zoom;
 
     var map = this.GetMap();
@@ -140,7 +140,7 @@ bbbfly.map.map._setMinZoom = function(zoom){
   return false;
 };
 bbbfly.map.map._setMaxZoom = function(zoom){
-  if(Number.isNumber(zoom)){
+  if(Number.isInteger(zoom)){
     this.MaxZoom = zoom;
 
     var map = this.GetMap();
@@ -198,7 +198,7 @@ bbbfly.map.map._onMapZoomEnd = function(event){
   if(map && map.Owner){
 
     var mapCtrl = map.Owner;
-    if(typeof mapCtrl.OnZoomChanged === 'function'){
+    if(Function.isFunction(mapCtrl.OnZoomChanged)){
       mapCtrl.OnZoomChanged(map.getZoom());
     }
   }
@@ -221,7 +221,7 @@ bbbfly.map.map._endLayersChanges = function(mapCtrl){
 bbbfly.map.map._layersChanged = function(mapCtrl){
   if(mapCtrl._layersChanging > 0){return;}
 
-  if(typeof mapCtrl.OnLayersChanged === 'function'){
+  if(Function.isFunction(mapCtrl.OnLayersChanged)){
     mapCtrl.OnLayersChanged();
   }
 };
@@ -270,7 +270,7 @@ bbbfly.map.map._addLayer = function(def){
     ng_MergeVar(options,iface.options);
   }
 
-  if(typeof iface.onCreateOptions === 'function'){
+  if(Function.isFunction(iface.onCreateOptions)){
     iface.onCreateOptions(options);
   }
 
@@ -333,7 +333,7 @@ bbbfly.map.map._removeLayer = function(id){
   var layer = this._layers[id];
   if(layer){
     delete this._layers[id];
-    if(typeof layer.remove === 'function'){
+    if(Function.isFunction(layer.remove)){
       layer.remove();
     }
     return true;
@@ -370,7 +370,7 @@ bbbfly.map.map._getAttributions = function(){
   return attributions;
 };
 bbbfly.map.map._getLayerAttributions = function(layer){
-  if(layer && (typeof layer.getAttribution === 'function')){
+  if(layer && Function.isFunction(layer.getAttribution)){
     var attributions = [];
 
     var attrs = layer.getAttribution();

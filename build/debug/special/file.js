@@ -15,7 +15,7 @@ bbbfly.fileuploader._onItemsChanged = function(list,items){
   this.SetInvalid(!hasItem);
   this.Owner.BtnRemoveFiles.SetEnabled(hasItem);
 
-  if(typeof uploader.OnFilesChanged === 'function'){
+  if(Function.isFunction(uploader.OnFilesChanged)){
     uploader.OnFilesChanged(items);
   }
 };
@@ -60,7 +60,7 @@ bbbfly.fileuploader._onGetProgressText = function(){
     : ngTxt('bbbfly_fileuploader_upload_more');
 };
 bbbfly.fileuploader._showError = function(data){
-  if(typeof this.DoShowError !== 'function'){return;}
+  if(!Function.isFunction(this.DoShowError)){return;}
 
   if(!Array.isArray(data)){data = new Array(data);}
 
@@ -190,7 +190,7 @@ bbbfly.fileuploader._getFilesToRemove = function(){
   return this.GetFilesToRemove.callParent();
 };
 bbbfly.fileuploader._maxSize = function(value){
-  if(Number.isNumber(value)){
+  if(Number.isInteger(value)){
     var units = new Array('B','kB','MB','GB');
     for(var i in units){
       if(value < 1000){return '('+(Math.floor(value*10)/10)+units[i]+')';}
@@ -200,7 +200,7 @@ bbbfly.fileuploader._maxSize = function(value){
   return '';
 };
 bbbfly.fileuploader._maxCnt = function(value){
-  return Number.isNumber(value) ? ' ('+Math.floor(value)+')' : '';
+  return Number.isInteger(value) ? ' ('+Math.floor(value)+')' : '';
 };
 bbbfly.FileUploader = function(def,ref,parent){
   def = def || {};

@@ -198,7 +198,7 @@ bbbfly.toolbar._onEnabledChanged = function(){
 bbbfly.toolbar._callControlsPanelFunction = function(funcName,args){
   var func = (this.ControlsPanel) ? this.ControlsPanel[funcName] : null;
 
-  if(typeof func === 'function'){
+  if(Function.isFunction(func)){
     return func.apply(this.ControlsPanel,(args ? args : []));
   }
 };

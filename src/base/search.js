@@ -44,11 +44,11 @@ bbbfly.search._normalizeText = function(text){
 bbbfly.searchedit._search = function(text){
   if(String.isString(text)){this.SetText(text);}
 
-  if((typeof this.OnSearch === 'function') && !this.OnSearch(text)){
+  if(Function.isFunction(this.OnSearch) && !this.OnSearch(text)){
     return false;
   }
   text = this.GetText();
-  if(typeof this.DoSearch === 'function'){
+  if(Function.isFunction(this.DoSearch)){
     return this.DoSearch(text);
   }
   return false;
@@ -57,7 +57,7 @@ bbbfly.searchedit._search = function(text){
 /** @ignore */
 bbbfly.searchedit._clearSearch = function(){
   this.SetText('');
-  if(typeof this.HideHint === 'function'){this.HideHint('noresults');}
+  if(Function.isFunction(this.HideHint)){this.HideHint('noresults');}
   this.SetFocus(false);
 };
 
@@ -71,11 +71,11 @@ bbbfly.searchedit._setSearchResults = function(results){
     };
 
     if(results.length > 0){
-      if(typeof this.OnSearchResults === 'function'){
+      if(Function.isFunction(this.OnSearchResults)){
         this.OnSearchResults(this._SearchResults);
       }
     }
-    else if(typeof this.OnNoSearchResults === 'function'){
+    else if(Function.isFunction(this.OnNoSearchResults)){
       this.OnNoSearchResults();
     }
     return true;
@@ -85,12 +85,12 @@ bbbfly.searchedit._setSearchResults = function(results){
 
 /** @ignore */
 bbbfly.searchedit._onNoSearchResults = function(){
-  if(typeof this.ShowHint === 'function'){this.ShowHint('noresults');}
+  if(Function.isFunction(this.ShowHint)){this.ShowHint('noresults');}
 };
 
 /** @ignore */
 bbbfly.searchedit._onTextChanged = function(){
-  if(typeof this.HideHint === 'function'){this.HideHint('noresults');}
+  if(Function.isFunction(this.HideHint)){this.HideHint('noresults');}
 };
 
 /** @ignore */
@@ -220,7 +220,7 @@ bbbfly.listsearchbox._onUpdated = function(){
 bbbfly.listsearchbox._setSearchList = function(list){
   if(
     list
-    && (typeof list.CtrlInheritsFrom === 'function')
+    && Function.isFunction(list.CtrlInheritsFrom)
     && list.CtrlInheritsFrom('bbbfly.List')
   ){
     this._SearchList = list;
@@ -259,7 +259,7 @@ bbbfly.listsearchbox._doSearch = function(text){
   text = bbbfly.search._normalizeText(text);
   if(!text){return false;}
 
-  if(typeof this.CompareItem === 'function'){
+  if(Function.isFunction(this.CompareItem)){
     var results = new Array();
     var searchBox = this;
 
@@ -290,10 +290,10 @@ bbbfly.listsearchbox._doSearch = function(text){
 bbbfly.listsearchbox._compareItem = function(list,item,text){
   var itemText = null;
 
-  if(typeof this.GetItemText === 'function'){
+  if(Function.isFunction(this.GetItemText)){
     itemText = this.GetItemText(item);
   }
-  else if(typeof list.OnGetText === 'function'){
+  else if(Function.isFunction(list.OnGetText)){
     itemText = list.OnGetText(list,item);
   }
   else{
@@ -357,7 +357,10 @@ bbbfly.listsearchbox._onKeyUp = function(event){
   if(button){
     button = this.GetButton(button);
   }
-  if(button && button.Visible && (typeof button.Click === 'function')){
+  if(
+    button && button.Visible
+    && Function.isFunction(button.Click)
+  ){
     button.Click();
     return false;
   }

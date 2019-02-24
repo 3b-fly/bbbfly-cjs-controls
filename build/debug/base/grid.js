@@ -23,7 +23,7 @@ bbbfly.grid._onUpdated = function(){
     ng_EndMeasureElement(node);
 
     var itemsCnt = childControls.length;
-    var columnsCnt = Number.isNumber(this.MinColumnWidth)
+    var columnsCnt = Number.isInteger(this.MinColumnWidth)
       ? Math.floor(gridWidth / this.MinColumnWidth) : 1;
 
     var itemsPerColumn = Math.ceil(itemsCnt / columnsCnt);
@@ -32,7 +32,7 @@ bbbfly.grid._onUpdated = function(){
 
     var columnWidth = Math.floor(gridWidth / columnsCnt);
 
-    if(Number.isNumber(this.MaxColumnWidth)){
+    if(Number.isInteger(this.MaxColumnWidth)){
       columnWidth = Math.min(columnWidth,this.MaxColumnWidth);
     }
 
@@ -73,7 +73,7 @@ bbbfly.grid._onUpdated = function(){
         if((item._GridColumn + 1) === columnsCnt){
           itemWidth = (gridWidth - itemLeft);
 
-          if(Number.isNumber(this.MaxColumnWidth)){
+          if(Number.isInteger(this.MaxColumnWidth)){
             itemWidth = Math.min(itemWidth,this.MaxColumnWidth);
           }
         }
@@ -116,7 +116,7 @@ bbbfly.grid._onUpdated = function(){
         this.Update(false);
       }
 
-      if(typeof this.OnAutoSized === 'function'){
+      if(Function.isFunction(this.OnAutoSized)){
         this.OnAutoSized();
       }
     }

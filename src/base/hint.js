@@ -33,7 +33,7 @@ bbbfly.hint.hintified._showHint = function(hintId,message){
     }
 
     if(
-      (typeof this.OnCreateHint === 'function')
+      Function.isFunction(this.OnCreateHint)
       && !this.OnCreateHint(this,hintId,hintDef)
     ){return false;}
 
@@ -49,7 +49,7 @@ bbbfly.hint.hintified._showHint = function(hintId,message){
   }
 
   if(
-    (typeof this.OnShowHint === 'function')
+    Function.isFunction(this.OnShowHint)
     && (!this.OnShowHint(this,hintId,hint))
   ){return false;}
 
@@ -58,17 +58,17 @@ bbbfly.hint.hintified._showHint = function(hintId,message){
     var node = this.Elm();
     ng_BeginMeasureElement(node);
 
-    if(Number.isNumber(this.HintXR)){
+    if(Number.isInteger(this.HintXR)){
       this.HintX = ng_ClientWidth(node) - this.HintXR;
     }
-    else if(Number.isNumber(this.HintXL)){
+    else if(Number.isInteger(this.HintXL)){
       this.HintX = this.HintXL;
     }
 
-    if(Number.isNumber(this.HintYB)){
+    if(Number.isInteger(this.HintYB)){
       this.HintY = ng_ClientHeight(node) - this.HintYB;
     }
-    else if(Number.isNumber(this.HintYT)){
+    else if(Number.isInteger(this.HintYT)){
       this.HintY = this.HintYT;
     }
 

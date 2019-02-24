@@ -206,7 +206,7 @@ bbbfly.wrapper._trackChildControl = function(wrapper,ctrl){
     !ctrl
     || (typeof ctrl._trackedBounds !== 'undefined')
     || (typeof ctrl._trackedFloat !== 'undefined')
-    || (typeof ctrl.AddEvent !== 'function')
+    || !Function.isFunction(ctrl.AddEvent)
   ){return;}
 
   ctrl.AddEvent('OnVisibleChanged',
@@ -427,7 +427,7 @@ bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
     break;
   }
 
-  if(autoSized && (typeof wrapper.OnAutoSized === 'function')){
+  if(autoSized && Function.isFunction(wrapper.OnAutoSized)){
     wrapper.OnAutoSized();
   }
 };

@@ -155,7 +155,7 @@ bbbfly.list._highlightItem = function(item){
 
   if(
     String.isString(hlClass)
-    && Number.isNumber(interval) && Number.isNumber(flashCnt)
+    && Number.isInteger(interval) && Number.isInteger(flashCnt)
   ){
     var itemId = this.ItemId(item);
     var itemNode = document.getElementById(this.ID+'_'+itemId);
@@ -195,11 +195,11 @@ bbbfly.list._highlightItem = function(item){
 bbbfly.list._onCalcIndent = function(list,item,id,level){
   var indent = 0;
   if(level > 0){
-    if(Number.isNumber(list.DefaultIndent)){
+    if(Number.isInteger(list.DefaultIndent)){
       indent += level*list.DefaultIndent;
     }
 
-    if(Number.isNumber(item.Indent)){
+    if(Number.isInteger(item.Indent)){
       indent += item.Indent;
     }
   }
@@ -225,8 +225,8 @@ bbbfly.list._selectDropDownItemWithFocus = function(item){
   var selected = this.SelectDropDownItem(item);
   var owner = this.DropDownOwner;
   if(selected && owner){
-    if(typeof owner.SetFocusAfter === 'function'){owner.SetFocusAfter();}
-    else if(typeof owner.SetFocus === 'function'){owner.SetFocus();}
+    if(Function.isFunction(owner.SetFocusAfter)){owner.SetFocusAfter();}
+    else if(Function.isFunction(owner.SetFocus)){owner.SetFocus();}
   }
   return selected;
 };
@@ -250,7 +250,7 @@ bbbfly.dropdownlist._onDropDownChanged = function(){
   this.Owner.DropDownButton.Check(this.Visible);
 };
 bbbfly.dropdownlist._onListItemGetText = function(edit,list,item,text){
-  if(typeof list.OnGetText === 'function'){
+  if(Function.isFunction(list.OnGetText)){
     return list.OnGetText(list,item);
   }
   return text;
