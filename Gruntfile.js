@@ -25,6 +25,7 @@ module.exports = function(grunt) {
       imgs_debug: {
         files: [{
           cwd: srcPath,
+          src: ['**/*.{png,jpg,gif}','!**/libs/**'],
           dest: buildPath+'/debug',
           expand: true
         }]
@@ -32,6 +33,7 @@ module.exports = function(grunt) {
       imgs_release: {
         files: [{
           cwd: srcPath,
+          src: ['**/*.{png,jpg,gif}','!**/libs/**'],
           dest: buildPath+'/release',
           expand: true
         }]
