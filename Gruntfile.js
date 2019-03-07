@@ -22,6 +22,20 @@ module.exports = function(grunt) {
           expand: true
         }]
       },
+      imgs_debug: {
+        files: [{
+          cwd: srcPath,
+          dest: buildPath+'/debug',
+          expand: true
+        }]
+      },
+      imgs_release: {
+        files: [{
+          cwd: srcPath,
+          dest: buildPath+'/release',
+          expand: true
+        }]
+      },
       libs_debug: {
         files: [{
           cwd: srcPath,
@@ -134,6 +148,7 @@ module.exports = function(grunt) {
     'clean',
     'copy:debug','closureCompiler:release',
     'comments:remove','usebanner',
+    'copy:imgs_debug','copy:imgs_release',
     'copy:libs_debug','copy:libs_release',
     'exportJSON',
     'copy:license'
