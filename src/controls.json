@@ -9,7 +9,7 @@
     "bbbfly-cjs": "2.0.0",
     "bbbfly-cjs-controls": "2.0.0"
   },
-  
+
   "Packages": {
     "bar": {
       "DebugFiles": [
@@ -37,6 +37,9 @@
       "Libraries": {
         "controls.js": {
           "Packages": ["Controls.js"]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": ["hint"]
         }
       }
     },
@@ -69,6 +72,9 @@
         },
         "bbbfly-cjs": {
           "Packages": ["crossbrowser"]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": ["hint"]
         }
       }
     },

@@ -41,6 +41,11 @@
           "Packages": [
             "Controls.js"
           ]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": [
+            "hint"
+          ]
         }
       }
     },
@@ -80,6 +85,11 @@
         "bbbfly-cjs": {
           "Packages": [
             "crossbrowser"
+          ]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": [
+            "hint"
           ]
         }
       }
