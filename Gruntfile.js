@@ -22,6 +22,22 @@ module.exports = function(grunt) {
           expand: true
         }]
       },
+      css_debug: {
+        files: [{
+          cwd: srcPath,
+          src: ['**/*.css','!**/libs/**'],
+          dest: buildPath+'/debug',
+          expand: true
+        }]
+      },
+      css_release: {
+        files: [{
+          cwd: srcPath,
+          src: ['**/*.css','!**/libs/**'],
+          dest: buildPath+'/release',
+          expand: true
+        }]
+      },
       imgs_debug: {
         files: [{
           cwd: srcPath,
@@ -150,6 +166,7 @@ module.exports = function(grunt) {
     'clean',
     'copy:debug','closureCompiler:release',
     'comments:remove','usebanner',
+    'copy:css_debug','copy:css_release',
     'copy:imgs_debug','copy:imgs_release',
     'copy:libs_debug','copy:libs_release',
     'exportJSON',
