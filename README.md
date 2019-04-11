@@ -46,8 +46,7 @@
   - `bbbfly.SearchBox`
   - `bbbfly.ListSearchBox`
 - **wrapper**
-  - `bbbfly.WrapperPanel`
-  - `bbbfly.WrapperGroup`
+  - `bbbfly.Wrapper`
 
 ### Usage
 

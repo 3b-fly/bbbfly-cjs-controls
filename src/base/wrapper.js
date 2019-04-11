@@ -13,28 +13,30 @@ bbbfly.wrapper = {};
 
 /** @ignore */
 bbbfly.wrapper._onCreated = function(wrapper){
-  if(wrapper._Stretcher){return;}
+  var cPanel = wrapper.GetControlsPanel();
+  wrapper.SetScrollBars(cPanel ? ssNone : ssAuto);
 
-  var childParent = wrapper.ControlsPanel ? wrapper.ControlsPanel : wrapper;
+  if(!wrapper._Stretcher){
+    var def = {Type:'bbbfly.Panel'};
+    var cHolder = wrapper.GetControlsHolder();
+    wrapper._Stretcher = ngCreateControl(def,undefined,cHolder.ID);
 
-  var def = {Type:'ngPanel'};
-  wrapper._Stretcher = ngCreateControl(def,undefined,childParent.ID);
+    if(wrapper._Stretcher){
+      def.parent = cHolder.ID;
+      def.id = wrapper._Stretcher.ID;
 
-  if(wrapper._Stretcher){
-    def.parent = childParent.ID;
-    def.id = wrapper._Stretcher.ID;
-
-    ngAddChildControl(childParent,wrapper._Stretcher);
-    wrapper._Stretcher.Create(def);
+      ngAddChildControl(cHolder,wrapper._Stretcher);
+      wrapper._Stretcher.Create(def);
+    }
   }
 };
 
 /** @ignore */
 bbbfly.wrapper._onUpdated = function(){
-  var childParent = this.ControlsPanel ? this.ControlsPanel : this;
-  var childParentNode = childParent.Elm();
+  var cHolder = this.GetControlsHolder();
+  var cHolderNode = cHolder.Elm();
 
-  var childControls = childParent.ChildControls;
+  var childControls = cHolder.ChildControls;
   if(!childControls){return;}
 
   var opts = bbbfly.wrapper._getWrapperOptions(this);
@@ -54,8 +56,8 @@ bbbfly.wrapper._onUpdated = function(){
       vars.padding = {start:'PaddingBottom',end:'PaddingTop'};
       vars.margin = {start:'MarginTop',end:'MarginBottom'};
 
-      if(!this._handlingSizeChange && childParentNode){
-        size = ng_ClientWidth(childParentNode);
+      if(!this._handlingSizeChange && cHolderNode){
+        size = ng_ClientWidth(cHolderNode);
       }
     break;
     case bbbfly.wrapper.orientation.horizontal:
@@ -64,8 +66,8 @@ bbbfly.wrapper._onUpdated = function(){
       vars.padding = {start:'PaddingRight',end:'PaddingLeft'};
       vars.margin = {start:'MarginLeft',end:'MarginRight'};
 
-      if(!this._handlingSizeChange && childParentNode){
-        size = ng_ClientHeight(childParentNode);
+      if(!this._handlingSizeChange && cHolderNode){
+        size = ng_ClientHeight(cHolderNode);
       }
     break;
     default: return;
@@ -150,15 +152,15 @@ bbbfly.wrapper._onUpdated = function(){
     }
   }
 
-  if(childParentNode && !this._handlingSizeChange){
+  if(cHolderNode && !this._handlingSizeChange){
     var finalSize = null;
 
     switch(opts.Orientation){
       case bbbfly.wrapper.orientation.vertical:
-        finalSize = ng_ClientWidth(childParentNode);
+        finalSize = ng_ClientWidth(cHolderNode);
       break;
       case bbbfly.wrapper.orientation.horizontal:
-        finalSize = ng_ClientHeight(childParentNode);
+        finalSize = ng_ClientHeight(cHolderNode);
       break;
     }
 
@@ -400,20 +402,21 @@ bbbfly.wrapper._positionStretcher = function(ctrl,vars,direction,opts){
 /** @ignore */
 bbbfly.wrapper._canPlaceStretchCtrls = function(wrapper,ctrls,vars,opts){
   if(!opts.AutoSize && (ctrls.length > 0)){
+    var cHolder = wrapper.GetControlsHolder();
+    var cHolderNode = cHolder.Elm();
     var maxPos = Infinity;
-    var root = wrapper.ControlsPanel ? wrapper.ControlsPanel : wrapper;
-    var node = root.Elm();
-    if(node){
-      ng_BeginMeasureElement(node);
+
+    if(cHolderNode){
+      ng_BeginMeasureElement(cHolderNode);
       switch(opts.Orientation){
         case bbbfly.wrapper.orientation.vertical:
-          maxPos = ng_ClientHeight(node);
+          maxPos = ng_ClientHeight(cHolderNode);
         break;
         case bbbfly.wrapper.orientation.horizontal:
-          maxPos = ng_ClientWidth(node);
+          maxPos = ng_ClientWidth(cHolderNode);
         break;
       }
-      ng_EndMeasureElement(node);
+      ng_EndMeasureElement(cHolderNode);
     }
     var position = vars.value.position;
     return ((position.start < maxPos) && (position.end < maxPos));
@@ -425,7 +428,7 @@ bbbfly.wrapper._canPlaceStretchCtrls = function(wrapper,ctrls,vars,opts){
 bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
   var dimension = (vars.value.position.start + vars.value.position.end);
 
-  var cPanel = wrapper.ControlsPanel;
+  var cPanel = wrapper.GetControlsPanel();
   if(cPanel && cPanel.Bounds){
 
     switch(opts.Orientation){
@@ -465,12 +468,12 @@ bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
 /**
  * @class
  * @type control
- * @extends ngPanel
+ * @extends bbbfly.Panel
  *
  * @description
  *   Panel which handles its child controls position.
  *   Child controls can implement
- *   {@link bbbfly.WrapperPanel.ChildControl|ChildControl} interface.
+ *   {@link bbbfly.Wrapper.ChildControl|ChildControl} interface.
  *
  * @inpackage wrapper
  *
@@ -480,11 +483,10 @@ bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
  *
  * @property {bbbfly.wrapper.wrapperOptions} [WrapperOptions=undefined]
  */
-bbbfly.WrapperPanel = function(def,ref,parent){
+bbbfly.Wrapper = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def, {
-    ScrollBars: ssAuto,
     Data: {
       WrapperOptions: undefined,
 
@@ -499,59 +501,13 @@ bbbfly.WrapperPanel = function(def,ref,parent){
       /**
        * @event
        * @name OnAutoSized
-       * @memberof bbbfly.WrapperPanel#
+       * @memberof bbbfly.Wrapper#
        */
       OnAutoSized: null
     }
   });
 
-  return ngCreateControlAsType(def,'ngPanel',ref,parent);
-};
-
-/**
- * @class
- * @type control
- * @extends ngGroup
- *
- * @description
- *   Group which handles its child controls position.
- *   Child controls can implement
- *   {@link bbbfly.WrapperGroup.ChildControl|ChildControl} interface.
- *
- * @inpackage wrapper
- *
- * @param {object} [def=undefined] - Descendant definition
- * @param {object} [ref=undefined] - Reference owner
- * @param {object|string} [parent=undefined] - Parent DIV element or its ID
- *
- * @property {bbbfly.wrapper.wrapperOptions} [WrapperOptions=undefined]
- */
-bbbfly.WrapperGroup = function(def,ref,parent){
-  def = def || {};
-
-  ng_MergeDef(def, {
-    ScrollBars: ssNone,
-    Data: {
-      WrapperOptions: undefined,
-
-      /** @private */
-      _Stretcher: null
-    },
-    /** @private */
-    OnCreated: bbbfly.wrapper._onCreated,
-    Events: {
-      /** @private */
-      OnUpdated: bbbfly.wrapper._onUpdated,
-      /**
-       * @event
-       * @name OnAutoSized
-       * @memberof bbbfly.WrapperGroup#
-       */
-      OnAutoSized: null
-    }
-  });
-
-  return ngCreateControlAsType(def,'ngGroup',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
 };
 
 /**
@@ -584,8 +540,7 @@ bbbfly.wrapper.float = {
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_wrapper'] = {
   OnInit: function(){
-    ngRegisterControlType('bbbfly.WrapperPanel',bbbfly.WrapperPanel);
-    ngRegisterControlType('bbbfly.WrapperGroup',bbbfly.WrapperGroup);
+    ngRegisterControlType('bbbfly.Wrapper',bbbfly.Wrapper);
   }
 };
 
@@ -612,20 +567,9 @@ ngUserControls['bbbfly_wrapper'] = {
 
 /**
  * @interface ChildControl
- * @memberOf bbbfly.WrapperPanel
+ * @memberOf bbbfly.Wrapper
  * @description
- *   {@link bbbfly.WrapperPanel|WrapperPanel} child controls can implement
- *   this to define their minimal distance from other child controls
- *   and their float direction.
- *
- * @property {bbbfly.wrapper.wrapOptions} [WrapOptions=undefined]
- */
-
-/**
- * @interface ChildControl
- * @memberOf bbbfly.WrapperGroup
- * @description
- *   {@link bbbfly.WrapperGroup|WrapperGroup} child controls can implement
+ *   {@link bbbfly.Wrapper|Wrapper} child controls can implement
  *   this to define their minimal distance from other child controls
  *   and their float direction.
  *
