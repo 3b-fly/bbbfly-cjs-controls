@@ -9,6 +9,22 @@
     "bbbfly-cjs-controls": "2.0.0"
   },
   "Packages": {
+    "panel": {
+      "DebugFiles": [
+        "debug/base/panel.js"
+      ],
+      "ReleaseFiles": [
+        "release/base/panel.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js",
+            "Controls.js UI"
+          ]
+        }
+      }
+    },
     "bar": {
       "DebugFiles": [
         "debug/base/bar.js"

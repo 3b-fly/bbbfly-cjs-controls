@@ -39,6 +39,8 @@
   - `bbbfly.Map`
 - **menu**
   - `bbbfly.Menu`
+- **panel**
+  - `bbbfly.Panel`
 - **search**
   - `bbbfly.SearchEdit`
   - `bbbfly.SearchBox`

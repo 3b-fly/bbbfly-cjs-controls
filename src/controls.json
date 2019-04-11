@@ -11,6 +11,19 @@
   },
 
   "Packages": {
+    "panel": {
+      "DebugFiles": [
+        "base/panel.js"
+      ],
+      "ReleaseFiles": [
+        "base/panel.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": ["Controls.js","Controls.js UI"]
+        }
+      }
+    },
     "bar": {
       "DebugFiles": [
         "base/bar.js"

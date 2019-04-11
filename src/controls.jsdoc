@@ -105,6 +105,14 @@
  */
 
 /**
+ * @package panel
+ *
+ * @version 2.0.0
+ *
+ * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
+ */
+
+/**
  * @package search
  *
  * @version 2.0.0
