@@ -44,7 +44,7 @@ bbbfly.wrapper._onUpdated = function(){
   };
 
   switch(opts.Orientation){
-    case bbbfly.wrapper.orientation.vertical:
+    case bbbfly.Wrapper.orientation.vertical:
       vars.float = {start:'top',end:'bottom',stretch:'stretch'};
       vars.direction = {start:'top',end:'bottom'};
       vars.padding = {start:'PaddingBottom',end:'PaddingTop'};
@@ -54,7 +54,7 @@ bbbfly.wrapper._onUpdated = function(){
         size = ng_ClientWidth(cHolderNode);
       }
     break;
-    case bbbfly.wrapper.orientation.horizontal:
+    case bbbfly.Wrapper.orientation.horizontal:
       vars.float = {start:'left',end:'right',stretch:'stretch'};
       vars.direction = {start:'left',end:'right'};
       vars.padding = {start:'PaddingRight',end:'PaddingLeft'};
@@ -86,19 +86,19 @@ bbbfly.wrapper._onUpdated = function(){
     childOpts = bbbfly.wrapper._getWrapOptions(childCtrl,opts);
 
     switch(childOpts.Float){
-      case bbbfly.wrapper.float[vars.float.start]:
+      case bbbfly.Wrapper.float[vars.float.start]:
         bbbfly.wrapper._setMargin(vars,'end',childOpts,'margin');
         bbbfly.wrapper._positionCtrl(childCtrl,vars,'start',opts);
         bbbfly.wrapper._overwriteMargin(vars,'end',childOpts,'margin');
         startCtrlsCnt++;
       break;
-      case bbbfly.wrapper.float[vars.float.end]:
+      case bbbfly.Wrapper.float[vars.float.end]:
         bbbfly.wrapper._setMargin(vars,'start',childOpts,'margin');
         bbbfly.wrapper._positionCtrl(childCtrl,vars,'end',opts);
         bbbfly.wrapper._overwriteMargin(vars,'start',childOpts,'margin');
         endCtrlsCnt++;
       break;
-      case bbbfly.wrapper.float[vars.float.stretch]:
+      case bbbfly.Wrapper.float[vars.float.stretch]:
         stretchCtrls.push(childCtrl);
       break;
     }
@@ -150,10 +150,10 @@ bbbfly.wrapper._onUpdated = function(){
     var finalSize = null;
 
     switch(opts.Orientation){
-      case bbbfly.wrapper.orientation.vertical:
+      case bbbfly.Wrapper.orientation.vertical:
         finalSize = ng_ClientWidth(cHolderNode);
       break;
-      case bbbfly.wrapper.orientation.horizontal:
+      case bbbfly.Wrapper.orientation.horizontal:
         finalSize = ng_ClientHeight(cHolderNode);
       break;
     }
@@ -169,7 +169,7 @@ bbbfly.wrapper._getWrapperOptions = function(ctrl){
   var opts = ng_CopyVar(ctrl.WrapperOptions);
   if((typeof opts !== 'object') || (opts === null)){opts = {};}
   ng_MergeDef(opts,{
-    Orientation: bbbfly.wrapper.orientation.vertical,
+    Orientation: bbbfly.Wrapper.orientation.vertical,
     AutoSize: false,
     PaddingTop: null,
     PaddingBottom: null,
@@ -192,11 +192,11 @@ bbbfly.wrapper._getWrapOptions = function(ctrl,opts){
     TrackChanges: opts.TrackChanges
   };
   switch(opts.Orientation){
-    case bbbfly.wrapper.orientation.vertical:
-      defOpts.Float = bbbfly.wrapper.float.top;
+    case bbbfly.Wrapper.orientation.vertical:
+      defOpts.Float = bbbfly.Wrapper.float.top;
     break;
-    case bbbfly.wrapper.orientation.horizontal:
-      defOpts.Float = bbbfly.wrapper.float.left;
+    case bbbfly.Wrapper.orientation.horizontal:
+      defOpts.Float = bbbfly.Wrapper.float.left;
     break;
   }
 
@@ -247,24 +247,24 @@ bbbfly.wrapper._onChildControlUpdated = function(){
   }
 
   switch(opts.Orientation){
-    case bbbfly.wrapper.orientation.vertical:
+    case bbbfly.Wrapper.orientation.vertical:
       if(ctrlBounds.H === lastBounds.H){return;}
 
       if(
-        (childOpts.Float === bbbfly.wrapper.float.top)
-        || (childOpts.Float === bbbfly.wrapper.float.bottom)
-        || (childOpts.Float === bbbfly.wrapper.float.stretch)
+        (childOpts.Float === bbbfly.Wrapper.float.top)
+        || (childOpts.Float === bbbfly.Wrapper.float.bottom)
+        || (childOpts.Float === bbbfly.Wrapper.float.stretch)
       ){
         this._parentWrapper.Update(false);
       }
     break;
-    case bbbfly.wrapper.orientation.horizontal:
+    case bbbfly.Wrapper.orientation.horizontal:
       if(ctrlBounds.W === lastBounds.W){return;}
 
       if(
-        (childOpts.Float === bbbfly.wrapper.float.left)
-        || (childOpts.Float === bbbfly.wrapper.float.right)
-        || (childOpts.Float === bbbfly.wrapper.float.stretch)
+        (childOpts.Float === bbbfly.Wrapper.float.left)
+        || (childOpts.Float === bbbfly.Wrapper.float.right)
+        || (childOpts.Float === bbbfly.Wrapper.float.stretch)
       ){
         this._parentWrapper.Update(false);
       }
@@ -308,10 +308,10 @@ bbbfly.wrapper._overwriteMargin = function(vars,direction,opts,type){
 bbbfly.wrapper._positionCtrl = function(ctrl,vars,direction,opts){
   var boundNames = null;
   switch(opts.Orientation){
-    case bbbfly.wrapper.orientation.vertical:
+    case bbbfly.Wrapper.orientation.vertical:
       boundNames = {start:'T',end:'B',dim:'H'};
     break;
-    case bbbfly.wrapper.orientation.horizontal:
+    case bbbfly.Wrapper.orientation.horizontal:
       boundNames = {start:'L',end:'R',dim:'W'};
     break;
   default: return;
@@ -354,7 +354,7 @@ bbbfly.wrapper._positionStretcher = function(ctrl,vars,direction,opts){
   var dim = (Number.isNumber(margin) && (margin > 0)) ? 1 : 0;
 
   switch(opts.Orientation){
-    case bbbfly.wrapper.orientation.vertical:
+    case bbbfly.Wrapper.orientation.vertical:
       var bounds = {T:undefined,B:undefined,H:dim,L:0,R:0,W:undefined};
       switch(direction){
         case 'start': bounds.T = (vars.value.position.start - dim); break;
@@ -362,7 +362,7 @@ bbbfly.wrapper._positionStretcher = function(ctrl,vars,direction,opts){
       }
       ctrl.SetBounds(bounds);
     break;
-    case bbbfly.wrapper.orientation.horizontal:
+    case bbbfly.Wrapper.orientation.horizontal:
       var bounds = {L:undefined,R:undefined,W:dim,T:0,B:0,H:undefined};
       switch(direction){
         case 'start': bounds.L = (vars.value.position.start - dim); break;
@@ -381,10 +381,10 @@ bbbfly.wrapper._canPlaceStretchCtrls = function(wrapper,ctrls,vars,opts){
     if(cHolderNode){
       ng_BeginMeasureElement(cHolderNode);
       switch(opts.Orientation){
-        case bbbfly.wrapper.orientation.vertical:
+        case bbbfly.Wrapper.orientation.vertical:
           maxPos = ng_ClientHeight(cHolderNode);
         break;
-        case bbbfly.wrapper.orientation.horizontal:
+        case bbbfly.Wrapper.orientation.horizontal:
           maxPos = ng_ClientWidth(cHolderNode);
         break;
       }
@@ -402,11 +402,11 @@ bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
   if(cPanel && cPanel.Bounds){
 
     switch(opts.Orientation){
-      case bbbfly.wrapper.orientation.vertical:
+      case bbbfly.Wrapper.orientation.vertical:
         if(Number.isNumber(cPanel.Bounds.T)){dimension += cPanel.Bounds.T;}
         if(Number.isNumber(cPanel.Bounds.B)){dimension += cPanel.Bounds.B;}
       break;
-      case bbbfly.wrapper.orientation.horizontal:
+      case bbbfly.Wrapper.orientation.horizontal:
         if(Number.isNumber(cPanel.Bounds.L)){dimension += cPanel.Bounds.L;}
         if(Number.isNumber(cPanel.Bounds.R)){dimension += cPanel.Bounds.R;}
       break;
@@ -416,13 +416,13 @@ bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
 
   var autoSized = false;
   switch(opts.Orientation){
-    case bbbfly.wrapper.orientation.vertical:
+    case bbbfly.Wrapper.orientation.vertical:
       if(wrapper.SetBounds({ H:dimension })){
         autoSized = true;
         wrapper.Update();
       }
     break;
-    case bbbfly.wrapper.orientation.horizontal:
+    case bbbfly.Wrapper.orientation.horizontal:
       if(wrapper.SetBounds({ W:dimension })){
         autoSized = true;
         wrapper.Update();
@@ -451,11 +451,11 @@ bbbfly.Wrapper = function(def,ref,parent){
 
   return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
 };
-bbbfly.wrapper.orientation = {
+bbbfly.Wrapper.orientation = {
   vertical: 1,
   horizontal: 2
 };
-bbbfly.wrapper.float = {
+bbbfly.Wrapper.float = {
   none: 0,
   top: 1,
   bottom: 2,
@@ -473,10 +473,11 @@ ngUserControls['bbbfly_wrapper'] = {
 /**
  * @interface ChildControl
  * @memberOf bbbfly.Wrapper
+ *
  * @description
  *   {@link bbbfly.Wrapper|Wrapper} child controls can implement
  *   this to define their minimal distance from other child controls
  *   and their float direction.
  *
- * @property {bbbfly.wrapper.wrapOptions} [WrapOptions=undefined]
+ * @property {bbbfly.Wrapper.wrapOptions} [WrapOptions=undefined]
  */
