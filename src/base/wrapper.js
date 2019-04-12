@@ -13,22 +13,28 @@ bbbfly.wrapper = {};
 
 /** @ignore */
 bbbfly.wrapper._onCreated = function(wrapper){
-  var cPanel = wrapper.GetControlsPanel();
-  wrapper.SetScrollBars(cPanel ? ssNone : ssAuto);
+  if(wrapper._Stretcher){return;}
 
-  if(!wrapper._Stretcher){
-    var def = {Type:'bbbfly.Panel'};
-    var cHolder = wrapper.GetControlsHolder();
-    wrapper._Stretcher = ngCreateControl(def,undefined,cHolder.ID);
+  var def = {Type:'bbbfly.Panel'};
+  var cHolder = wrapper.GetControlsHolder();
+  wrapper._Stretcher = ngCreateControl(def,undefined,cHolder.ID);
 
-    if(wrapper._Stretcher){
-      def.parent = cHolder.ID;
-      def.id = wrapper._Stretcher.ID;
+  if(wrapper._Stretcher){
+    def.parent = cHolder.ID;
+    def.id = wrapper._Stretcher.ID;
 
-      ngAddChildControl(cHolder,wrapper._Stretcher);
-      wrapper._Stretcher.Create(def);
-    }
+    ngAddChildControl(cHolder,wrapper._Stretcher);
+    wrapper._Stretcher.Create(def);
   }
+};
+
+/** @ignore */
+bbbfly.wrapper._onUpdate = function(){
+  var cHolder = this.GetControlsHolder();
+  var opts = bbbfly.wrapper._getWrapperOptions(this);
+
+  cHolder.SetScrollBars(opts.AutoSize ? ssNone : ssAuto);
+  return true;
 };
 
 /** @ignore */
@@ -487,6 +493,7 @@ bbbfly.Wrapper = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def, {
+    ScrollBars: ssNone,
     Data: {
       WrapperOptions: undefined,
 
@@ -496,6 +503,8 @@ bbbfly.Wrapper = function(def,ref,parent){
     /** @private */
     OnCreated: bbbfly.wrapper._onCreated,
     Events: {
+      /** @private */
+      OnUpdate: bbbfly.wrapper._onUpdate,
       /** @private */
       OnUpdated: bbbfly.wrapper._onUpdated,
       /**
