@@ -28,8 +28,7 @@
 - **file**
   - `bbbfly.FileUploader`
 - **grid**
-  - `bbbfly.GridPanel`
-  - `bbbfly.GridGroup`
+  - `bbbfly.Grid`
 - **image**
   - `bbbfly.ImagePreview`
 - **list**

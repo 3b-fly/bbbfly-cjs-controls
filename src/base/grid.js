@@ -12,21 +12,28 @@ var bbbfly = bbbfly || {};
 bbbfly.grid = {};
 
 /** @ignore */
+bbbfly.grid._onUpdate = function(){
+  var cHolder = this.GetControlsHolder();
+  cHolder.SetScrollBars(this.AutoSize ? ssNone : ssAuto);
+  return true;
+};
+
+/** @ignore */
 bbbfly.grid._onUpdated = function(){
-  var childParent = this.ControlsPanel ? this.ControlsPanel : this;
-  var childControls = childParent.ChildControls;
+  var cHolder = this.GetControlsHolder();
+  var items = cHolder.ChildControls;
 
   this._Rows = new Array();
   this._Columns = new Array();
 
-  if(childControls && (childControls.length > 0)){
+  if(items && (items.length > 0)){
+    var cHolderNode = cHolder.Elm();
 
-    var node = childParent.Elm();
-    ng_BeginMeasureElement(node);
-    var gridWidth = ng_ClientWidth(node);
-    ng_EndMeasureElement(node);
+    ng_BeginMeasureElement(cHolderNode);
+    var gridWidth = ng_ClientWidth(cHolderNode);
+    ng_EndMeasureElement(cHolderNode);
 
-    var itemsCnt = childControls.length;
+    var itemsCnt = items.length;
     var columnsCnt = Number.isInteger(this.MinColumnWidth)
       ? Math.floor(gridWidth / this.MinColumnWidth) : 1;
 
@@ -43,8 +50,8 @@ bbbfly.grid._onUpdated = function(){
     var colIndex = 0;
     var rowIndex = 0;
 
-    for(var i in childControls){
-      var item = childControls[i];
+    for(var i in items){
+      var item = items[i];
 
       if(!this._Rows[rowIndex]){this._Rows[rowIndex] = new Array();}
       if(!this._Columns[colIndex]){this._Columns[colIndex] = new Array();}
@@ -108,10 +115,9 @@ bbbfly.grid._onUpdated = function(){
     }
 
     if(this.AutoSize){
+      var cPanel = this.GetControlsPanel();
 
-      var cPanel = this.ControlsPanel;
       if(cPanel && cPanel.Bounds){
-
         if(Number.isNumber(cPanel.Bounds.T)){gridHeight += cPanel.Bounds.T;}
         if(Number.isNumber(cPanel.Bounds.B)){gridHeight += cPanel.Bounds.B;}
       }
@@ -146,62 +152,10 @@ bbbfly.grid._onUpdated = function(){
  * @property {px} [MinColumnWidth=200]
  * @property {px} [MaxColumnWidth=undefined]
  */
-bbbfly.GridPanel = function(def,ref,parent){
+bbbfly.Grid = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
-    Data: {
-      AutoSize: true,
-      MinColumnWidth: 200,
-      MaxColumnWidth: undefined,
-
-      /** @private */
-      _Rows: new Array(),
-      /** @private */
-      _Columns: new Array()
-    },
-    Events: {
-      /** @private */
-      OnUpdated: bbbfly.grid._onUpdated,
-      /**
-       * @event
-       * @name OnAutoSized
-       * @memberof bbbfly.GridPanel#
-       */
-      OnAutoSized: null
-    }
-  });
-
-  ng_MergeDef(def,{
-    ScrollBars: (def.Data.AutoSize ? ssNone : ssAuto)
-  });
-
-  return ngCreateControlAsType(def,'ngPanel',ref,parent);
-};
-
-/**
- * @class
- * @type control
- * @extends ngGroup
- *
- * @description
- *   Group which places its child controls in columns grid.
- *
- * @inpackage grid
- *
- * @param {object} [def=undefined] - Descendant definition
- * @param {object} [ref=undefined] - Reference owner
- * @param {object|string} [parent=undefined] - Parent DIV element or its ID
- *
- * @property {boolean} [AutoSize=true]
- * @property {px} [MinColumnWidth=200]
- * @property {px} [MaxColumnWidth=undefined]
- */
-bbbfly.GridGroup = function(def,ref,parent){
-  def = def || {};
-
-  ng_MergeDef(def,{
-    ScrollBars: ssNone,
     Data: {
       AutoSize: true,
       MinColumnWidth: 200,
@@ -215,29 +169,24 @@ bbbfly.GridGroup = function(def,ref,parent){
     Events: {
       /** @private */
       OnUpdate: bbbfly.grid._onUpdate,
+      /** @private */
+      OnUpdated: bbbfly.grid._onUpdated,
       /**
        * @event
        * @name OnAutoSized
-       * @memberof bbbfly.GridGroup#
+       * @memberof bbbfly.Grid#
        */
       OnAutoSized: null
     }
   });
 
-  ng_MergeDef(def,{
-    ControlsPanel: {
-      ScrollBars: (def.Data.AutoSize ? ssNone : ssAuto)
-    }
-  });
-
-  return ngCreateControlAsType(def,'ngGroup',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
 };
 
 /** @ignore */
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_grid'] = {
   OnInit: function(){
-    ngRegisterControlType('bbbfly.GridPanel',bbbfly.GridPanel);
-    ngRegisterControlType('bbbfly.GridGroup',bbbfly.GridGroup);
+    ngRegisterControlType('bbbfly.Grid',bbbfly.Grid);
   }
 };

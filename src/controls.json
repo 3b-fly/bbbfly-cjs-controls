@@ -120,7 +120,10 @@
       ],
       "Libraries": {
         "controls.js": {
-          "Packages": ["Controls.js","Controls.js UI"]
+          "Packages": ["Controls.js"]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": ["panel"]
         }
       }
     },
