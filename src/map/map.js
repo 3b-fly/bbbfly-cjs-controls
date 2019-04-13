@@ -20,6 +20,9 @@ bbbfly.map.layer = {
 
 /** @ignore */
 bbbfly.map.map._onCreated = function(map){
+  var cHolder = map.GetControlsHolder();
+  cHolder.SetScrollBars(ssNone);
+
   map.CreateMap();
   return true;
 };
@@ -86,21 +89,20 @@ bbbfly.map.map._createMap = function(){
 
 /** @ignore */
 bbbfly.map.map._doCreateMap = function(options){
-  if(!this.GetMap() && this.Controls.Map){
-    var map = L.map(this.Controls.Map.ID,options);
+  if(this.GetMap() || !this.Controls.Map){return null;}
+  var mapHolder = this.Controls.Map.GetControlsHolder();
 
-    if(map){
-      map.Owner = this;
-      map.on('zoomend',bbbfly.map.map._onMapZoomEnd);
+  var map = L.map(mapHolder.ID,options);
+  if(!map){return null;}
 
-      map.on('layeradd',bbbfly.map.map._onMapLayersChanged);
-      map.on('layerremove',bbbfly.map.map._onMapLayersChanged);
+  map.Owner = this;
+  map.on('zoomend',bbbfly.map.map._onMapZoomEnd);
 
-      this._map = map;
-      return map;
-    }
-  }
-  return null;
+  map.on('layeradd',bbbfly.map.map._onMapLayersChanged);
+  map.on('layerremove',bbbfly.map.map._onMapLayersChanged);
+
+  this._map = map;
+  return map;
 };
 
 /** @ignore */
@@ -502,7 +504,7 @@ bbbfly.map.layer.mapbox_style._oncreateOptions = function(options){
 /**
  * @class
  * @type control
- * @extends ngGroup
+ * @extends bbbfly.Panel
  *
  * @description
  *   Map control providing easy way to handle Leaflet map.
@@ -580,12 +582,9 @@ bbbfly.Map = function(def,ref,parent){
       _layersChanging: 0
     },
     OnCreated: bbbfly.map.map._onCreated,
-    ControlsPanel: {
-      ScrollBars: ssNone
-    },
     Controls: {
       Map: {
-        Type: 'ngPanel',
+        Type: 'bbbfly.Panel',
         L:0,R:0,T:0,B:0,
         style: {zIndex: 1}
       }
@@ -987,7 +986,7 @@ bbbfly.Map = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'ngGroup',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
 };
 
 /**
