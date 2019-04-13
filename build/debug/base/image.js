@@ -10,11 +10,7 @@ var bbbfly = bbbfly || {};
 bbbfly.imagepreview = {};
 bbbfly.imagepreview._getImgHolder = function(){
   var imgCtrl = this.Controls.Image;
-
-  if(imgCtrl && Function.isFunction('GetControlsHolder')){
-    return imgCtrl.GetControlsHolder();
-  }
-  return imgCtrl;
+  return imgCtrl.GetControlsHolder();
 };
 bbbfly.imagepreview._getImgNode = function(){
   var holder = this.GetImgHolder();

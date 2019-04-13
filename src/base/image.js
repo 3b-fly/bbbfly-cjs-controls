@@ -14,11 +14,7 @@ bbbfly.imagepreview = {};
 /** @ignore */
 bbbfly.imagepreview._getImgHolder = function(){
   var imgCtrl = this.Controls.Image;
-
-  if(imgCtrl && Function.isFunction('GetControlsHolder')){
-    return imgCtrl.GetControlsHolder();
-  }
-  return imgCtrl;
+  return imgCtrl.GetControlsHolder();
 };
 
 /** @ignore */
