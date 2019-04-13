@@ -24,7 +24,7 @@ bbbfly.panel._getControlsHolder = function(){
 /**
  * @class
  * @type control
- * @extends bbbfly.Panel
+ * @extends ngPanel
  *
  * @description
  *   Panel with conditioned frame support.

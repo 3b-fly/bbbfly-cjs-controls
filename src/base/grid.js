@@ -137,7 +137,7 @@ bbbfly.grid._onUpdated = function(){
 /**
  * @class
  * @type control
- * @extends ngPanel
+ * @extends bbbfly.Panel
  *
  * @description
  *   Panel which places its child controls in columns grid.
