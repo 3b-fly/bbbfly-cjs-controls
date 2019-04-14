@@ -8,28 +8,206 @@
 
 var bbbfly = bbbfly || {};
 bbbfly.panel = {};
+bbbfly.panel._doCreate = function(def,ref,node){
+  if(!def.Data || (typeof def.Data.Frame === 'undefined')){return;}
+
+  var refDef = {
+    FramePanel: {},
+    ControlsPanel: {}
+  };
+
+  if(Object.isObject(def.FramePanel)){
+    refDef.FramePanel = def.FramePanel;
+  }
+  if(Object.isObject(def.ControlsPanel)){
+    refDef.ControlsPanel = def.ControlsPanel;
+  }
+
+  ng_MergeDef(refDef,{
+    FramePanel: {
+      L:0,T:0,R:0,B:0,
+      Type: 'ngPanel',
+      id: this.ID + '_F',
+      ScrollBars: ssDefault,
+      style: { zIndex: 1 }
+    },
+    ControlsPanel: {
+      L:0,T:0,R:0,B:0,
+      Type: 'ngPanel',
+      id: this.ID + '_P',
+      ScrollBars: ssAuto,
+      style: { zIndex: 2 },
+      Controls: def.Controls,
+      ModifyControls: def.ModifyControls
+    }
+  });
+
+  if(!def.ParentReferences){
+    this.Controls = {};
+    this.Controls.Owner = this;
+    ref = this.Controls;
+  }
+
+  var refs = ngCreateControls(refDef,undefined,node);
+
+  this.ControlsPanel = refs.ControlsPanel;
+  this.ControlsPanel.Owner = this;
+
+  this.FramePanel = refs.FramePanel;
+  this.FramePanel.Owner = this;
+
+  delete def.Controls;
+  delete def.ModifyControls;
+  delete refs.ControlsPanel;
+  delete refs.FramePanel;
+
+  this.UpdateClassName();
+  ngCloneRefs(ref,refs);
+};
+bbbfly.panel._doUpdate = function(node){
+  this.DoUpdateFrame(node);
+  this.DoUpdateControlsPanel(node);
+  return true;
+};
+bbbfly.panel._doUpdateFrame = function(node){
+  if(typeof node === 'undefined'){node = this.Elm();}
+  if(!node){return;}
+
+  var fPanel = this.GetFramePanel();
+  if(!fPanel){return;}
+
+  var fNode = fPanel.Elm();
+  if(!fNode){return;}
+
+  var html = new ngStringBuilder();
+
+  ng_BeginMeasureElement(node);
+  var w = ng_ClientWidth(node);
+  var h = ng_ClientHeight(node);
+  ng_EndMeasureElement(node);
+
+  var frame = {};
+  ngc_ImgBox(
+    html,this.ID,'bbbfly.Panel',
+    0,this.Enabled,
+    0,0,w,h,false,
+    this.Frame,
+    '','',undefined,
+    frame
+  );
+  ng_SetInnerHTML(fNode,html.toString());
+
+  this._FrameDims = {
+    T: frame.Top.H,
+    L: frame.Left.W,
+    R: frame.Right.W,
+    B: frame.Bottom.H
+  };
+};
+bbbfly.panel._doUpdateImages = function(){
+  ngc_ChangeBox(this.ID,0,this.Enabled,this.Frame);
+};
+bbbfly.panel._doUpdateControlsPanel = function(node){
+  if(typeof node === 'undefined'){node = this.Elm();}
+
+  var cPanel = this.GetControlsPanel();
+  if(!node || !cPanel){return;}
+
+  ng_BeginMeasureElement(node);
+  var w = ng_ClientWidth(node);
+  var h = ng_ClientHeight(node);
+  ng_EndMeasureElement(node);
+
+  var dims = Object.isObject(this._FrameDims)
+    ? this._FrameDims: { T:0, L:0, R:0, B:0 };
+
+  cPanel.SetBounds({
+    W: (w - dims.L - dims.R),
+    H: (h - dims.T - dims.B),
+    T: dims.T,
+    L: dims.L,
+    R: null,
+    B: null
+  });
+};
+bbbfly.panel._updateClassName = function(){
+  var node = this.Elm();
+  if(node){node.className = this.GetClassName();}
+};
+bbbfly.panel._getClassName = function(className){
+  if(!String.isString(className)){className = '';}
+
+  if(!this.Enabled){className += 'Disabled';}
+  else if(this.Invalid){className += 'Invalid';}
+
+  return this.BaseClassName+className;
+};
+bbbfly.panel._getFramePanel = function(){
+  return this.FramePanel ? this.FramePanel : null;
+};
 bbbfly.panel._getControlsPanel = function(){
   return this.ControlsPanel ? this.ControlsPanel : null;
 };
 bbbfly.panel._getControlsHolder = function(){
   return this.ControlsPanel ? this.ControlsPanel : this;
 };
+bbbfly.panel._setInvalid = function(invalid,update){
+  invalid = (invalid !== false);
+  update = (update !== false);
+
+  if(this.Invalid === invalid){return true;}
+
+  if(this.OnSetInvalid && !this.OnSetInvalid(this,invalid,update)){
+    return false;
+  }
+
+  if(this.DoSetInvalid){this.DoSetInvalid(invalid,update);}
+  return true;
+};
+bbbfly.panel._doSetInvalid = function(invalid,update){
+  this.Invalid = !!invalid;
+  this.UpdateClassName();
+
+  if(update){this.Update();}
+  else{this.DoUpdateImages();}
+};
+bbbfly.panel._onEnabledChanged = function(){
+  this.UpdateClassName();
+};
 bbbfly.Panel = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
+    ramePanel: null,
+    ControlsPanel: null,
+    ParentReferences: true,
     Data: {
-      Frame: undefined
+      Enabled: true,
+      Invalid: false,
+      Frame: undefined,
+      _FrameDims: {}
+    },
+    Events: {
+      OnEnabledChanged: bbbfly.panel._onEnabledChanged,
+      OnSetInvalid: null
     },
     Methods: {
+      DoCreate: bbbfly.panel._doCreate,
+      DoUpdate: bbbfly.panel._doUpdate,
+      DoUpdateFrame: bbbfly.panel._doUpdateFrame,
+      DoUpdateImages: bbbfly.panel._doUpdateImages,
+      DoUpdateControlsPanel: bbbfly.panel._doUpdateControlsPanel,
+      UpdateClassName: bbbfly.panel._updateClassName,
+      GetClassName: bbbfly.panel._getClassName,
+      GetFramePanel: bbbfly.panel._getFramePanel,
       GetControlsPanel: bbbfly.panel._getControlsPanel,
-      GetControlsHolder: bbbfly.panel._getControlsHolder
+      GetControlsHolder: bbbfly.panel._getControlsHolder,
+      SetInvalid: bbbfly.panel._setInvalid,
+      DoSetInvalid: bbbfly.panel._doSetInvalid
     }
   });
 
-  return (def.Data && (typeof def.Data.Frame !== 'undefined'))
-    ? ngCreateControlAsType(def,'ngGroup',ref,parent)
-    : ngCreateControlAsType(def,'ngPanel',ref,parent);
+  return ngCreateControlAsType(def,'ngPanel',ref,parent);
 };
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_panel'] = {
