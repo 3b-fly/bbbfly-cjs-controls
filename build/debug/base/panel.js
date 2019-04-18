@@ -175,8 +175,21 @@ bbbfly.panel._setInvalid = function(invalid,update){
   }
   return true;
 };
-bbbfly.panel._onEnabledChanged = function(){
-  this.UpdateClassName();
+bbbfly.panel._setReadOnly = function(readOnly,update){
+  if(readOnly === this.ReadOnly){return true;}
+
+  if(
+    Function.isFunction(this.OnSetReadOnly)
+    && !this.OnSetReadOnly(readOnly)
+  ){return false;}
+
+  this.ReadOnly = !!readOnly;
+  bbbfly.panel._doChangeState(this,update);
+
+  if(Function.isFunction(this.OnReadOnlyChanged)){
+    this.OnReadOnlyChanged();
+  }
+  return true;
 };
 bbbfly.Panel = function(def,ref,parent){
   def = def || {};
@@ -188,13 +201,16 @@ bbbfly.Panel = function(def,ref,parent){
     Data: {
       Enabled: true,
       Invalid: false,
+      ReadOnly: false,
       Frame: undefined,
       _FrameDims: {}
     },
     Events: {
-      OnEnabledChanged: bbbfly.panel._onEnabledChanged,
       OnSetInvalid: null,
-      OnInvalidChanged: null
+      OnInvalidChanged: null,
+      OnSetReadOnly: null,
+      OnReadOnlyChanged: null
+
     },
     Methods: {
       DoCreate: bbbfly.panel._doCreate,
@@ -207,7 +223,8 @@ bbbfly.Panel = function(def,ref,parent){
       GetFramePanel: bbbfly.panel._getFramePanel,
       GetControlsPanel: bbbfly.panel._getControlsPanel,
       GetControlsHolder: bbbfly.panel._getControlsHolder,
-      SetInvalid: bbbfly.panel._setInvalid
+      SetInvalid: bbbfly.panel._setInvalid,
+      SetReadOnly: bbbfly.panel._setReadOnly
     }
   });
 

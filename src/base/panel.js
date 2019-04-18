@@ -203,8 +203,21 @@ bbbfly.panel._setInvalid = function(invalid,update){
 };
 
 /** @ignore */
-bbbfly.panel._onEnabledChanged = function(){
-  this.UpdateClassName();
+bbbfly.panel._setReadOnly = function(readOnly,update){
+  if(readOnly === this.ReadOnly){return true;}
+
+  if(
+    Function.isFunction(this.OnSetReadOnly)
+    && !this.OnSetReadOnly(readOnly)
+  ){return false;}
+
+  this.ReadOnly = !!readOnly;
+  bbbfly.panel._doChangeState(this,update);
+
+  if(Function.isFunction(this.OnReadOnlyChanged)){
+    this.OnReadOnlyChanged();
+  }
+  return true;
 };
 
 /**
@@ -223,6 +236,7 @@ bbbfly.panel._onEnabledChanged = function(){
  *
  * @property {boolean} [Enabled=true]
  * @property {boolean} [Invalid=false]
+ * @property {boolean} [ReadOnly=false]
  * @property {frame} [Frame=undefined]
  *   Define this property before panel creation to add frame support
  */
@@ -244,14 +258,13 @@ bbbfly.Panel = function(def,ref,parent){
     Data: {
       Enabled: true,
       Invalid: false,
+      ReadOnly: false,
       Frame: undefined,
 
       /** @private */
       _FrameDims: {}
     },
     Events: {
-      /** @private */
-      OnEnabledChanged: bbbfly.panel._onEnabledChanged,
       /**
        * @event
        * @name OnSetInvalid
@@ -272,7 +285,29 @@ bbbfly.Panel = function(def,ref,parent){
        * @see {@link bbbfly.Panel#SetInvalid|SetInvalid()}
        * @see {@link bbbfly.Panel#event:OnSetInvalid|OnSetInvalid}
        */
-      OnInvalidChanged: null
+      OnInvalidChanged: null,
+      /**
+       * @event
+       * @name OnSetReadOnly
+       * @memberof bbbfly.Panel#
+       *
+       * @param {boolean} readonly - Value to set
+       * @return {boolean} Return false to deny value change
+       *
+       * @see {@link bbbfly.Panel#SetReadOnly|SetReadOnly()}
+       * @see {@link bbbfly.Panel#event:OnReadOnlyChanged|OnReadOnlyChanged}
+       */
+      OnSetReadOnly: null,
+      /**
+       * @event
+       * @name OnReadOnlyChanged
+       * @memberof bbbfly.Panel#
+       *
+       * @see {@link bbbfly.Panel#SetReadOnly|SetReadOnly()}
+       * @see {@link bbbfly.Panel#event:OnSetReadOnly|OnSetReadOnly}
+       */
+      OnReadOnlyChanged: null
+
     },
     Methods: {
       /** @private */
@@ -341,7 +376,20 @@ bbbfly.Panel = function(def,ref,parent){
        * @see {@link bbbfly.Panel#event:OnSetInvalid|OnSetInvalid}
        * @see {@link bbbfly.Panel#event:OnInvalidChanged|OnInvalidChanged}
        */
-      SetInvalid: bbbfly.panel._setInvalid
+      SetInvalid: bbbfly.panel._setInvalid,
+      /**
+       * @function
+       * @name SetReadOnly
+       * @memberof bbbfly.Panel#
+       *
+       * @param {boolean} readonly - Value to set
+       * @param {boolean} [update=true] - If update control
+       * @return {boolean} False if change was denied
+       *
+       * @see {@link bbbfly.Panel#event:OnSetReadOnly|OnSetReadOnly}
+       * @see {@link bbbfly.Panel#event:OnReadOnlyChanged|OnReadOnlyChanged}
+       */
+      SetReadOnly: bbbfly.panel._setReadOnly
     }
   });
 
