@@ -8,10 +8,10 @@
 var bbbfly = bbbfly || {};
 bbbfly.toolbar = {};
 bbbfly.toolbar._setControlsPanelProps = function(){
-  if(!this.ControlsPanel){return;}
-  if(!this.ControlsPanel.CtrlInheritsFrom('ngToolBar')){return;}
+  var cPanel = this.GetControlsPanel();
+  if(!cPanel){return;}
 
-  ng_MergeVarReplace(this.ControlsPanel,{
+  ng_MergeVarReplace(cPanel,{
     AutoSize: this.AutoSize,
     Vertical: this.Vertical,
     VPadding: this.VPadding,
@@ -21,204 +21,60 @@ bbbfly.toolbar._setControlsPanelProps = function(){
     Wrapable: this.Wrapable
   },true);
 };
-bbbfly.toolbar._setControlsPanelClassName = function(){
-  if(!this.ControlsPanel){return;}
-
-  var cn = this.BaseClassName + 'ControlsPanel';
-  if(!this.Enabled){cn += 'Disabled';}
-  else if(this.Invalid){cn += 'Invalid';}
-
-  var node = this.ControlsPanel.Elm();
-  this.ControlsPanel.BaseClassName = cn;
-  if(node){node.className = cn;}
-};
 bbbfly.toolbar._doCreate = function(def,ref,node){
-  var defs = {
-    ControlsPanel: (Object.isObject(def.ControlsPanel))
-      ? def.ControlsPanel : {}
-  };
-
-  ng_MergeDef(defs,{
-    ControlsPanel: {
-      L:0,T:0,R:0,B:0,
-      Type: 'ngToolBar',
-      id: this.ID + '_P',
-      ScrollBars: ssAuto,
-      Controls: def.Controls,
-      ModifyControls: def.ModifyControls,
-      Events: {
-        OnUpdated: bbbfly.toolbar._onControlsPanelUpdated
-      }
-    },
-    FramePanel: {
-      Type: 'ngPanel',
-      id: this.ID + '_F',
-      ScrollBars: ssDefault,
-      style: {
-        position: 'absolute',
-        zIndex: 800
-      }
-    }
-  });
-
-  if(!def.ParentReferences){
-    this.Controls = {};
-    this.Controls.Owner = this;
-    ref = this.Controls;
-  }
-
-  var refs = ngCreateControls(defs,undefined,node);
-  this.ControlsPanel = refs.ControlsPanel;
-  this.ControlsPanel.Owner = this;
-
+  this.DoCreate.callParent(def,ref,node);
   this.SetControlsPanelProps();
-  this.SetControlsPanelClassName();
-
-  delete def.Controls;
-  delete def.ModifyControls;
-  delete refs.ControlsPanel;
-  delete refs.FramePanel;
-
-  ngCloneRefs(ref,refs);
-};
-bbbfly.toolbar._doRelease = function(node){
-  node.style.display = 'none';
-  var frameNode = document.getElementById(this.ID + '_F');
-  if(frameNode){ng_SetInnerHTML(frameNode,'');}
 };
 bbbfly.toolbar._update = function(recursive){
   this.SetControlsPanelProps();
   return this.Update.callParent(recursive);
 };
-bbbfly.toolbar._doUpdate = function(node){
-  this.DoUpdateFrame(node);
-  this.DoUpdateControlsPanel(node);
-  return true;
-};
 bbbfly.toolbar._onControlsPanelUpdated = function(){
-  var toolBar = this.Owner;
-  if(toolBar && toolBar.AutoSize){
+  var ctrl = this.Owner;
+  if(ctrl && ctrl.AutoSize){
     var bounds = {};
 
-    if(toolBar.Vertical){
+    if(ctrl.Vertical){
       bounds.W = this.Bounds.W;
-      if(toolBar._FrameDims){
-        bounds.W += toolBar._FrameDims.L + toolBar._FrameDims.R;
+      if(ctrl._FrameDims){
+        bounds.W += ctrl._FrameDims.L + ctrl._FrameDims.R;
       }
     }
     else{
       bounds.H = this.Bounds.H;
-      if(toolBar._FrameDims){
-        bounds.H += toolBar._FrameDims.T + toolBar._FrameDims.B;
+      if(ctrl._FrameDims){
+        bounds.H += ctrl._FrameDims.T + ctrl._FrameDims.B;
       }
     }
 
-    toolBar.SetBounds(bounds);
-    toolBar.DoUpdateFrame();
+    ctrl.SetBounds(bounds);
+    ctrl.DoUpdateFrame();
   }
 };
-bbbfly.toolbar._doUpdateFrame = function(node){
-  if(typeof node === 'undefined'){node = this.Elm();}
-  var frameNode = document.getElementById(this.ID + '_F');
-  if(!node || !frameNode){return;}
+bbbfly.toolbar._callToolBarFunction = function(funcName,args){
+  var cPanel = this.GetControlsPanel();
+  var cPanelFnc = (cPanel) ? cPanel[funcName] : null;
 
-  var html = new ngStringBuilder();
-
-  ng_BeginMeasureElement(node);
-  var w = ng_ClientWidth(node);
-  var h = ng_ClientHeight(node);
-  ng_EndMeasureElement(node);
-
-  var frame = {};
-  ngc_ImgBox(
-    html,this.ID,'bbbfly.ToolBar',
-    0,this.Enabled,
-    0,0,w,h,false,
-    this.Frame,
-    '','',undefined,
-    frame
-  );
-  ng_SetInnerHTML(frameNode,html.toString());
-
-  this._FrameDims = {
-    T: frame.Top.H,
-    L: frame.Left.W,
-    R: frame.Right.W,
-    B: frame.Bottom.H
-  };
-};
-bbbfly.toolbar._doUpdateControlsPanel = function(node){
-  if(typeof node === 'undefined'){node = this.Elm();}
-  if(!node || !this.ControlsPanel){return;}
-
-  var dims = Object.isObject(this._FrameDims)
-    ? this._FrameDims: { T:0, L:0, R:0, B:0 };
-
-  var bounds = {
-    T: dims.T,
-    L: dims.L,
-    R: null,
-    B: null
-  };
-
-  ng_BeginMeasureElement(node);
-  var w = ng_ClientWidth(node);
-  var h = ng_ClientHeight(node);
-  ng_EndMeasureElement(node);
-
-  bounds.W = (w - dims.L - dims.R);
-  bounds.H = (h - dims.T - dims.B);
-
-  this.ControlsPanel.SetBounds(bounds);
-};
-bbbfly.toolbar._doUpdateImages = function(){
-  ngc_ChangeBox(this.ID,0,this.Enabled,this.Frame);
-};
-bbbfly.toolbar._setInvalid = function(invalid,update){
-  invalid = (invalid !== false);
-  update = (update !== false);
-
-  if(this.Invalid === invalid){return true;}
-
-  if(this.OnSetInvalid && !this.OnSetInvalid(this,invalid,update)){
-    return false;
-  }
-
-  this.Invalid = invalid;
-  if(this.DoSetInvalid){this.DoSetInvalid(invalid,update);}
-
-  return true;
-};
-bbbfly.toolbar._doSetInvalid = function(invalid,update){
-  this.SetControlsPanelClassName();
-};
-bbbfly.toolbar._onEnabledChanged = function(){
-  this.SetControlsPanelClassName();
-};
-bbbfly.toolbar._callControlsPanelFunction = function(funcName,args){
-  var func = (this.ControlsPanel) ? this.ControlsPanel[funcName] : null;
-
-  if(Function.isFunction(func)){
-    return func.apply(this.ControlsPanel,(args ? args : []));
+  if(Function.isFunction(cPanelFnc)){
+    return cPanelFnc.apply(cPanel,(args ? args : []));
   }
 };
 bbbfly.toolbar._ctrlBringToFront = function(control){
-  return this.CallControlsPanelFunction('CtrlBringToFront',[control]);
+  return this.CallToolbarFunction('CtrlBringToFront',[control]);
 };
 bbbfly.toolbar._ctrlSendToBack = function(control){
-  return this.CallControlsPanelFunction('CtrlSendToBack',[control]);
+  return this.CallToolbarFunction('CtrlSendToBack',[control]);
 };
 bbbfly.toolbar._ctrlInsertAfter = function(control,after){
-  return this.CallControlsPanelFunction('CtrlInsertAfter',[control,after]);
+  return this.CallToolbarFunction('CtrlInsertAfter',[control,after]);
 };
 bbbfly.toolbar._ctrlInsertBefore = function(control,before){
-  return this.CallControlsPanelFunction('CtrlInsertBefore',[control,before]);
+  return this.CallToolbarFunction('CtrlInsertBefore',[control,before]);
 };
 bbbfly.ToolBar = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
-    ParentReferences: true,
     Data: {
       AutoSize: false,
       Vertical: false,
@@ -226,38 +82,27 @@ bbbfly.ToolBar = function(def,ref,parent){
       HPadding: 0,
       VAlign: bbbfly.ToolBar.valign.top,
       HAlign: bbbfly.ToolBar.halign.left,
-      Wrapable: true,
-
-      Invalid: false,
-      Frame: {},
-      _FrameDims: {}
+      Wrapable: true
     },
-    ControlsPanel: null,
-    Events: {
-      OnEnabledChanged: bbbfly.toolbar._onEnabledChanged,
-      OnSetInvalid: null
+    ControlsPanel: {
+      Type: 'ngToolBar',
+      Events: {
+        OnUpdated: bbbfly.toolbar._onControlsPanelUpdated
+      }
     },
     Methods: {
       Update: bbbfly.toolbar._update,
-      DoUpdate: bbbfly.toolbar._doUpdate,
       DoCreate: bbbfly.toolbar._doCreate,
-      DoRelease: bbbfly.toolbar._doRelease,
-      DoUpdateFrame: bbbfly.toolbar._doUpdateFrame,
-      DoUpdateControlsPanel: bbbfly.toolbar._doUpdateControlsPanel,
-      DoUpdateImages: bbbfly.toolbar._doUpdateImages,
       SetControlsPanelProps: bbbfly.toolbar._setControlsPanelProps,
-      SetControlsPanelClassName: bbbfly.toolbar._setControlsPanelClassName,
-      CallControlsPanelFunction: bbbfly.toolbar._callControlsPanelFunction,
+      CallToolBarFunction: bbbfly.toolbar._callToolbarFunction,
       CtrlBringToFront: bbbfly.toolbar._ctrlBringToFront,
       CtrlSendToBack: bbbfly.toolbar._ctrlSendToBack,
       CtrlInsertAfter: bbbfly.toolbar._ctrlInsertAfter,
-      CtrlInsertBefore: bbbfly.toolbar._ctrlInsertBefore,
-      SetInvalid: bbbfly.toolbar._setInvalid,
-      DoSetInvalid: bbbfly.toolbar._doSetInvalid
+      CtrlInsertBefore: bbbfly.toolbar._ctrlInsertBefore
     }
   });
 
-  return ngCreateControlAsType(def,'ngPanel',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
 };
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_layout'] = {
