@@ -29,7 +29,8 @@ bbbfly.panel._doCreate = function(def,ref,node){
       Type: 'ngPanel',
       id: this.ID + '_F',
       ScrollBars: ssDefault,
-      style: { zIndex: 1 }
+      style: { zIndex: 1 },
+      className: this.BaseClassName+'FramePanel'
     },
     ControlsPanel: {
       L:0,T:0,R:0,B:0,
@@ -38,7 +39,8 @@ bbbfly.panel._doCreate = function(def,ref,node){
       ScrollBars: ssAuto,
       style: { zIndex: 2 },
       Controls: def.Controls,
-      ModifyControls: def.ModifyControls
+      ModifyControls: def.ModifyControls,
+      className: this.BaseClassName+'ControlsPanel'
     }
   });
 
@@ -65,6 +67,7 @@ bbbfly.panel._doCreate = function(def,ref,node){
 };
 bbbfly.panel._doUpdate = function(node){
   this.DoUpdateFrame(node);
+  this.DoUpdateClassName(node);
   this.DoUpdateControlsPanel(node);
   return true;
 };
@@ -106,6 +109,10 @@ bbbfly.panel._doUpdateFrame = function(node){
 bbbfly.panel._doUpdateImages = function(){
   ngc_ChangeBox(this.ID,0,this.Enabled,this.GetFrame());
 };
+bbbfly.panel._doUpdateClassName = function(node){
+  if(typeof node === 'undefined'){node = this.Elm();}
+  node.className = this.GetClassName();
+};
 bbbfly.panel._doUpdateControlsPanel = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
 
@@ -132,17 +139,17 @@ bbbfly.panel._doUpdateControlsPanel = function(node){
 bbbfly.panel._getFrame = function(){
   return (Object.isObject(this.Frame) ? this.Frame : {});
 };
-bbbfly.panel._updateClassName = function(){
-  var node = this.Elm();
-  if(node){node.className = this.GetClassName();}
-};
 bbbfly.panel._getClassName = function(className){
-  if(!String.isString(className)){className = '';}
-
-  if(!this.Enabled){className += 'Disabled';}
-  else if(this.Invalid){className += 'Invalid';}
-
-  return this.BaseClassName+className;
+  if(String.isString(className)){
+    className = this.BaseClassName+className;
+  }
+  else{
+    className = this.BaseClassName;
+    if(!this.Enabled){className += ' '+className+'Disabled';}
+    else if(this.ReadOnly){className += ' '+className+'ReadOnly';}
+    else if(this.Invalid){className += ' '+className+'Invalid';}
+  }
+  return className;
 };
 bbbfly.panel._getFramePanel = function(){
   return this.FramePanel ? this.FramePanel : null;
@@ -220,8 +227,8 @@ bbbfly.Panel = function(def,ref,parent){
       DoUpdate: bbbfly.panel._doUpdate,
       DoUpdateFrame: bbbfly.panel._doUpdateFrame,
       DoUpdateImages: bbbfly.panel._doUpdateImages,
+      DoUpdateClassName: bbbfly.panel._doUpdateClassName,
       DoUpdateControlsPanel: bbbfly.panel._doUpdateControlsPanel,
-      UpdateClassName: bbbfly.panel._updateClassName,
       GetFrame: bbbfly.panel._getFrame,
       GetClassName: bbbfly.panel._getClassName,
       GetFramePanel: bbbfly.panel._getFramePanel,
