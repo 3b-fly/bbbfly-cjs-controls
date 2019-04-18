@@ -65,7 +65,6 @@ bbbfly.panel._doCreate = function(def,ref,node){
   delete refs.ControlsPanel;
   delete refs.FramePanel;
 
-  this.UpdateClassName();
   ngCloneRefs(ref,refs);
 };
 
@@ -175,27 +174,32 @@ bbbfly.panel._getControlsHolder = function(){
 };
 
 /** @ignore */
-bbbfly.panel._setInvalid = function(invalid,update){
-  invalid = (invalid !== false);
-  update = (update !== false);
-
-  if(this.Invalid === invalid){return true;}
-
-  if(this.OnSetInvalid && !this.OnSetInvalid(this,invalid,update)){
-    return false;
+bbbfly.panel._doChangeState = function(ctrl,update){
+  if(update){
+    ctrl.Update();
   }
-
-  if(this.DoSetInvalid){this.DoSetInvalid(invalid,update);}
-  return true;
+  else{
+    ctrl.DoUpdateImages();
+    ctrl.DoUpdateClassName();
+  }
 };
 
 /** @ignore */
-bbbfly.panel._doSetInvalid = function(invalid,update){
-  this.Invalid = !!invalid;
-  this.UpdateClassName();
+bbbfly.panel._setInvalid = function(invalid,update){
+  if(this.Invalid === invalid){return true;}
 
-  if(update){this.Update();}
-  else{this.DoUpdateImages();}
+  if(
+    Function.isFunction(this.OnSetInvalid)
+    && !this.OnSetInvalid(invalid)
+  ){return false;}
+
+  this.Invalid = !!invalid;
+  bbbfly.panel._doChangeState(this,update);
+
+  if(Function.isFunction(this.OnInvalidChanged)){
+    this.OnInvalidChanged();
+  }
+  return true;
 };
 
 /** @ignore */
@@ -234,7 +238,7 @@ bbbfly.Panel = function(def,ref,parent){
    */
 
   ng_MergeDef(def,{
-    ramePanel: null,
+    FramePanel: null,
     ControlsPanel: null,
     ParentReferences: true,
     Data: {
@@ -253,15 +257,22 @@ bbbfly.Panel = function(def,ref,parent){
        * @name OnSetInvalid
        * @memberof bbbfly.Panel#
        *
-       * @param {bbbfly.Panel} bar - Control reference
-       * @param {boolean} invalid - If validity state should change to invalid
-       * @param {boolean} update - If should be updated
-       * @return {boolean} Return false to deny validity change
+       * @param {boolean} invalid - Value to set
+       * @return {boolean} Return false to deny value change
        *
        * @see {@link bbbfly.Panel#SetInvalid|SetInvalid()}
-       * @see {@link bbbfly.Panel#DoSetInvalid|DoSetInvalid()}
+       * @see {@link bbbfly.Panel#event:OnInvalidChanged|OnInvalidChanged}
        */
-      OnSetInvalid: null
+      OnSetInvalid: null,
+      /**
+       * @event
+       * @name OnInvalidChanged
+       * @memberof bbbfly.Panel#
+       *
+       * @see {@link bbbfly.Panel#SetInvalid|SetInvalid()}
+       * @see {@link bbbfly.Panel#event:OnSetInvalid|OnSetInvalid}
+       */
+      OnInvalidChanged: null
     },
     Methods: {
       /** @private */
@@ -323,28 +334,14 @@ bbbfly.Panel = function(def,ref,parent){
        * @name SetInvalid
        * @memberof bbbfly.Panel#
        *
-       * @param {boolean} invalid - If set invalid or valid
-       * @param {boolean} [update=true] - If update toolbar
-       * @return {boolean} If validity change was not denied by OnSetInvalid()
+       * @param {boolean} invalid - Value to set
+       * @param {boolean} [update=true] - If update control
+       * @return {boolean} False if change was denied
        *
-       * @see {@link bbbfly.Panel#DoSetInvalid|DoSetInvalid()}
        * @see {@link bbbfly.Panel#event:OnSetInvalid|OnSetInvalid}
+       * @see {@link bbbfly.Panel#event:OnInvalidChanged|OnInvalidChanged}
        */
-      SetInvalid: bbbfly.panel._setInvalid,
-      /**
-       * @function
-       * @name DoSetInvalid
-       * @memberof bbbfly.Panel#
-       * @description Use this method to implement validity change
-       *
-       * @param {boolean} invalid - Validity state
-       * @param {boolean} [update=true] - If update toolbar
-       * @return {boolean} If validity change was not denied by OnSetInvalid()
-       *
-       * @see {@link bbbfly.Panel#SetInvalid|SetInvalid()}
-       * @see {@link bbbfly.Panel#event:OnSetInvalid|OnSetInvalid}
-       */
-      DoSetInvalid: bbbfly.panel._doSetInvalid
+      SetInvalid: bbbfly.panel._setInvalid
     }
   });
 

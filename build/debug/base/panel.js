@@ -61,7 +61,6 @@ bbbfly.panel._doCreate = function(def,ref,node){
   delete refs.ControlsPanel;
   delete refs.FramePanel;
 
-  this.UpdateClassName();
   ngCloneRefs(ref,refs);
 };
 bbbfly.panel._doUpdate = function(node){
@@ -151,25 +150,30 @@ bbbfly.panel._getControlsPanel = function(){
 bbbfly.panel._getControlsHolder = function(){
   return this.ControlsPanel ? this.ControlsPanel : this;
 };
+bbbfly.panel._doChangeState = function(ctrl,update){
+  if(update){
+    ctrl.Update();
+  }
+  else{
+    ctrl.DoUpdateImages();
+    ctrl.DoUpdateClassName();
+  }
+};
 bbbfly.panel._setInvalid = function(invalid,update){
-  invalid = (invalid !== false);
-  update = (update !== false);
-
   if(this.Invalid === invalid){return true;}
 
-  if(this.OnSetInvalid && !this.OnSetInvalid(this,invalid,update)){
-    return false;
-  }
+  if(
+    Function.isFunction(this.OnSetInvalid)
+    && !this.OnSetInvalid(invalid)
+  ){return false;}
 
-  if(this.DoSetInvalid){this.DoSetInvalid(invalid,update);}
-  return true;
-};
-bbbfly.panel._doSetInvalid = function(invalid,update){
   this.Invalid = !!invalid;
-  this.UpdateClassName();
+  bbbfly.panel._doChangeState(this,update);
 
-  if(update){this.Update();}
-  else{this.DoUpdateImages();}
+  if(Function.isFunction(this.OnInvalidChanged)){
+    this.OnInvalidChanged();
+  }
+  return true;
 };
 bbbfly.panel._onEnabledChanged = function(){
   this.UpdateClassName();
@@ -178,7 +182,7 @@ bbbfly.Panel = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
-    ramePanel: null,
+    FramePanel: null,
     ControlsPanel: null,
     ParentReferences: true,
     Data: {
@@ -189,7 +193,8 @@ bbbfly.Panel = function(def,ref,parent){
     },
     Events: {
       OnEnabledChanged: bbbfly.panel._onEnabledChanged,
-      OnSetInvalid: null
+      OnSetInvalid: null,
+      OnInvalidChanged: null
     },
     Methods: {
       DoCreate: bbbfly.panel._doCreate,
@@ -202,8 +207,7 @@ bbbfly.Panel = function(def,ref,parent){
       GetFramePanel: bbbfly.panel._getFramePanel,
       GetControlsPanel: bbbfly.panel._getControlsPanel,
       GetControlsHolder: bbbfly.panel._getControlsHolder,
-      SetInvalid: bbbfly.panel._setInvalid,
-      DoSetInvalid: bbbfly.panel._doSetInvalid
+      SetInvalid: bbbfly.panel._setInvalid
     }
   });
 
