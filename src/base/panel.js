@@ -13,7 +13,7 @@ bbbfly.panel = {};
 
 /** @ignore */
 bbbfly.panel._doCreate = function(def,ref,node){
-  if(!def.Data || (typeof def.Data.Frame === 'undefined')){return;}
+  if(!this.Frame){return;}
 
   var refDef = {
     FramePanel: {},
@@ -86,19 +86,19 @@ bbbfly.panel._doUpdateFrame = function(node){
   var fNode = fPanel.Elm();
   if(!fNode){return;}
 
-  var html = new ngStringBuilder();
-
   ng_BeginMeasureElement(node);
   var w = ng_ClientWidth(node);
   var h = ng_ClientHeight(node);
   ng_EndMeasureElement(node);
 
+  var html = new ngStringBuilder();
   var frame = {};
+
   ngc_ImgBox(
     html,this.ID,'bbbfly.Panel',
     0,this.Enabled,
     0,0,w,h,false,
-    this.Frame,
+    this.GetFrame(),
     '','',undefined,
     frame
   );
@@ -114,7 +114,7 @@ bbbfly.panel._doUpdateFrame = function(node){
 
 /** @ignore */
 bbbfly.panel._doUpdateImages = function(){
-  ngc_ChangeBox(this.ID,0,this.Enabled,this.Frame);
+  ngc_ChangeBox(this.ID,0,this.Enabled,this.GetFrame());
 };
 
 /** @ignore */
@@ -140,6 +140,11 @@ bbbfly.panel._doUpdateControlsPanel = function(node){
     R: null,
     B: null
   });
+};
+
+/** @ignore */
+bbbfly.panel._getFrame = function(){
+  return (Object.isObject(this.Frame) ? this.Frame : {});
 };
 
 /** @ignore */
@@ -237,8 +242,8 @@ bbbfly.panel._setReadOnly = function(readOnly,update){
  * @property {boolean} [Enabled=true]
  * @property {boolean} [Invalid=false]
  * @property {boolean} [ReadOnly=false]
- * @property {frame} [Frame=undefined]
- *   Define this property before panel creation to add frame support
+ * @property {boolean|frame} [Frame=false] - Frame definition
+ *   Define frame or set to true before panel creation to support frame
  */
 bbbfly.Panel = function(def,ref,parent){
   def = def || {};
@@ -259,7 +264,7 @@ bbbfly.Panel = function(def,ref,parent){
       Enabled: true,
       Invalid: false,
       ReadOnly: false,
-      Frame: undefined,
+      Frame: false,
 
       /** @private */
       _FrameDims: {}
@@ -322,6 +327,14 @@ bbbfly.Panel = function(def,ref,parent){
       DoUpdateControlsPanel: bbbfly.panel._doUpdateControlsPanel,
       /** @private */
       UpdateClassName: bbbfly.panel._updateClassName,
+      /**
+       * @function
+       * @name GetFrame
+       * @memberof bbbfly.Panel#
+       *
+       * @return {frame} Frame definition
+       */
+      GetFrame: bbbfly.panel._getFrame,
       /**
        * @function
        * @name GetClassName

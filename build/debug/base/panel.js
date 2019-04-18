@@ -9,7 +9,7 @@
 var bbbfly = bbbfly || {};
 bbbfly.panel = {};
 bbbfly.panel._doCreate = function(def,ref,node){
-  if(!def.Data || (typeof def.Data.Frame === 'undefined')){return;}
+  if(!this.Frame){return;}
 
   var refDef = {
     FramePanel: {},
@@ -78,19 +78,19 @@ bbbfly.panel._doUpdateFrame = function(node){
   var fNode = fPanel.Elm();
   if(!fNode){return;}
 
-  var html = new ngStringBuilder();
-
   ng_BeginMeasureElement(node);
   var w = ng_ClientWidth(node);
   var h = ng_ClientHeight(node);
   ng_EndMeasureElement(node);
 
+  var html = new ngStringBuilder();
   var frame = {};
+
   ngc_ImgBox(
     html,this.ID,'bbbfly.Panel',
     0,this.Enabled,
     0,0,w,h,false,
-    this.Frame,
+    this.GetFrame(),
     '','',undefined,
     frame
   );
@@ -104,7 +104,7 @@ bbbfly.panel._doUpdateFrame = function(node){
   };
 };
 bbbfly.panel._doUpdateImages = function(){
-  ngc_ChangeBox(this.ID,0,this.Enabled,this.Frame);
+  ngc_ChangeBox(this.ID,0,this.Enabled,this.GetFrame());
 };
 bbbfly.panel._doUpdateControlsPanel = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
@@ -128,6 +128,9 @@ bbbfly.panel._doUpdateControlsPanel = function(node){
     R: null,
     B: null
   });
+};
+bbbfly.panel._getFrame = function(){
+  return (Object.isObject(this.Frame) ? this.Frame : {});
 };
 bbbfly.panel._updateClassName = function(){
   var node = this.Elm();
@@ -202,7 +205,7 @@ bbbfly.Panel = function(def,ref,parent){
       Enabled: true,
       Invalid: false,
       ReadOnly: false,
-      Frame: undefined,
+      Frame: false,
       _FrameDims: {}
     },
     Events: {
@@ -219,6 +222,7 @@ bbbfly.Panel = function(def,ref,parent){
       DoUpdateImages: bbbfly.panel._doUpdateImages,
       DoUpdateControlsPanel: bbbfly.panel._doUpdateControlsPanel,
       UpdateClassName: bbbfly.panel._updateClassName,
+      GetFrame: bbbfly.panel._getFrame,
       GetClassName: bbbfly.panel._getClassName,
       GetFramePanel: bbbfly.panel._getFramePanel,
       GetControlsPanel: bbbfly.panel._getControlsPanel,
