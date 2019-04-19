@@ -68,8 +68,44 @@ bbbfly.edit._normalizeButtons = function(def){
 };
 
 /** @ignore */
+bbbfly.memo._validate = function(){
+  var text = String.trim(this.GetText());
+  var valid = (!this.Required || (text.length > 0));
+
+  if(valid && Number.isInteger(this.MaxLength)){
+    valid = (text.length <= this.MaxLength);
+  }
+  this.SetInvalid(!valid);
+  return valid;
+};
+
+/** @ignore */
+bbbfly.memo._setRequired = function(required){
+  if(required === this.Required){return;}
+
+  this.Required = !!required;
+  this.Validate();
+};
+
+/** @ignore */
+bbbfly.memo._setMaxLength = function(maxLength){
+  if(maxLength === this.MaxLength){return;}
+
+  this.MaxLength = (Number.isInteger(maxLength) ? maxLength : null);
+  this.Validate();
+};
+
+/** @ignore */
+bbbfly.memo._onTextChanged = function(){
+  this.Validate();
+};
+
+/** @ignore */
 bbbfly.memo._onGetClassName = function(memo,part){
-  return part+(memo.Invalid ? 'Invalid' : '');
+  var className = String.isString(part) ? part : '';
+
+  if(memo.Enabled && memo.Invalid){className += 'Invalid';}
+  return className;
 };
 
 /**
@@ -159,16 +195,49 @@ bbbfly.Edit = function(def,ref,parent,parentType){
  * @param {object} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
+ *
+ * @property {boolean} [Required=false]
+ * @property {integer|null} [MaxLength=null]
  */
 bbbfly.Memo = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
+    Data:{
+      Required: false,
+      MaxLength: null
+    },
     Events: {
+      /** @private */
+      OnTextChanged: bbbfly.memo._onTextChanged,
       /** @private */
       OnGetClassName: bbbfly.memo._onGetClassName
     },
     Methods: {
+      /**
+       * @function
+       * @name Validate
+       * @memberof bbbfly.Memo#
+       *
+       * @return {boolean} If is valid
+       */
+      Validate: bbbfly.memo._validate,
+      /**
+       * @function
+       * @name SetRequired
+       * @memberof bbbfly.Memo#
+       *
+       * @param {boolean} [required=false] - Value to set
+       */
+      SetRequired: bbbfly.memo._setRequired,
+      /**
+       * @function
+       * @name SetMaxLength
+       * @memberof bbbfly.Memo#
+       *
+       * @param {integer|null} [maxLength=null] - Value to set
+       */
+      SetMaxLength: bbbfly.memo._setMaxLength,
       /**
        * @function
        * @name SetFocusBefore

@@ -53,8 +53,36 @@ bbbfly.edit._normalizeButtons = function(def){
     def.Buttons = new Array();
   }
 };
+bbbfly.memo._validate = function(){
+  var text = String.trim(this.GetText());
+  var valid = (!this.Required || (text.length > 0));
+
+  if(valid && Number.isInteger(this.MaxLength)){
+    valid = (text.length <= this.MaxLength);
+  }
+  this.SetInvalid(!valid);
+  return valid;
+};
+bbbfly.memo._setRequired = function(required){
+  if(required === this.Required){return;}
+
+  this.Required = !!required;
+  this.Validate();
+};
+bbbfly.memo._setMaxLength = function(maxLength){
+  if(maxLength === this.MaxLength){return;}
+
+  this.MaxLength = (Number.isInteger(maxLength) ? maxLength : null);
+  this.Validate();
+};
+bbbfly.memo._onTextChanged = function(){
+  this.Validate();
+};
 bbbfly.memo._onGetClassName = function(memo,part){
-  return part+(memo.Invalid ? 'Invalid' : '');
+  var className = String.isString(part) ? part : '';
+
+  if(memo.Enabled && memo.Invalid){className += 'Invalid';}
+  return className;
 };
 bbbfly.Edit = function(def,ref,parent,parentType){
   def = def || {};
@@ -80,10 +108,18 @@ bbbfly.Memo = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
+    Data:{
+      Required: false,
+      MaxLength: null
+    },
     Events: {
+      OnTextChanged: bbbfly.memo._onTextChanged,
       OnGetClassName: bbbfly.memo._onGetClassName
     },
     Methods: {
+      Validate: bbbfly.memo._validate,
+      SetRequired: bbbfly.memo._setRequired,
+      SetMaxLength: bbbfly.memo._setMaxLength,
       SetFocusBefore: bbbfly.edit._setFocusBefore,
       SetFocusAfter: bbbfly.edit._setFocusAfter
     }
