@@ -69,12 +69,18 @@ bbbfly.edit._normalizeButtons = function(def){
 
 /** @ignore */
 bbbfly.memo._validate = function(){
-  var text = String.trim(this.GetText());
-  var valid = (!this.Required || (text.length > 0));
+  var text = this.GetText();
+  if(!String.isString(text)){text = '';}
+  var valid = true;
+
+  if(this.Required && (String.trim(text).length < 1)){
+    valid = false;
+  };
 
   if(valid && Number.isInteger(this.MaxLength)){
     valid = (text.length <= this.MaxLength);
   }
+  
   this.SetInvalid(!valid);
   return valid;
 };
