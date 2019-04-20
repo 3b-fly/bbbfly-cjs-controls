@@ -96,7 +96,7 @@ bbbfly.toolbar._ctrlInsertBefore = function(control,before){
 /**
  * @class
  * @type control
- * @extends ngPanel
+ * @extends bbbfly.Panel
  *
  * @description
  *   ToolBar whith frame.
