@@ -28,7 +28,7 @@ bbbfly.panel._doCreate = function(def,ref,node){
       L:0,T:0,R:0,B:0,
       Type: 'ngPanel',
       id: this.ID + '_F',
-      ScrollBars: ssDefault,
+      ScrollBars: ssNone,
       style: { zIndex: 1 },
       className: this.BaseClassName+'FramePanel'
     },
@@ -146,7 +146,6 @@ bbbfly.panel._getClassName = function(className){
   else{
     className = this.BaseClassName;
     if(!this.Enabled){className += ' '+className+'Disabled';}
-    else if(this.ReadOnly){className += ' '+className+'ReadOnly';}
     else if(this.Invalid){className += ' '+className+'Invalid';}
   }
   return className;
@@ -205,9 +204,6 @@ bbbfly.Panel = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
-    FramePanel: null,
-    ControlsPanel: null,
-    ParentReferences: true,
     Data: {
       Enabled: true,
       Invalid: false,
@@ -215,6 +211,9 @@ bbbfly.Panel = function(def,ref,parent){
       Frame: false,
       _FrameDims: {}
     },
+    FramePanel: undefined,
+    ControlsPanel: undefined,
+    ParentReferences: true,
     Events: {
       OnSetInvalid: null,
       OnInvalidChanged: null,
