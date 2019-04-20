@@ -289,7 +289,7 @@ bbbfly.FileUploader = function(def,ref,parent){
         style: { zIndex: 2 }
       },
       ProgressPanel: {
-        Type: 'ngPanel',
+        Type: 'bbbfly.Panel',
         L:0, R:0, T:0, B:0,
         style: { zIndex: 3 },
         ParentReferences: false,

@@ -136,6 +136,11 @@
           "Packages": [
             "crossbrowser"
           ]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": [
+            "panel"
+          ]
         }
       }
     },
