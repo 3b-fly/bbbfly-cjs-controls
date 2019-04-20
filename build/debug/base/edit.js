@@ -9,6 +9,14 @@
 var bbbfly = bbbfly || {};
 bbbfly.edit = {};
 bbbfly.memo = {};
+bbbfly.edit._setInvalid = function(invalid,update){
+  var changed = this.SetInvalid.callParent(invalid,update);
+
+  if(changed && Function.isFunction(this.OnInvalidChanged)){
+    this.OnInvalidChanged();
+  }
+  return changed;
+};
 bbbfly.edit._onReadOnlyChanged = function(edit,readOnly){
   var ddButton = this.DropDownButton;
   if(ddButton && (ddButton.Visible !== !readOnly)){
@@ -55,19 +63,18 @@ bbbfly.edit._normalizeButtons = function(def){
 };
 bbbfly.memo._validate = function(){
   var text = this.GetText();
-  if(!String.isString(text)){text = '';}
-  var valid = true;
+  var valid = (this.Required && (String.trim(text).length < 1))
+    ? false : this.ValidLength(text);
 
-  if(this.Required && (String.trim(text).length < 1)){
-    valid = false;
-  };
-
-  if(valid && Number.isInteger(this.MaxLength)){
-    valid = (text.length <= this.MaxLength);
-  }
-  
   this.SetInvalid(!valid);
   return valid;
+};
+
+bbbfly.memo._validLength = function(text){
+  if(Number.isInteger(this.MaxLength) && String.isString(text)){
+    return (text.length <= this.MaxLength);
+  }
+  return true;
 };
 bbbfly.memo._setRequired = function(required){
   if(required === this.Required){return;}
@@ -95,9 +102,11 @@ bbbfly.Edit = function(def,ref,parent,parentType){
   ng_MergeDef(def,{
     Buttons: null,
     Events: {
-      OnReadOnlyChanged: bbbfly.edit._onReadOnlyChanged
+      OnReadOnlyChanged: bbbfly.edit._onReadOnlyChanged,
+      OnInvalidChanged: null
     },
     Methods: {
+      SetInvalid: bbbfly.edit._setInvalid,
       GetButton: bbbfly.edit._getButton,
       SetFocusBefore: bbbfly.edit._setFocusBefore,
       SetFocusAfter: bbbfly.edit._setFocusAfter
@@ -120,10 +129,13 @@ bbbfly.Memo = function(def,ref,parent){
     },
     Events: {
       OnTextChanged: bbbfly.memo._onTextChanged,
-      OnGetClassName: bbbfly.memo._onGetClassName
+      OnGetClassName: bbbfly.memo._onGetClassName,
+      OnInvalidChanged: null
     },
     Methods: {
+      SetInvalid: bbbfly.edit._setInvalid,
       Validate: bbbfly.memo._validate,
+      ValidLength: bbbfly.memo._validLength,
       SetRequired: bbbfly.memo._setRequired,
       SetMaxLength: bbbfly.memo._setMaxLength,
       SetFocusBefore: bbbfly.edit._setFocusBefore,

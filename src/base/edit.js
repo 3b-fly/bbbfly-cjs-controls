@@ -14,6 +14,16 @@ bbbfly.edit = {};
 bbbfly.memo = {};
 
 /** @ignore */
+bbbfly.edit._setInvalid = function(invalid,update){
+  var changed = this.SetInvalid.callParent(invalid,update);
+
+  if(changed && Function.isFunction(this.OnInvalidChanged)){
+    this.OnInvalidChanged();
+  }
+  return changed;
+};
+
+/** @ignore */
 bbbfly.edit._onReadOnlyChanged = function(edit,readOnly){
   var ddButton = this.DropDownButton;
   if(ddButton && (ddButton.Visible !== !readOnly)){
@@ -70,19 +80,18 @@ bbbfly.edit._normalizeButtons = function(def){
 /** @ignore */
 bbbfly.memo._validate = function(){
   var text = this.GetText();
-  if(!String.isString(text)){text = '';}
-  var valid = true;
+  var valid = (this.Required && (String.trim(text).length < 1))
+    ? false : this.ValidLength(text);
 
-  if(this.Required && (String.trim(text).length < 1)){
-    valid = false;
-  };
-
-  if(valid && Number.isInteger(this.MaxLength)){
-    valid = (text.length <= this.MaxLength);
-  }
-  
   this.SetInvalid(!valid);
   return valid;
+};
+
+bbbfly.memo._validLength = function(text){
+  if(Number.isInteger(this.MaxLength) && String.isString(text)){
+    return (text.length <= this.MaxLength);
+  }
+  return true;
 };
 
 /** @ignore */
@@ -142,9 +151,17 @@ bbbfly.Edit = function(def,ref,parent,parentType){
     Buttons: null,
     Events: {
       /** @private */
-      OnReadOnlyChanged: bbbfly.edit._onReadOnlyChanged
+      OnReadOnlyChanged: bbbfly.edit._onReadOnlyChanged,
+      /**
+       * @event
+       * @name OnInvalidChanged
+       * @memberof bbbfly.Edit#
+       */
+      OnInvalidChanged: null
     },
     Methods: {
+      /** @private */
+      SetInvalid: bbbfly.edit._setInvalid,
       /**
        * @function
        * @name GetButton
@@ -217,9 +234,17 @@ bbbfly.Memo = function(def,ref,parent){
       /** @private */
       OnTextChanged: bbbfly.memo._onTextChanged,
       /** @private */
-      OnGetClassName: bbbfly.memo._onGetClassName
+      OnGetClassName: bbbfly.memo._onGetClassName,
+      /**
+       * @event
+       * @name OnInvalidChanged
+       * @memberof bbbfly.Memo#
+       */
+      OnInvalidChanged: null
     },
     Methods: {
+      /** @private */
+      SetInvalid: bbbfly.edit._setInvalid,
       /**
        * @function
        * @name Validate
@@ -228,6 +253,14 @@ bbbfly.Memo = function(def,ref,parent){
        * @return {boolean} If is valid
        */
       Validate: bbbfly.memo._validate,
+      /**
+       * @function
+       * @name ValidLength
+       * @memberof bbbfly.Memo#
+       *
+       * @return {boolean} If length is valid
+       */
+      ValidLength: bbbfly.memo._validLength,
       /**
        * @function
        * @name SetRequired
