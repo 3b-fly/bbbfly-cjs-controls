@@ -61,36 +61,46 @@ bbbfly.fileuploader._onGetProgressText = function(){
 };
 bbbfly.fileuploader._showError = function(data){
   if(!Function.isFunction(this.DoShowError)){return;}
-
-  if(!Array.isArray(data)){data = new Array(data);}
-
   var message = '';
+
   switch(this.ErrorLevel){
     case bbbfly.FileUploader.error.minimal:
-      var filesCnt = (data.length > 0) ? ''+data.length+'x' : '';
-
-      var text = ngTxt('bbbfly_fileuploader_error_min_general');
-      message += text.replace('%errs%',filesCnt);
+      if(Object.isObject(data)){
+        message +=  ngTxt('bbbfly_fileuploader_error_min_main');
+      }
+      else if(Array.isArray(data) && (data.length > 0)){
+        var text = ngTxt('bbbfly_fileuploader_error_min_general');
+        message += text.replace('%errs%',data.length+'x');
+      }
     break;
     case bbbfly.FileUploader.error.grouped:
+      if(!Array.isArray(data)){data = [data];}
       var errors = {};
 
       for(var i in data){
         var item = data[i];
-        if(typeof item !== 'object'){continue;}
+        if(!Object.isObject(item)){continue;}
+
+        var error = item.Error;
+        if(String.isString(error)){error = { Message: error };}
+        if(!Object.isObject(error)){continue;}
 
         var fileName = item.Name;
-        var error = item.Error;
+        if(!String.isString(fileName)){fileName = '?';}
 
-        if(error && error.Message){
+        if(error && String.isString(error.Message)){
           if(!errors[error.Message]){errors[error.Message] = new Array();}
-          errors[error.Message].push(fileName ? fileName : true);
+          errors[error.Message].push(fileName);
         }
       }
 
       for(var i in errors){
         var filesCnt = (errors[i].length > 0) ? ''+errors[i].length+'x' : '';
         switch(i){
+          case 'ngfup_Error_Main':
+            var text = ngTxt('bbbfly_fileuploader_error_grp_main');
+            message += text+'\n';
+          break;
           case 'ngfup_Error_General':
             var text = ngTxt('bbbfly_fileuploader_error_grp_general');
             message += text.replace('%errs%',filesCnt)+'\n';
@@ -119,39 +129,47 @@ bbbfly.fileuploader._showError = function(data){
       }
     break;
     case bbbfly.FileUploader.error.fulllog:
+      if(!Array.isArray(data)){data = [data];}
+
       for(var i in data){
         var item = data[i];
-        if(typeof item !== 'object'){continue;}
+        if(!Object.isObject(item)){continue;}
+
+        var error = item.Error;
+        if(String.isString(error)){error = { Message: error };}
+        if(!Object.isObject(error)){continue;}
 
         var fileName = item.Name;
-        var error = item.Error;
+        if(!String.isString(fileName)){fileName = '?';}
 
-        if(fileName && error && error.Message){
-          switch(error.Message){
-            case 'ngfup_Error_General':
-              var text = ngTxt('bbbfly_fileuploader_error_full_general');
-              message += text.replace('%file%',fileName)+'\n';
-            break;
-            case 'ngfup_Error_Extension':
-              var text = ngTxt('bbbfly_fileuploader_error_full_extension');
-              message += text.replace('%file%',fileName)+'\n';
-            break;
-            case 'ngfup_Error_Size':
-              var maxSize = bbbfly.fileuploader._maxSize(this.MaxFileSize);
-              var text = ngTxt('bbbfly_fileuploader_error_full_maxsize');
-              message += text.replace('%file%',fileName).replace('%size%',maxSize)+'\n';
-            break;
-            case 'ngfup_Error_MaxBatch':
-              var maxSize = bbbfly.fileuploader._maxSize(this.MaxBatchSize);
-              var text = ngTxt('bbbfly_fileuploader_error_full_batch');
-              message += text.replace('%size%',maxSize)+'\n';
-            break;
-            case 'ngfup_Error_MaxFiles':
-              var maxCnt = bbbfly.fileuploader._maxCnt(this.MaxFilesCount);
-              var text = ngTxt('bbbfly_fileuploader_error_full_maxcnt');
-              message += text.replace('%cnt%',maxCnt)+'\n';
-            break;
-          }
+        switch(error.Message){
+          case 'ngfup_Error_Main':
+            var text = ngTxt('bbbfly_fileuploader_error_full_main');
+            message += text+'\n';
+          break;
+          case 'ngfup_Error_General':
+            var text = ngTxt('bbbfly_fileuploader_error_full_general');
+            message += text.replace('%file%',fileName)+'\n';
+          break;
+          case 'ngfup_Error_Extension':
+            var text = ngTxt('bbbfly_fileuploader_error_full_extension');
+            message += text.replace('%file%',fileName)+'\n';
+          break;
+          case 'ngfup_Error_Size':
+            var maxSize = bbbfly.fileuploader._maxSize(this.MaxFileSize);
+            var text = ngTxt('bbbfly_fileuploader_error_full_maxsize');
+            message += text.replace('%file%',fileName).replace('%size%',maxSize)+'\n';
+          break;
+          case 'ngfup_Error_MaxBatch':
+            var maxSize = bbbfly.fileuploader._maxSize(this.MaxBatchSize);
+            var text = ngTxt('bbbfly_fileuploader_error_full_batch');
+            message += text.replace('%size%',maxSize)+'\n';
+          break;
+          case 'ngfup_Error_MaxFiles':
+            var maxCnt = bbbfly.fileuploader._maxCnt(this.MaxFilesCount);
+            var text = ngTxt('bbbfly_fileuploader_error_full_maxcnt');
+            message += text.replace('%cnt%',maxCnt)+'\n';
+          break;
         }
       }
     break;

@@ -16,12 +16,17 @@ ngc_Lang.cs.bbbfly_fileuploader_remove_more = 'Odebrat vybrané soubory';
 ngc_Lang.cs.bbbfly_fileuploader_upload_one = 'Nahrávám soubor...';
 ngc_Lang.cs.bbbfly_fileuploader_upload_more = 'Nahrávám soubory...';
 
+ngc_Lang.cs.bbbfly_fileuploader_error_min_main = 'Nahrávání selhalo';
 ngc_Lang.cs.bbbfly_fileuploader_error_min_general = 'Nahrávání selhalo';
+
+ngc_Lang.cs.bbbfly_fileuploader_error_grp_main = 'Nahrávání selhalo';
 ngc_Lang.cs.bbbfly_fileuploader_error_grp_general = 'Nahrávání selhalo: %errs%';
 ngc_Lang.cs.bbbfly_fileuploader_error_grp_extension = 'Nepodporovaný typ souboru: %exts%';
 ngc_Lang.cs.bbbfly_fileuploader_error_grp_maxsize = 'Překročena max. velikost souboru %size%: %errs%';
 ngc_Lang.cs.bbbfly_fileuploader_error_grp_batch = 'Překročena max. velikost dávky %size%: %errs%';
 ngc_Lang.cs.bbbfly_fileuploader_error_grp_maxcnt = 'Překročen max. počet souborů %cnt%: %errs%';
+
+ngc_Lang.cs.bbbfly_fileuploader_error_full_main = 'Nahrávání selhalo';
 ngc_Lang.cs.bbbfly_fileuploader_error_full_general = '%file%: Nahrávání selhalo';
 ngc_Lang.cs.bbbfly_fileuploader_error_full_extension = '%file%: Nepodporovaný typ souboru';
 ngc_Lang.cs.bbbfly_fileuploader_error_full_maxsize = '%file%: Překročena max. velikost souboru %size%';
