@@ -21,6 +21,9 @@
       "Libraries": {
         "controls.js": {
           "Packages": ["Controls.js","Controls.js UI"]
+        },
+        "bbbfly-cjs": {
+          "Packages": ["renderer"]
         }
       }
     },

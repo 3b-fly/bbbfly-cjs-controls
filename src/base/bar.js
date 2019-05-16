@@ -43,19 +43,15 @@ bbbfly.toolbar._update = function(recursive){
 bbbfly.toolbar._onControlsPanelUpdated = function(){
   var ctrl = this.Owner;
   if(ctrl && ctrl.AutoSize){
+
+    var dims = ctrl.GetFrameDims();
     var bounds = {};
 
     if(ctrl.Vertical){
-      bounds.W = this.Bounds.W;
-      if(ctrl._FrameDims){
-        bounds.W += ctrl._FrameDims.L + ctrl._FrameDims.R;
-      }
+      bounds.W = (this.Bounds.W + dims.L + dims.R);
     }
     else{
-      bounds.H = this.Bounds.H;
-      if(ctrl._FrameDims){
-        bounds.H += ctrl._FrameDims.T + ctrl._FrameDims.B;
-      }
+      bounds.H = (this.Bounds.H + dims.T + dims.B);
     }
 
     ctrl.SetBounds(bounds);

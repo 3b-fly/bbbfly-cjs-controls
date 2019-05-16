@@ -30,7 +30,8 @@ bbbfly.panel._doCreate = function(def,ref,node){
       id: this.ID + '_F',
       ScrollBars: ssNone,
       style: { zIndex: 1 },
-      className: this.BaseClassName+'FramePanel'
+      className: this.BaseClassName+'FramePanel',
+      Data: { _FrameProxy: null }
     },
     ControlsPanel: {
       L:0,T:0,R:0,B:0,
@@ -73,41 +74,36 @@ bbbfly.panel._doUpdate = function(node){
 };
 bbbfly.panel._doUpdateFrame = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
-  if(!node){return;}
 
   var fPanel = this.GetFramePanel();
-  if(!fPanel){return;}
-
-  var fNode = fPanel.Elm();
-  if(!fNode){return;}
+  if(!node || !fPanel){return;}
 
   ng_BeginMeasureElement(node);
   var w = ng_ClientWidth(node);
   var h = ng_ClientHeight(node);
   ng_EndMeasureElement(node);
 
-  var html = new ngStringBuilder();
-  var frame = {};
+  fPanel.SetBounds({ T:0, L:0, W:w, H:h });
 
-  ngc_ImgBox(
-    html,this.ID,'bbbfly.Panel',
-    0,this.Enabled,
-    0,0,w,h,false,
-    this.GetFrame(),
-    '','',undefined,
-    frame
-  );
-  ng_SetInnerHTML(fNode,html.toString());
+  var fNode = fPanel.Elm();
+  if(!fNode){return;}
 
-  this._FrameDims = {
-    T: frame.Top.H,
-    L: frame.Left.W,
-    R: frame.Right.W,
-    B: frame.Bottom.H
-  };
+  var frame = this.GetFrame();
+  var state = this.GetState();
+
+  fPanel._FrameProxy = bbbfly.Renderer.FrameProxy(frame,state,this.ID);
+  fNode.innerHTML = bbbfly.Renderer.FrameHTML(fPanel._FrameProxy,state);
 };
 bbbfly.panel._doUpdateImages = function(){
-  ngc_ChangeBox(this.ID,0,this.Enabled,this.GetFrame());
+  var fPanel = this.GetFramePanel();
+  if(!fPanel){return;}
+
+  var proxy = fPanel._FrameProxy;
+  if(!Object.isObject(proxy)){return;}
+
+  var state = this.GetState();
+  bbbfly.Renderer.UpdateFrameProxy(proxy,state);
+  bbbfly.Renderer.UpdateFrameHTML(proxy,state);
 };
 bbbfly.panel._doUpdateClassName = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
@@ -124,8 +120,7 @@ bbbfly.panel._doUpdateControlsPanel = function(node){
   var h = ng_ClientHeight(node);
   ng_EndMeasureElement(node);
 
-  var dims = Object.isObject(this._FrameDims)
-    ? this._FrameDims: { T:0, L:0, R:0, B:0 };
+  var dims = this.GetFrameDims();
 
   cPanel.SetBounds({
     W: (w - dims.L - dims.R),
@@ -136,8 +131,26 @@ bbbfly.panel._doUpdateControlsPanel = function(node){
     B: null
   });
 };
+bbbfly.panel._getState = function(){
+  return {
+    disabled: !this.Enabled,
+    invalid: !!this.Invalid
+  };
+};
 bbbfly.panel._getFrame = function(){
   return (Object.isObject(this.Frame) ? this.Frame : {});
+};
+bbbfly.panel._getFrameDims = function(){
+  var dims = { L:0, T:0, R:0, B:0 };
+
+  var fPanel = this.GetFramePanel();
+  if(fPanel && Object.isObject(fPanel._FrameProxy)){
+    dims.L = fPanel._FrameProxy.L.W;
+    dims.T = fPanel._FrameProxy.T.H;
+    dims.R = fPanel._FrameProxy.R.W;
+    dims.B = fPanel._FrameProxy.B.H;
+  }
+  return dims;
 };
 bbbfly.panel._getClassName = function(className){
   if(String.isString(className)){
@@ -208,8 +221,7 @@ bbbfly.Panel = function(def,ref,parent){
       Enabled: true,
       Invalid: false,
       ReadOnly: false,
-      Frame: false,
-      _FrameDims: {}
+      Frame: false
     },
     FramePanel: undefined,
     ControlsPanel: undefined,
@@ -219,7 +231,6 @@ bbbfly.Panel = function(def,ref,parent){
       OnInvalidChanged: null,
       OnSetReadOnly: null,
       OnReadOnlyChanged: null
-
     },
     Methods: {
       DoCreate: bbbfly.panel._doCreate,
@@ -228,7 +239,9 @@ bbbfly.Panel = function(def,ref,parent){
       DoUpdateImages: bbbfly.panel._doUpdateImages,
       DoUpdateClassName: bbbfly.panel._doUpdateClassName,
       DoUpdateControlsPanel: bbbfly.panel._doUpdateControlsPanel,
+      GetState: bbbfly.panel._getState,
       GetFrame: bbbfly.panel._getFrame,
+      GetFrameDims: bbbfly.panel._getFrameDims,
       GetClassName: bbbfly.panel._getClassName,
       GetFramePanel: bbbfly.panel._getFramePanel,
       GetControlsPanel: bbbfly.panel._getControlsPanel,

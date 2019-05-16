@@ -34,7 +34,8 @@ bbbfly.panel._doCreate = function(def,ref,node){
       id: this.ID + '_F',
       ScrollBars: ssNone,
       style: { zIndex: 1 },
-      className: this.BaseClassName+'FramePanel'
+      className: this.BaseClassName+'FramePanel',
+      Data: { _FrameProxy: null }
     },
     ControlsPanel: {
       L:0,T:0,R:0,B:0,
@@ -81,43 +82,38 @@ bbbfly.panel._doUpdate = function(node){
 /** @ignore */
 bbbfly.panel._doUpdateFrame = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
-  if(!node){return;}
 
   var fPanel = this.GetFramePanel();
-  if(!fPanel){return;}
-
-  var fNode = fPanel.Elm();
-  if(!fNode){return;}
+  if(!node || !fPanel){return;}
 
   ng_BeginMeasureElement(node);
   var w = ng_ClientWidth(node);
   var h = ng_ClientHeight(node);
   ng_EndMeasureElement(node);
 
-  var html = new ngStringBuilder();
-  var frame = {};
+  fPanel.SetBounds({ T:0, L:0, W:w, H:h });
 
-  ngc_ImgBox(
-    html,this.ID,'bbbfly.Panel',
-    0,this.Enabled,
-    0,0,w,h,false,
-    this.GetFrame(),
-    '','',undefined,
-    frame
-  );
-  ng_SetInnerHTML(fNode,html.toString());
+  var fNode = fPanel.Elm();
+  if(!fNode){return;}
 
-  this._FrameDims = {
-    T: frame.Top.H,
-    L: frame.Left.W,
-    R: frame.Right.W,
-    B: frame.Bottom.H
-  };
+  var frame = this.GetFrame();
+  var state = this.GetState();
+
+  fPanel._FrameProxy = bbbfly.Renderer.FrameProxy(frame,state,this.ID);
+  fNode.innerHTML = bbbfly.Renderer.FrameHTML(fPanel._FrameProxy,state);
 };
 
 /** @ignore */
 bbbfly.panel._doUpdateImages = function(){
-  ngc_ChangeBox(this.ID,0,this.Enabled,this.GetFrame());
+  var fPanel = this.GetFramePanel();
+  if(!fPanel){return;}
+
+  var proxy = fPanel._FrameProxy;
+  if(!Object.isObject(proxy)){return;}
+
+  var state = this.GetState();
+  bbbfly.Renderer.UpdateFrameProxy(proxy,state);
+  bbbfly.Renderer.UpdateFrameHTML(proxy,state);
 };
 
 /** @ignore */
@@ -138,8 +134,7 @@ bbbfly.panel._doUpdateControlsPanel = function(node){
   var h = ng_ClientHeight(node);
   ng_EndMeasureElement(node);
 
-  var dims = Object.isObject(this._FrameDims)
-    ? this._FrameDims: { T:0, L:0, R:0, B:0 };
+  var dims = this.GetFrameDims();
 
   cPanel.SetBounds({
     W: (w - dims.L - dims.R),
@@ -152,8 +147,30 @@ bbbfly.panel._doUpdateControlsPanel = function(node){
 };
 
 /** @ignore */
+bbbfly.panel._getState = function(){
+  return {
+    disabled: !this.Enabled,
+    invalid: !!this.Invalid
+  };
+};
+
+/** @ignore */
 bbbfly.panel._getFrame = function(){
   return (Object.isObject(this.Frame) ? this.Frame : {});
+};
+
+/** @ignore */
+bbbfly.panel._getFrameDims = function(){
+  var dims = { L:0, T:0, R:0, B:0 };
+
+  var fPanel = this.GetFramePanel();
+  if(fPanel && Object.isObject(fPanel._FrameProxy)){
+    dims.L = fPanel._FrameProxy.L.W;
+    dims.T = fPanel._FrameProxy.T.H;
+    dims.R = fPanel._FrameProxy.R.W;
+    dims.B = fPanel._FrameProxy.B.H;
+  }
+  return dims;
 };
 
 /** @ignore */
@@ -248,7 +265,7 @@ bbbfly.panel._setReadOnly = function(readOnly,update){
  * @property {boolean} [Enabled=true]
  * @property {boolean} [Invalid=false]
  * @property {boolean} [ReadOnly=false]
- * @property {boolean|frame} [Frame=false] - Frame definition
+ * @property {boolean|bbbfly.Renderer.frame} [Frame=false] - Frame definition
  *   Define frame or set to true before panel creation to support frame
  */
 bbbfly.Panel = function(def,ref,parent){
@@ -267,10 +284,7 @@ bbbfly.Panel = function(def,ref,parent){
       Enabled: true,
       Invalid: false,
       ReadOnly: false,
-      Frame: false,
-
-      /** @private */
-      _FrameDims: {}
+      Frame: false
     },
     FramePanel: undefined,
     ControlsPanel: undefined,
@@ -318,7 +332,6 @@ bbbfly.Panel = function(def,ref,parent){
        * @see {@link bbbfly.Panel#event:OnSetReadOnly|OnSetReadOnly}
        */
       OnReadOnlyChanged: null
-
     },
     Methods: {
       /** @private */
@@ -335,12 +348,28 @@ bbbfly.Panel = function(def,ref,parent){
       DoUpdateControlsPanel: bbbfly.panel._doUpdateControlsPanel,
       /**
        * @function
+       * @name GetState
+       * @memberof bbbfly.Panel#
+       *
+       * @return {bbbfly.Renderer.state} Control state
+       */
+      GetState: bbbfly.panel._getState,
+      /**
+       * @function
        * @name GetFrame
        * @memberof bbbfly.Panel#
        *
        * @return {frame} Frame definition
        */
       GetFrame: bbbfly.panel._getFrame,
+      /**
+       * @function
+       * @name GetFrameDims
+       * @memberof bbbfly.Panel#
+       *
+       * @return {object} Frame dimensions
+       */
+      GetFrameDims: bbbfly.panel._getFrameDims,
       /**
        * @function
        * @name GetClassName

@@ -22,6 +22,11 @@
             "Controls.js",
             "Controls.js UI"
           ]
+        },
+        "bbbfly-cjs": {
+          "Packages": [
+            "renderer"
+          ]
         }
       }
     },
