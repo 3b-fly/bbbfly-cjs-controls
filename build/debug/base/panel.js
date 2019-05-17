@@ -131,10 +131,31 @@ bbbfly.panel._doUpdateControlsPanel = function(node){
     B: null
   });
 };
+bbbfly.panel._doMouseEnter = function(){
+  var fPanel = this.GetFramePanel();
+  if(!fPanel){return;}
+
+  var proxy = fPanel._FrameProxy;
+  if(!Object.isObject(proxy)){return;}
+
+  var state = this.GetState();
+  bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+};
+bbbfly.panel._doMouseLeave = function(){
+  var fPanel = this.GetFramePanel();
+  if(!fPanel){return;}
+
+  var proxy = fPanel._FrameProxy;
+  if(!Object.isObject(proxy)){return;}
+
+  var state = this.GetState();
+  bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+};
 bbbfly.panel._getState = function(){
   return {
     disabled: !this.Enabled,
-    invalid: !!this.Invalid
+    invalid: !!this.Invalid,
+    mouseOver: !!this.MouseInControl
   };
 };
 bbbfly.panel._getFrame = function(){
@@ -239,6 +260,8 @@ bbbfly.Panel = function(def,ref,parent){
       DoUpdateImages: bbbfly.panel._doUpdateImages,
       DoUpdateClassName: bbbfly.panel._doUpdateClassName,
       DoUpdateControlsPanel: bbbfly.panel._doUpdateControlsPanel,
+      DoMouseEnter: bbbfly.panel._doMouseEnter,
+      DoMouseLeave: bbbfly.panel._doMouseLeave,
       GetState: bbbfly.panel._getState,
       GetFrame: bbbfly.panel._getFrame,
       GetFrameDims: bbbfly.panel._getFrameDims,

@@ -147,10 +147,35 @@ bbbfly.panel._doUpdateControlsPanel = function(node){
 };
 
 /** @ignore */
+bbbfly.panel._doMouseEnter = function(){
+  var fPanel = this.GetFramePanel();
+  if(!fPanel){return;}
+
+  var proxy = fPanel._FrameProxy;
+  if(!Object.isObject(proxy)){return;}
+
+  var state = this.GetState();
+  bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+};
+
+/** @ignore */
+bbbfly.panel._doMouseLeave = function(){
+  var fPanel = this.GetFramePanel();
+  if(!fPanel){return;}
+
+  var proxy = fPanel._FrameProxy;
+  if(!Object.isObject(proxy)){return;}
+
+  var state = this.GetState();
+  bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+};
+
+/** @ignore */
 bbbfly.panel._getState = function(){
   return {
     disabled: !this.Enabled,
-    invalid: !!this.Invalid
+    invalid: !!this.Invalid,
+    mouseOver: !!this.MouseInControl
   };
 };
 
@@ -346,6 +371,11 @@ bbbfly.Panel = function(def,ref,parent){
       DoUpdateClassName: bbbfly.panel._doUpdateClassName,
       /** @private */
       DoUpdateControlsPanel: bbbfly.panel._doUpdateControlsPanel,
+      /** @private */
+      DoMouseEnter: bbbfly.panel._doMouseEnter,
+      /** @private */
+      DoMouseLeave: bbbfly.panel._doMouseLeave,
+
       /**
        * @function
        * @name GetState
