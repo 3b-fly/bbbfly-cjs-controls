@@ -10,9 +10,115 @@
 var bbbfly = bbbfly || {};
 /** @ignore */
 bbbfly.panel = {};
+/** @ignore */
+bbbfly.frame = {};
 
 /** @ignore */
-bbbfly.panel._doCreate = function(def,ref,node){
+bbbfly.panel._doUpdate = function(node){
+  this.DoUpdateClassName(node);
+  return true;
+};
+
+/** @ignore */
+bbbfly.panel._doUpdateClassName = function(node){
+  if(typeof node === 'undefined'){node = this.Elm();}
+  node.className = this.GetClassName();
+};
+
+/** @ignore */
+bbbfly.panel._getState = function(){
+  return {
+    disabled: !this.Enabled,
+    invalid: !!this.Invalid,
+    mouseOver: !!(this.MouseInControl && !this.ReadOnly)
+  };
+};
+
+/** @ignore */
+bbbfly.panel._getClassName = function(className){
+  if(String.isString(className)){
+    className = this.BaseClassName+className;
+  }
+  else{
+    className = this.BaseClassName;
+    if(!this.Enabled){className += ' '+className+'Disabled';}
+    else if(this.Invalid){className += ' '+className+'Invalid';}
+  }
+  return className;
+};
+
+/** @ignore */
+bbbfly.panel._doChangeState = function(update){
+  if(update){this.Update();}
+  else{this.DoUpdateClassName();}
+};
+
+/** @ignore */
+bbbfly.panel._setEnabled = function(enabled,update){
+  if(!Boolean.isBoolean(enabled)){enabled = true;}
+  if(this.Enabled === enabled){return true;}
+
+  if(
+    Function.isFunction(this.OnSetEnabled)
+    && !this.OnSetEnabled(enabled)
+  ){return false;}
+
+  if(!Boolean.isBoolean(update)){update = true;}
+  this.SetChildControlsEnabled(enabled,this);
+
+  this.Enabled = enabled;
+  this.DoChangeState(this,update);
+
+  if(Function.isFunction(this.OnEnabledChanged)){
+    this.OnEnabledChanged();
+  }
+  return true;
+};
+
+/** @ignore */
+bbbfly.panel._setInvalid = function(invalid,update){
+  if(!Boolean.isBoolean(invalid)){invalid = true;}
+  if(this.Invalid === invalid){return true;}
+
+  if(
+    Function.isFunction(this.OnSetInvalid)
+    && !this.OnSetInvalid(invalid)
+  ){return false;}
+
+  if(!Boolean.isBoolean(update)){update = true;}
+
+  this.Invalid = invalid;
+  this.DoChangeState(update);
+
+  if(Function.isFunction(this.OnInvalidChanged)){
+    this.OnInvalidChanged();
+  }
+  return true;
+};
+
+/** @ignore */
+bbbfly.panel._setReadOnly = function(readOnly,update){
+  if(!Boolean.isBoolean(readOnly)){readOnly = true;}
+  if(readOnly === this.ReadOnly){return true;}
+
+  if(
+    Function.isFunction(this.OnSetReadOnly)
+    && !this.OnSetReadOnly(readOnly)
+  ){return false;}
+
+  if(!Boolean.isBoolean(update)){update = true;}
+
+  this.ReadOnly = readOnly;
+  this.DoChangeState(update);
+
+  if(Function.isFunction(this.OnReadOnlyChanged)){
+    this.OnReadOnlyChanged();
+  }
+  return true;
+};
+
+/** @ignore */
+bbbfly.frame._doCreate = function(def,ref,node){
   if(!this.Frame){return;}
 
   var refDef = {
@@ -30,7 +136,7 @@ bbbfly.panel._doCreate = function(def,ref,node){
   ng_MergeDef(refDef,{
     FramePanel: {
       L:0,T:0,R:0,B:0,
-      Type: 'ngPanel',
+      Type: 'bbbfly.Panel',
       id: this.ID + '_F',
       ScrollBars: ssNone,
       style: { zIndex: 1 },
@@ -39,7 +145,7 @@ bbbfly.panel._doCreate = function(def,ref,node){
     },
     ControlsPanel: {
       L:0,T:0,R:0,B:0,
-      Type: 'ngPanel',
+      Type: 'bbbfly.Panel',
       id: this.ID + '_P',
       ScrollBars: ssAuto,
       style: { zIndex: 2 },
@@ -72,15 +178,48 @@ bbbfly.panel._doCreate = function(def,ref,node){
 };
 
 /** @ignore */
-bbbfly.panel._doUpdate = function(node){
+bbbfly.frame._doUpdate = function(node){
   this.DoUpdateFrame(node);
-  this.DoUpdateClassName(node);
   this.DoUpdateControlsPanel(node);
-  return true;
+  return this.DoUpdate.callParent(node);
 };
 
 /** @ignore */
-bbbfly.panel._doUpdateFrame = function(node){
+bbbfly.frame._doMouseEnter = function(){
+  var fPanel = this.GetFramePanel();
+  if(!fPanel){return;}
+
+  var proxy = fPanel._FrameProxy;
+  if(!Object.isObject(proxy)){return;}
+
+  var state = this.GetState();
+  if(!this.ReadOnly){state.mouseOver = true;}
+
+  bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+};
+
+/** @ignore */
+bbbfly.frame._doMouseLeave = function(){
+  var fPanel = this.GetFramePanel();
+  if(!fPanel){return;}
+
+  var proxy = fPanel._FrameProxy;
+  if(!Object.isObject(proxy)){return;}
+
+  var state = this.GetState();
+  if(!this.ReadOnly){state.mouseOver = false;}
+
+  bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+};
+
+/** @ignore */
+bbbfly.frame._doChangeState = function(update){
+  this.DoChangeState.callParent(update);
+  if(!update){this.DoUpdateImages();}
+};
+
+/** @ignore */
+bbbfly.frame._doUpdateFrame = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
 
   var fPanel = this.GetFramePanel();
@@ -104,7 +243,7 @@ bbbfly.panel._doUpdateFrame = function(node){
 };
 
 /** @ignore */
-bbbfly.panel._doUpdateImages = function(){
+bbbfly.frame._doUpdateImages = function(){
   var fPanel = this.GetFramePanel();
   if(!fPanel){return;}
 
@@ -117,13 +256,7 @@ bbbfly.panel._doUpdateImages = function(){
 };
 
 /** @ignore */
-bbbfly.panel._doUpdateClassName = function(node){
-  if(typeof node === 'undefined'){node = this.Elm();}
-  node.className = this.GetClassName();
-};
-
-/** @ignore */
-bbbfly.panel._doUpdateControlsPanel = function(node){
+bbbfly.frame._doUpdateControlsPanel = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
 
   var cPanel = this.GetControlsPanel();
@@ -147,45 +280,12 @@ bbbfly.panel._doUpdateControlsPanel = function(node){
 };
 
 /** @ignore */
-bbbfly.panel._doMouseEnter = function(){
-  var fPanel = this.GetFramePanel();
-  if(!fPanel){return;}
-
-  var proxy = fPanel._FrameProxy;
-  if(!Object.isObject(proxy)){return;}
-
-  var state = this.GetState();
-  bbbfly.Renderer.UpdateFrameHTML(proxy,state);
-};
-
-/** @ignore */
-bbbfly.panel._doMouseLeave = function(){
-  var fPanel = this.GetFramePanel();
-  if(!fPanel){return;}
-
-  var proxy = fPanel._FrameProxy;
-  if(!Object.isObject(proxy)){return;}
-
-  var state = this.GetState();
-  bbbfly.Renderer.UpdateFrameHTML(proxy,state);
-};
-
-/** @ignore */
-bbbfly.panel._getState = function(){
-  return {
-    disabled: !this.Enabled,
-    invalid: !!this.Invalid,
-    mouseOver: !!this.MouseInControl
-  };
-};
-
-/** @ignore */
-bbbfly.panel._getFrame = function(){
+bbbfly.frame._getFrame = function(){
   return (Object.isObject(this.Frame) ? this.Frame : {});
 };
 
 /** @ignore */
-bbbfly.panel._getFrameDims = function(){
+bbbfly.frame._getFrameDims = function(){
   var dims = { L:0, T:0, R:0, B:0 };
 
   var fPanel = this.GetFramePanel();
@@ -199,78 +299,18 @@ bbbfly.panel._getFrameDims = function(){
 };
 
 /** @ignore */
-bbbfly.panel._getClassName = function(className){
-  if(String.isString(className)){
-    className = this.BaseClassName+className;
-  }
-  else{
-    className = this.BaseClassName;
-    if(!this.Enabled){className += ' '+className+'Disabled';}
-    else if(this.Invalid){className += ' '+className+'Invalid';}
-  }
-  return className;
-};
-
-/** @ignore */
-bbbfly.panel._getFramePanel = function(){
+bbbfly.frame._getFramePanel = function(){
   return this.FramePanel ? this.FramePanel : null;
 };
 
 /** @ignore */
-bbbfly.panel._getControlsPanel = function(){
+bbbfly.frame._getControlsPanel = function(){
   return this.ControlsPanel ? this.ControlsPanel : null;
 };
 
 /** @ignore */
-bbbfly.panel._getControlsHolder = function(){
+bbbfly.frame._getControlsHolder = function(){
   return this.ControlsPanel ? this.ControlsPanel : this;
-};
-
-/** @ignore */
-bbbfly.panel._doChangeState = function(ctrl,update){
-  if(update){
-    ctrl.Update();
-  }
-  else{
-    ctrl.DoUpdateImages();
-    ctrl.DoUpdateClassName();
-  }
-};
-
-/** @ignore */
-bbbfly.panel._setInvalid = function(invalid,update){
-  if(this.Invalid === invalid){return true;}
-
-  if(
-    Function.isFunction(this.OnSetInvalid)
-    && !this.OnSetInvalid(invalid)
-  ){return false;}
-
-  this.Invalid = !!invalid;
-  bbbfly.panel._doChangeState(this,update);
-
-  if(Function.isFunction(this.OnInvalidChanged)){
-    this.OnInvalidChanged();
-  }
-  return true;
-};
-
-/** @ignore */
-bbbfly.panel._setReadOnly = function(readOnly,update){
-  if(readOnly === this.ReadOnly){return true;}
-
-  if(
-    Function.isFunction(this.OnSetReadOnly)
-    && !this.OnSetReadOnly(readOnly)
-  ){return false;}
-
-  this.ReadOnly = !!readOnly;
-  bbbfly.panel._doChangeState(this,update);
-
-  if(Function.isFunction(this.OnReadOnlyChanged)){
-    this.OnReadOnlyChanged();
-  }
-  return true;
 };
 
 /**
@@ -279,7 +319,7 @@ bbbfly.panel._setReadOnly = function(readOnly,update){
  * @extends ngPanel
  *
  * @description
- *   Panel with conditioned frame support.
+ *   Panel with invalid and readonly state support.
  *
  * @inpackage panel
  *
@@ -290,31 +330,39 @@ bbbfly.panel._setReadOnly = function(readOnly,update){
  * @property {boolean} [Enabled=true]
  * @property {boolean} [Invalid=false]
  * @property {boolean} [ReadOnly=false]
- * @property {boolean|bbbfly.Renderer.frame} [Frame=false] - Frame definition
- *   Define frame or set to true before panel creation to support frame
  */
 bbbfly.Panel = function(def,ref,parent){
   def = def || {};
-
-  /**
-   * @definition
-   * @memberof bbbfly.Panel
-   * @property {ngControl} [FramePanel=undefined]
-   * @property {ngControl} [ControlsPanel=undefined]
-   * @property {boolean} [ParentReferences=true]
-   */
 
   ng_MergeDef(def,{
     Data: {
       Enabled: true,
       Invalid: false,
-      ReadOnly: false,
-      Frame: false
+      ReadOnly: false
     },
-    FramePanel: undefined,
-    ControlsPanel: undefined,
     ParentReferences: true,
     Events: {
+      /**
+       * @event
+       * @name OnSetEnabled
+       * @memberof bbbfly.Panel#
+       *
+       * @param {boolean} enabled - Value to set
+       * @return {boolean} Return false to deny value change
+       *
+       * @see {@link bbbfly.Panel#SetEnabled|SetEnabled()}
+       * @see {@link bbbfly.Panel#event:OnEnabledChanged|OnEnabledChanged}
+       */
+      OnSetEnabled: null,
+      /**
+       * @event
+       * @name OnEnabledChanged
+       * @memberof bbbfly.Panel#
+       *
+       * @see {@link bbbfly.Panel#SetEnabled|SetEnabled()}
+       * @see {@link bbbfly.Panel#event:OnSetEnabled|OnSetEnabled}
+       */
+      OnEnabledChanged: null,
       /**
        * @event
        * @name OnSetInvalid
@@ -360,21 +408,11 @@ bbbfly.Panel = function(def,ref,parent){
     },
     Methods: {
       /** @private */
-      DoCreate: bbbfly.panel._doCreate,
-      /** @private */
       DoUpdate: bbbfly.panel._doUpdate,
       /** @private */
-      DoUpdateFrame: bbbfly.panel._doUpdateFrame,
-      /** @private */
-      DoUpdateImages: bbbfly.panel._doUpdateImages,
+      DoChangeState: bbbfly.panel._doChangeState,
       /** @private */
       DoUpdateClassName: bbbfly.panel._doUpdateClassName,
-      /** @private */
-      DoUpdateControlsPanel: bbbfly.panel._doUpdateControlsPanel,
-      /** @private */
-      DoMouseEnter: bbbfly.panel._doMouseEnter,
-      /** @private */
-      DoMouseLeave: bbbfly.panel._doMouseLeave,
 
       /**
        * @function
@@ -386,22 +424,6 @@ bbbfly.Panel = function(def,ref,parent){
       GetState: bbbfly.panel._getState,
       /**
        * @function
-       * @name GetFrame
-       * @memberof bbbfly.Panel#
-       *
-       * @return {frame} Frame definition
-       */
-      GetFrame: bbbfly.panel._getFrame,
-      /**
-       * @function
-       * @name GetFrameDims
-       * @memberof bbbfly.Panel#
-       *
-       * @return {object} Frame dimensions
-       */
-      GetFrameDims: bbbfly.panel._getFrameDims,
-      /**
-       * @function
        * @name GetClassName
        * @memberof bbbfly.Panel#
        *
@@ -409,45 +431,26 @@ bbbfly.Panel = function(def,ref,parent){
        * @return {string} Control class name
        */
       GetClassName: bbbfly.panel._getClassName,
+
       /**
        * @function
-       * @name GetFramePanel
+       * @name SetEnabled
        * @memberof bbbfly.Panel#
        *
-       * @return {object|null} FramePanel control
+       * @param {boolean} [enabled=true] - Value to set
+       * @param {boolean} [update=true] - If update control
+       * @return {boolean} False if change was denied
        *
-       * @see {@link bbbfly.Panel#GetControlsPanel|GetControlsPanel()}
-       * @see {@link bbbfly.Panel#GetControlsHolder|GetControlsHolder()}
+       * @see {@link bbbfly.Panel#event:OnSetEnabled|OnSetEnabled}
+       * @see {@link bbbfly.Panel#event:OnEnabledChanged|OnEnabledChanged}
        */
-      GetFramePanel: bbbfly.panel._getFramePanel,
-      /**
-       * @function
-       * @name GetControlsPanel
-       * @memberof bbbfly.Panel#
-       *
-       * @return {object|null} ControlsPanel control
-       *
-       * @see {@link bbbfly.Panel#GetFramePanel|GetFramePanel()}
-       * @see {@link bbbfly.Panel#GetControlsHolder|GetControlsHolder()}
-       */
-      GetControlsPanel: bbbfly.panel._getControlsPanel,
-      /**
-       * @function
-       * @name GetControlsHolder
-       * @memberof bbbfly.Panel#
-       *
-       * @return {object} ControlsPanel control or self
-       *
-       * @see {@link bbbfly.Panel#GetFramePanel|GetFramePanel()}
-       * @see {@link bbbfly.Panel#GetControlsPanel|GetControlsPanel()}
-       */
-      GetControlsHolder: bbbfly.panel._getControlsHolder,
+      SetEnabled: bbbfly.panel._setEnabled,
       /**
        * @function
        * @name SetInvalid
        * @memberof bbbfly.Panel#
        *
-       * @param {boolean} invalid - Value to set
+       * @param {boolean} [invalid=true] - Value to set
        * @param {boolean} [update=true] - If update control
        * @return {boolean} False if change was denied
        *
@@ -460,7 +463,7 @@ bbbfly.Panel = function(def,ref,parent){
        * @name SetReadOnly
        * @memberof bbbfly.Panel#
        *
-       * @param {boolean} readonly - Value to set
+       * @param {boolean} [readonly=true] - Value to set
        * @param {boolean} [update=true] - If update control
        * @return {boolean} False if change was denied
        *
@@ -474,10 +477,117 @@ bbbfly.Panel = function(def,ref,parent){
   return ngCreateControlAsType(def,'ngPanel',ref,parent);
 };
 
+/**
+ * @class
+ * @type control
+ * @extends bbbfly.Frame
+ *
+ * @description
+ *   Panel with conditioned frame support.
+ *
+ * @inpackage panel
+ *
+ * @param {bbbfly.Panel.definition} [def=undefined] - Descendant definition
+ * @param {object} [ref=undefined] - Reference owner
+ * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
+ *
+ * @property {boolean|bbbfly.Renderer.frame} [Frame=false] - Frame definition
+ *   Define frame or set to true before panel creation to support frame
+ */
+bbbfly.Frame = function(def,ref,parent){
+  def = def || {};
+
+  /**
+   * @definition
+   * @memberof bbbfly.Frame
+   * @property {ngControl} [FramePanel=undefined]
+   * @property {ngControl} [ControlsPanel=undefined]
+   */
+
+  ng_MergeDef(def,{
+    Data: {
+      Frame: false
+    },
+    FramePanel: undefined,
+    ControlsPanel: undefined,
+    Methods: {
+      /** @private */
+      DoCreate: bbbfly.frame._doCreate,
+      /** @private */
+      DoUpdate: bbbfly.frame._doUpdate,
+      /** @private */
+      DoMouseEnter: bbbfly.frame._doMouseEnter,
+      /** @private */
+      DoMouseLeave: bbbfly.frame._doMouseLeave,
+      /** @private */
+      DoChangeState: bbbfly.frame._doChangeState,
+      /** @private */
+      DoUpdateFrame: bbbfly.frame._doUpdateFrame,
+      /** @private */
+      DoUpdateImages: bbbfly.frame._doUpdateImages,
+      /** @private */
+      DoUpdateControlsPanel: bbbfly.frame._doUpdateControlsPanel,
+
+      /**
+       * @function
+       * @name GetFrame
+       * @memberof bbbfly.Frame#
+       *
+       * @return {frame} Frame definition
+       */
+      GetFrame: bbbfly.frame._getFrame,
+      /**
+       * @function
+       * @name GetFrameDims
+       * @memberof bbbfly.Frame#
+       *
+       * @return {object} Frame dimensions
+       */
+      GetFrameDims: bbbfly.frame._getFrameDims,
+      /**
+       * @function
+       * @name GetFramePanel
+       * @memberof bbbfly.Frame#
+       *
+       * @return {object|null} FramePanel control
+       *
+       * @see {@link bbbfly.Frame#GetControlsPanel|GetControlsPanel()}
+       * @see {@link bbbfly.Frame#GetControlsHolder|GetControlsHolder()}
+       */
+      GetFramePanel: bbbfly.frame._getFramePanel,
+      /**
+       * @function
+       * @name GetControlsPanel
+       * @memberof bbbfly.Frame#
+       *
+       * @return {object|null} ControlsPanel control
+       *
+       * @see {@link bbbfly.Frame#GetFramePanel|GetFramePanel()}
+       * @see {@link bbbfly.Frame#GetControlsHolder|GetControlsHolder()}
+       */
+      GetControlsPanel: bbbfly.frame._getControlsPanel,
+      /**
+       * @function
+       * @name GetControlsHolder
+       * @memberof bbbfly.Frame#
+       *
+       * @return {object} ControlsPanel control or self
+       *
+       * @see {@link bbbfly.Frame#GetFramePanel|GetFramePanel()}
+       * @see {@link bbbfly.Frame#GetControlsPanel|GetControlsPanel()}
+       */
+      GetControlsHolder: bbbfly.frame._getControlsHolder
+    }
+  });
+
+  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+};
+
 /** @ignore */
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_panel'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.Panel',bbbfly.Panel);
+    ngRegisterControlType('bbbfly.Frame',bbbfly.Frame);
   }
 };

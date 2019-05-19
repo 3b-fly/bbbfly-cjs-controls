@@ -40,6 +40,7 @@
   - `bbbfly.Menu`
 - **panel**
   - `bbbfly.Panel`
+  - `bbbfly.Frame`
 - **search**
   - `bbbfly.SearchEdit`
   - `bbbfly.SearchBox`

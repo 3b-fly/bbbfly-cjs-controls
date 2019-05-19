@@ -98,7 +98,7 @@ bbbfly.ToolBar = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Frame',ref,parent);
 };
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_layout'] = {

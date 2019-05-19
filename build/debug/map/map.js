@@ -449,7 +449,7 @@ bbbfly.Map = function(def,ref,parent){
     OnCreated: bbbfly.map.map._onCreated,
     Controls: {
       Map: {
-        Type: 'bbbfly.Panel',
+        Type: 'bbbfly.Frame',
         L:0,R:0,T:0,B:0,
         style: {zIndex: 1}
       }
@@ -488,7 +488,7 @@ bbbfly.Map = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Frame',ref,parent);
 };
 bbbfly.Map.layer = {
   image: 'ImageLayer',

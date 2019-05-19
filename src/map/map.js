@@ -504,7 +504,7 @@ bbbfly.map.layer.mapbox_style._oncreateOptions = function(options){
 /**
  * @class
  * @type control
- * @extends bbbfly.Panel
+ * @extends bbbfly.Frame
  *
  * @description
  *   Map control providing easy way to handle Leaflet map.
@@ -584,7 +584,7 @@ bbbfly.Map = function(def,ref,parent){
     OnCreated: bbbfly.map.map._onCreated,
     Controls: {
       Map: {
-        Type: 'bbbfly.Panel',
+        Type: 'bbbfly.Frame',
         L:0,R:0,T:0,B:0,
         style: {zIndex: 1}
       }
@@ -986,7 +986,7 @@ bbbfly.Map = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Frame',ref,parent);
 };
 
 /**

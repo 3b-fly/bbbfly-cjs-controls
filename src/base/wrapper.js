@@ -474,7 +474,7 @@ bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
 /**
  * @class
  * @type control
- * @extends bbbfly.Panel
+ * @extends bbbfly.Frame
  *
  * @description
  *   Panel which handles its child controls position.
@@ -516,7 +516,7 @@ bbbfly.Wrapper = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Frame',ref,parent);
 };
 
 /**

@@ -455,7 +455,7 @@ bbbfly.Wrapper = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Frame',ref,parent);
 };
 bbbfly.Wrapper.orientation = {
   vertical: 1,

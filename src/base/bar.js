@@ -92,14 +92,14 @@ bbbfly.toolbar._ctrlInsertBefore = function(control,before){
 /**
  * @class
  * @type control
- * @extends bbbfly.Panel
+ * @extends bbbfly.Frame
  *
  * @description
  *   ToolBar whith frame.
  *
  * @inpackage bar
  *
- * @param {bbbfly.Panel.definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Frame.definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *
@@ -185,7 +185,7 @@ bbbfly.ToolBar = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Frame',ref,parent);
 };
 
 /** @ignore */

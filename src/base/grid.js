@@ -137,7 +137,7 @@ bbbfly.grid._onUpdated = function(){
 /**
  * @class
  * @type control
- * @extends bbbfly.Panel
+ * @extends bbbfly.Frame
  *
  * @description
  *   Panel which places its child controls in columns grid.
@@ -180,7 +180,7 @@ bbbfly.Grid = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Frame',ref,parent);
 };
 
 /** @ignore */
