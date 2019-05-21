@@ -254,8 +254,8 @@ bbbfly.frame._doUpdateFrame = function(node){
   state.mouseOver = stateOver;
 
   fPanel._FrameProxy = proxy;
-  if(html !== fPanel._FrameHtml){return;}
-  
+  if(html === fPanel._FrameHtml){return;}
+
   fPanel._FrameHtml = html;
   fNode.innerHTML = html;
 
