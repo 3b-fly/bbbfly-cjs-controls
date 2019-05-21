@@ -35,6 +35,9 @@ bbbfly.panel._getClassName = function(className){
   }
   return className;
 };
+bbbfly.panel._getControlsHolder = function(){
+  return this;
+};
 bbbfly.panel._doChangeState = function(update){
   if(update){this.Update();}
   else{this.DoUpdateClassName();}
@@ -265,7 +268,8 @@ bbbfly.frame._getControlsPanel = function(){
   return this.ControlsPanel ? this.ControlsPanel : null;
 };
 bbbfly.frame._getControlsHolder = function(){
-  return this.ControlsPanel ? this.ControlsPanel : this;
+  var cPanel = this.GetControlsPanel();
+  return cPanel ? cPanel : this.GetControlsHolder.callParent();
 };
 bbbfly.Panel = function(def,ref,parent){
   def = def || {};
@@ -291,6 +295,7 @@ bbbfly.Panel = function(def,ref,parent){
       DoUpdateClassName: bbbfly.panel._doUpdateClassName,
       GetState: bbbfly.panel._getState,
       GetClassName: bbbfly.panel._getClassName,
+      GetControlsHolder: bbbfly.panel._getControlsHolder,
       SetEnabled: bbbfly.panel._setEnabled,
       SetInvalid: bbbfly.panel._setInvalid,
       SetReadOnly: bbbfly.panel._setReadOnly

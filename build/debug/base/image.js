@@ -67,7 +67,7 @@ bbbfly.ImagePreview = function(def,ref,parent){
     OnCreated: bbbfly.imagepreview._onCreated,
     Controls: {
       Image: {
-        Type: 'bbbfly.Frame',
+        Type: 'bbbfly.Panel',
         L:0,R:0,T:0,B:0
       }
     },

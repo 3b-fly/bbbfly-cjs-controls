@@ -584,7 +584,7 @@ bbbfly.Map = function(def,ref,parent){
     OnCreated: bbbfly.map.map._onCreated,
     Controls: {
       Map: {
-        Type: 'bbbfly.Frame',
+        Type: 'bbbfly.Panel',
         L:0,R:0,T:0,B:0,
         style: {zIndex: 1}
       }

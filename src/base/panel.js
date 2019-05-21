@@ -48,6 +48,11 @@ bbbfly.panel._getClassName = function(className){
 };
 
 /** @ignore */
+bbbfly.panel._getControlsHolder = function(){
+  return this;
+};
+
+/** @ignore */
 bbbfly.panel._doChangeState = function(update){
   if(update){this.Update();}
   else{this.DoUpdateClassName();}
@@ -310,7 +315,8 @@ bbbfly.frame._getControlsPanel = function(){
 
 /** @ignore */
 bbbfly.frame._getControlsHolder = function(){
-  return this.ControlsPanel ? this.ControlsPanel : this;
+  var cPanel = this.GetControlsPanel();
+  return cPanel ? cPanel : this.GetControlsHolder.callParent();
 };
 
 /**
@@ -431,6 +437,14 @@ bbbfly.Panel = function(def,ref,parent){
        * @return {string} Control class name
        */
       GetClassName: bbbfly.panel._getClassName,
+      /**
+       * @function
+       * @name GetControlsHolder
+       * @memberof bbbfly.Panel#
+       *
+       * @return {object} self
+       */
+      GetControlsHolder: bbbfly.panel._getControlsHolder,
 
       /**
        * @function
