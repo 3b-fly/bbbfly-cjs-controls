@@ -123,7 +123,10 @@ bbbfly.frame._doCreate = function(def,ref,node){
       ScrollBars: ssNone,
       style: { zIndex: 1 },
       className: this.BaseClassName+'FramePanel',
-      Data: { _FrameProxy: null }
+      Data: {
+        _FrameProxy: null,
+        _FrameHtml: ''
+      }
     },
     ControlsPanel: {
       L:0,T:0,R:0,B:0,
@@ -210,8 +213,22 @@ bbbfly.frame._doUpdateFrame = function(node){
   var frame = this.GetFrame();
   var state = this.GetState();
 
-  fPanel._FrameProxy = bbbfly.Renderer.FrameProxy(frame,state,this.ID);
-  fNode.innerHTML = bbbfly.Renderer.FrameHTML(fPanel._FrameProxy,state);
+  var stateOver = state.mouseOver;
+
+  state.mouseOver = false;
+  var proxy = bbbfly.Renderer.FrameProxy(frame,state,this.ID);
+  var html = bbbfly.Renderer.FrameHTML(proxy,state);
+  state.mouseOver = stateOver;
+
+  fPanel._FrameProxy = proxy;
+  if(html !== fPanel._FrameHtml){return;}
+  
+  fPanel._FrameHtml = html;
+  fNode.innerHTML = html;
+
+  if(stateOver){
+    bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+  }
 };
 bbbfly.frame._doUpdateImages = function(){
   var fPanel = this.GetFramePanel();
