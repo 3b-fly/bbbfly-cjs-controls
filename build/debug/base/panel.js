@@ -10,37 +10,56 @@ var bbbfly = bbbfly || {};
 bbbfly.panel = {};
 bbbfly.frame = {};
 bbbfly.panel._doUpdate = function(node){
-  this.DoUpdateClassName(node);
+  this.DoUpdateHtml(node);
   return true;
 };
-bbbfly.panel._doUpdateClassName = function(node){
+bbbfly.panel._doMouseEnter = function(){
+  this.DoUpdateHtml();
+};
+bbbfly.panel._doMouseLeave = function(){
+  this.DoUpdateHtml();
+};
+bbbfly.panel._doUpdateHtml = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
+  if(!node){return;}
+
   node.className = this.GetClassName();
+
+  var state = this.GetState();
+  if(!Object.isObject(state)){state = {};}
+
+  var attrs = {
+    disabled: 'D',
+    invalid: 'I',
+    selected: 'S',
+    grayed: 'G',
+    highlight: 'h',
+    mouseOver: 'o'
+  };
+
+  for(var s in attrs){
+    if(state[s]){node.setAttribute(attrs[s],'1');}
+    else{node.removeAttribute(attrs[s]);}
+  }
 };
 bbbfly.panel._getState = function(){
   return {
     disabled: !this.Enabled,
     invalid: !!this.Invalid,
-    mouseOver: !!(this.MouseInControl && !this.ReadOnly)
+    mouseOver: !!(!this.ReadOnly && ngMouseInControls[this.ID])
   };
 };
 bbbfly.panel._getClassName = function(className){
-  if(String.isString(className)){
-    className = this.BaseClassName+className;
-  }
-  else{
-    className = this.BaseClassName;
-    if(!this.Enabled){className += ' '+className+'Disabled';}
-    else if(this.Invalid){className += ' '+className+'Invalid';}
-  }
-  return className;
+  return String.isString(className)
+    ? this.BaseClassName+className
+    : this.BaseClassName;
 };
 bbbfly.panel._getControlsHolder = function(){
   return this;
 };
 bbbfly.panel._doChangeState = function(update){
   if(update){this.Update();}
-  else{this.DoUpdateClassName();}
+  else{this.DoUpdateHtml();}
 };
 bbbfly.panel._setEnabled = function(enabled,update){
   if(!Boolean.isBoolean(enabled)){enabled = true;}
@@ -55,7 +74,7 @@ bbbfly.panel._setEnabled = function(enabled,update){
   this.SetChildControlsEnabled(enabled,this);
 
   this.Enabled = enabled;
-  this.DoChangeState(this,update);
+  this.DoChangeState(update);
 
   if(Function.isFunction(this.OnEnabledChanged)){
     this.OnEnabledChanged();
@@ -167,6 +186,8 @@ bbbfly.frame._doUpdate = function(node){
   return this.DoUpdate.callParent(node);
 };
 bbbfly.frame._doMouseEnter = function(){
+  this.DoMouseEnter.callParent();
+
   var fPanel = this.GetFramePanel();
   if(!fPanel){return;}
 
@@ -174,11 +195,11 @@ bbbfly.frame._doMouseEnter = function(){
   if(!Object.isObject(proxy)){return;}
 
   var state = this.GetState();
-  if(!this.ReadOnly){state.mouseOver = true;}
-
   bbbfly.Renderer.UpdateFrameHTML(proxy,state);
 };
 bbbfly.frame._doMouseLeave = function(){
+  this.DoMouseLeave.callParent();
+
   var fPanel = this.GetFramePanel();
   if(!fPanel){return;}
 
@@ -186,8 +207,6 @@ bbbfly.frame._doMouseLeave = function(){
   if(!Object.isObject(proxy)){return;}
 
   var state = this.GetState();
-  if(!this.ReadOnly){state.mouseOver = false;}
-
   bbbfly.Renderer.UpdateFrameHTML(proxy,state);
 };
 bbbfly.frame._doChangeState = function(update){
@@ -308,8 +327,10 @@ bbbfly.Panel = function(def,ref,parent){
     },
     Methods: {
       DoUpdate: bbbfly.panel._doUpdate,
+      DoMouseEnter: bbbfly.panel._doMouseEnter,
+      DoMouseLeave: bbbfly.panel._doMouseLeave,
       DoChangeState: bbbfly.panel._doChangeState,
-      DoUpdateClassName: bbbfly.panel._doUpdateClassName,
+      DoUpdateHtml: bbbfly.panel._doUpdateHtml,
       GetState: bbbfly.panel._getState,
       GetClassName: bbbfly.panel._getClassName,
       GetControlsHolder: bbbfly.panel._getControlsHolder,
