@@ -15,43 +15,36 @@ bbbfly.frame = {};
 
 /** @ignore */
 bbbfly.panel._doUpdate = function(node){
-  this.DoUpdateHtml(node);
+  this.DoUpdateHtmlClass(node);
+  this.DoUpdateHtmlState(node);
   return true;
 };
 
 /** @ignore */
-bbbfly.panel._doMouseEnter = function(){
-  this.DoUpdateHtml();
+bbbfly.panel._doMouseEnter = function(event,options){
+  this.DoUpdateHtmlState(options.Element);
 };
 
 /** @ignore */
-bbbfly.panel._doMouseLeave = function(){
-  this.DoUpdateHtml();
+bbbfly.panel._doMouseLeave = function(event,options){
+  this.DoUpdateHtmlState(options.Element);
 };
 
 /** @ignore */
-bbbfly.panel._doUpdateHtml = function(node){
+bbbfly.panel._doUpdateHtmlClass = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
   if(!node){return;}
 
   node.className = this.GetClassName();
+};
+
+/** @ignore */
+bbbfly.panel._doUpdateHtmlState = function(node){
+  if(typeof node === 'undefined'){node = this.Elm();}
+  if(!node){return;}
 
   var state = this.GetState();
-  if(!Object.isObject(state)){state = {};}
-
-  var attrs = {
-    disabled: 'D',
-    invalid: 'I',
-    selected: 'S',
-    grayed: 'G',
-    highlight: 'h',
-    mouseOver: 'o'
-  };
-
-  for(var s in attrs){
-    if(state[s]){node.setAttribute(attrs[s],'1');}
-    else{node.removeAttribute(attrs[s]);}
-  }
+  bbbfly.Renderer.UpdateHTMLState(node,state);
 };
 
 /** @ignore */
@@ -77,8 +70,14 @@ bbbfly.panel._getControlsHolder = function(){
 
 /** @ignore */
 bbbfly.panel._doChangeState = function(update){
-  if(update){this.Update();}
-  else{this.DoUpdateHtml();}
+  if(update){
+    this.Update();
+  }
+  else{
+    var node = this.Elm();
+    this.DoUpdateHtmlClass(node);
+    this.DoUpdateHtmlState(node);
+  }
 };
 
 /** @ignore */
@@ -216,8 +215,8 @@ bbbfly.frame._doUpdate = function(node){
 };
 
 /** @ignore */
-bbbfly.frame._doMouseEnter = function(){
-  this.DoMouseEnter.callParent();
+bbbfly.frame._doMouseEnter = function(event,options){
+  this.DoMouseEnter.callParent(event,options);
 
   var fPanel = this.GetFramePanel();
   if(!fPanel){return;}
@@ -230,8 +229,8 @@ bbbfly.frame._doMouseEnter = function(){
 };
 
 /** @ignore */
-bbbfly.frame._doMouseLeave = function(){
-  this.DoMouseLeave.callParent();
+bbbfly.frame._doMouseLeave = function(event,options){
+  this.DoMouseLeave.callParent(event,options);
 
   var fPanel = this.GetFramePanel();
   if(!fPanel){return;}
@@ -462,7 +461,9 @@ bbbfly.Panel = function(def,ref,parent){
       /** @private */
       DoChangeState: bbbfly.panel._doChangeState,
       /** @private */
-      DoUpdateHtml: bbbfly.panel._doUpdateHtml,
+      DoUpdateHtmlClass: bbbfly.panel._doUpdateHtmlClass,
+      /** @private */
+      DoUpdateHtmlState: bbbfly.panel._doUpdateHtmlState,
 
       /**
        * @function

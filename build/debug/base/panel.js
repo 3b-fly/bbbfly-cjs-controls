@@ -10,37 +10,28 @@ var bbbfly = bbbfly || {};
 bbbfly.panel = {};
 bbbfly.frame = {};
 bbbfly.panel._doUpdate = function(node){
-  this.DoUpdateHtml(node);
+  this.DoUpdateHtmlClass(node);
+  this.DoUpdateHtmlState(node);
   return true;
 };
-bbbfly.panel._doMouseEnter = function(){
-  this.DoUpdateHtml();
+bbbfly.panel._doMouseEnter = function(event,options){
+  this.DoUpdateHtmlState(options.Element);
 };
-bbbfly.panel._doMouseLeave = function(){
-  this.DoUpdateHtml();
+bbbfly.panel._doMouseLeave = function(event,options){
+  this.DoUpdateHtmlState(options.Element);
 };
-bbbfly.panel._doUpdateHtml = function(node){
+bbbfly.panel._doUpdateHtmlClass = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
   if(!node){return;}
 
   node.className = this.GetClassName();
+};
+bbbfly.panel._doUpdateHtmlState = function(node){
+  if(typeof node === 'undefined'){node = this.Elm();}
+  if(!node){return;}
 
   var state = this.GetState();
-  if(!Object.isObject(state)){state = {};}
-
-  var attrs = {
-    disabled: 'D',
-    invalid: 'I',
-    selected: 'S',
-    grayed: 'G',
-    highlight: 'h',
-    mouseOver: 'o'
-  };
-
-  for(var s in attrs){
-    if(state[s]){node.setAttribute(attrs[s],'1');}
-    else{node.removeAttribute(attrs[s]);}
-  }
+  bbbfly.Renderer.UpdateHTMLState(node,state);
 };
 bbbfly.panel._getState = function(){
   return {
@@ -58,8 +49,14 @@ bbbfly.panel._getControlsHolder = function(){
   return this;
 };
 bbbfly.panel._doChangeState = function(update){
-  if(update){this.Update();}
-  else{this.DoUpdateHtml();}
+  if(update){
+    this.Update();
+  }
+  else{
+    var node = this.Elm();
+    this.DoUpdateHtmlClass(node);
+    this.DoUpdateHtmlState(node);
+  }
 };
 bbbfly.panel._setEnabled = function(enabled,update){
   if(!Boolean.isBoolean(enabled)){enabled = true;}
@@ -185,8 +182,8 @@ bbbfly.frame._doUpdate = function(node){
   this.DoUpdateControlsPanel(node);
   return this.DoUpdate.callParent(node);
 };
-bbbfly.frame._doMouseEnter = function(){
-  this.DoMouseEnter.callParent();
+bbbfly.frame._doMouseEnter = function(event,options){
+  this.DoMouseEnter.callParent(event,options);
 
   var fPanel = this.GetFramePanel();
   if(!fPanel){return;}
@@ -197,8 +194,8 @@ bbbfly.frame._doMouseEnter = function(){
   var state = this.GetState();
   bbbfly.Renderer.UpdateFrameHTML(proxy,state);
 };
-bbbfly.frame._doMouseLeave = function(){
-  this.DoMouseLeave.callParent();
+bbbfly.frame._doMouseLeave = function(event,options){
+  this.DoMouseLeave.callParent(event,options);
 
   var fPanel = this.GetFramePanel();
   if(!fPanel){return;}
@@ -330,7 +327,8 @@ bbbfly.Panel = function(def,ref,parent){
       DoMouseEnter: bbbfly.panel._doMouseEnter,
       DoMouseLeave: bbbfly.panel._doMouseLeave,
       DoChangeState: bbbfly.panel._doChangeState,
-      DoUpdateHtml: bbbfly.panel._doUpdateHtml,
+      DoUpdateHtmlClass: bbbfly.panel._doUpdateHtmlClass,
+      DoUpdateHtmlState: bbbfly.panel._doUpdateHtmlState,
       GetState: bbbfly.panel._getState,
       GetClassName: bbbfly.panel._getClassName,
       GetControlsHolder: bbbfly.panel._getControlsHolder,
