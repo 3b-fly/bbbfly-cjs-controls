@@ -36,8 +36,13 @@ bbbfly.panel._doUpdateHtmlState = function(node){
 bbbfly.panel._getState = function(){
   return {
     disabled: !this.Enabled,
+    readonly: !!this.ReadOnly,
     invalid: !!this.Invalid,
-    mouseOver: !!(!this.ReadOnly && ngMouseInControls[this.ID])
+
+    mouseover: !!(
+      this.Enabled && !this.ReadOnly
+      && ngMouseInControls[this.ID]
+    )
   };
 };
 bbbfly.panel._getClassName = function(className){
@@ -229,12 +234,12 @@ bbbfly.frame._doUpdateFrame = function(node){
   var frame = this.GetFrame();
   var state = this.GetState();
 
-  var stateOver = state.mouseOver;
+  var over = state.mouseover;
 
-  state.mouseOver = false;
+  state.mouseover = false;
   var proxy = bbbfly.Renderer.FrameProxy(frame,state,this.ID);
   var html = bbbfly.Renderer.FrameHTML(proxy,state);
-  state.mouseOver = stateOver;
+  state.mouseover = over;
 
   fPanel._FrameProxy = proxy;
   if(html === fPanel._FrameHtml){return;}
@@ -242,7 +247,7 @@ bbbfly.frame._doUpdateFrame = function(node){
   fPanel._FrameHtml = html;
   fNode.innerHTML = html;
 
-  if(stateOver){
+  if(over){
     bbbfly.Renderer.UpdateFrameHTML(proxy,state);
   }
 };
