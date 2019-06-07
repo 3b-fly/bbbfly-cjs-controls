@@ -12,6 +12,8 @@ var bbbfly = bbbfly || {};
 bbbfly.panel = {};
 /** @ignore */
 bbbfly.frame = {};
+/** @ignore */
+bbbfly.line = {};
 
 /** @ignore */
 bbbfly.panel._doUpdate = function(node){
@@ -363,13 +365,25 @@ bbbfly.frame._getControlsHolder = function(){
   return cPanel ? cPanel : this.GetControlsHolder.callParent();
 };
 
+/** @ignore */
+bbbfly.line._setBounds = function(bounds){
+  if(Object.isObject(bounds)){
+    switch(this.Orientation){
+      case bbbfly.Line.orientation.horizontal: delete bounds.H; break;
+      case bbbfly.Line.orientation.vertical: delete bounds.W; break;
+    }
+  }
+
+  return this.SetBounds.callParent(bounds);
+};
+
 /**
  * @class
  * @type control
  * @extends ngPanel
  *
  * @description
- *   Panel with invalid and readonly state support.
+ *   Panel with basic states support.
  *
  * @inpackage panel
  *
@@ -647,11 +661,54 @@ bbbfly.Frame = function(def,ref,parent){
   return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
 };
 
+/**
+ * @class
+ * @type control
+ * @extends bbbfly.Frame
+ *
+ * @description
+ *   Frame control with fixed dimension in one direction.
+ *
+ * @inpackage panel
+ *
+ * @param {bbbfly.Panel.definition} [def=undefined] - Descendant definition
+ * @param {object} [ref=undefined] - Reference owner
+ * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
+ *
+ * @property {bbbfly.Line.orientation} [Orientation=horizontal]
+ */
+bbbfly.Line = function(def,ref,parent){
+  def = def || {};
+
+  ng_MergeDef(def,{
+    Data: {
+      Orientation: bbbfly.Line.orientation.horizontal
+    },
+    Methods: {
+      /** @private */
+      SetBounds: bbbfly.line._setBounds
+    }
+  });
+
+  return ngCreateControlAsType(def,'bbbfly.Frame',ref,parent);
+};
+
+/**
+ * @enum {integer}
+ * @description
+ *   Possible values for {@link bbbfly.Line.Orientation}
+ */
+bbbfly.Line.orientation = {
+  vertical: 1,
+  horizontal: 2
+};
+
 /** @ignore */
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_panel'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.Panel',bbbfly.Panel);
     ngRegisterControlType('bbbfly.Frame',bbbfly.Frame);
+    ngRegisterControlType('bbbfly.Line',bbbfly.Line);
   }
 };

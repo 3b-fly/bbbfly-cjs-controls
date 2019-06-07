@@ -41,6 +41,7 @@
 - **panel**
   - `bbbfly.Panel`
   - `bbbfly.Frame`
+  - `bbbfly.Line`
 - **search**
   - `bbbfly.SearchEdit`
   - `bbbfly.SearchBox`
