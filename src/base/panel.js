@@ -174,7 +174,7 @@ bbbfly.frame._doCreate = function(def,ref,node){
       id: this.ID + '_F',
       ScrollBars: ssNone,
       style: { zIndex: 1 },
-      className: 'FramePanel',
+      className: this.BaseClassName+'FramePanel',
       Data: {
         _FrameProxy: null,
         _FrameHtml: ''
@@ -188,7 +188,7 @@ bbbfly.frame._doCreate = function(def,ref,node){
       style: { zIndex: 2 },
       Controls: def.Controls,
       ModifyControls: def.ModifyControls,
-      className: 'ControlsPanel'
+      className: this.BaseClassName+'ControlsPanel'
     }
   });
 
