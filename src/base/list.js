@@ -15,49 +15,56 @@ bbbfly.dropdownlist = {};
 
 /** @ignore */
 bbbfly.list._normalizeColumns = function(def){
-  if(def.Data.Columns){
-    if(Object.isObject(def.Data.Columns)){
-      var columns = new Array();
-      for(var id in def.Data.Columns){
-        var column = def.Data.Columns[id];
-        ng_MergeVar(column,{
-          ID: id,
-          Align: 'left'
-        });
-        columns.push(column);
-      }
-      def.Data.Columns = columns;
-    }
+  def.Data.Columns = bbbfly.list._columnsToArray(def.Data.Columns);
+};
+
+/** @ignore */
+bbbfly.list._columnsToArray = function(columns){
+  if(Array.isArray(columns)){return columns;}
+  if(!Object.isObject(columns)){return new Array();}
+
+  var resultColumns = new Array();
+
+  for(var id in columns){
+    var column = columns[id];
+    ng_MergeVar(column,{
+      ID: id,
+      Align: 'left'
+    });
+    resultColumns.push(column);
   }
-  else{
-    def.Data.Columns = new Array();
-  }
+  return resultColumns;
 };
 
 /** @ignore */
 bbbfly.list._normalizeItems = function(def){
+  def.Data.Items = bbbfly.list._itemsToArray(def.Data.Items);
+};
 
-  var itemsToArray = function(items){
-    if(Array.isArray(items)){
-      return items;
+/** @ignore */
+bbbfly.list._itemsToArray = function(items){
+  if(Array.isArray(items)){return items;}
+  if(!Object.isObject(items)){return new Array();}
+
+  var resultItems = new Array();
+
+  for(var name in items){
+    var itemGroup = items[name];
+
+    if(resultItems.length > 0){
+      resultItems.push({Text: '-'});
     }
-    else if(Object.isObject(items)){
-      var resultItems = new Array();
-      for(var name in items){
-        var itemGroup = items[name];
-        if(resultItems.length > 0){resultItems.push({Text: '-'});}
-        for(var id in itemGroup){
-          var item = itemGroup[id];
-          if(item.Items){item.Items = itemsToArray(item.Items);}
-          resultItems.push(item);
-        }
+
+    for(var id in itemGroup){
+      var item = itemGroup[id];
+
+      if(item.Items){
+        item.Items = bbbfly.list._itemsToArray(item.Items);
       }
-      return resultItems;
+      resultItems.push(item);
     }
-    return new Array();
-  };
-
-  def.Data.Items = itemsToArray(def.Data.Items);
+  }
+  return resultItems;
 };
 
 /** @ignore */
