@@ -133,7 +133,7 @@ bbbfly.hint.hintified._onUpdated = function(){
  *   Modifies passed defintion to make control
  *   implement {@link bbbfly.hint.Hintified|Hintified} interface.
  *
- * @param {object} [def=undefined] - Control definition
+ * @param {ngControl.Definition} [def=undefined] - Control definition
  * @return {object} Control definition
  */
 bbbfly.hint.Hintify = function(def){

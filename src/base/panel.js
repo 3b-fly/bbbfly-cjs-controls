@@ -387,7 +387,7 @@ bbbfly.line._setBounds = function(bounds){
  *
  * @inpackage panel
  *
- * @param {bbbfly.Panel.definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Panel.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -558,14 +558,14 @@ bbbfly.Panel = function(def,ref,parent){
 /**
  * @class
  * @type control
- * @extends bbbfly.Frame
+ * @extends bbbfly.Panel
  *
  * @description
  *   Panel with conditioned frame support.
  *
  * @inpackage panel
  *
- * @param {bbbfly.Panel.definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Frame.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -574,13 +574,6 @@ bbbfly.Panel = function(def,ref,parent){
  */
 bbbfly.Frame = function(def,ref,parent){
   def = def || {};
-
-  /**
-   * @definition
-   * @memberof bbbfly.Frame
-   * @property {ngControl} [FramePanel=undefined]
-   * @property {ngControl} [ControlsPanel=undefined]
-   */
 
   ng_MergeDef(def,{
     Data: {
@@ -671,7 +664,7 @@ bbbfly.Frame = function(def,ref,parent){
  *
  * @inpackage panel
  *
- * @param {bbbfly.Panel.definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Frame.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -712,3 +705,22 @@ ngUserControls['bbbfly_panel'] = {
     ngRegisterControlType('bbbfly.Line',bbbfly.Line);
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.Panel
+ * @extends ngControl.Definition
+ *
+ * @description Panel control definition
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.Frame
+ * @extends bbbfly.Panel.Definition
+ *
+ * @description Frame control definition
+ *
+ * @property {ngControl.Definition} [FramePanel=undefined] - Control definition
+ * @property {ngControl.Definition} [ControlsPanel=undefined] - Control definition
+ */

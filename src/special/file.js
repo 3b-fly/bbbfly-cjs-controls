@@ -261,7 +261,7 @@ bbbfly.fileuploader._maxCnt = function(value){
  *
  * @inpackage file
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {ngControl.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *

@@ -332,7 +332,7 @@ bbbfly.dropdownlist._onReadOnlyChanged = function(edit,readOnly){
  *
  * @inpackage list
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {bbbfly.List.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -489,7 +489,7 @@ bbbfly.List = function(def,ref,parent){
  *
  * @inpackage list
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {ngControl.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -571,6 +571,17 @@ ngUserControls['bbbfly_list'] = {
     ngRegisterControlType('bbbfly.DropDownList',bbbfly.DropDownList);
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.List
+ * @extends ngControl.Definition
+ *
+ * @description Menu control definition
+ *
+ * @property {array|object} [Columns=null] - Define columns as object to allow their merging
+ * @property {array|object} [Items=null] - Define items as object to allow their merging
+ */
 
 /**
  * @typedef {ngListItem} ListItem

@@ -135,18 +135,14 @@ bbbfly.memo._onGetClassName = function(memo,part){
  *
  * @inpackage edit
  *
- * @param {bbbfly.Edit.definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Edit.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  * @param {string} [parentType='ngMemo'] - Ancestor type
  */
 bbbfly.Edit = function(def,ref,parent,parentType){
   def = def || {};
-  /**
-   * @definition
-   * @memberof bbbfly.Edit
-   * @property {array|object} [Buttons=null] - Define buttons as object to allow their merging
-   */
+
   ng_MergeDef(def,{
     Buttons: null,
     Events: {
@@ -215,7 +211,7 @@ bbbfly.Edit = function(def,ref,parent,parentType){
  *
  * @inpackage edit
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {ngControl.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -322,4 +318,14 @@ ngUserControls['bbbfly_edit'] = {
  *   Any {@link bbbfly.Edit|Edit} child button can implement this interface.
  *
  * @property {string} [ButtonId=null] - ID unique per edit
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.Edit
+ * @extends ngControl.Definition
+ *
+ * @description Edit control definition
+ *
+ * @property {array|object} [Buttons=null] - Define buttons as object to allow their merging
  */

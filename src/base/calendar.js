@@ -21,7 +21,7 @@ var bbbfly = bbbfly || {};
  *
  * @inpackage calendar
  *
- * @param {bbbfly.Edit.definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Edit.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
@@ -44,7 +44,7 @@ bbbfly.EditDate = function(def,ref,parent){
  *
  * @inpackage calendar
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {bbbfly.Edit.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */

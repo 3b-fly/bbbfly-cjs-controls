@@ -79,7 +79,7 @@ bbbfly.imagepreview._onCreated = function(ctrl){
  *
  * @inpackage image
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {bbbfly.Frame.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *

@@ -55,7 +55,7 @@ bbbfly.menu._onSubMenuClick = function(){
  *
  * @inpackage menu
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {bbbfly.Menu.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -81,3 +81,13 @@ ngUserControls['bbbfly_menu'] = {
     ngRegisterControlType('bbbfly.Menu',bbbfly.Menu);
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.Menu
+ * @extends ngControl.Definition
+ *
+ * @description Menu control definition
+ *
+ * @property {array|object} [Items=null] - Define items as object to allow their merging
+ */

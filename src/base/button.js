@@ -21,7 +21,7 @@ var bbbfly = bbbfly || {};
  *
  * @inpackage button
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {ngControl.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
@@ -43,7 +43,7 @@ bbbfly.Button = function(def,ref,parent){
  *
  * @inpackage button
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {ngControl.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
@@ -65,7 +65,7 @@ bbbfly.CheckBox = function(def,ref,parent){
  *
  * @inpackage button
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {ngControl.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */

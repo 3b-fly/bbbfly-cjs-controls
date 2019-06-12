@@ -99,6 +99,7 @@ bbbfly.memo._onGetClassName = function(memo,part){
 };
 bbbfly.Edit = function(def,ref,parent,parentType){
   def = def || {};
+
   ng_MergeDef(def,{
     Buttons: null,
     Events: {
@@ -154,12 +155,3 @@ ngUserControls['bbbfly_edit'] = {
     ngRegisterControlType('bbbfly.Memo',bbbfly.Memo);
   }
 };
-
-/**
- * @interface Button
- * @memberOf bbbfly.Edit
- * @description
- *   Any {@link bbbfly.Edit|Edit} child button can implement this interface.
- *
- * @property {string} [ButtonId=null] - ID unique per edit
- */

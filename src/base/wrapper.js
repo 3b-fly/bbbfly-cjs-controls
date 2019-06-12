@@ -483,7 +483,7 @@ bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
  *
  * @inpackage wrapper
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {bbbfly.Frame.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *
