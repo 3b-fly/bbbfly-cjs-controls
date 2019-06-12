@@ -13,31 +13,34 @@ bbbfly.menu = {};
 
 /** @ignore */
 bbbfly.menu._normalizeItems = function(def){
+  def.Data.Items = bbbfly.menu._itemsToArray(def.Data.Items);
+};
 
-  var itemsToArray = function(items){
-    if(Array.isArray(items)){
-      return items;
+/** @ignore */
+bbbfly.menu._itemsToArray = function(items){
+  if(Array.isArray(items)){return items;}
+  if(!Object.isObject(items)){return new Array();}
+
+  var resultItems = new Array();
+
+  for(var name in items){
+    var itemGroup = items[name];
+
+    if(resultItems.length > 0){
+      resultItems.push({Text: '-'});
     }
-    else if(Object.isObject(items)){
-      var resultItems = new Array();
-      for(var name in items){
-        var itemGroup = items[name];
-        if(resultItems.length > 0){resultItems.push({Text: '-'});}
-        for(var id in itemGroup){
-          var item = itemGroup[id];
-          if(item.SubMenu){
-            item.SubMenu = itemsToArray(item.SubMenu);
-            ng_MergeVar(item,{OnClick: bbbfly.menu._onSubMenuClick});
-          }
-          resultItems.push(item);
-        }
+
+    for(var id in itemGroup){
+      var item = itemGroup[id];
+
+      if(item.SubMenu){
+        item.SubMenu = bbbfly.menu._itemsToArray(item.SubMenu);
+        ng_MergeVar(item,{OnClick: bbbfly.menu._onSubMenuClick});
       }
-      return resultItems;
+      resultItems.push(item);
     }
-    return new Array();
-  };
-
-  def.Data.Items = itemsToArray(def.Data.Items);
+  }
+  return resultItems;
 };
 
 /** @ignore */
