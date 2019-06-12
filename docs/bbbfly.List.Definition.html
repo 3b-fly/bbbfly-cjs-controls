@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Interface: Layer</title>
+    <title>Interface: Definition</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -946,6 +946,18 @@
         <li data-name="DefaultLayer">
           <a href="bbbfly.Map.html#property:DefaultLayer">DefaultLayer</a>
         </li>
+        <li data-name="DefaultLayer.ZIndex">
+          <a href="bbbfly.Map.html#property:DefaultLayer.ZIndex">DefaultLayer.ZIndex</a>
+        </li>
+        <li data-name="DefaultLayer.Opacity">
+          <a href="bbbfly.Map.html#property:DefaultLayer.Opacity">DefaultLayer.Opacity</a>
+        </li>
+        <li data-name="DefaultLayer.ClassName">
+          <a href="bbbfly.Map.html#property:DefaultLayer.ClassName">DefaultLayer.ClassName</a>
+        </li>
+        <li data-name="DefaultLayer.CrossOrigin">
+          <a href="bbbfly.Map.html#property:DefaultLayer.CrossOrigin">DefaultLayer.CrossOrigin</a>
+        </li>
     </ul>
     <ul class="members itemMembers">
       <span class="subtitle">Members</span>
@@ -1688,13 +1700,13 @@
 <section class="kind-interface">
 <header>
     <h1 class="name">
-          <span class="ancestors"><a href="bbbfly.html">bbbfly</a><a href="bbbfly.Map.html">.Map</a>.</span>
-        Layer
+          <span class="ancestors"><a href="bbbfly.html">bbbfly</a><a href="bbbfly.List.html">.List</a>.</span>
+        Definition
     </h1>
 </header>
 <article>
     <div class="container-overview">
-            <div class="description">Ancestor for all Leaflet layer definitions.</div>
+            <div class="description">Menu control definition</div>
 <dl class="details">
     <h3>Properties</h3>
     <table class="props" my="test">
@@ -1702,104 +1714,43 @@
         <tr>
             <th>Name</th>
             <th>Type</th>
+            <th>Default</th>
             <th class="last">Description</th>
         </tr>
         </thead>
         <tbody>
-            <tr id="property:Id">
+            <tr id="property:Columns">
                     <td class="name">
-                      <span class="param-name">Id</span>
+                      <span class="param-name">Columns</span>
                     </td>
                 <td class="type">
-<span class="param-type">string</span>
-                </td>
-                <td class="description last">
-                  Layer can be accesses by this ID
-                </td>
-            </tr>
-            <tr id="property:Type">
-                    <td class="name">
-                      <span class="param-name">Type</span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="bbbfly.Map.html#.layer">bbbfly.Map.layer</a></span>
-                </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:Url">
-                    <td class="name">
-                      <span class="param-name">Url</span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#url">url</a></span>
-                </td>
-                <td class="description last">
-                  Url used for tile requests
-                </td>
-            </tr>
-            <tr id="property:CrossOrigin">
-                    <td class="name">
-                      <span class="param-name">CrossOrigin</span>
-                    </td>
-                <td class="type">
-<span class="param-type">boolean</span>
+<span class="param-type">array</span>
 |
-<span class="param-type">string</span>
+<span class="param-type">object</span>
                 </td>
+                    <td class="default">
+                        null
+                    </td>
                 <td class="description last">
                         <span class="optional">optional</span>
-                  Will be added to tile requests
+                  Define columns as object to allow their merging
                 </td>
             </tr>
-            <tr id="property:ZIndex">
+            <tr id="property:Items">
                     <td class="name">
-                      <span class="param-name">ZIndex</span>
+                      <span class="param-name">Items</span>
                     </td>
                 <td class="type">
-<span class="param-type">number</span>
-                </td>
-                <td class="description last">
-                        <span class="optional">optional</span>
-                  Layer z-index
-                </td>
-            </tr>
-            <tr id="property:Opacity">
-                    <td class="name">
-                      <span class="param-name">Opacity</span>
-                    </td>
-                <td class="type">
-<span class="param-type">number</span>
-                </td>
-                <td class="description last">
-                        <span class="optional">optional</span>
-                  Layer opacity
-                </td>
-            </tr>
-            <tr id="property:ClassName">
-                    <td class="name">
-                      <span class="param-name">ClassName</span>
-                    </td>
-                <td class="type">
-<span class="param-type">string</span>
-                </td>
-                <td class="description last">
-                        <span class="optional">optional</span>
-                  Layer element CSS class name
-                </td>
-            </tr>
-            <tr id="property:Attribution">
-                    <td class="name">
-                      <span class="param-name">Attribution</span>
-                    </td>
-                <td class="type">
-<span class="param-type">string</span>
+<span class="param-type">array</span>
 |
-<span class="param-type">Array.&lt;string></span>
+<span class="param-type">object</span>
                 </td>
+                    <td class="default">
+                        null
+                    </td>
                 <td class="description last">
                         <span class="optional">optional</span>
-                  Layer copyright attribution
+                  Define items as object to allow their merging
                 </td>
             </tr>
         </tbody>
@@ -1808,6 +1759,10 @@
 <dl class="details">
 </dl>
     </div>
+        <h3>Extends</h3>
+        <ul>
+            <li>ngControl.Definition</li>
+        </ul>
 </article>
 </section>
         <footer>
