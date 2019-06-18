@@ -46,9 +46,9 @@ bbbfly.panel._getState = function(){
     )
   };
 };
-bbbfly.panel._getClassName = function(className){
-  return String.isString(className)
-    ? this.BaseClassName+className
+bbbfly.panel._getClassName = function(suffix){
+  return String.isString(suffix)
+    ? this.BaseClassName+suffix
     : this.BaseClassName;
 };
 bbbfly.panel._getControlsHolder = function(){

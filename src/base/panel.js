@@ -64,9 +64,9 @@ bbbfly.panel._getState = function(){
 };
 
 /** @ignore */
-bbbfly.panel._getClassName = function(className){
-  return String.isString(className)
-    ? this.BaseClassName+className
+bbbfly.panel._getClassName = function(suffix){
+  return String.isString(suffix)
+    ? this.BaseClassName+suffix
     : this.BaseClassName;
 };
 
@@ -497,7 +497,7 @@ bbbfly.Panel = function(def,ref,parent){
        * @name GetClassName
        * @memberof bbbfly.Panel#
        *
-       * @param {string} [className=undefined] - Control part class name
+       * @param {string} [suffix=undefined] - Control part class name
        * @return {string} Control class name
        */
       GetClassName: bbbfly.panel._getClassName,
