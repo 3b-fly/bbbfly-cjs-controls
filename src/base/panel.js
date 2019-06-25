@@ -155,42 +155,47 @@ bbbfly.panel._setReadOnly = function(readOnly,update){
 bbbfly.frame._doCreate = function(def,ref,node){
   if(!this.Frame){return;}
 
-  var refDef = {
-    FramePanel: {},
-    ControlsPanel: {}
-  };
+  var refDef = {};
 
+  if(def.FramePanel !== null){
     if(Object.isObject(def.FramePanel)){
-    refDef.FramePanel = def.FramePanel;
+      refDef.FramePanel = ng_CopyVar(def.FramePanel);
     }
-  if(Object.isObject(def.ControlsPanel)){
-    refDef.ControlsPanel = def.ControlsPanel;
+
+    ng_MergeDef(refDef,{
+      FramePanel: {
+        L:0,T:0,R:0,B:0,
+        Type: 'bbbfly.Panel',
+        id: this.ID + '_F',
+        ScrollBars: ssNone,
+        style: { zIndex: 1 },
+        className: 'FramePanel',
+        Data: {
+          _FrameProxy: null,
+          _FrameHtml: ''
+        }
+      }
+    });
   }
 
-  ng_MergeDef(refDef,{
-    FramePanel: {
-      L:0,T:0,R:0,B:0,
-      Type: 'bbbfly.Panel',
-      id: this.ID + '_F',
-      ScrollBars: ssNone,
-      style: { zIndex: 1 },
-      className: 'FramePanel',
-      Data: {
-        _FrameProxy: null,
-        _FrameHtml: ''
-      }
-    },
-    ControlsPanel: {
-      L:0,T:0,R:0,B:0,
-      Type: 'bbbfly.Panel',
-      id: this.ID + '_P',
-      ScrollBars: ssAuto,
-      style: { zIndex: 2 },
-      Controls: def.Controls,
-      ModifyControls: def.ModifyControls,
-      className: 'ControlsPanel'
+  if(def.ControlsPanel !== null){
+    if(Object.isObject(def.ControlsPanel)){
+      refDef.ControlsPanel = ng_CopyVar(def.ControlsPanel);
     }
-  });
+
+    ng_MergeDef(refDef,{
+      ControlsPanel: {
+        L:0,T:0,R:0,B:0,
+        Type: 'bbbfly.Panel',
+        id: this.ID + '_P',
+        ScrollBars: ssAuto,
+        style: { zIndex: 2 },
+        Controls: def.Controls,
+        ModifyControls: def.ModifyControls,
+        className: 'ControlsPanel'
+      }
+    });
+  }
 
   if(!def.ParentReferences){
     this.Controls = {};
@@ -200,11 +205,15 @@ bbbfly.frame._doCreate = function(def,ref,node){
 
   var refs = ngCreateControls(refDef,undefined,node);
 
-  this.ControlsPanel = refs.ControlsPanel;
-  this.ControlsPanel.Owner = this;
+  if(refs.ControlsPanel){
+    this.ControlsPanel = refs.ControlsPanel;
+    this.ControlsPanel.Owner = this;
+  }
 
-  this.FramePanel = refs.FramePanel;
-  this.FramePanel.Owner = this;
+  if(refs.FramePanel){
+    this.FramePanel = refs.FramePanel;
+    this.FramePanel.Owner = this;
+  }
 
   delete def.Controls;
   delete def.ModifyControls;
