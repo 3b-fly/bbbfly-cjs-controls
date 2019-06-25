@@ -315,11 +315,18 @@ bbbfly.frame._getControlsHolder = function(){
   return cPanel ? cPanel : this.GetControlsHolder.callParent();
 };
 bbbfly.line._setBounds = function(bounds){
-  if(Object.isObject(bounds)){
-    switch(this.Orientation){
-        case bbbfly.Line.orientation.horizontal: delete bounds.H; break;
-        case bbbfly.Line.orientation.vertical: delete bounds.W; break;
-    }
+  if(!Object.isObject(bounds)){bounds = {};}
+  var dims = this.GetFrameDims();
+
+  switch(this.Orientation){
+    case bbbfly.Line.orientation.horizontal:
+      bounds.H = dims.T+dims.B;
+      if(Number.isInteger(dims.H)){bounds.H += dims.H;}
+    break;
+    case bbbfly.Line.orientation.vertical:
+      bounds.W = dims.L+dims.R;
+      if(Number.isInteger(dims.W)){bounds.W += dims.W;}
+    break;
   }
 
   return this.SetBounds.callParent(bounds);
