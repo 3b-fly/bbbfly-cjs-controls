@@ -130,9 +130,9 @@ bbbfly.frame._doCreate = function(def,ref,node){
     ControlsPanel: {}
   };
 
-  if(Object.isObject(def.FramePanel)){
+    if(Object.isObject(def.FramePanel)){
     refDef.FramePanel = def.FramePanel;
-  }
+    }
   if(Object.isObject(def.ControlsPanel)){
     refDef.ControlsPanel = def.ControlsPanel;
   }
@@ -289,14 +289,18 @@ bbbfly.frame._getFrame = function(){
   return (Object.isObject(this.Frame) ? this.Frame : {});
 };
 bbbfly.frame._getFrameDims = function(){
-  var dims = { L:0, T:0, R:0, B:0 };
+  var dims = { L:0, T:0, R:0, B:0, W:undefined, H:undefined };
 
   var fPanel = this.GetFramePanel();
-  if(fPanel && Object.isObject(fPanel._FrameProxy)){
-    dims.L = fPanel._FrameProxy.L.W;
-    dims.T = fPanel._FrameProxy.T.H;
-    dims.R = fPanel._FrameProxy.R.W;
-    dims.B = fPanel._FrameProxy.B.H;
+  var fProxy = (fPanel) ? fPanel._FrameProxy : null;
+
+  if(Object.isObject(fProxy)){
+    if(Number.isInteger(fProxy.L.W)){dims.L = fProxy.L.W;}
+    if(Number.isInteger(fProxy.T.H)){dims.T = fProxy.T.H;}
+    if(Number.isInteger(fProxy.R.W)){dims.R = fProxy.R.W;}
+    if(Number.isInteger(fProxy.B.H)){dims.B = fProxy.B.H;}
+    if(Number.isInteger(fProxy.C.W)){dims.W = fProxy.C.W;}
+    if(Number.isInteger(fProxy.C.H)){dims.H = fProxy.C.H;}
   }
   return dims;
 };
@@ -313,8 +317,8 @@ bbbfly.frame._getControlsHolder = function(){
 bbbfly.line._setBounds = function(bounds){
   if(Object.isObject(bounds)){
     switch(this.Orientation){
-      case bbbfly.Line.orientation.horizontal: delete bounds.H; break;
-      case bbbfly.Line.orientation.vertical: delete bounds.W; break;
+        case bbbfly.Line.orientation.horizontal: delete bounds.H; break;
+        case bbbfly.Line.orientation.vertical: delete bounds.W; break;
     }
   }
 
