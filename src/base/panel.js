@@ -55,6 +55,7 @@ bbbfly.panel._getState = function(){
     disabled: !this.Enabled,
     readonly: !!this.ReadOnly,
     invalid: !!this.Invalid,
+    selected: !!this.Selected,
 
     mouseover: !!(
       this.Enabled && !this.ReadOnly
@@ -147,6 +148,27 @@ bbbfly.panel._setReadOnly = function(readOnly,update){
 
   if(Function.isFunction(this.OnReadOnlyChanged)){
     this.OnReadOnlyChanged();
+  }
+  return true;
+};
+
+/** @ignore */
+bbbfly.panel._setSelected = function(selected,update){
+  if(!Boolean.isBoolean(selected)){selected = true;}
+  if(selected === this.Selected){return true;}
+
+  if(
+    Function.isFunction(this.OnSetSelected)
+    && !this.OnSetSelected(selected)
+  ){return false;}
+
+  if(!Boolean.isBoolean(update)){update = true;}
+
+  this.Selected = selected;
+  this.DoChangeState(update);
+
+  if(Function.isFunction(this.OnSelectedChanged)){
+    this.OnSelectedChanged();
   }
   return true;
 };
@@ -414,6 +436,7 @@ bbbfly.line._setBounds = function(bounds){
  * @property {boolean} [Enabled=true]
  * @property {boolean} [Invalid=false]
  * @property {boolean} [ReadOnly=false]
+ * @property {boolean} [Selected=false]
  */
 bbbfly.Panel = function(def,ref,parent){
   def = def || {};
@@ -422,7 +445,8 @@ bbbfly.Panel = function(def,ref,parent){
     Data: {
       Enabled: true,
       Invalid: false,
-      ReadOnly: false
+      ReadOnly: false,
+      Selected: false
     },
     ParentReferences: true,
     Events: {
@@ -488,7 +512,28 @@ bbbfly.Panel = function(def,ref,parent){
        * @see {@link bbbfly.Panel#SetReadOnly|SetReadOnly()}
        * @see {@link bbbfly.Panel#event:OnSetReadOnly|OnSetReadOnly}
        */
-      OnReadOnlyChanged: null
+      OnReadOnlyChanged: null,
+      /**
+       * @event
+       * @name OnSetSelected
+       * @memberof bbbfly.Panel#
+       *
+       * @param {boolean} selected - Value to set
+       * @return {boolean} Return false to deny value change
+       *
+       * @see {@link bbbfly.Panel#SetSelected|SetSelected()}
+       * @see {@link bbbfly.Panel#event:OnSelectedChanged|OnSelectedChanged}
+       */
+      OnSetSelected: null,
+      /**
+       * @event
+       * @name OnSelectedChanged
+       * @memberof bbbfly.Panel#
+       *
+       * @see {@link bbbfly.Panel#SetSelected|SetSelected()}
+       * @see {@link bbbfly.Panel#event:OnSetSelected|OnSetSelected}
+       */
+      OnSelectedChanged: null
     },
     Methods: {
       /** @private */
@@ -568,7 +613,20 @@ bbbfly.Panel = function(def,ref,parent){
        * @see {@link bbbfly.Panel#event:OnSetReadOnly|OnSetReadOnly}
        * @see {@link bbbfly.Panel#event:OnReadOnlyChanged|OnReadOnlyChanged}
        */
-      SetReadOnly: bbbfly.panel._setReadOnly
+      SetReadOnly: bbbfly.panel._setReadOnly,
+      /**
+       * @function
+       * @name SetSelected
+       * @memberof bbbfly.Panel#
+       *
+       * @param {boolean} [selected=true] - Value to set
+       * @param {boolean} [update=true] - If update control
+       * @return {boolean} False if change was denied
+       *
+       * @see {@link bbbfly.Panel#event:OnSetSelected|OnSetSelected}
+       * @see {@link bbbfly.Panel#event:OnSelectedChanged|OnSelectedChanged}
+       */
+      SetSelected: bbbfly.panel._setSelected
     }
   });
 

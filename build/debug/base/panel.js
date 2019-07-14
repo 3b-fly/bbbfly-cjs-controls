@@ -39,6 +39,7 @@ bbbfly.panel._getState = function(){
     disabled: !this.Enabled,
     readonly: !!this.ReadOnly,
     invalid: !!this.Invalid,
+    selected: !!this.Selected,
 
     mouseover: !!(
       this.Enabled && !this.ReadOnly
@@ -119,6 +120,25 @@ bbbfly.panel._setReadOnly = function(readOnly,update){
 
   if(Function.isFunction(this.OnReadOnlyChanged)){
     this.OnReadOnlyChanged();
+  }
+  return true;
+};
+bbbfly.panel._setSelected = function(selected,update){
+  if(!Boolean.isBoolean(selected)){selected = true;}
+  if(selected === this.Selected){return true;}
+
+  if(
+    Function.isFunction(this.OnSetSelected)
+    && !this.OnSetSelected(selected)
+  ){return false;}
+
+  if(!Boolean.isBoolean(update)){update = true;}
+
+  this.Selected = selected;
+  this.DoChangeState(update);
+
+  if(Function.isFunction(this.OnSelectedChanged)){
+    this.OnSelectedChanged();
   }
   return true;
 };
@@ -347,7 +367,8 @@ bbbfly.Panel = function(def,ref,parent){
     Data: {
       Enabled: true,
       Invalid: false,
-      ReadOnly: false
+      ReadOnly: false,
+      Selected: false
     },
     ParentReferences: true,
     Events: {
@@ -356,7 +377,9 @@ bbbfly.Panel = function(def,ref,parent){
       OnSetInvalid: null,
       OnInvalidChanged: null,
       OnSetReadOnly: null,
-      OnReadOnlyChanged: null
+      OnReadOnlyChanged: null,
+      OnSetSelected: null,
+      OnSelectedChanged: null
     },
     Methods: {
       DoUpdate: bbbfly.panel._doUpdate,
@@ -370,7 +393,8 @@ bbbfly.Panel = function(def,ref,parent){
       GetControlsHolder: bbbfly.panel._getControlsHolder,
       SetEnabled: bbbfly.panel._setEnabled,
       SetInvalid: bbbfly.panel._setInvalid,
-      SetReadOnly: bbbfly.panel._setReadOnly
+      SetReadOnly: bbbfly.panel._setReadOnly,
+      SetSelected: bbbfly.panel._setSelected
     }
   });
 
