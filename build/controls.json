@@ -65,6 +65,12 @@
             "Controls.js UI"
           ]
         },
+        "bbbfly-cjs": {
+          "Packages": [
+            "crossbrowser",
+            "renderer"
+          ]
+        },
         "bbbfly-cjs-controls": {
           "Packages": [
             "hint"
