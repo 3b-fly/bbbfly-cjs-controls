@@ -648,7 +648,7 @@ bbbfly.Panel = function(def,ref,parent){
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
  * @property {boolean|bbbfly.Renderer.frame} [Frame=false] - Frame definition
- *   Define frame or set to true before panel creation to support frame
+ *   Define frame or set it to true before panel creation to support frame
  */
 bbbfly.Frame = function(def,ref,parent){
   def = def || {};
@@ -682,7 +682,7 @@ bbbfly.Frame = function(def,ref,parent){
        * @name GetFrame
        * @memberof bbbfly.Frame#
        *
-       * @return {frame} Frame definition
+       * @return {bbbfly.Renderer.frame} Frame definition
        */
       GetFrame: bbbfly.frame._getFrame,
       /**
