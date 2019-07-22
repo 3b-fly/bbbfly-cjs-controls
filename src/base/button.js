@@ -8,6 +8,44 @@
 
 /** @ignore */
 var bbbfly = bbbfly || {};
+/** @ignore */
+bbbfly.button = {};
+
+/** @ignore */
+bbbfly.button.NormalizeDef = function(def){
+  def = def || {};
+
+  ng_MergeDef(def,{
+    Methods: {
+      GetState: bbbfly.button._ngGetState,
+      DoUpdate: bbbfly.button._ngDoUpdate
+    }
+  });
+  return def;
+};
+
+/** @ignore */
+bbbfly.button._ngDoUpdate = function(node){
+  this.DoUpdate.callParent(node);
+
+  var textNode = document.getElementById(this.ID+'_T');
+  bbbfly.Renderer.UpdateHTMLState(textNode,this.GetState());
+  return true;
+};
+
+/** @ignore */
+bbbfly.button._ngGetState = function(){
+  return {
+    disabled: !this.Enabled,
+    readonly: !!this.ReadOnly,
+    invalid: !!this.Invalid,
+
+    mouseover: !!(
+      this.Enabled && !this.ReadOnly
+      && ngMouseInControls[this.ID]
+    )
+  };
+};
 
 /**
  * @class
@@ -26,7 +64,7 @@ var bbbfly = bbbfly || {};
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
 bbbfly.Button = function(def,ref,parent){
-  def = def || {};
+  def = bbbfly.button.NormalizeDef(def);
   if(bbbfly.hint){bbbfly.hint.Hintify(def);}
   return ngCreateControlAsType(def,'ngButton',ref,parent);
 };
@@ -48,7 +86,7 @@ bbbfly.Button = function(def,ref,parent){
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
 bbbfly.CheckBox = function(def,ref,parent){
-  def = def || {};
+  def = bbbfly.button.NormalizeDef(def);
   if(bbbfly.hint){bbbfly.hint.Hintify(def);}
   return ngCreateControlAsType(def,'ngCheckBox',ref,parent);
 };
@@ -70,7 +108,7 @@ bbbfly.CheckBox = function(def,ref,parent){
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
 bbbfly.RadioButton = function(def,ref,parent){
-  def = def || {};
+  def = bbbfly.button.NormalizeDef(def);
   if(bbbfly.hint){bbbfly.hint.Hintify(def);}
   return ngCreateControlAsType(def,'ngRadioButton',ref,parent);
 };
