@@ -9,11 +9,195 @@
 /** @ignore */
 var bbbfly = bbbfly || {};
 /** @ignore */
+bbbfly.panelgroup = {};
+/** @ignore */
 bbbfly.panel = {};
 /** @ignore */
 bbbfly.frame = {};
 /** @ignore */
 bbbfly.line = {};
+
+/** @ignore */
+bbbfly.panelgroup._registerControl = function(ctrl,def){
+  var registered = false;
+
+  if(Object.isObject(def)){
+    for(var s in def){
+      if(!def.hasOwnProperty(s)){continue;}
+
+      var state = bbbfly.PanelGroup.state[s.toLowerCase()];
+      if(this.RegisterGroup(ctrl,state,def[s])){
+        registered = true;
+      }
+    }
+  }
+  return registered;
+};
+
+/** @ignore */
+bbbfly.panelgroup._registerGroup = function(ctrl,state,id){
+  if(!Object.isObject(ctrl) || !String.isString(ctrl.ID)){return false;}
+  if(!Number.isInteger(state) || !String.isString(id)){return false;}
+
+  var value = false;
+
+  switch(state){
+    case bbbfly.PanelGroup.state.visible:
+      if(Function.isFunction(ctrl.AddEvent)){
+        ctrl.AddEvent(
+          'OnVisibleChanged',
+          bbbfly.panelgroup._onControlVisibleChanged
+        );
+      }
+      value = ctrl.Visible;
+    break;
+    case bbbfly.PanelGroup.state.selected:
+      if(Function.isFunction(ctrl.AddEvent)){
+        ctrl.AddEvent(
+          'OnSelectedChanged',
+          bbbfly.panelgroup._onControlSelectedChanged
+        );
+      }
+      value = ctrl.Selected;
+    break;
+    default:
+      return false;
+  }
+
+  var group = this._Groups[id];
+  var groups = this._ControlGroups[ctrl.ID];
+
+  if(!Object.isObject(group)){
+    group = {targets:[],on:null};
+    this._Groups[id] = group;
+  }
+
+  if(!Object.isObject(groups)){
+    groups = {};
+    this._ControlGroups[ctrl.ID] = groups;
+  }
+
+  group.targets.push({
+    ctrl: ctrl,
+    state: state
+  });
+
+  groups[state] = group;
+
+  if(value){
+    bbbfly.PanelGroup.ApplyControlState(
+      ctrl,state,value
+    );
+  }
+
+  return true;
+};
+
+/** @ignore */
+bbbfly.panelgroup._unregisterControl = function(ctrl){
+  if(!Object.isObject(ctrl) || !String.isString(ctrl.ID)){return false;}
+
+  var groups = this._ControlGroups[ctrl.ID];
+  delete this._ControlGroups[ctrl.ID];
+
+  for(var state in groups){
+    var group = groups[state];
+
+    for(var i in group.targets){
+      if(group.targets[i].ctrl === ctrl){
+        delete group.targets[i];
+      }
+
+      if(
+        Object.isObject(group.on)
+        && (group.on.ctrl === ctrl)
+      ){
+        group.on = null;
+      }
+    }
+  }
+
+  if(Function.isFunction(ctrl.RemoveEvent)){
+    ctrl.RemoveEvent(
+      'OnVisibleChanged',
+      bbbfly.panelgroup._onControlVisibleChanged
+    );
+    ctrl.RemoveEvent(
+      'OnSelectedChanged',
+      bbbfly.panelgroup._onControlSelectedChanged
+    );
+  }
+  return true;
+};
+
+/** @ignore */
+bbbfly.panelgroup._applyControlState = function(ctrl,state,value){
+  if(!Object.isObject(ctrl) || !String.isString(ctrl.ID)){return false;}
+
+  var groups = this._ControlGroups[ctrl.ID];
+  if(!Object.isObject(groups)){return false;}
+
+  var group = groups[state];
+  if(!Object.isObject(group)){return false;}
+
+  if(value){
+    for(var i in group.targets){
+      var target = group.targets[i];
+      if((target.ctrl === ctrl) && (target.state === state)){
+        group.on = target;
+      }
+      else if(Object.isObject(target.ctrl)){
+        switch(target.state){
+          case bbbfly.PanelGroup.state.visible:
+            if(Function.isFunction(target.ctrl.SetVisible)){
+              target.ctrl.SetVisible(false);
+            }
+          break;
+          case bbbfly.PanelGroup.state.selected:
+            if(Function.isFunction(target.ctrl.SetSelected)){
+              target.ctrl.SetSelected(false);
+            }
+          break;
+        }
+      }
+    }
+  }
+  else if(
+    Object.isObject(group.on)
+    && (group.on.ctrl === ctrl)
+    && (group.on.state === state)
+  ){
+    group.on = null;
+  }
+  return true;
+};
+
+/** @ignore */
+bbbfly.panelgroup._onControlVisibleChanged = function(){
+  bbbfly.PanelGroup.ApplyControlState(
+    this,bbbfly.PanelGroup.state.visible,this.Visible
+  );
+};
+
+/** @ignore */
+bbbfly.panelgroup._onControlSelectedChanged = function(){
+  bbbfly.PanelGroup.ApplyControlState(
+    this,bbbfly.PanelGroup.state.selected,this.Selected
+  );
+};
+
+/** @ignore */
+bbbfly.panel._doCreate = function(def,ref,node){
+  if(this.Group){
+    bbbfly.PanelGroup.RegisterControl(
+      this,this.Group
+    );
+  }
+};
+
+bbbfly.panel._doDispose = function(){
+  return bbbfly.PanelGroup.UnregisterControl(this);
+};
 
 /** @ignore */
 bbbfly.panel._doUpdate = function(node){
@@ -175,6 +359,7 @@ bbbfly.panel._setSelected = function(selected,update){
 
 /** @ignore */
 bbbfly.frame._doCreate = function(def,ref,node){
+  this.DoCreate.callParent(def,ref,node);
   if(!this.Frame){return;}
 
   var refDef = {};
@@ -421,6 +606,80 @@ bbbfly.line._setBounds = function(bounds){
 
 /**
  * @class
+ * @hideconstructor
+ *
+ * @description
+ *   Handles {bbbfly.Panel} control state groups
+ *
+ * @inpackage panel
+ */
+bbbfly.PanelGroup = {
+  /** @private */
+  _Groups: {},
+  _ControlGroups: {},
+
+  /**
+   * @function
+   * @name RegisterControl
+   * @memberof bbbfly.PanelGroup#
+   *
+   * @param {bbbfly.Panel} ctrl - Control instance
+   * @param {bbbfly.PanelGroup.def} def - State groups definition
+   * @return {boolean} If control was registred
+   */
+  RegisterControl: bbbfly.panelgroup._registerControl,
+  /**
+   * @function
+   * @name RegisterGroup
+   * @memberof bbbfly.PanelGroup#
+   *
+   * @param {bbbfly.Panel} ctrl - Control instance
+   * @param {bbbfly.PanelGroup.state} state - State to handle
+   * @param {string} id - State group ID
+   * @return {boolean} If control group was registred
+   */
+  RegisterGroup: bbbfly.panelgroup._registerGroup,
+  /**
+   * @function
+   * @name UnregisterControl
+   * @memberof bbbfly.PanelGroup#
+   *
+   * @param {bbbfly.Panel} ctrl - Control instance
+   * @return {boolean} If control was unregistred
+   */
+  UnregisterControl: bbbfly.panelgroup._unregisterControl,
+
+  /**
+   * @function
+   * @name ApplyControlState
+   * @memberof bbbfly.PanelGroup#
+   *
+   * @param {bbbfly.Panel} ctrl - Control instance
+   * @param {bbbfly.PanelGroup.state} state - State to Apply
+   * @param {boolean} value - State value
+   * @return {boolean} If unregistration was successful
+   */
+  ApplyControlState: bbbfly.panelgroup._applyControlState
+};
+
+/**
+ * @enum {integer}
+ */
+bbbfly.PanelGroup.state = {
+  visible: 1,
+  selected: 2
+};
+
+/**
+ * @typedef {object} def
+ * @memberOf bbbfly.PanelGroup
+ *
+ * @property {string} [Visible] - Group ID
+ * @property {string} [Selected] - Group ID
+ */
+
+/**
+ * @class
  * @type control
  * @extends ngPanel
  *
@@ -437,6 +696,8 @@ bbbfly.line._setBounds = function(bounds){
  * @property {boolean} [Invalid=false]
  * @property {boolean} [ReadOnly=false]
  * @property {boolean} [Selected=false]
+ *
+ * @property {bbbfly.PanelGroup.def} [Group=null]
  */
 bbbfly.Panel = function(def,ref,parent){
   def = def || {};
@@ -446,7 +707,9 @@ bbbfly.Panel = function(def,ref,parent){
       Enabled: true,
       Invalid: false,
       ReadOnly: false,
-      Selected: false
+      Selected: false,
+
+      Group: null
     },
     ParentReferences: true,
     Events: {
@@ -536,6 +799,10 @@ bbbfly.Panel = function(def,ref,parent){
       OnSelectedChanged: null
     },
     Methods: {
+      /** @private */
+      DoCreate: bbbfly.panel._doCreate,
+      /** @private */
+      DoDispose: bbbfly.panel._doDispose,
       /** @private */
       DoUpdate: bbbfly.panel._doUpdate,
       /** @private */

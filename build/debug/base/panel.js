@@ -7,9 +7,178 @@
 
 
 var bbbfly = bbbfly || {};
+bbbfly.panelgroup = {};
 bbbfly.panel = {};
 bbbfly.frame = {};
 bbbfly.line = {};
+bbbfly.panelgroup._registerControl = function(ctrl,def){
+  var registered = false;
+
+  if(Object.isObject(def)){
+    for(var s in def){
+      if(!def.hasOwnProperty(s)){continue;}
+
+      var state = bbbfly.PanelGroup.state[s.toLowerCase()];
+      if(this.RegisterGroup(ctrl,state,def[s])){
+        registered = true;
+      }
+    }
+  }
+  return registered;
+};
+bbbfly.panelgroup._registerGroup = function(ctrl,state,id){
+  if(!Object.isObject(ctrl) || !String.isString(ctrl.ID)){return false;}
+  if(!Number.isInteger(state) || !String.isString(id)){return false;}
+
+  var value = false;
+
+  switch(state){
+    case bbbfly.PanelGroup.state.visible:
+      if(Function.isFunction(ctrl.AddEvent)){
+        ctrl.AddEvent(
+          'OnVisibleChanged',
+          bbbfly.panelgroup._onControlVisibleChanged
+        );
+      }
+      value = ctrl.Visible;
+    break;
+    case bbbfly.PanelGroup.state.selected:
+      if(Function.isFunction(ctrl.AddEvent)){
+        ctrl.AddEvent(
+          'OnSelectedChanged',
+          bbbfly.panelgroup._onControlSelectedChanged
+        );
+      }
+      value = ctrl.Selected;
+    break;
+    default:
+      return false;
+  }
+
+  var group = this._Groups[id];
+  var groups = this._ControlGroups[ctrl.ID];
+
+  if(!Object.isObject(group)){
+    group = {targets:[],on:null};
+    this._Groups[id] = group;
+  }
+
+  if(!Object.isObject(groups)){
+    groups = {};
+    this._ControlGroups[ctrl.ID] = groups;
+  }
+
+  group.targets.push({
+    ctrl: ctrl,
+    state: state
+  });
+
+  groups[state] = group;
+
+  if(value){
+    bbbfly.PanelGroup.ApplyControlState(
+      ctrl,state,value
+    );
+  }
+
+  return true;
+};
+bbbfly.panelgroup._unregisterControl = function(ctrl){
+  if(!Object.isObject(ctrl) || !String.isString(ctrl.ID)){return false;}
+
+  var groups = this._ControlGroups[ctrl.ID];
+  delete this._ControlGroups[ctrl.ID];
+
+  for(var state in groups){
+    var group = groups[state];
+
+    for(var i in group.targets){
+      if(group.targets[i].ctrl === ctrl){
+        delete group.targets[i];
+      }
+
+      if(
+        Object.isObject(group.on)
+        && (group.on.ctrl === ctrl)
+      ){
+        group.on = null;
+      }
+    }
+  }
+
+  if(Function.isFunction(ctrl.RemoveEvent)){
+    ctrl.RemoveEvent(
+      'OnVisibleChanged',
+      bbbfly.panelgroup._onControlVisibleChanged
+    );
+    ctrl.RemoveEvent(
+      'OnSelectedChanged',
+      bbbfly.panelgroup._onControlSelectedChanged
+    );
+  }
+  return true;
+};
+bbbfly.panelgroup._applyControlState = function(ctrl,state,value){
+  if(!Object.isObject(ctrl) || !String.isString(ctrl.ID)){return false;}
+
+  var groups = this._ControlGroups[ctrl.ID];
+  if(!Object.isObject(groups)){return false;}
+
+  var group = groups[state];
+  if(!Object.isObject(group)){return false;}
+
+  if(value){
+    for(var i in group.targets){
+      var target = group.targets[i];
+      if((target.ctrl === ctrl) && (target.state === state)){
+        group.on = target;
+      }
+      else if(Object.isObject(target.ctrl)){
+        switch(target.state){
+          case bbbfly.PanelGroup.state.visible:
+            if(Function.isFunction(target.ctrl.SetVisible)){
+              target.ctrl.SetVisible(false);
+            }
+          break;
+          case bbbfly.PanelGroup.state.selected:
+            if(Function.isFunction(target.ctrl.SetSelected)){
+              target.ctrl.SetSelected(false);
+            }
+          break;
+        }
+      }
+    }
+  }
+  else if(
+    Object.isObject(group.on)
+    && (group.on.ctrl === ctrl)
+    && (group.on.state === state)
+  ){
+    group.on = null;
+  }
+  return true;
+};
+bbbfly.panelgroup._onControlVisibleChanged = function(){
+  bbbfly.PanelGroup.ApplyControlState(
+    this,bbbfly.PanelGroup.state.visible,this.Visible
+  );
+};
+bbbfly.panelgroup._onControlSelectedChanged = function(){
+  bbbfly.PanelGroup.ApplyControlState(
+    this,bbbfly.PanelGroup.state.selected,this.Selected
+  );
+};
+bbbfly.panel._doCreate = function(def,ref,node){
+  if(this.Group){
+    bbbfly.PanelGroup.RegisterControl(
+      this,this.Group
+    );
+  }
+};
+
+bbbfly.panel._doDispose = function(){
+  return bbbfly.PanelGroup.UnregisterControl(this);
+};
 bbbfly.panel._doUpdate = function(node){
   this.DoUpdateHtmlClass(node);
   this.DoUpdateHtmlState(node);
@@ -143,6 +312,7 @@ bbbfly.panel._setSelected = function(selected,update){
   return true;
 };
 bbbfly.frame._doCreate = function(def,ref,node){
+  this.DoCreate.callParent(def,ref,node);
   if(!this.Frame){return;}
 
   var refDef = {};
@@ -360,6 +530,18 @@ bbbfly.line._setBounds = function(bounds){
 
   return this.SetBounds.callParent(bounds);
 };
+bbbfly.PanelGroup = {
+  _Groups: {},
+  _ControlGroups: {},
+  RegisterControl: bbbfly.panelgroup._registerControl,
+  RegisterGroup: bbbfly.panelgroup._registerGroup,
+  UnregisterControl: bbbfly.panelgroup._unregisterControl,
+  ApplyControlState: bbbfly.panelgroup._applyControlState
+};
+bbbfly.PanelGroup.state = {
+  visible: 1,
+  selected: 2
+};
 bbbfly.Panel = function(def,ref,parent){
   def = def || {};
 
@@ -368,7 +550,9 @@ bbbfly.Panel = function(def,ref,parent){
       Enabled: true,
       Invalid: false,
       ReadOnly: false,
-      Selected: false
+      Selected: false,
+
+      Group: null
     },
     ParentReferences: true,
     Events: {
@@ -382,6 +566,8 @@ bbbfly.Panel = function(def,ref,parent){
       OnSelectedChanged: null
     },
     Methods: {
+      DoCreate: bbbfly.panel._doCreate,
+      DoDispose: bbbfly.panel._doDispose,
       DoUpdate: bbbfly.panel._doUpdate,
       DoMouseEnter: bbbfly.panel._doMouseEnter,
       DoMouseLeave: bbbfly.panel._doMouseLeave,
