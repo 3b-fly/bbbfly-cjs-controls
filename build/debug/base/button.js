@@ -355,7 +355,6 @@ bbbfly.Btn = function(def,ref,parent){
       _IconProxy: null,
       _HolderHtml: ''
     },
-    ControlsPanel: null,
     Events: {
       OnClick: null,
       OnDblClick: null

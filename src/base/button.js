@@ -409,7 +409,6 @@ bbbfly.Btn = function(def,ref,parent){
       _IconProxy: null,
       _HolderHtml: ''
     },
-    ControlsPanel: null,
     Events: {
       /**
        * @event
