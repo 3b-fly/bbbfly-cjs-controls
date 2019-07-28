@@ -76,11 +76,6 @@ bbbfly.button._setIcon = function(node,proxy,align,state,indent){
   return bbbfly.Renderer.SetImage(
     node,proxy,pos.L,pos.T,pos.R,pos.B,state,'Icon',style
   );
-
- //TODO
-//  return bbbfly.Renderer.ImageHTML(
-//    proxy,pos.L,pos.T,pos.R,pos.B,state,'Icon',style
-//  );
 };
 
 /** @ignore */
@@ -238,6 +233,7 @@ bbbfly.button._doUpdate = function(node){
   }
 
   var cursor = ((hasClick || hasDblClick) ? 'pointer' : 'default');
+  node.style.cursor = cursor;
 
   hNode.style.minWidth = bbbfly.Renderer.StyleDim(iSize.W);
   hNode.style.minHeight = bbbfly.Renderer.StyleDim(iSize.H);
@@ -249,7 +245,6 @@ bbbfly.button._doUpdate = function(node){
   hNode.style.top = bbbfly.Renderer.StyleDim(hPosition.T);
   hNode.style.right = bbbfly.Renderer.StyleDim(hPosition.R);
   hNode.style.bottom = bbbfly.Renderer.StyleDim(hPosition.B);
-  hNode.style.cursor = cursor;
 
   this._IconProxy = iProxy;
   state.mouseover = over;
