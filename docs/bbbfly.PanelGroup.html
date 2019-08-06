@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Interface: Button</title>
+    <title>Class: PanelGroup</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -1122,18 +1122,6 @@
         <li data-name="DefaultLayer">
           <a href="bbbfly.Map.html#property:DefaultLayer">DefaultLayer</a>
         </li>
-        <li data-name="DefaultLayer.ZIndex">
-          <a href="bbbfly.Map.html#property:DefaultLayer.ZIndex">DefaultLayer.ZIndex</a>
-        </li>
-        <li data-name="DefaultLayer.Opacity">
-          <a href="bbbfly.Map.html#property:DefaultLayer.Opacity">DefaultLayer.Opacity</a>
-        </li>
-        <li data-name="DefaultLayer.ClassName">
-          <a href="bbbfly.Map.html#property:DefaultLayer.ClassName">DefaultLayer.ClassName</a>
-        </li>
-        <li data-name="DefaultLayer.CrossOrigin">
-          <a href="bbbfly.Map.html#property:DefaultLayer.CrossOrigin">DefaultLayer.CrossOrigin</a>
-        </li>
     </ul>
     <ul class="members itemMembers">
       <span class="subtitle">Members</span>
@@ -1950,18 +1938,121 @@
   }
 })();</script>
     <div class="main">
-<section class="kind-interface">
+<section class="kind-class">
 <header>
     <h1 class="name">
-          <span class="ancestors"><a href="bbbfly.html">bbbfly</a><a href="bbbfly.Edit.html">.Edit</a>.</span>
-        Button
+          <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
+        PanelGroup
+  <span class="types">
+      <span class="type-signature object">
+        object
+      </span>
+  </span>
     </h1>
 </header>
 <article>
     <div class="container-overview">
-            <div class="description">Any <a href="bbbfly.Edit.html">Edit</a> child button can implement this interface.</div>
+<dt>
+    <div class="nameContainer">
+        <h2 id="PanelGroup">
+          bbbfly.PanelGroup
+        </h2>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L616">base/panel.js, line 616</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Handles {bbbfly.Panel} control state groups</div>
 <dl class="details">
-    <h3>Properties</h3>
+</dl>
+</dd>
+    </div>
+        <h3>In Packages</h3>
+        <ul>
+              <li><a href="packages.html#package:panel">panel</a></li>
+        </ul>
+        <h3>Type Definitions</h3>
+        <dl>
+<dt>
+  <div class="nameContainer">
+    <h4 class="name" id=".def">
+      def
+  <span class="types">
+      <span class="type-signature object">
+        object
+      </span>
+  </span>
+    </h4>
+  </div>
+</dt>
+<dd class="member-content">
+<dl class="details">
+      <h5>Properties:</h5>
+    <table class="props" my="test">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr id="property:Visible">
+                    <td class="name">
+                      <span class="param-name">Visible</span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                <td class="description last">
+                        <span class="optional">optional</span>
+                  Group ID
+                </td>
+            </tr>
+            <tr id="property:Selected">
+                    <td class="name">
+                      <span class="param-name">Selected</span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                <td class="description last">
+                        <span class="optional">optional</span>
+                  Group ID
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</dl>
+<dl class="details">
+</dl>
+</dd>
+        </dl>
+        <h3>Members</h3>
+        <dl>
+<dt>
+  <div class="nameContainer">
+    <h4 class="name" id=".state">
+  <span class="attribs">
+      <span class="type-signature static">
+        static
+      </span>
+  </span>
+      state
+  <span class="types">
+      <span class="type-signature enum">
+        enum
+      </span>
+      <span class="type-signature integer">
+        integer
+      </span>
+  </span>
+    </h4>
+  </div>
+</dt>
+<dd class="member-content">
+<dl class="details">
     <table class="props" my="test">
         <thead>
         <tr>
@@ -1972,19 +2063,30 @@
         </tr>
         </thead>
         <tbody>
-            <tr id="property:ButtonId">
+            <tr id="property:visible">
                     <td class="name">
-                      <span class="param-name">ButtonId</span>
+                      <span class="param-name">visible</span>
                     </td>
                 <td class="type">
-<span class="param-type">string</span>
+<span class="param-type">integer</span>
                 </td>
                     <td class="default">
-                        null
+                        1
                     </td>
                 <td class="description last">
-                        <span class="optional">optional</span>
-                  ID unique per edit
+                </td>
+            </tr>
+            <tr id="property:selected">
+                    <td class="name">
+                      <span class="param-name">selected</span>
+                    </td>
+                <td class="type">
+<span class="param-type">integer</span>
+                </td>
+                    <td class="default">
+                        2
+                    </td>
+                <td class="description last">
                 </td>
             </tr>
         </tbody>
@@ -1992,7 +2094,286 @@
 </dl>
 <dl class="details">
 </dl>
+</dd>
+        </dl>
+        <h3>Methods</h3>
+        <dl>
+<dt>
+    <div class="nameContainer">
+        <h4 id="ApplyControlState">
+          ApplyControlState
+          <span class="signature">(ctrl, state, value)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L652">base/panel.js, line 652</a>
+        </div>
     </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">ctrl</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.Panel.html">bbbfly.Panel</a></span>
+            </td>
+            <td class="description last">
+                Control instance
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">state</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.PanelGroup.html#.state">bbbfly.PanelGroup.state</a></span>
+            </td>
+            <td class="description last">
+                State to Apply
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">value</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+            <td class="description last">
+                State value
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">If unregistration was successful</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="RegisterControl">
+          RegisterControl
+          <span class="signature">(ctrl, def)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L621">base/panel.js, line 621</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">ctrl</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.Panel.html">bbbfly.Panel</a></span>
+            </td>
+            <td class="description last">
+                Control instance
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">def</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.PanelGroup.html#.def">bbbfly.PanelGroup.def</a></span>
+            </td>
+            <td class="description last">
+                State groups definition
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">If control was registred</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="RegisterGroup">
+          RegisterGroup
+          <span class="signature">(ctrl, state, id)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L631">base/panel.js, line 631</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">ctrl</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.Panel.html">bbbfly.Panel</a></span>
+            </td>
+            <td class="description last">
+                Control instance
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">state</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.PanelGroup.html#.state">bbbfly.PanelGroup.state</a></span>
+            </td>
+            <td class="description last">
+                State to handle
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">id</span>
+                </td>
+            <td class="type">
+<span class="param-type">string</span>
+            </td>
+            <td class="description last">
+                State group ID
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">If control group was registred</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="UnregisterControl">
+          UnregisterControl
+          <span class="signature">(ctrl)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L642">base/panel.js, line 642</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">ctrl</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.Panel.html">bbbfly.Panel</a></span>
+            </td>
+            <td class="description last">
+                Control instance
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">If control was unregistred</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+        </dl>
 </article>
 </section>
         <footer>
