@@ -200,7 +200,7 @@ bbbfly.button._doUpdate = function(node){
       +' unselectable="on">'+text+'</div>';
   }
 
-  switch(this.Autosize){
+  switch(this.AutoSize){
     case bbbfly.Btn.autosize.both:
     break;
     case bbbfly.Btn.autosize.horizontal:
@@ -245,14 +245,14 @@ bbbfly.button._doUpdate = function(node){
     }
   }
 
-  if(this.Autosize){
+  if(this.AutoSize){
     var bounds = {};
     ng_BeginMeasureElement(hNode);
 
-    if(this.Autosize & bbbfly.Btn.autosize.horizontal){
+    if(this.AutoSize & bbbfly.Btn.autosize.horizontal){
       bounds.W = ng_OuterWidth(hNode);
     }
-    if(this.Autosize & bbbfly.Btn.autosize.vertical){
+    if(this.AutoSize & bbbfly.Btn.autosize.vertical){
       bounds.H = ng_OuterHeight(hNode);
     }
 
@@ -346,7 +346,7 @@ bbbfly.Btn = function(def,ref,parent){
       IconAlign: bbbfly.Btn.iconalign.left,
 
       Indent: 0,
-      Autosize: bbbfly.Btn.autosize.none,
+      AutoSize: bbbfly.Btn.autosize.none,
       SelectType: bbbfly.Btn.selecttype.none,
 
       Multiline: false,

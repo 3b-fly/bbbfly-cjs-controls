@@ -212,7 +212,7 @@ bbbfly.button._doUpdate = function(node){
       +' unselectable="on">'+text+'</div>';
   }
 
-  switch(this.Autosize){
+  switch(this.AutoSize){
     case bbbfly.Btn.autosize.both:
       //let stretch
     break;
@@ -258,14 +258,14 @@ bbbfly.button._doUpdate = function(node){
     }
   }
 
-  if(this.Autosize){
+  if(this.AutoSize){
     var bounds = {};
     ng_BeginMeasureElement(hNode);
 
-    if(this.Autosize & bbbfly.Btn.autosize.horizontal){
+    if(this.AutoSize & bbbfly.Btn.autosize.horizontal){
       bounds.W = ng_OuterWidth(hNode);
     }
-    if(this.Autosize & bbbfly.Btn.autosize.vertical){
+    if(this.AutoSize & bbbfly.Btn.autosize.vertical){
       bounds.H = ng_OuterHeight(hNode);
     }
 
@@ -383,7 +383,7 @@ bbbfly.button._ngGetState = function(){
  * @property {bbbfly.Btn.iconalign} [IconAlign=left]
  *
  * @property {px} [Indent=0] - Space between button parts
- * @property {bbbfly.Btn.autosize} [Autosize=none]
+ * @property {bbbfly.Btn.autosize} [AutoSize=none]
  * @property {bbbfly.Btn.selecttype} [SelectType=none]
  *
  * @property {boolean} [Multiline=false]
@@ -400,7 +400,7 @@ bbbfly.Btn = function(def,ref,parent){
       IconAlign: bbbfly.Btn.iconalign.left,
 
       Indent: 0,
-      Autosize: bbbfly.Btn.autosize.none,
+      AutoSize: bbbfly.Btn.autosize.none,
       SelectType: bbbfly.Btn.selecttype.none,
 
       Multiline: false,
@@ -518,7 +518,7 @@ bbbfly.Btn.iconalign = {
 /**
  * @enum {integer}
  * @description
- *   Possible values for {@link bbbfly.Btn.Autosize}
+ *   Possible values for {@link bbbfly.Btn.AutoSize}
  */
 bbbfly.Btn.autosize = {
   none: 0,
