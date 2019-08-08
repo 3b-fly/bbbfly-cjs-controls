@@ -185,10 +185,10 @@ bbbfly.panel._doUpdate = function(node){
   return true;
 };
 bbbfly.panel._doMouseEnter = function(event,options){
-  this.DoUpdateHtmlState(options.Element);
+  return this.DoUpdateHtmlState(options.Element);
 };
 bbbfly.panel._doMouseLeave = function(event,options){
-  this.DoUpdateHtmlState(options.Element);
+  return this.DoUpdateHtmlState(options.Element);
 };
 bbbfly.panel._doUpdateHtmlClass = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
@@ -198,10 +198,11 @@ bbbfly.panel._doUpdateHtmlClass = function(node){
 };
 bbbfly.panel._doUpdateHtmlState = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
-  if(!node){return;}
 
   var state = this.GetState();
-  bbbfly.Renderer.UpdateHTMLState(node,state);
+  if(node){bbbfly.Renderer.UpdateHTMLState(node,state);}
+
+  return state;
 };
 bbbfly.panel._getState = function(){
   return {
@@ -388,28 +389,30 @@ bbbfly.frame._doUpdate = function(node){
   return this.DoUpdate.callParent(node);
 };
 bbbfly.frame._doMouseEnter = function(event,options){
-  this.DoMouseEnter.callParent(event,options);
-
+  var state = this.DoMouseEnter.callParent(event,options);
   var fPanel = this.GetFramePanel();
-  if(!fPanel){return;}
 
-  var proxy = fPanel._FrameProxy;
-  if(!Object.isObject(proxy)){return;}
+  if(fPanel){
+    var proxy = fPanel._FrameProxy;
 
-  var state = this.GetState();
-  bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+    if(Object.isObject(proxy)){
+      bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+    }
+  }
+  return state;
 };
 bbbfly.frame._doMouseLeave = function(event,options){
-  this.DoMouseLeave.callParent(event,options);
-
+  var state = this.DoMouseLeave.callParent(event,options);
   var fPanel = this.GetFramePanel();
-  if(!fPanel){return;}
 
-  var proxy = fPanel._FrameProxy;
-  if(!Object.isObject(proxy)){return;}
+  if(fPanel){
+    var proxy = fPanel._FrameProxy;
 
-  var state = this.GetState();
-  bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+    if(Object.isObject(proxy)){
+      bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+    }
+  }
+  return state;
 };
 bbbfly.frame._doChangeState = function(update){
   this.DoChangeState.callParent(update);
