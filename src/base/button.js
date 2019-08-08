@@ -285,16 +285,37 @@ bbbfly.button._doUpdateImages = function(){
   this.DoUpdateImages.callParent();
 };
 
+/** @ignore */
+bbbfly.button._doMouseEnter = function(event,options){
+  var state = this.DoMouseEnter.callParent(event,options);
+  var proxy = this._IconProxy;
+
+  bbbfly.Renderer.UpdateImageHTML(proxy,state);
+  return state;
+};
+
+/** @ignore */
+bbbfly.frame._doMouseLeave = function(event,options){
+  var state = this.DoMouseLeave.callParent(event,options);
+  var proxy = this._IconProxy;
+
+  bbbfly.Renderer.UpdateImageHTML(proxy,state);
+  return state;
+};
+
+/** @ignore */
 bbbfly.button._doPtrClick = function(ptrInfo){
   if(ptrInfo.EventID !== 'btn'){return;}
   this.Click(ptrInfo.Event);
 };
 
+/** @ignore */
 bbbfly.button._doPtrDblClick = function(ptrInfo){
   if(ptrInfo.EventID !== 'btn'){return;}
   this.DblClick(ptrInfo.Event);
 };
 
+/** @ignore */
 bbbfly.button._click = function(event){
   if(!this.Enabled || this.ReadOnly){return;}
 
@@ -308,6 +329,7 @@ bbbfly.button._click = function(event){
   }
 };
 
+/** @ignore */
 bbbfly.button._dblClick = function(event){
   if(!this.Enabled || this.ReadOnly){return;}
 
@@ -442,6 +464,10 @@ bbbfly.Btn = function(def,ref,parent){
       DoUpdate: bbbfly.button._doUpdate,
       /** @private */
       DoUpdateImages: bbbfly.button._doUpdateImages,
+      /** @private */
+      DoMouseEnter: bbbfly.button._doMouseEnter,
+      /** @private */
+      DoMouseLeave: bbbfly.button._doMouseLeave,
       /** @private */
       DoPtrClick: bbbfly.button._doPtrClick,
       /** @private */
