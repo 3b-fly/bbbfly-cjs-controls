@@ -115,9 +115,10 @@ bbbfly.button._doUpdate = function(node){
 
   var iProxy = bbbfly.Renderer.ImageProxy(icon,state,this.ID+'_I');
   var indent = Number.isInteger(this.Indent) ? this.Indent : 0;
+  var gap = Number.isInteger(this.IconGap) ? this.IconGap : 0;
 
+  if(!hasText || !icon){gap = 0;}
   var iIndent = indent;
-  var tIndent = (hasText ? indent : 0);
 
   var iSize = {
     W: Number.isInteger(iProxy.W) ? iProxy.W : 0,
@@ -130,7 +131,7 @@ bbbfly.button._doUpdate = function(node){
         hPosSet = true;
         hPosition.L = 0;
         iIndent += hPadding.L;
-        hPadding.L += iSize.W + tIndent;
+        hPadding.L += iSize.W + gap;
       }
     break;
     case bbbfly.Btn.iconalign.top:
@@ -138,7 +139,7 @@ bbbfly.button._doUpdate = function(node){
         hPosSet = true;
         hPosition.T = 0;
         iIndent += hPadding.T;
-        hPadding.T += iSize.H + tIndent;
+        hPadding.T += iSize.H + gap;
       }
     break;
     case bbbfly.Btn.iconalign.right:
@@ -146,7 +147,7 @@ bbbfly.button._doUpdate = function(node){
         hPosSet = true;
         hPosition.R = 0;
         iIndent += hPadding.R;
-        hPadding.R += iSize.W + tIndent;
+        hPadding.R += iSize.W + gap;
       }
     break;
     case bbbfly.Btn.iconalign.bottom:
@@ -154,7 +155,7 @@ bbbfly.button._doUpdate = function(node){
         hPosSet = true;
         hPosition.B = 0;
         iIndent += hPadding.B;
-        hPadding.B += iSize.H + tIndent;
+        hPadding.B += iSize.H + gap;
       }
     break;
   }
@@ -356,6 +357,8 @@ bbbfly.Btn = function(def,ref,parent){
       IconAlign: bbbfly.Btn.iconalign.left,
 
       Indent: 0,
+      IconGap: 0,
+
       AutoSize: bbbfly.Btn.autosize.none,
       SelectType: bbbfly.Btn.selecttype.none,
 
