@@ -320,13 +320,8 @@ bbbfly.button._doPtrDblClick = function(ptrInfo){
 bbbfly.button._click = function(event){
   if(!this.Enabled || this.ReadOnly){return;}
 
-  if(
-    Function.isFunction(this.OnClick)
-    && !this.OnClick(event)
-  ){return;}
-
-  if(this.SelectType & bbbfly.Btn.selecttype.click){
-    this.SetSelected(!this.Selected);
+  if(Function.isFunction(this.OnClick)){
+    this.OnClick(event);
   }
 };
 
@@ -334,11 +329,20 @@ bbbfly.button._click = function(event){
 bbbfly.button._dblClick = function(event){
   if(!this.Enabled || this.ReadOnly){return;}
 
-  if(
-    Function.isFunction(this.OnDblClick)
-    && !this.OnDblClick(event)
-  ){return;}
+  if(Function.isFunction(this.OnDblClick)){
+    this.OnDblClick(event);
+  }
+};
 
+/** @ignore */
+bbbfly.button._onClick = function(){
+  if(this.SelectType & bbbfly.Btn.selecttype.click){
+    this.SetSelected(!this.Selected);
+  }
+};
+
+/** @ignore */
+bbbfly.button._onDblClick = function(){
   if(this.SelectType & bbbfly.Btn.selecttype.dblclick){
     this.SetSelected(!this.Selected);
   }
@@ -448,7 +452,7 @@ bbbfly.Btn = function(def,ref,parent){
        * @see {@link bbbfly.Btn#Click|Click()}
        * @see {@link bbbfly.Btn#event:OnDblClick|OnDblClick}
        */
-      OnClick: null,
+      OnClick: bbbfly.button._onClick,
       /**
        * @event
        * @name OnDblClick
@@ -460,7 +464,7 @@ bbbfly.Btn = function(def,ref,parent){
        * @see {@link bbbfly.Btn#DblClick|DblClick()}
        * @see {@link bbbfly.Btn#event:OnClick|OnClick}
        */
-      OnDblClick: null
+      OnDblClick: bbbfly.button._onDblClick
     },
     Methods: {
       /** @private */
