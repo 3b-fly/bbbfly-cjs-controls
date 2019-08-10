@@ -277,7 +277,7 @@ bbbfly.button._doMouseEnter = function(event,options){
   bbbfly.Renderer.UpdateImageHTML(proxy,state);
   return state;
 };
-bbbfly.frame._doMouseLeave = function(event,options){
+bbbfly.button._doMouseLeave = function(event,options){
   var state = this.DoMouseLeave.callParent(event,options);
   var proxy = this._IconProxy;
 
