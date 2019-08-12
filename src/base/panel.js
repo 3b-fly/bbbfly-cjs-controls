@@ -187,7 +187,7 @@ bbbfly.panelgroup._onControlSelectedChanged = function(){
 };
 
 /** @ignore */
-bbbfly.panel._doCreate = function(def,ref,node){
+bbbfly.panel._doCreate = function(){
   if(this.Group){
     bbbfly.PanelGroup.RegisterControl(
       this,this.Group
