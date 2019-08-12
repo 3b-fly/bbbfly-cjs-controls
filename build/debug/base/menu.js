@@ -29,21 +29,39 @@ bbbfly.menu._itemsToArray = function(items){
 
       if(item.SubMenu){
         item.SubMenu = bbbfly.menu._itemsToArray(item.SubMenu);
-        ng_MergeVar(item,{OnClick: bbbfly.menu._onSubMenuClick});
       }
       resultItems.push(item);
     }
   }
   return resultItems;
 };
-bbbfly.menu._onSubMenuClick = function(){
-  return false;
+
+bbbfly.menu._add = function(item,parent){
+  if(!item.AddEvent){item.AddEvent = ngObjAddEvent;}
+  item.AddEvent('OnMenuClick',bbbfly.menu._onItemClick,true);
+
+  if(typeof item.CloseOnClick === 'undefined'){
+    item.CloseOnClick = !item.SubMenu;
+  }
+  item.Owner = this;
+
+  this.Add.callParent(item,parent);
+};
+
+bbbfly.menu._onItemClick = function(event,menu,item){
+  if(typeof item.Checked !== 'undefined'){
+    menu.CheckItem(item,!item.Checked);
+  }
+  return !!item.CloseOnClick;
 };
 bbbfly.Menu = function(def,ref,parent){
   def = def || {};
   ng_MergeDef(def, {
     Data: {
       Items: null
+    },
+    Methods: {
+      Add: bbbfly.menu._add
     }
   });
 
@@ -57,3 +75,10 @@ ngUserControls['bbbfly_menu'] = {
     ngRegisterControlType('bbbfly.Menu',bbbfly.Menu);
   }
 };
+
+/**
+ * @typedef {ngMenuItem} Item
+ * @memberOf bbbfly.Menu
+ *
+ * @property {boolean} CloseOnClick - If close Popup menu on item click
+ */
