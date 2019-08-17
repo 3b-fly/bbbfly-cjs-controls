@@ -35,11 +35,7 @@ bbbfly.menu._itemsToArray = function(items){
   }
   return resultItems;
 };
-
 bbbfly.menu._add = function(item,parent){
-  if(!item.AddEvent){item.AddEvent = ngObjAddEvent;}
-  item.AddEvent('OnMenuClick',bbbfly.menu._onItemClick,true);
-
   if(typeof item.CloseOnClick === 'undefined'){
     item.CloseOnClick = !item.SubMenu;
   }
@@ -47,11 +43,14 @@ bbbfly.menu._add = function(item,parent){
 
   this.Add.callParent(item,parent);
 };
-
-bbbfly.menu._onItemClick = function(event,menu,item){
-  if(typeof item.Checked !== 'undefined'){
+bbbfly.menu._onMenuClick = function(event,menu,item){
+  if(
+    (typeof item.Checked !== 'undefined')
+    || (typeof item.RadioGroup !== 'undefined')
+  ){
     menu.CheckItem(item,!item.Checked);
   }
+
   return !!item.CloseOnClick;
 };
 bbbfly.Menu = function(def,ref,parent){
@@ -59,6 +58,9 @@ bbbfly.Menu = function(def,ref,parent){
   ng_MergeDef(def, {
     Data: {
       Items: null
+    },
+    Events: {
+      OnMenuClick: bbbfly.menu._onMenuClick
     },
     Methods: {
       Add: bbbfly.menu._add
