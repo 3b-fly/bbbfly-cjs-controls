@@ -12,6 +12,17 @@ var bbbfly = bbbfly || {};
 bbbfly.button = {};
 
 /** @ignore */
+bbbfly.button._getAlt = function(){
+  if(String.isString(this.AltRes)){
+    return ngTxt(this.AltRes);
+  }
+  else if(String.isString(this.Alt)){
+    return this.Alt;
+  }
+  return null;
+};
+
+/** @ignore */
 bbbfly.button._getText = function(){
   if(String.isString(this.TextRes)){
     return ngTxt(this.TextRes);
@@ -110,10 +121,13 @@ bbbfly.button._doUpdate = function(node){
   var iNode = document.getElementById(this.ID+'_I');
   if(!node || !hNode){return;}
 
-  var state = this.GetState();
+  var alt = this.GetAlt();
   var text = this.GetText();
   var icon = this.GetIcon();
+  var state = this.GetState();
 
+  var hasIcon = !!(Object.isObject(icon));
+  var hasAlt = !!(String.isString(alt) && alt);
   var hasText = !!(String.isString(text) && text);
   var hasClick = !!(this.Enabled && !this.ReadOnly && this.OnClick);
   var hasDblClick = !!(this.Enabled && !this.ReadOnly && this.OnDblClick);
@@ -129,13 +143,15 @@ bbbfly.button._doUpdate = function(node){
   var indent = Number.isInteger(this.Indent) ? this.Indent : 0;
   var gap = Number.isInteger(this.IconGap) ? this.IconGap : 0;
 
-  if(!hasText || !icon){gap = 0;}
+  if(!hasText || !hasIcon){gap = 0;}
   var iIndent = indent;
 
   var iSize = {
     W: Number.isInteger(iProxy.W) ? iProxy.W : 0,
     H: Number.isInteger(iProxy.H) ? iProxy.H : 0
   };
+
+  var minHDim = {W:0,H:0};
 
   switch(this.IconAlign){
     case bbbfly.Btn.iconalign.left:
@@ -145,6 +161,7 @@ bbbfly.button._doUpdate = function(node){
         iIndent += hPadding.L;
         hPadding.L += iSize.W + gap;
       }
+      minHDim.H = iSize.H;
     break;
     case bbbfly.Btn.iconalign.top:
       if(iSize.H){
@@ -153,6 +170,7 @@ bbbfly.button._doUpdate = function(node){
         iIndent += hPadding.T;
         hPadding.T += iSize.H + gap;
       }
+      minHDim.H = iSize.W;
     break;
     case bbbfly.Btn.iconalign.right:
       if(iSize.W){
@@ -161,6 +179,7 @@ bbbfly.button._doUpdate = function(node){
         iIndent += hPadding.R;
         hPadding.R += iSize.W + gap;
       }
+      minHDim.H = iSize.H;
     break;
     case bbbfly.Btn.iconalign.bottom:
       if(iSize.H){
@@ -169,6 +188,7 @@ bbbfly.button._doUpdate = function(node){
         iIndent += hPadding.B;
         hPadding.B += iSize.H + gap;
       }
+      minHDim.H = iSize.W;
     break;
   }
 
@@ -233,11 +253,19 @@ bbbfly.button._doUpdate = function(node){
     break;
   }
 
+  if(hasAlt){
+    if(this.HTMLEncode){alt = ng_htmlEncode(alt,false);}
+    node.title = alt;
+  }
+  else{
+    node.title = '';
+  }
+
   var cursor = ((hasClick || hasDblClick) ? 'pointer' : 'default');
   node.style.cursor = cursor;
 
-  hNode.style.minWidth = bbbfly.Renderer.StyleDim(iSize.W);
-  hNode.style.minHeight = bbbfly.Renderer.StyleDim(iSize.H);
+  hNode.style.minWidth = bbbfly.Renderer.StyleDim(minHDim.W);
+  hNode.style.minHeight = bbbfly.Renderer.StyleDim(minHDim.H);
   hNode.style.marginLeft = bbbfly.Renderer.StyleDim(hPadding.L + indent);
   hNode.style.marginTop = bbbfly.Renderer.StyleDim(hPadding.T + indent);
   hNode.style.marginRight = bbbfly.Renderer.StyleDim(hPadding.R + indent);
@@ -401,6 +429,9 @@ bbbfly.button._ngGetState = function(){
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
+ * @property {string} [Alt=null] - Alt string
+ * @property {string} [AltRes=null] - Alt  resource ID
+ *
  * @property {string} [Text=null] - Text string
  * @property {string} [TextRes=null] - Text resource ID
  * @property {bbbfly.Btn.textalign} [TextAlign=left]
@@ -421,6 +452,9 @@ bbbfly.button._ngGetState = function(){
 bbbfly.Btn = function(def,ref,parent){
   ng_MergeDef(def,{
     Data: {
+      Alt: null,
+      AltRes: null,
+
       Text: null,
       TextRes: null,
       TextAlign: bbbfly.Btn.textalign.left,
@@ -482,6 +516,14 @@ bbbfly.Btn = function(def,ref,parent){
       /** @private */
       DoPtrDblClick: bbbfly.button._doPtrDblClick,
 
+      /**
+       * @function
+       * @name GetAlt
+       * @memberof bbbfly.Btn#
+       *
+       * @return {string|null}
+       */
+      GetAlt: bbbfly.button._getAlt,
       /**
        * @function
        * @name GetText
