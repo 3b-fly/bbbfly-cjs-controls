@@ -80,7 +80,6 @@ bbbfly.button._setIcon = function(node,proxy,align,state,indent){
 };
 bbbfly.button._doCreate = function(def,ref,node){
   this.DoCreate.callParent(def,ref,node);
-  ngc_PtrEvents(this,'btn',['tap','doubletap']);
 
   var holder = document.createElement('DIV');
   holder.id = this.ID+'_H';
@@ -310,12 +309,19 @@ bbbfly.button._doMouseLeave = function(event,options){
   bbbfly.Renderer.UpdateImageHTML(proxy,state);
   return state;
 };
+bbbfly.button._doAcceptCPGestures = function(elm, gestures){
+  gestures.drag = false;
+};
+bbbfly.button._doAcceptGestures = function(elm, gestures){
+  gestures.doubletap = true;
+  gestures.tap = true;
+};
 bbbfly.button._doPtrClick = function(ptrInfo){
-  if(ptrInfo.EventID !== 'btn'){return;}
+  if(ptrInfo.EventID !== 'control'){return;}
   this.Click(ptrInfo.Event);
 };
 bbbfly.button._doPtrDblClick = function(ptrInfo){
-  if(ptrInfo.EventID !== 'btn'){return;}
+  if(ptrInfo.EventID !== 'control'){return;}
   this.DblClick(ptrInfo.Event);
 };
 bbbfly.button._click = function(event){
@@ -397,6 +403,11 @@ bbbfly.Btn = function(def,ref,parent){
       _IconProxy: null,
       _HolderHtml: ''
     },
+    ControlsPanel: {
+      Methods: {
+        DoAcceptGestures: bbbfly.button._doAcceptCPGestures
+      }
+    },
     Events: {
       OnClick: bbbfly.button._onClick,
       OnDblClick: bbbfly.button._onDblClick
@@ -407,6 +418,7 @@ bbbfly.Btn = function(def,ref,parent){
       DoUpdateImages: bbbfly.button._doUpdateImages,
       DoMouseEnter: bbbfly.button._doMouseEnter,
       DoMouseLeave: bbbfly.button._doMouseLeave,
+      DoAcceptGestures: bbbfly.button._doAcceptGestures,
       DoPtrClick: bbbfly.button._doPtrClick,
       DoPtrDblClick: bbbfly.button._doPtrDblClick,
       GetAlt: bbbfly.button._getAlt,
