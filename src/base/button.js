@@ -39,34 +39,33 @@ bbbfly.button._getIcon = function(){
 };
 
 /** @ignore */
-bbbfly.button._setIcon = function(node,proxy,align,state,indent){
-  if(!node || !proxy){return;}
+bbbfly.button._setIcon = function(node,proxy,indent,align,state){
+  if(!node || !proxy || !indent){return;}
 
   var width = Number.isInteger(proxy.W) ? proxy.W : 0;
   var height = Number.isInteger(proxy.H) ? proxy.H : 0;
-  if(!Number.isInteger(indent)){indent = 0;}
 
   var pos = {L:null,T:null,R:null,B:null};
   var margin = {L:null,T:null};
 
   switch(align){
     case bbbfly.Btn.iconalign.left:
-      pos.L = indent;
+      pos.L = Number.isInteger(indent.L) ? indent.L : 0;
       margin.T = Math.floor(height/2);
       pos.T = '50%';
     break;
     case bbbfly.Btn.iconalign.top:
-      pos.T = indent;
+      pos.T = Number.isInteger(indent.T) ? indent.T : 0;
       margin.L = Math.floor(width/2);
       pos.L = '50%';
     break;
     case bbbfly.Btn.iconalign.right:
-      pos.R = indent;
+      pos.R = Number.isInteger(indent.R) ? indent.R : 0;
       margin.T = Math.floor(height/2);
       pos.T = '50%';
     break;
     case bbbfly.Btn.iconalign.bottom:
-      pos.B = indent;
+      pos.B = Number.isInteger(indent.B) ? indent.B : 0;
       margin.L = Math.floor(width/2);
       pos.L = '50%';
     break;
@@ -139,11 +138,24 @@ bbbfly.button._doUpdate = function(node){
   var hPosSet = false;
 
   var iProxy = bbbfly.Renderer.ImageProxy(icon,state,this.ID+'_I');
-  var indent = Number.isInteger(this.Indent) ? this.Indent : 0;
-  var gap = Number.isInteger(this.IconGap) ? this.IconGap : 0;
+  var indent = {L:0,T:0,R:0,B:0,I:0};
 
-  if(!hasText || !hasIcon){gap = 0;}
-  var iIndent = indent;
+  if(Object.isObject(this.Indent)){
+    if(Number.isInteger(this.Indent.L)){indent.L = this.Indent.L;}
+    if(Number.isInteger(this.Indent.T)){indent.T = this.Indent.T;}
+    if(Number.isInteger(this.Indent.R)){indent.R = this.Indent.R;}
+    if(Number.isInteger(this.Indent.B)){indent.B = this.Indent.B;}
+    if(Number.isInteger(this.Indent.I)){indent.I = this.Indent.I;}
+
+    if(!hasText || !hasIcon){indent.I = 0;}
+  }
+
+  var iIndent = {
+    L:indent.L,
+    T:indent.T,
+    R:indent.R,
+    B:indent.B
+  };
 
   var iSize = {
     W: Number.isInteger(iProxy.W) ? iProxy.W : 0,
@@ -157,8 +169,8 @@ bbbfly.button._doUpdate = function(node){
       if(iSize.W){
         hPosSet = true;
         hPosition.L = 0;
-        iIndent += hPadding.L;
-        hPadding.L += iSize.W + gap;
+        iIndent.L += hPadding.L;
+        hPadding.L += iSize.W + indent.I;
       }
       minHDim.H = iSize.H;
     break;
@@ -166,8 +178,8 @@ bbbfly.button._doUpdate = function(node){
       if(iSize.H){
         hPosSet = true;
         hPosition.T = 0;
-        iIndent += hPadding.T;
-        hPadding.T += iSize.H + gap;
+        iIndent.T += hPadding.T;
+        hPadding.T += iSize.H + indent.I;
       }
       minHDim.H = iSize.W;
     break;
@@ -175,8 +187,8 @@ bbbfly.button._doUpdate = function(node){
       if(iSize.W){
         hPosSet = true;
         hPosition.R = 0;
-        iIndent += hPadding.R;
-        hPadding.R += iSize.W + gap;
+        iIndent.R += hPadding.R;
+        hPadding.R += iSize.W + indent.I;
       }
       minHDim.H = iSize.H;
     break;
@@ -184,8 +196,8 @@ bbbfly.button._doUpdate = function(node){
       if(iSize.H){
         hPosSet = true;
         hPosition.B = 0;
-        iIndent += hPadding.B;
-        hPadding.B += iSize.H + gap;
+        iIndent.B += hPadding.B;
+        hPadding.B += iSize.H + indent.I;
       }
       minHDim.H = iSize.W;
     break;
@@ -193,7 +205,7 @@ bbbfly.button._doUpdate = function(node){
 
   if(iNode){
     bbbfly.button._setIcon(
-      iNode,iProxy,this.IconAlign,state,iIndent
+      iNode,iProxy,iIndent,this.IconAlign,state
     );
   }
 
@@ -265,10 +277,10 @@ bbbfly.button._doUpdate = function(node){
 
   hNode.style.minWidth = bbbfly.Renderer.StyleDim(minHDim.W);
   hNode.style.minHeight = bbbfly.Renderer.StyleDim(minHDim.H);
-  hNode.style.marginLeft = bbbfly.Renderer.StyleDim(hPadding.L + indent);
-  hNode.style.marginTop = bbbfly.Renderer.StyleDim(hPadding.T + indent);
-  hNode.style.marginRight = bbbfly.Renderer.StyleDim(hPadding.R + indent);
-  hNode.style.marginBottom = bbbfly.Renderer.StyleDim(hPadding.B + indent);
+  hNode.style.marginLeft = bbbfly.Renderer.StyleDim(hPadding.L + indent.L);
+  hNode.style.marginTop = bbbfly.Renderer.StyleDim(hPadding.T + indent.T);
+  hNode.style.marginRight = bbbfly.Renderer.StyleDim(hPadding.R + indent.R);
+  hNode.style.marginBottom = bbbfly.Renderer.StyleDim(hPadding.B + indent.B);
   hNode.style.left = bbbfly.Renderer.StyleDim(hPosition.L);
   hNode.style.top = bbbfly.Renderer.StyleDim(hPosition.T);
   hNode.style.right = bbbfly.Renderer.StyleDim(hPosition.R);
@@ -450,8 +462,7 @@ bbbfly.button._ngGetState = function(){
  *   Define define or set it to true before button creation to support icon
  * @property {bbbfly.Btn.iconalign} [IconAlign=left]
  *
- * @property {px} [Indent=0] - Space between frame and content
- * @property {px} [IconGap=0] - Space between icon and text
+ * @property {bbbfly.Btn.indent} [Indent=null]
  *
  * @property {bbbfly.Btn.autosize} [AutoSize=none]
  * @property {bbbfly.Btn.selecttype} [SelectType=none]
@@ -472,8 +483,7 @@ bbbfly.Btn = function(def,ref,parent){
       Icon: null,
       IconAlign: bbbfly.Btn.iconalign.left,
 
-      Indent: 0,
-      IconGap: 0,
+      Indent: null,
 
       AutoSize: bbbfly.Btn.autosize.none,
       SelectType: bbbfly.Btn.selecttype.none,
@@ -632,6 +642,20 @@ bbbfly.Btn.selecttype = {
   dblclick: 2,
   both: 3
 };
+
+/**
+ * @typedef {object} indent
+ * @memberOf bbbfly.Btn
+ *
+ * @description
+ *   Possible values for {@link bbbfly.Btn.Indent|Indent}
+ *
+ * @property {px} [L] - Gap between left frame and content
+ * @property {px} [T] - Gap between top frame and content
+ * @property {px} [R] - Gap between right frame and content
+ * @property {px} [B] - Gap between bottom frame and content
+ * @property {px} [I=undefined] - Gap between icon and text
+ */
 
 /**
  * @class
