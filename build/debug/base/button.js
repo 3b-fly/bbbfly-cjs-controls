@@ -124,7 +124,7 @@ bbbfly.button._doUpdate = function(node){
   var hPosSet = false;
 
   var iProxy = bbbfly.Renderer.ImageProxy(icon,state,this.ID+'_I');
-    var indent = {L:0,T:0,R:0,B:0,I:0};
+  var indent = {L:0,T:0,R:0,B:0,I:0};
 
   if(Object.isObject(this.Indent)){
     if(Number.isInteger(this.Indent.L)){indent.L = this.Indent.L;}
