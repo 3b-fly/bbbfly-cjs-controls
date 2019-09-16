@@ -220,6 +220,23 @@ bbbfly.list._highlightItem = function(item){
 };
 
 /** @ignore */
+bbbfly.list._updateClassName = function(){
+  var node = this.Elm();
+  if(node){
+    var cn = this.BaseClassName;
+
+    if(!this.Enabled){cn = cn+' '+cn+'Disabled';}
+    else if(this.Invalid){cn = cn+' '+cn+'Invalid';}
+
+    node.className = cn;
+  }
+};
+
+bbbfly.list._onUpdated = function(){
+  this.UpdateClassName();
+};
+
+/** @ignore */
 bbbfly.list._onCalcIndent = function(list,item,id,level){
   var indent = 0;
   if(level > 0){
@@ -242,14 +259,32 @@ bbbfly.list._setInvalid = function(invalid,update){
 
   if(this.Invalid === invalid){return true;}
 
-  if(this.OnSetInvalid && !this.OnSetInvalid(this,invalid,update)){
+  if(
+    Function.isFunction(this.OnSetInvalid)
+    && !this.OnSetInvalid(this,invalid,update)
+  ){
     return false;
   }
 
   this.Invalid = invalid;
-  if(this.DoSetInvalid){this.DoSetInvalid(invalid,update);}
+  if(Function.isFunction(this.DoSetInvalid)){
+    this.DoSetInvalid(invalid,update);
+  }
+  if(Function.isFunction(this.OnInvalidChanged)){
+    this.OnInvalidChanged();
+  }
 
   return true;
+};
+
+/** @ignore */
+bbbfly.list._onInvalidChanged = function(){
+  this.UpdateClassName();
+};
+
+/** @ignore */
+bbbfly.list._onEnabledChanged = function(){
+  this.UpdateClassName();
 };
 
 /** @ignore */
@@ -364,7 +399,11 @@ bbbfly.List = function(def,ref,parent){
     },
     Events: {
       /** @private */
+      OnUpdated: bbbfly.list._onUpdated,
+      /** @private */
       OnCalcIndent: bbbfly.list._onCalcIndent,
+      /** @private */
+      OnEnabledChanged: bbbfly.list._onEnabledChanged,
       /**
        * @event
        * @name OnSetInvalid
@@ -377,10 +416,23 @@ bbbfly.List = function(def,ref,parent){
        *
        * @see {@link bbbfly.List#SetInvalid|SetInvalid()}
        * @see {@link bbbfly.List#DoSetInvalid|DoSetInvalid()}
+       * @see {@link bbbfly.List#event:OnInvalidChanged|OnInvalidChanged}
        */
-      OnSetInvalid: null
+      OnSetInvalid: null,
+      /**
+       * @event
+       * @name OnInvalidChanged
+       * @memberof bbbfly.List#
+       *
+       * @see {@link bbbfly.List#SetInvalid|SetInvalid()}
+       * @see {@link bbbfly.List#DoSetInvalid|DoSetInvalid()}
+       * @see {@link bbbfly.List#event:OnSetInvalid|OnSetInvalid}
+       */
+      OnInvalidChanged: bbbfly.list._onInvalidChanged
     },
     Methods: {
+      /** @private */
+      UpdateClassName: bbbfly.list._updateClassName,
       /** @private */
       SelectDropDownItemWithFocus: bbbfly.list._selectDropDownItemWithFocus,
       /**
@@ -456,6 +508,7 @@ bbbfly.List = function(def,ref,parent){
        *
        * @see {@link bbbfly.List#DoSetInvalid|DoSetInvalid()}
        * @see {@link bbbfly.List#event:OnSetInvalid|OnSetInvalid}
+       * @see {@link bbbfly.List#event:OnInvalidChanged|OnInvalidChanged}
        */
       SetInvalid: bbbfly.list._setInvalid,
       /**
@@ -471,6 +524,7 @@ bbbfly.List = function(def,ref,parent){
        *
        * @see {@link bbbfly.List#SetInvalid|SetInvalid()}
        * @see {@link bbbfly.List#event:OnSetInvalid|OnSetInvalid}
+       * @see {@link bbbfly.List#event:OnInvalidChanged|OnInvalidChanged}
        */
       DoSetInvalid: null
     }

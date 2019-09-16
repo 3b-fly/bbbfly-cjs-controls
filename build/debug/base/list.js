@@ -195,6 +195,21 @@ bbbfly.list._highlightItem = function(item){
   }
   return false;
 };
+bbbfly.list._updateClassName = function(){
+  var node = this.Elm();
+  if(node){
+    var cn = this.BaseClassName;
+
+    if(!this.Enabled){cn = cn+' '+cn+'Disabled';}
+    else if(this.Invalid){cn = cn+' '+cn+'Invalid';}
+
+    node.className = cn;
+  }
+};
+
+bbbfly.list._onUpdated = function(){
+  this.UpdateClassName();
+};
 bbbfly.list._onCalcIndent = function(list,item,id,level){
   var indent = 0;
   if(level > 0){
@@ -215,14 +230,28 @@ bbbfly.list._setInvalid = function(invalid,update){
 
   if(this.Invalid === invalid){return true;}
 
-  if(this.OnSetInvalid && !this.OnSetInvalid(this,invalid,update)){
+  if(
+    Function.isFunction(this.OnSetInvalid)
+    && !this.OnSetInvalid(this,invalid,update)
+  ){
     return false;
   }
 
   this.Invalid = invalid;
-  if(this.DoSetInvalid){this.DoSetInvalid(invalid,update);}
+  if(Function.isFunction(this.DoSetInvalid)){
+    this.DoSetInvalid(invalid,update);
+  }
+  if(Function.isFunction(this.OnInvalidChanged)){
+    this.OnInvalidChanged();
+  }
 
   return true;
+};
+bbbfly.list._onInvalidChanged = function(){
+  this.UpdateClassName();
+};
+bbbfly.list._onEnabledChanged = function(){
+  this.UpdateClassName();
 };
 bbbfly.list._selectDropDownItemWithFocus = function(item){
   var selected = this.SelectDropDownItem(item);
@@ -295,10 +324,14 @@ bbbfly.List = function(def,ref,parent){
 
     },
     Events: {
+      OnUpdated: bbbfly.list._onUpdated,
       OnCalcIndent: bbbfly.list._onCalcIndent,
-      OnSetInvalid: null
+      OnEnabledChanged: bbbfly.list._onEnabledChanged,
+      OnSetInvalid: null,
+      OnInvalidChanged: bbbfly.list._onInvalidChanged
     },
     Methods: {
+      UpdateClassName: bbbfly.list._updateClassName,
       SelectDropDownItemWithFocus: bbbfly.list._selectDropDownItemWithFocus,
       GetExpanded: bbbfly.list._getExpanded,
       ExpandItems: bbbfly.list._expandItems,
