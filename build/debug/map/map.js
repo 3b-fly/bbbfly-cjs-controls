@@ -227,6 +227,20 @@ bbbfly.map.map._layersChanged = function(mapCtrl){
     mapCtrl.OnLayersChanged();
   }
 };
+bbbfly.map.map._layerInterface = function(iname,iface){
+  if(!String.isString(iname)){return;}
+
+  var ifc = bbbfly.Map[iname];
+  if(!Object.isObject(ifc)){return;}
+
+  if(Object.isObject(iface)){ng_MergeVar(iface,ifc);}
+  else{iface = ifc;}
+
+  if(ifc.extends){
+    this.LayerInterface(ifc.extends,iface);
+  }
+  return iface;
+};
 bbbfly.map.map._getLayer = function(id){
   if(!String.isString(id)){return null;}
 
@@ -298,9 +312,10 @@ bbbfly.map.map._addLayer = function(def){
   if(layer){
     if(String.isString(def.Id)){this.RemoveLayer(def.Id);}
     else{def.Id = '_L'+(this._layerId++);}
-
-    layer.addTo(map);
     this._layers[def.Id] = layer;
+
+    this.SetLayerVisible(def.Id,true);
+
     return true;
   }
   return false;
@@ -332,29 +347,33 @@ bbbfly.map.map._removeLayers = function(ids){
 bbbfly.map.map._removeLayer = function(id){
   if(!String.isString(id)){return false;}
 
-  var layer = this._layers[id];
-  if(layer){
+  if(this.SetLayerVisible(id,false)){
     delete this._layers[id];
-    if(Function.isFunction(layer.remove)){
-      layer.remove();
-    }
     return true;
   }
   return false;
 };
-bbbfly.map.map._layerInterface = function(iname,iface){
-  if(!String.isString(iname)){return;}
 
-  var ifc = bbbfly.Map[iname];
-  if(!Object.isObject(ifc)){return;}
+bbbfly.map.map._setLayerVisible = function(id,visible){
+  var layer = this.GetLayer(id);
+  if(!layer){return false;}
 
-  if(Object.isObject(iface)){ng_MergeVar(iface,ifc);}
-  else{iface = ifc;}
+  var map = this.GetMap();
+  if(!map){return false;}
 
-  if(ifc.extends){
-    this.LayerInterface(ifc.extends,iface);
+  if(visible){
+    if(Function.isFunction(layer.addTo)){
+      layer.addTo(map);
+      return true;
+    }
   }
-  return iface;
+  else{
+    if(Function.isFunction(layer.removeFrom)){
+      layer.removeFrom(map);
+      return true;
+    }
+  }
+  return false;
 };
 bbbfly.map.map._onMapLayersChanged = function(event){
   if(event.target && event.target.Owner){
@@ -484,6 +503,7 @@ bbbfly.Map = function(def,ref,parent){
       AddLayer: bbbfly.map.map._addLayer,
       RemoveLayers: bbbfly.map.map._removeLayers,
       RemoveLayer: bbbfly.map.map._removeLayer,
+      SetLayerVisible: bbbfly.map.map._setLayerVisible,
       GetAttributions: bbbfly.map.map._getAttributions
     }
   });
