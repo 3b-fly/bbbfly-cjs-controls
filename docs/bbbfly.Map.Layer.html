@@ -1259,6 +1259,9 @@
         <li data-name="bbbfly.Map#SetInvalid">
           <a href="bbbfly.Map.html#SetInvalid">SetInvalid</a>
         </li>
+        <li data-name="bbbfly.Map#SetLayerVisible">
+          <a href="bbbfly.Map.html#SetLayerVisible">SetLayerVisible</a>
+        </li>
         <li data-name="bbbfly.Map#SetMaxBounds">
           <a href="bbbfly.Map.html#SetMaxBounds">SetMaxBounds</a>
         </li>
@@ -1993,7 +1996,6 @@
 <span class="param-type">string</span>
                 </td>
                 <td class="description last">
-                  Layer can be accesses by this ID
                 </td>
             </tr>
             <tr id="property:Type">
@@ -2002,6 +2004,16 @@
                     </td>
                 <td class="type">
 <span class="param-type"><a href="bbbfly.Map.html#.layer">bbbfly.Map.layer</a></span>
+                </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:Display">
+                    <td class="name">
+                      <span class="param-name">Display</span>
+                    </td>
+                <td class="type">
+<span class="param-type"><a href="bbbfly.Map.Layer.html#.display">bbbfly.Map.Layer.display</a></span>
                 </td>
                 <td class="description last">
                 </td>
@@ -2015,20 +2027,6 @@
                 </td>
                 <td class="description last">
                   Url used for tile requests
-                </td>
-            </tr>
-            <tr id="property:CrossOrigin">
-                    <td class="name">
-                      <span class="param-name">CrossOrigin</span>
-                    </td>
-                <td class="type">
-<span class="param-type">boolean</span>
-|
-<span class="param-type">string</span>
-                </td>
-                <td class="description last">
-                        <span class="optional">optional</span>
-                  Will be added to tile requests
                 </td>
             </tr>
             <tr id="property:ZIndex">
@@ -2081,12 +2079,109 @@
                   Layer copyright attribution
                 </td>
             </tr>
+            <tr id="property:CrossOrigin">
+                    <td class="name">
+                      <span class="param-name">CrossOrigin</span>
+                    </td>
+                <td class="type">
+<span class="param-type">boolean</span>
+|
+<span class="param-type">string</span>
+                </td>
+                <td class="description last">
+                        <span class="optional">optional</span>
+                  Will be added to tile requests
+                </td>
+            </tr>
         </tbody>
     </table>
 </dl>
 <dl class="details">
 </dl>
     </div>
+        <h3>Members</h3>
+        <dl>
+<dt>
+  <div class="nameContainer">
+    <h4 class="name" id=".display">
+  <span class="attribs">
+      <span class="type-signature static">
+        static
+      </span>
+  </span>
+      display
+  <span class="types">
+      <span class="type-signature enum">
+        enum
+      </span>
+      <span class="type-signature string">
+        string
+      </span>
+  </span>
+    </h4>
+  </div>
+</dt>
+<dd class="member-content">
+<dl class="details">
+    <table class="props" my="test">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr id="property:fixed">
+                    <td class="name">
+                      <span class="param-name">fixed</span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                    <td class="default">
+                        fixed
+                    </td>
+                <td class="description last">
+                  Always shown
+                </td>
+            </tr>
+            <tr id="property:visible">
+                    <td class="name">
+                      <span class="param-name">visible</span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                    <td class="default">
+                        visible
+                    </td>
+                <td class="description last">
+                  Optional, shown as default
+                </td>
+            </tr>
+            <tr id="property:hidden">
+                    <td class="name">
+                      <span class="param-name">hidden</span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                    <td class="default">
+                        hidden
+                    </td>
+                <td class="description last">
+                  Optional, hidden as default
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</dl>
+<dl class="details">
+</dl>
+</dd>
+        </dl>
 </article>
 </section>
         <footer>
