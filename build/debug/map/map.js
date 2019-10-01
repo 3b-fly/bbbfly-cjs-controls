@@ -302,11 +302,16 @@ bbbfly.map.map._createLayer = function(def){
     Visible: false
   };
 };
+bbbfly.map.map._getLayers = function(){
+  return Object.isObject(this._layers) ? this._layers : {};
+};
 bbbfly.map.map._getLayer = function(id){
   if(!String.isString(id)){return null;}
 
-  var layer = this._layers[id];
-  return (layer) ? layer : null;
+  var layers = this.GetLayers();
+  var layer = layers[id];
+
+  return Object.isObject(layer) ? layer : null;
 };
 bbbfly.map.map._addLayers = function(defs){
   if(!Array.isArray(defs)){return false;}
@@ -525,6 +530,7 @@ bbbfly.Map = function(def,ref,parent){
       ZoomOut: bbbfly.map.map._zoomOut,
       SetCenter: bbbfly.map.map._setCenter,
       GetCenter: bbbfly.map.map._getCenter,
+      GetLayers: bbbfly.map.map._getLayers,
       GetLayer: bbbfly.map.map._getLayer,
       AddLayers: bbbfly.map.map._addLayers,
       AddLayer: bbbfly.map.map._addLayer,

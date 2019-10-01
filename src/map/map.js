@@ -366,11 +366,18 @@ bbbfly.map.map._createLayer = function(def){
 };
 
 /** @ignore */
+bbbfly.map.map._getLayers = function(){
+  return Object.isObject(this._layers) ? this._layers : {};
+};
+
+/** @ignore */
 bbbfly.map.map._getLayer = function(id){
   if(!String.isString(id)){return null;}
 
-  var layer = this._layers[id];
-  return (layer) ? layer : null;
+  var layers = this.GetLayers();
+  var layer = layers[id];
+
+  return Object.isObject(layer) ? layer : null;
 };
 
 /** @ignore */
@@ -934,14 +941,31 @@ bbbfly.Map = function(def,ref,parent){
       GetCenter: bbbfly.map.map._getCenter,
       /**
        * @function
+       * @name GetLayers
+       * @memberof bbbfly.Map#
+       *
+       * @description Get map layers.
+       *
+       *  @return {object}
+       *
+       * @see {@link bbbfly.Map#GetLayer|GetLayer()}
+       * @see {@link bbbfly.Map#AddLayers|AddLayers()}
+       * @see {@link bbbfly.Map#AddLayer|AddLayer()}
+       * @see {@link bbbfly.Map#RemoveLayers|RemoveLayers()}
+       * @see {@link bbbfly.Map#RemoveLayer|RemoveLayer()}
+       */
+      GetLayers: bbbfly.map.map._getLayers,
+      /**
+       * @function
        * @name GetLayer
        * @memberof bbbfly.Map#
        *
-       * @description Get Leaflet layer.
+       * @description Get map layer.
        *
        * @param {string} id
-       * @return {object} {@link https://leafletjs.com/reference-1.4.0.html#layer|L.Layer}
+       * @return {object}
        *
+       * @see {@link bbbfly.Map#GetLayers|GetLayers()}
        * @see {@link bbbfly.Map#AddLayers|AddLayers()}
        * @see {@link bbbfly.Map#AddLayer|AddLayer()}
        * @see {@link bbbfly.Map#RemoveLayers|RemoveLayers()}
@@ -953,11 +977,12 @@ bbbfly.Map = function(def,ref,parent){
        * @name AddLayers
        * @memberof bbbfly.Map#
        *
-       * @description Add new Leaflet layers.
+       * @description Add new map layers.
        *
        * @param {bbbfly.Map.Layer[]} defs
        * @return {boolean} - If all layers were added
        *
+       * @see {@link bbbfly.Map#GetLayers|GetLayers()}
        * @see {@link bbbfly.Map#GetLayer|GetLayer()}
        * @see {@link bbbfly.Map#AddLayer|AddLayer()}
        * @see {@link bbbfly.Map#RemoveLayers|RemoveLayers()}
@@ -970,11 +995,12 @@ bbbfly.Map = function(def,ref,parent){
        * @name AddLayer
        * @memberof bbbfly.Map#
        *
-       * @description Add new Leaflet layer.
+       * @description Add new map layer.
        *
        * @param {bbbfly.Map.Layer} def
        * @return {boolean} - If layer was added
        *
+       * @see {@link bbbfly.Map#GetLayers|GetLayers()}
        * @see {@link bbbfly.Map#GetLayer|GetLayer()}
        * @see {@link bbbfly.Map#AddLayers|AddLayers()}
        * @see {@link bbbfly.Map#RemoveLayers|RemoveLayers()}
@@ -987,11 +1013,12 @@ bbbfly.Map = function(def,ref,parent){
        * @name RemoveLayers
        * @memberof bbbfly.Map#
        *
-       * @description Remove Leaflet layers.
+       * @description Remove map layers.
        *
        * @param {string[]} [ids=undefined] - All layers will be removed if no ID is passed
        * @return {boolean} - If all layers were removed
        *
+       * @see {@link bbbfly.Map#GetLayers|GetLayers()}
        * @see {@link bbbfly.Map#GetLayer|GetLayer()}
        * @see {@link bbbfly.Map#AddLayers|AddLayers()}
        * @see {@link bbbfly.Map#AddLayer|AddLayer()}
@@ -1004,11 +1031,12 @@ bbbfly.Map = function(def,ref,parent){
        * @name RemoveLayer
        * @memberof bbbfly.Map#
        *
-       * @description Remove Leaflet layer.
+       * @description Remove map layer.
        *
        * @param {string} id
        * @return {boolean} - If layer was removed
        *
+       * @see {@link bbbfly.Map#GetLayers|GetLayers()}
        * @see {@link bbbfly.Map#GetLayer|GetLayer()}
        * @see {@link bbbfly.Map#AddLayers|AddLayers()}
        * @see {@link bbbfly.Map#AddLayer|AddLayer()}
@@ -1021,7 +1049,7 @@ bbbfly.Map = function(def,ref,parent){
        * @name SetLayerVisible
        * @memberof bbbfly.Map#
        *
-       * @description Shows or hides Leaflet layer.
+       * @description Shows or hides map layer.
        *
        * @param {string} id
        * @param {boolean} visible
