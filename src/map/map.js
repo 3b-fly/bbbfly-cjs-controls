@@ -360,6 +360,9 @@ bbbfly.map.map._createLayer = function(def){
   return {
     Id: String.isString(def.Id) ? def.Id : '_L_'+(this._layerId++),
     Display: def.Display ? def.Display : bbbfly.Map.Layer.display.fixed,
+    NameRes: def.NameRes ? def.NameRes : null,
+    Name: def.Name ? def.Name : null,
+
     Layer: mapLayer,
     Visible: false
   };
@@ -467,7 +470,7 @@ bbbfly.map.map._setLayerVisible = function(id,visible){
   var visible = !!visible;
   if(visible === layer.Visible){return true;}
 
-  if((layer.Display === bbbfly.Map.Layer.display.fixed) && !visible){
+  if(layer.Display === bbbfly.Map.Layer.display.fixed){
     return false;
   }
 
@@ -493,6 +496,25 @@ bbbfly.map.map._onMapLayersChanged = function(event){
   if(event.target && event.target.Owner){
     bbbfly.map.map._layersChanged(event.target.Owner);
   }
+};
+
+/** @ignore */
+bbbfly.map.map._getLayerName = function(id){
+  var layer = this.GetLayer(id);
+  if(!layer){return null;}
+
+  if(String.isString(layer.Name)){
+    return layer.Name;
+  }
+  else if(Object.isObject(layer.Name)){
+    var text = layer.Name[ngApp.Lang];
+    if(String.isString(text)){return text;}
+  }
+  else if(String.isString(layer.NameRes)){
+    return ngTxt(layer.NameRes);
+  }
+
+  return null;
 };
 
 /** @ignore */
@@ -674,8 +696,6 @@ bbbfly.Map = function(def,ref,parent){
       Dispose: bbbfly.map.map._dispose,
       /** @private */
       LayerInterface: bbbfly.map.map._layerInterface,
-      /** @private */
-      CreateLayer: bbbfly.map.map._createLayer,
 
       /**
        * @function
@@ -941,12 +961,30 @@ bbbfly.Map = function(def,ref,parent){
       GetCenter: bbbfly.map.map._getCenter,
       /**
        * @function
+       * @name CreateLayer
+       * @memberof bbbfly.Map#
+       *
+       * @description Create Leaflet layer wrapper.
+       *
+       * @param {bbbfly.Map.Layer} def
+       * @return {bbbfly.Map.layer}
+       *
+       * @see {@link bbbfly.Map#GetLayers|GetLayers()}
+       * @see {@link bbbfly.Map#GetLayer|GetLayer()}
+       * @see {@link bbbfly.Map#AddLayers|AddLayers()}
+       * @see {@link bbbfly.Map#AddLayer|AddLayer()}
+       * @see {@link bbbfly.Map#RemoveLayers|RemoveLayers()}
+       * @see {@link bbbfly.Map#RemoveLayer|RemoveLayer()}
+       */
+      CreateLayer: bbbfly.map.map._createLayer,
+      /**
+       * @function
        * @name GetLayers
        * @memberof bbbfly.Map#
        *
        * @description Get map layers.
        *
-       *  @return {object}
+       * @return {bbbfly.Map.layer[]}
        *
        * @see {@link bbbfly.Map#GetLayer|GetLayer()}
        * @see {@link bbbfly.Map#AddLayers|AddLayers()}
@@ -963,7 +1001,7 @@ bbbfly.Map = function(def,ref,parent){
        * @description Get map layer.
        *
        * @param {string} id
-       * @return {object}
+       * @return {bbbfly.Map.layer}
        *
        * @see {@link bbbfly.Map#GetLayers|GetLayers()}
        * @see {@link bbbfly.Map#AddLayers|AddLayers()}
@@ -1061,6 +1099,17 @@ bbbfly.Map = function(def,ref,parent){
       SetLayerVisible: bbbfly.map.map._setLayerVisible,
       /**
        * @function
+       * @name GetLayerName
+       * @memberof bbbfly.Map#
+       *
+       * @description Get layer name for current language.
+       *
+       * @param {string} id
+       * @return {string}
+       */
+      GetLayerName: bbbfly.map.map._getLayerName,
+      /**
+       * @function
        * @name GetAttributions
        * @memberof bbbfly.Map#
        *
@@ -1075,25 +1124,6 @@ bbbfly.Map = function(def,ref,parent){
   });
 
   return ngCreateControlAsType(def,'bbbfly.Frame',ref,parent);
-};
-
-/**
- * @enum {string}
- *
- * @description
- *   Supported map layer types.
- */
-bbbfly.Map.layer = {
-  image: 'ImageLayer',
-  tile: 'TileLayer',
-  wms: 'WMSLayer',
-
-  arcgis_online: 'ArcGISOnlineLayer',
-  arcgis_server: 'ArcGISServerLayer',
-  arcgis_enterprise: 'ArcGISEnterpriseLayer',
-
-  mapbox_tile: 'MapboxTileLayer',
-  mapbox_style: 'MapboxStyleLayer'
 };
 
 /**
@@ -1117,15 +1147,32 @@ ngUserControls['bbbfly_map'] = {
 };
 
 /**
+ * @typedef {object} layer
+ * @memberOf bbbfly.Map
+ *
+ * @description
+ *   Leaflet layer wrapper.
+ *
+ * @property {string} Id
+ * @property {bbbfly.Map.Layer.display} Display
+ * @property {string} [NameRes=undefined] - Layer name resource ID
+ * @property {string|object} [Name=undefined] - Layer name by language in format {lang: 'name'}
+ * @property {boolean} Visible
+ * @property {mapLayer} Layer
+ */
+
+/**
  * @interface Layer
  * @memberOf bbbfly.Map
  *
  * @description
  *   Ancestor for all Leaflet layer definitions.
  *
- * @property {string} Id
- * @property {bbbfly.Map.layer} Type
- * @property {bbbfly.Map.Layer.display} Display
+ * @property {string} [Id=undefined]
+ * @property {bbbfly.Map.Layer.type} Type
+ * @property {bbbfly.Map.Layer.display} [Display=fixed]
+ * @property {string} [NameRes=undefined] - Layer name resource ID
+ * @property {string|object} [Name=undefined] - Layer name by language
  *
  * @property {url} Url - Url used for tile requests
  * @property {number} [ZIndex=undefined] - Layer z-index
@@ -1154,6 +1201,25 @@ bbbfly.Map.Layer = {
 
 /**
  * @enum {string}
+ *
+ * @description
+ *   Supported map layer types.
+ */
+bbbfly.Map.Layer.type = {
+  image: 'ImageLayer',
+  tile: 'TileLayer',
+  wms: 'WMSLayer',
+
+  arcgis_online: 'ArcGISOnlineLayer',
+  arcgis_server: 'ArcGISServerLayer',
+  arcgis_enterprise: 'ArcGISEnterpriseLayer',
+
+  mapbox_tile: 'MapboxTileLayer',
+  mapbox_style: 'MapboxStyleLayer'
+};
+
+/**
+ * @enum {string}
  */
 bbbfly.Map.Layer.display = {
   /** Always shown */
@@ -1173,7 +1239,7 @@ bbbfly.Map.Layer.display = {
  *   {@link https://leafletjs.com/reference-1.4.0.html#imageoverlay|L.ImageOverlay}
  *   instance will be added to map.
  *
- * @property {bbbfly.Map.layer} Type=image
+ * @property {bbbfly.Map.Layer.type} Type=image
  * @property {url} [ErrorUrl=undefined] - Url used when tile request has failed
  * @property {mapBounds} Bounds - Place image within bounds
  *
@@ -1203,7 +1269,7 @@ bbbfly.Map.ImageLayer = {
  *   {@link https://leafletjs.com/reference-1.4.0.html#tilelayer|L.TileLayer}
  *   instance will be added to map.
  *
- * @property {bbbfly.Map.layer} Type=tile
+ * @property {bbbfly.Map.Layer.type} Type=tile
  * @property {url} [ErrorUrl=undefined] - Url used when tile request has failed
  * @property {mapBounds} [Bounds=undefined] - Display layer only in bounds
  * @property {number} [MinZoom=1] - Display layer from zoom level
@@ -1254,7 +1320,7 @@ bbbfly.Map.TileLayer = {
  *   {@link https://leafletjs.com/reference-1.4.0.html#tilelayer-wms|L.TileLayer.wms}
  *   instance will be added to map.
  *
- * @property {bbbfly.Map.layer} Type=wms
+ * @property {bbbfly.Map.Layer.type} Type=wms
  * @property {string} Layers - Comma-separated WMS layers
  * @property {string} [Styles=undefined] - Comma-separated WMS styles
  * @property {string} [Format='image/png32'] - WMS image format
@@ -1307,7 +1373,7 @@ bbbfly.Map.WMSLayer = {
  *   {@link https://esri.github.io/esri-leaflet/api-reference/layers/tiled-map-layer.html|L.esri.TiledMapLayer}
  *   instance will be added to map.
  *
- * @property {bbbfly.Map.layer} Type=arcgis_online
+ * @property {bbbfly.Map.Layer.type} Type=arcgis_online
  *
  * @see {@link bbbfly.Map.ImageLayer|ImageLayer}
  * @see {@link bbbfly.Map.TileLayer|TileLayer}
@@ -1340,7 +1406,7 @@ bbbfly.Map.ArcGISOnlineLayer = {
  *   {@link https://esri.github.io/esri-leaflet/api-reference/layers/tiled-map-layer.html|L.esri.TiledMapLayer}
  *   instance will be added to map.
  *
- * @property {bbbfly.Map.layer} Type=arcgis_server
+ * @property {bbbfly.Map.Layer.type} Type=arcgis_server
  *
  * @see {@link bbbfly.Map.ImageLayer|ImageLayer}
  * @see {@link bbbfly.Map.TileLayer|TileLayer}
@@ -1373,7 +1439,7 @@ bbbfly.Map.ArcGISServerLayer = {
  *   {@link https://esri.github.io/esri-leaflet/api-reference/layers/dynamic-map-layer.html|L.esri.DynamicMapLayer}
  *   instance will be added to map.
  *
- * @property {bbbfly.Map.layer} Type=arcgis_enterprise
+ * @property {bbbfly.Map.Layer.type} Type=arcgis_enterprise
  * @property {string} [Format='png32'] - Service image format
  * @property {array} Layers - An array of service layer IDs
  * @property {boolean} [Transparent=true] - Allow service image transparency
@@ -1414,7 +1480,7 @@ bbbfly.Map.ArcGISEnterpriseLayer = {
  * @extends bbbfly.Map.TileLayer
  * @memberOf bbbfly.Map
  *
- * @property {bbbfly.Map.layer} Type=mapbox_tile
+ * @property {bbbfly.Map.Layer.type} Type=mapbox_tile
  * @property {string} MapId - {@link https://docs.mapbox.com/help/glossary/map-id/|Mapbox map ID}
  * @property {string} AccessToken - {@link https://docs.mapbox.com/help/glossary/access-token/|Mapbox access token}
  * @property {string} [Format='png32'] - png, png32, png64, png128, png256, jpg70, jpg80, jpg90
@@ -1456,7 +1522,7 @@ bbbfly.Map.MapboxTileLayer = {
  * @extends bbbfly.Map.TileLayer
  * @memberOf bbbfly.Map
  *
- * @property {bbbfly.Map.layer} Type=mapbox_style
+ * @property {bbbfly.Map.Layer.type} Type=mapbox_style
  * @property {string} StyleUrl - {@link https://docs.mapbox.com/help/glossary/style-url/|Mapbox style URL}
  * @property {string} AccessToken - {@link https://docs.mapbox.com/help/glossary/access-token/|Mapbox access token}
  * @property {string} [Format='png32'] - Service image format

@@ -298,6 +298,9 @@ bbbfly.map.map._createLayer = function(def){
   return {
     Id: String.isString(def.Id) ? def.Id : '_L_'+(this._layerId++),
     Display: def.Display ? def.Display : bbbfly.Map.Layer.display.fixed,
+    NameRes: def.NameRes ? def.NameRes : null,
+    Name: def.Name ? def.Name : null,
+
     Layer: mapLayer,
     Visible: false
   };
@@ -392,7 +395,7 @@ bbbfly.map.map._setLayerVisible = function(id,visible){
   var visible = !!visible;
   if(visible === layer.Visible){return true;}
 
-  if((layer.Display === bbbfly.Map.Layer.display.fixed) && !visible){
+  if(layer.Display === bbbfly.Map.Layer.display.fixed){
     return false;
   }
 
@@ -416,6 +419,23 @@ bbbfly.map.map._onMapLayersChanged = function(event){
   if(event.target && event.target.Owner){
     bbbfly.map.map._layersChanged(event.target.Owner);
   }
+};
+bbbfly.map.map._getLayerName = function(id){
+  var layer = this.GetLayer(id);
+  if(!layer){return null;}
+
+  if(String.isString(layer.Name)){
+    return layer.Name;
+  }
+  else if(Object.isObject(layer.Name)){
+    var text = layer.Name[ngApp.Lang];
+    if(String.isString(text)){return text;}
+  }
+  else if(String.isString(layer.NameRes)){
+    return ngTxt(layer.NameRes);
+  }
+
+  return null;
 };
 bbbfly.map.map._getAttributions = function(){
   var map = this.GetMap();
@@ -512,7 +532,6 @@ bbbfly.Map = function(def,ref,parent){
     Methods: {
       Dispose: bbbfly.map.map._dispose,
       LayerInterface: bbbfly.map.map._layerInterface,
-      CreateLayer: bbbfly.map.map._createLayer,
       GetMap: bbbfly.map.map._getMap,
       CreateMap: bbbfly.map.map._createMap,
       DoCreateMap: bbbfly.map.map._doCreateMap,
@@ -530,6 +549,7 @@ bbbfly.Map = function(def,ref,parent){
       ZoomOut: bbbfly.map.map._zoomOut,
       SetCenter: bbbfly.map.map._setCenter,
       GetCenter: bbbfly.map.map._getCenter,
+      CreateLayer: bbbfly.map.map._createLayer,
       GetLayers: bbbfly.map.map._getLayers,
       GetLayer: bbbfly.map.map._getLayer,
       AddLayers: bbbfly.map.map._addLayers,
@@ -537,23 +557,12 @@ bbbfly.Map = function(def,ref,parent){
       RemoveLayers: bbbfly.map.map._removeLayers,
       RemoveLayer: bbbfly.map.map._removeLayer,
       SetLayerVisible: bbbfly.map.map._setLayerVisible,
+      GetLayerName: bbbfly.map.map._getLayerName,
       GetAttributions: bbbfly.map.map._getAttributions
     }
   });
 
   return ngCreateControlAsType(def,'bbbfly.Frame',ref,parent);
-};
-bbbfly.Map.layer = {
-  image: 'ImageLayer',
-  tile: 'TileLayer',
-  wms: 'WMSLayer',
-
-  arcgis_online: 'ArcGISOnlineLayer',
-  arcgis_server: 'ArcGISServerLayer',
-  arcgis_enterprise: 'ArcGISEnterpriseLayer',
-
-  mapbox_tile: 'MapboxTileLayer',
-  mapbox_style: 'MapboxStyleLayer'
 };
 bbbfly.Map.crs = {
   WorldMercator: 'EPSG3395',
@@ -582,6 +591,18 @@ bbbfly.Map.Layer = {
     className: '',
     crossOrigin: false
   }
+};
+bbbfly.Map.Layer.type = {
+  image: 'ImageLayer',
+  tile: 'TileLayer',
+  wms: 'WMSLayer',
+
+  arcgis_online: 'ArcGISOnlineLayer',
+  arcgis_server: 'ArcGISServerLayer',
+  arcgis_enterprise: 'ArcGISEnterpriseLayer',
+
+  mapbox_tile: 'MapboxTileLayer',
+  mapbox_style: 'MapboxStyleLayer'
 };
 bbbfly.Map.Layer.display = {
   fixed: 'fixed',
