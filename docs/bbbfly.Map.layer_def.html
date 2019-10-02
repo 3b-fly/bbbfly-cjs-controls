@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Namespace: bbbfly</title>
+    <title>Interface: layer_def</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -1143,16 +1143,16 @@
           <a href="bbbfly.Map.html#property:DefaultLayer">DefaultLayer</a>
         </li>
     </ul>
-    <ul class="typedefs itemMembers">
-      <span class="subtitle">Typedefs</span>
-        <li data-name="bbbfly.Map.layer">
-          <a href="bbbfly.Map.html#.layer">layer</a>
-        </li>
-    </ul>
     <ul class="members itemMembers">
       <span class="subtitle">Members</span>
         <li data-name="bbbfly.Map.crs">
           <a href="bbbfly.Map.html#.crs">crs</a>
+        </li>
+        <li data-name="bbbfly.Map.display">
+          <a href="bbbfly.Map.html#.display">display</a>
+        </li>
+        <li data-name="bbbfly.Map.layer_type">
+          <a href="bbbfly.Map.html#.layer_type">layer_type</a>
         </li>
     </ul>
     <ul class="methods itemMembers">
@@ -1171,6 +1171,9 @@
         </li>
         <li data-name="bbbfly.Map.Layer">
           <a href="bbbfly.Map.Layer.html">Layer</a>
+        </li>
+        <li data-name="bbbfly.Map.layer_def">
+          <a href="bbbfly.Map.layer_def.html">layer_def</a>
         </li>
         <li data-name="bbbfly.Map.MapboxStyleLayer">
           <a href="bbbfly.Map.MapboxStyleLayer.html">MapboxStyleLayer</a>
@@ -1192,9 +1195,6 @@
         </li>
         <li data-name="bbbfly.Map#AddLayers">
           <a href="bbbfly.Map.html#AddLayers">AddLayers</a>
-        </li>
-        <li data-name="bbbfly.Map#CreateLayer">
-          <a href="bbbfly.Map.html#CreateLayer">CreateLayer</a>
         </li>
         <li data-name="bbbfly.Map#CreateMap">
           <a href="bbbfly.Map.html#CreateMap">CreateMap</a>
@@ -1237,9 +1237,6 @@
         </li>
         <li data-name="bbbfly.Map#GetLayer">
           <a href="bbbfly.Map.html#GetLayer">GetLayer</a>
-        </li>
-        <li data-name="bbbfly.Map#GetLayerName">
-          <a href="bbbfly.Map.html#GetLayerName">GetLayerName</a>
         </li>
         <li data-name="bbbfly.Map#GetLayers">
           <a href="bbbfly.Map.html#GetLayers">GetLayers</a>
@@ -1979,127 +1976,85 @@
   }
 })();</script>
     <div class="main">
-<section class="kind-namespace">
+<section class="kind-interface">
 <header>
     <h1 class="name">
-        bbbfly
-  <span class="types">
-      <span class="type-signature namespace">
-        namespace
-      </span>
-  </span>
+          <span class="ancestors"><a href="bbbfly.html">bbbfly</a><a href="bbbfly.Map.html">.Map</a>.</span>
+        layer_def
     </h1>
 </header>
 <article>
     <div class="container-overview">
+            <div class="description">Generic layer definitions.</div>
+<dl class="details">
+    <h3>Properties</h3>
+    <table class="props" my="test">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr id="property:Id">
+                    <td class="name">
+                      <span class="param-name">Id</span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:Type">
+                    <td class="name">
+                      <span class="param-name">Type</span>
+                    </td>
+                <td class="type">
+<span class="param-type">bbbfly.Map.layer</span>
+                </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:NameRes">
+                    <td class="name">
+                      <span class="param-name">NameRes</span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                <td class="description last">
+                  Layer name resource ID
+                </td>
+            </tr>
+            <tr id="property:Name">
+                    <td class="name">
+                      <span class="param-name">Name</span>
+                    </td>
+                <td class="type">
+<span class="param-type">object</span>
+                </td>
+                <td class="description last">
+                  Layer name by language in format {lang: 'name'}
+                </td>
+            </tr>
+            <tr id="property:Display">
+                    <td class="name">
+                      <span class="param-name">Display</span>
+                    </td>
+                <td class="type">
+<span class="param-type"><a href="bbbfly.Map.html#.display">bbbfly.Map.display</a></span>
+                </td>
+                <td class="description last">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</dl>
 <dl class="details">
 </dl>
     </div>
-        <h3>Classes</h3>
-        <ul>
-            <li>
-              <a href="bbbfly.Btn.html">Btn</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.Button.html">Button</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.CheckBox.html">CheckBox</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.DropDownList.html">DropDownList</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.Edit.html">Edit</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.EditDate.html">EditDate</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.EditTime.html">EditTime</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.FileUploader.html">FileUploader</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.Frame.html">Frame</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.Grid.html">Grid</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.ImagePreview.html">ImagePreview</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.Line.html">Line</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.List.html">List</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.ListSearchBox.html">ListSearchBox</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.Map.html">Map</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.Memo.html">Memo</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.Menu.html">Menu</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.Panel.html">Panel</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.PanelGroup.html">PanelGroup</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.RadioButton.html">RadioButton</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.SearchBox.html">SearchBox</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.SearchEdit.html">SearchEdit</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.ToolBar.html">ToolBar</a>
-              <dd></dd>
-            </li>
-            <li>
-              <a href="bbbfly.Wrapper.html">Wrapper</a>
-              <dd></dd>
-            </li>
-        </ul>
-        <h3>Namespaces</h3>
-        <ul>
-            <li><a href="bbbfly.hint.html">hint</a>
-              <dd></dd>
-            </li>
-        </ul>
 </article>
 </section>
         <footer>
