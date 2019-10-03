@@ -132,23 +132,6 @@ bbbfly.button._doUpdate = function(node){
   node.style.cursor = cursor;
 
   this.DoUpdateHolder();
-  var hNode = document.getElementById(this.ID+'_H');
-
-  if(this.AutoSize && hNode){
-    var bounds = {};
-    ng_BeginMeasureElement(hNode);
-
-    if(this.AutoSize & bbbfly.Btn.autosize.horizontal){
-      bounds.W = ng_OuterWidth(hNode);
-    }
-    if(this.AutoSize & bbbfly.Btn.autosize.vertical){
-      bounds.H = ng_OuterHeight(hNode);
-    }
-
-    ng_EndMeasureElement(hNode);
-    this.SetBounds(bounds);
-  }
-
   this.DoUpdate.callParent(node);
 };
 
@@ -331,6 +314,25 @@ bbbfly.button._doUpdateImages = function(){
   bbbfly.Renderer.UpdateImageHTML(proxy,state);
 
   this.DoUpdateImages.callParent();
+};
+
+bbbfly.button._doAutoSize = function(){
+  var hNode = document.getElementById(this.ID+'_H');
+
+  if(this.AutoSize && hNode){
+    var bounds = {};
+    ng_BeginMeasureElement(hNode);
+
+    if(this.AutoSize & bbbfly.Btn.autosize.horizontal){
+      bounds.W = ng_OuterWidth(hNode);
+    }
+    if(this.AutoSize & bbbfly.Btn.autosize.vertical){
+      bounds.H = ng_OuterHeight(hNode);
+    }
+
+    ng_EndMeasureElement(hNode);
+    this.SetBounds(bounds);
+  }
 };
 
 /** @ignore */
@@ -542,6 +544,8 @@ bbbfly.Btn = function(def,ref,parent){
       DoUpdateHolder: bbbfly.button._doUpdateHolder,
       /** @private */
       DoUpdateImages: bbbfly.button._doUpdateImages,
+      /** @private */
+      DoAutoSize: bbbfly.button._doAutoSize,
       /** @private */
       DoMouseEnter: bbbfly.button._doMouseEnter,
       /** @private */

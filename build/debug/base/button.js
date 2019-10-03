@@ -118,23 +118,7 @@ bbbfly.button._doUpdate = function(node){
   node.style.cursor = cursor;
 
   this.DoUpdateHolder();
-  var hNode = document.getElementById(this.ID+'_H');
-
-  if(this.AutoSize && hNode){
-    var bounds = {};
-    ng_BeginMeasureElement(hNode);
-
-    if(this.AutoSize & bbbfly.Btn.autosize.horizontal){
-      bounds.W = ng_OuterWidth(hNode);
-    }
-    if(this.AutoSize & bbbfly.Btn.autosize.vertical){
-      bounds.H = ng_OuterHeight(hNode);
-    }
-
-    ng_EndMeasureElement(hNode);
-    this.SetBounds(bounds);
-  }
-
+  this.DoAutoSize();
   this.DoUpdate.callParent(node);
 };
 bbbfly.button._doUpdateHolder = function(){
@@ -313,6 +297,25 @@ bbbfly.button._doUpdateImages = function(){
 
   this.DoUpdateImages.callParent();
 };
+
+bbbfly.button._doAutoSize = function(){
+  var hNode = document.getElementById(this.ID+'_H');
+
+  if(this.AutoSize && hNode){
+    var bounds = {};
+    ng_BeginMeasureElement(hNode);
+
+    if(this.AutoSize & bbbfly.Btn.autosize.horizontal){
+      bounds.W = ng_OuterWidth(hNode);
+    }
+    if(this.AutoSize & bbbfly.Btn.autosize.vertical){
+      bounds.H = ng_OuterHeight(hNode);
+    }
+
+    ng_EndMeasureElement(hNode);
+    this.SetBounds(bounds);
+  }
+};
 bbbfly.button._doMouseEnter = function(event,options){
   var state = this.DoMouseEnter.callParent(event,options);
   var proxy = this._IconProxy;
@@ -434,6 +437,7 @@ bbbfly.Btn = function(def,ref,parent){
       DoUpdate: bbbfly.button._doUpdate,
       DoUpdateHolder: bbbfly.button._doUpdateHolder,
       DoUpdateImages: bbbfly.button._doUpdateImages,
+      DoAutoSize: bbbfly.button._doAutoSize,
       DoMouseEnter: bbbfly.button._doMouseEnter,
       DoMouseLeave: bbbfly.button._doMouseLeave,
       DoAcceptGestures: bbbfly.button._doAcceptGestures,
