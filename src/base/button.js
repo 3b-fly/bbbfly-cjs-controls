@@ -113,22 +113,56 @@ bbbfly.button._doCreate = function(def,ref,node){
 
 /** @ignore */
 bbbfly.button._doUpdate = function(node){
-  this.DoUpdate.callParent(node);
-
-  var hNode = document.getElementById(this.ID+'_H');
-  var iNode = document.getElementById(this.ID+'_I');
-  if(!node || !hNode){return;}
+  if(!node){return;}
 
   var alt = this.GetAlt();
+  var hasAlt = !!(String.isString(alt) && alt);
+  var hasClick = !!(this.Enabled && !this.ReadOnly && this.OnClick);
+  var hasDblClick = !!(this.Enabled && !this.ReadOnly && this.OnDblClick);
+
+  if(hasAlt){
+    if(this.HTMLEncode){alt = ng_htmlEncode(alt,false);}
+    node.title = alt;
+  }
+  else{
+    node.title = '';
+  }
+
+  var cursor = ((hasClick || hasDblClick) ? 'pointer' : 'default');
+  node.style.cursor = cursor;
+
+  this.DoUpdateHolder();
+  var hNode = document.getElementById(this.ID+'_H');
+
+  if(this.AutoSize && hNode){
+    var bounds = {};
+    ng_BeginMeasureElement(hNode);
+
+    if(this.AutoSize & bbbfly.Btn.autosize.horizontal){
+      bounds.W = ng_OuterWidth(hNode);
+    }
+    if(this.AutoSize & bbbfly.Btn.autosize.vertical){
+      bounds.H = ng_OuterHeight(hNode);
+    }
+
+    ng_EndMeasureElement(hNode);
+    this.SetBounds(bounds);
+  }
+
+  this.DoUpdate.callParent(node);
+};
+
+/** @ignore */
+bbbfly.button._doUpdateHolder = function(){
+  var hNode = document.getElementById(this.ID+'_H');
+  var iNode = document.getElementById(this.ID+'_I');
+
   var text = this.GetText();
   var icon = this.GetIcon();
   var state = this.GetState();
 
   var hasIcon = !!(Object.isObject(icon));
-  var hasAlt = !!(String.isString(alt) && alt);
   var hasText = !!(String.isString(text) && text);
-  var hasClick = !!(this.Enabled && !this.ReadOnly && this.OnClick);
-  var hasDblClick = !!(this.Enabled && !this.ReadOnly && this.OnDblClick);
 
   var over = state.mouseover;
   state.mouseover = false;
@@ -264,53 +298,27 @@ bbbfly.button._doUpdate = function(node){
     break;
   }
 
-  if(hasAlt){
-    if(this.HTMLEncode){alt = ng_htmlEncode(alt,false);}
-    node.title = alt;
+  if(hNode){
+    hNode.style.minWidth = bbbfly.Renderer.StyleDim(minHDim.W);
+    hNode.style.minHeight = bbbfly.Renderer.StyleDim(minHDim.H);
+    hNode.style.marginLeft = bbbfly.Renderer.StyleDim(hPadding.L + indent.L);
+    hNode.style.marginTop = bbbfly.Renderer.StyleDim(hPadding.T + indent.T);
+    hNode.style.marginRight = bbbfly.Renderer.StyleDim(hPadding.R + indent.R);
+    hNode.style.marginBottom = bbbfly.Renderer.StyleDim(hPadding.B + indent.B);
+    hNode.style.left = bbbfly.Renderer.StyleDim(hPosition.L);
+    hNode.style.top = bbbfly.Renderer.StyleDim(hPosition.T);
+    hNode.style.right = bbbfly.Renderer.StyleDim(hPosition.R);
+    hNode.style.bottom = bbbfly.Renderer.StyleDim(hPosition.B);
   }
-  else{
-    node.title = '';
-  }
-
-  var cursor = ((hasClick || hasDblClick) ? 'pointer' : 'default');
-  node.style.cursor = cursor;
-
-  hNode.style.minWidth = bbbfly.Renderer.StyleDim(minHDim.W);
-  hNode.style.minHeight = bbbfly.Renderer.StyleDim(minHDim.H);
-  hNode.style.marginLeft = bbbfly.Renderer.StyleDim(hPadding.L + indent.L);
-  hNode.style.marginTop = bbbfly.Renderer.StyleDim(hPadding.T + indent.T);
-  hNode.style.marginRight = bbbfly.Renderer.StyleDim(hPadding.R + indent.R);
-  hNode.style.marginBottom = bbbfly.Renderer.StyleDim(hPadding.B + indent.B);
-  hNode.style.left = bbbfly.Renderer.StyleDim(hPosition.L);
-  hNode.style.top = bbbfly.Renderer.StyleDim(hPosition.T);
-  hNode.style.right = bbbfly.Renderer.StyleDim(hPosition.R);
-  hNode.style.bottom = bbbfly.Renderer.StyleDim(hPosition.B);
 
   this._IconProxy = iProxy;
   state.mouseover = over;
 
   if(html !== this._HolderHtml){
     this._HolderHtml = html;
-    hNode.innerHTML = html;
 
-    if(over){
-      bbbfly.Renderer.UpdateImageHTML(iProxy,state);
-    }
-  }
-
-  if(this.AutoSize){
-    var bounds = {};
-    ng_BeginMeasureElement(hNode);
-
-    if(this.AutoSize & bbbfly.Btn.autosize.horizontal){
-      bounds.W = ng_OuterWidth(hNode);
-    }
-    if(this.AutoSize & bbbfly.Btn.autosize.vertical){
-      bounds.H = ng_OuterHeight(hNode);
-    }
-
-    ng_EndMeasureElement(hNode);
-    this.SetBounds(bounds);
+    if(hNode){hNode.innerHTML = html;}
+    if(over){bbbfly.Renderer.UpdateImageHTML(iProxy,state);}
   }
 };
 
@@ -530,6 +538,8 @@ bbbfly.Btn = function(def,ref,parent){
       DoCreate: bbbfly.button._doCreate,
       /** @private */
       DoUpdate: bbbfly.button._doUpdate,
+      /** @private */
+      DoUpdateHolder: bbbfly.button._doUpdateHolder,
       /** @private */
       DoUpdateImages: bbbfly.button._doUpdateImages,
       /** @private */
