@@ -24,11 +24,11 @@ bbbfly.button._getAlt = function(){
 
 /** @ignore */
 bbbfly.button._getText = function(){
-  if(String.isString(this.TextRes)){
-    return ngTxt(this.TextRes);
-  }
-  else if(String.isString(this.Text)){
+  if(String.isString(this.Text)){
     return this.Text;
+  }
+  else if(String.isString(this.TextRes)){
+    return ngTxt(this.TextRes);
   }
   return null;
 };
