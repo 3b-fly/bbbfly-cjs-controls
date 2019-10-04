@@ -424,13 +424,6 @@ bbbfly.frame._doUpdateFrame = function(node){
   var fPanel = this.GetFramePanel();
   if(!node || !fPanel){return;}
 
-  ng_BeginMeasureElement(node);
-  var w = ng_ClientWidth(node);
-  var h = ng_ClientHeight(node);
-  ng_EndMeasureElement(node);
-
-  fPanel.SetBounds({ T:0, L:0, W:w, H:h });
-
   var fNode = fPanel.Elm();
   if(!fNode){return;}
 
