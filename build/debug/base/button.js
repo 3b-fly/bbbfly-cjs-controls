@@ -8,6 +8,30 @@
 
 var bbbfly = bbbfly || {};
 bbbfly.button = {};
+
+bbbfly.button._setAlt = function(alt,update){
+  if(!String.isString(alt) && (alt !== null)){return;}
+
+  if(alt !== this.Alt){
+    this.Alt = alt;
+
+    if(!Boolean.isBoolean(update) || update){
+      this.Update();
+    }
+  }
+};
+
+bbbfly.button._setText = function(text,update){
+  if(!String.isString(text) && (text !== null)){return;}
+
+  if(text !== this.Text){
+    this.Text = text;
+
+    if(!Boolean.isBoolean(update) || update){
+      this.Update();
+    }
+  }
+};
 bbbfly.button._getAlt = function(){
   if(String.isString(this.AltRes)){
     return ngTxt(this.AltRes);
@@ -443,6 +467,8 @@ bbbfly.Btn = function(def,ref,parent){
       DoAcceptGestures: bbbfly.button._doAcceptGestures,
       DoPtrClick: bbbfly.button._doPtrClick,
       DoPtrDblClick: bbbfly.button._doPtrDblClick,
+      SetAlt: bbbfly.button._setAlt,
+      SetText: bbbfly.button._setText,
       GetAlt: bbbfly.button._getAlt,
       GetText: bbbfly.button._getText,
       GetIcon: bbbfly.button._getIcon,

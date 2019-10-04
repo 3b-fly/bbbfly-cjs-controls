@@ -11,6 +11,30 @@ var bbbfly = bbbfly || {};
 /** @ignore */
 bbbfly.button = {};
 
+bbbfly.button._setAlt = function(alt,update){
+  if(!String.isString(alt) && (alt !== null)){return;}
+
+  if(alt !== this.Alt){
+    this.Alt = alt;
+
+    if(!Boolean.isBoolean(update) || update){
+      this.Update();
+    }
+  }
+};
+
+bbbfly.button._setText = function(text,update){
+  if(!String.isString(text) && (text !== null)){return;}
+
+  if(text !== this.Text){
+    this.Text = text;
+
+    if(!Boolean.isBoolean(update) || update){
+      this.Update();
+    }
+  }
+};
+
 /** @ignore */
 bbbfly.button._getAlt = function(){
   if(String.isString(this.AltRes)){
@@ -132,6 +156,7 @@ bbbfly.button._doUpdate = function(node){
   node.style.cursor = cursor;
 
   this.DoUpdateHolder();
+  this.DoAutoSize();
   this.DoUpdate.callParent(node);
 };
 
@@ -556,6 +581,25 @@ bbbfly.Btn = function(def,ref,parent){
       DoPtrClick: bbbfly.button._doPtrClick,
       /** @private */
       DoPtrDblClick: bbbfly.button._doPtrDblClick,
+
+      /**
+       * @function
+       * @name SetAlt
+       * @memberof bbbfly.Btn#
+       *
+       * @param {string|null} alt
+       * @param {boolean} [update=true]
+       */
+      SetAlt: bbbfly.button._setAlt,
+      /**
+       * @function
+       * @name SetText
+       * @memberof bbbfly.Btn#
+       *
+       * @param {string|null} text
+       * @param {boolean} [update=true]
+       */
+      SetText: bbbfly.button._setText,
 
       /**
        * @function
