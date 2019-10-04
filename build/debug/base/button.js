@@ -125,6 +125,8 @@ bbbfly.button._doCreate = function(def,ref,node){
 bbbfly.button._doUpdate = function(node){
   if(!node){return;}
 
+  this.DoUpdate.callParent(node);
+
   var alt = this.GetAlt();
   var hasAlt = !!(String.isString(alt) && alt);
   var hasClick = !!(this.Enabled && !this.ReadOnly && this.OnClick);
@@ -143,7 +145,6 @@ bbbfly.button._doUpdate = function(node){
 
   this.DoUpdateHolder();
   this.DoAutoSize();
-  this.DoUpdate.callParent(node);
 };
 bbbfly.button._doUpdateHolder = function(){
   var hNode = document.getElementById(this.ID+'_H');
