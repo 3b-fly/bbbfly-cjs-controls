@@ -418,11 +418,9 @@ bbbfly.frame._doChangeState = function(update){
   this.DoChangeState.callParent(update);
   if(!update){this.DoUpdateImages();}
 };
-bbbfly.frame._doUpdateFrame = function(node){
-  if(typeof node === 'undefined'){node = this.Elm();}
-
+bbbfly.frame._doUpdateFrame = function(){
   var fPanel = this.GetFramePanel();
-  if(!node || !fPanel){return;}
+  if(!fPanel){return;}
 
   var fNode = fPanel.Elm();
   if(!fNode){return;}
@@ -458,26 +456,18 @@ bbbfly.frame._doUpdateImages = function(){
   bbbfly.Renderer.UpdateFrameProxy(proxy,state);
   bbbfly.Renderer.UpdateFrameHTML(proxy,state);
 };
-bbbfly.frame._doUpdateControlsPanel = function(node){
-  if(typeof node === 'undefined'){node = this.Elm();}
-
+bbbfly.frame._doUpdateControlsPanel = function(){
   var cPanel = this.GetControlsPanel();
-  if(!node || !cPanel){return;}
-
-  ng_BeginMeasureElement(node);
-  var w = ng_ClientWidth(node);
-  var h = ng_ClientHeight(node);
-  ng_EndMeasureElement(node);
+  if(!cPanel){return;}
 
   var dims = this.GetFrameDims();
-
   cPanel.SetBounds({
-    W: (w - dims.L - dims.R),
-    H: (h - dims.T - dims.B),
-    T: dims.T,
     L: dims.L,
-    R: null,
-    B: null
+    T: dims.T,
+    R: dims.R,
+    B: dims.B,
+    W: null,
+    H: null
   });
 };
 bbbfly.frame._getFrame = function(){
