@@ -401,15 +401,15 @@ bbbfly.map.map._setLayerVisible = function(id,visible){
 
   if(visible){
     if(Function.isFunction(mapLayer.addTo)){
-      mapLayer.addTo(map);
       layer.Visible = true;
+      mapLayer.addTo(map);
       return true;
     }
   }
   else{
     if(Function.isFunction(mapLayer.removeFrom)){
-      mapLayer.removeFrom(map);
       layer.Visible = false;
+      mapLayer.removeFrom(map);
       return true;
     }
   }
