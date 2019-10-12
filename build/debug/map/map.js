@@ -395,7 +395,7 @@ bbbfly.map.map._setLayerVisible = function(id,visible){
   var visible = !!visible;
   if(visible === layer.Visible){return true;}
 
-  if(layer.Display === bbbfly.Map.Layer.display.fixed){
+  if(!visible && (layer.Display === bbbfly.Map.Layer.display.fixed)){
     return false;
   }
 
