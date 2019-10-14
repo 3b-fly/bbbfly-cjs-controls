@@ -43,7 +43,7 @@ bbbfly.map.map._dispose = function(){
 
 /** @ignore */
 bbbfly.map.map._getMap = function(){
-  return this._map;
+  return this._Map;
 };
 
 /** @ignore */
@@ -101,7 +101,7 @@ bbbfly.map.map._doCreateMap = function(options){
   map.on('layeradd',bbbfly.map.map._onMapLayersChanged);
   map.on('layerremove',bbbfly.map.map._onMapLayersChanged);
 
-  this._map = map;
+  this._Map = map;
   return map;
 };
 
@@ -268,18 +268,18 @@ bbbfly.map.map._getCenter = function(){
 
 /** @ignore */
 bbbfly.map.map._beginLayersChanges = function(mapCtrl){
-  if(++mapCtrl._layersChanging < 1){mapCtrl._layersChanging = 1;}
+  if(++mapCtrl._LayersChanging < 1){mapCtrl._LayersChanging = 1;}
 };
 
 /** @ignore */
 bbbfly.map.map._endLayersChanges = function(mapCtrl){
-  if(--mapCtrl._layersChanging < 0){mapCtrl._layersChanging = 0;}
+  if(--mapCtrl._LayersChanging < 0){mapCtrl._LayersChanging = 0;}
   bbbfly.map.map._layersChanged(mapCtrl);
 };
 
 /** @ignore */
 bbbfly.map.map._layersChanged = function(mapCtrl){
-  if(mapCtrl._layersChanging > 0){return;}
+  if(mapCtrl._LayersChanging > 0){return;}
 
   if(Function.isFunction(mapCtrl.OnLayersChanged)){
     mapCtrl.OnLayersChanged();
@@ -358,7 +358,7 @@ bbbfly.map.map._createLayer = function(def){
   if(!mapLayer){return null;}
 
   return {
-    Id: String.isString(def.Id) ? def.Id : '_L_'+(this._layerId++),
+    Id: String.isString(def.Id) ? def.Id : '_L_'+(this._LayerId++),
     Display: def.Display ? def.Display : bbbfly.Map.Layer.display.fixed,
     NameRes: def.NameRes ? def.NameRes : null,
     Name: def.Name ? def.Name : null,
@@ -370,7 +370,7 @@ bbbfly.map.map._createLayer = function(def){
 
 /** @ignore */
 bbbfly.map.map._getLayers = function(){
-  return Object.isObject(this._layers) ? this._layers : {};
+  return Object.isObject(this._Layers) ? this._Layers : {};
 };
 
 /** @ignore */
@@ -408,7 +408,7 @@ bbbfly.map.map._addLayer = function(def){
   if(!layer){return false;}
 
     this.RemoveLayer(layer.Id);
-    this._layers[layer.Id] = layer;
+    this._Layers[layer.Id] = layer;
 
     switch(layer.Display){
       case bbbfly.Map.Layer.display.fixed:
@@ -434,7 +434,7 @@ bbbfly.map.map._removeLayers = function(ids){
     }
   }
   else{
-    for(var id in this._layers){
+    for(var id in this._Layers){
       if(!this.RemoveLayer(id)){
         result = false;
         break;
@@ -451,7 +451,7 @@ bbbfly.map.map._removeLayer = function(id){
   if(!String.isString(id)){return false;}
 
   if(this.SetLayerVisible(id,false)){
-    delete this._layers[id];
+    delete this._Layers[id];
     return true;
   }
   return false;
@@ -645,13 +645,13 @@ bbbfly.Map = function(def,ref,parent){
       DefaultLayer: null,
 
       /** @private */
-      _map: null,
+      _Map: null,
       /** @private */
-      _layers: {},
+      _Layers: {},
       /** @private */
-      _layerId: 1,
+      _LayerId: 1,
       /** @private */
-      _layersChanging: 0
+      _LayersChanging: 0
     },
     OnCreated: bbbfly.map.map._onCreated,
     Controls: {
@@ -1138,14 +1138,6 @@ bbbfly.Map.crs = {
   WGS84: 'EPSG4326'
 };
 
-/** @ignore */
-ngUserControls = ngUserControls || new Array();
-ngUserControls['bbbfly_map'] = {
-  OnInit: function(){
-    ngRegisterControlType('bbbfly.Map',bbbfly.Map);
-  }
-};
-
 /**
  * @typedef {object} layer
  * @memberOf bbbfly.Map
@@ -1160,6 +1152,16 @@ ngUserControls['bbbfly_map'] = {
  * @property {boolean} Visible
  * @property {mapLayer} Layer
  */
+
+
+
+/** @ignore */
+ngUserControls = ngUserControls || new Array();
+ngUserControls['bbbfly_map'] = {
+  OnInit: function(){
+    ngRegisterControlType('bbbfly.Map',bbbfly.Map);
+  }
+};
 
 /**
  * @interface Layer
