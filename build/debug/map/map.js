@@ -141,6 +141,10 @@ bbbfly.map.map._setMinZoom = function(zoom){
   }
   return false;
 };
+bbbfly.map.map._getMinZoom = function(){
+  var map = this.GetMap();
+  return (map) ? map.getMinZoom() : null;
+};
 bbbfly.map.map._setMaxZoom = function(zoom){
   if(Number.isInteger(zoom)){
     this.MaxZoom = zoom;
@@ -150,6 +154,10 @@ bbbfly.map.map._setMaxZoom = function(zoom){
     return true;
   }
   return false;
+};
+bbbfly.map.map._getMaxZoom = function(){
+  var map = this.GetMap();
+  return (map) ? map.getMaxZoom() : null;
 };
 bbbfly.map.map._enableAnimation = function(enable){
   if(enable === this.Animate){return false;}
@@ -392,7 +400,7 @@ bbbfly.map.map._setLayerVisible = function(id,visible){
   var mapLayer = layer.Layer;
   if(!mapLayer){return false;}
 
-  var visible = !!visible;
+  visible = !!visible;
   if(visible === layer.Visible){return true;}
 
   if(!visible && (layer.Display === bbbfly.Map.Layer.display.fixed)){
@@ -540,7 +548,9 @@ bbbfly.Map = function(def,ref,parent){
       SetBoundsPadding: bbbfly.map.map._setBoundsPadding,
       FitBounds: bbbfly.map.map._fitBounds,
       SetMinZoom: bbbfly.map.map._setMinZoom,
+      GetMinZoom: bbbfly.map.map._getMinZoom,
       SetMaxZoom: bbbfly.map.map._setMaxZoom,
+      GetMaxZoom: bbbfly.map.map._getMaxZoom,
       EnableAnimation: bbbfly.map.map._enableAnimation,
       SetView: bbbfly.map.map._setView,
       SetZoom: bbbfly.map.map._setZoom,

@@ -175,6 +175,12 @@ bbbfly.map.map._setMinZoom = function(zoom){
 };
 
 /** @ignore */
+bbbfly.map.map._getMinZoom = function(){
+  var map = this.GetMap();
+  return (map) ? map.getMinZoom() : null;
+};
+
+/** @ignore */
 bbbfly.map.map._setMaxZoom = function(zoom){
   if(Number.isInteger(zoom)){
     this.MaxZoom = zoom;
@@ -184,6 +190,12 @@ bbbfly.map.map._setMaxZoom = function(zoom){
     return true;
   }
   return false;
+};
+
+/** @ignore */
+bbbfly.map.map._getMaxZoom = function(){
+  var map = this.GetMap();
+  return (map) ? map.getMaxZoom() : null;
 };
 
 /** @ignore */
@@ -467,7 +479,7 @@ bbbfly.map.map._setLayerVisible = function(id,visible){
   var mapLayer = layer.Layer;
   if(!mapLayer){return false;}
 
-  var visible = !!visible;
+  visible = !!visible;
   if(visible === layer.Visible){return true;}
 
   if(!visible && (layer.Display === bbbfly.Map.Layer.display.fixed)){
@@ -816,9 +828,26 @@ bbbfly.Map = function(def,ref,parent){
        * @param {number} zoom - Zoom level
        * @return {boolean} If zoom was set
        *
+       * @see {@link bbbfly.Map#GetMinZoom|GetMinZoom()}
+       * @see {@link bbbfly.Map#GetMaxZoom|GetMaxZoom()}
        * @see {@link bbbfly.Map#SetMaxZoom|SetMaxZoom()}
        */
       SetMinZoom: bbbfly.map.map._setMinZoom,
+
+      /**
+       * @function
+       * @name GetMinZoom
+       * @memberof bbbfly.Map#
+       *
+       * @description Get map minimal zoom level.
+       *
+       * @return {number|null} zoom - Zoom level
+       *
+       * @see {@link bbbfly.Map#SetMinZoom|SetMinZoom()}
+       * @see {@link bbbfly.Map#SetMaxZoom|SetMaxZoom()}
+       * @see {@link bbbfly.Map#GetMaxZoom|GetMaxZoom()}
+       */
+      GetMinZoom: bbbfly.map.map._getMinZoom,
       /**
        * @function
        * @name SetMaxZoom
@@ -830,9 +859,25 @@ bbbfly.Map = function(def,ref,parent){
        * @param {number} zoom - Zoom level
        * @return {boolean} If zoom was set
        *
+       * @see {@link bbbfly.Map#GetMaxZoom|GetMaxZoom()}
+       * @see {@link bbbfly.Map#GetMinZoom|GetMinZoom()}
        * @see {@link bbbfly.Map#SetMinZoom|SetMinZoom()}
        */
       SetMaxZoom: bbbfly.map.map._setMaxZoom,
+      /**
+       * @function
+       * @name GetMaxZoom
+       * @memberof bbbfly.Map#
+       *
+       * @description Get map maximal zoom level.
+       *
+       * @return {number|null} zoom - Zoom level
+       *
+       * @see {@link bbbfly.Map#SetMaxZoom|SetMaxZoom()}
+       * @see {@link bbbfly.Map#SetMinZoom|SetMinZoom()}
+       * @see {@link bbbfly.Map#GetMinZoom|GetMinZoom()}
+       */
+      GetMaxZoom: bbbfly.map.map._getMaxZoom,
       /**
        * @function
        * @name EnableAnimation
