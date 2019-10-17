@@ -18,6 +18,18 @@ bbbfly.map.map._onCreated = function(map){
   cHolder.SetScrollBars(ssNone);
 
   map.CreateMap();
+  bbbfly.MapRegistry.RegisterMap(map);
+
+  if(map.Controls){
+    for(var i in map.Controls){
+      var ctrl = map.Controls[i];
+
+      if(ctrl.MapID === null){
+        ctrl.MapID = map.ID;
+        bbbfly.MapRegistry.RegisterControl(ctrl);
+      }
+    }
+  }
   return true;
 };
 bbbfly.map.map._onUpdated = function(){
