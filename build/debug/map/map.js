@@ -14,21 +14,18 @@ bbbfly.map.layer = {
   mapbox_style: {}
 };
 bbbfly.map.map._onCreated = function(map){
+  bbbfly.MapRegistry.RegisterMap(map);
+
   var cHolder = map.GetControlsHolder();
   cHolder.SetScrollBars(ssNone);
 
   map.CreateMap();
-  bbbfly.MapRegistry.RegisterMap(map);
-
-  if(map.Controls){
-    for(var i in map.Controls){
-      var ctrl = map.Controls[i];
-
-      if(ctrl.MapID === null){
-        ctrl.MapID = map.ID;
-        bbbfly.MapRegistry.RegisterControl(ctrl);
-      }
-    }
+  return true;
+};
+bbbfly.map.map._onUpdate = function(){
+  if(!this._ControlsRegistered){
+    this.RegisterControls();
+    this._ControlsRegistered = true;
   }
   return true;
 };
@@ -36,6 +33,16 @@ bbbfly.map.map._onUpdated = function(){
   var map = this.GetMap();
   if(map && Function.isFunction(map.invalidateSize)){
     map.invalidateSize();
+  }
+};
+bbbfly.map.map._registerControls = function(){
+  if(!this.Controls){return;}
+
+  for(var i in this.Controls){
+    var ctrl = this.Controls[i];
+
+    if(!String.isString(ctrl.MapID)){ctrl.MapID = this.ID;}
+    bbbfly.MapRegistry.RegisterControl(ctrl);
   }
 };
 bbbfly.map.map._dispose = function(){
@@ -534,7 +541,8 @@ bbbfly.Map = function(def,ref,parent){
       _Map: null,
       _Layers: {},
       _LayerId: 1,
-      _LayersChanging: 0
+      _LayersChanging: 0,
+      _ControlsRegistered: false
     },
     OnCreated: bbbfly.map.map._onCreated,
     Controls: {
@@ -545,7 +553,9 @@ bbbfly.Map = function(def,ref,parent){
       }
     },
     Events: {
+      OnUpdate: bbbfly.map.map._onUpdate,
       OnUpdated: bbbfly.map.map._onUpdated,
+      RegisterControls: bbbfly.map.map._registerControls,
       OnZoomChanged: null,
       OnLayersChanged: null
     },
