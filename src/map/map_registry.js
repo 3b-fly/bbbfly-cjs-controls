@@ -50,20 +50,21 @@ bbbfly.map.registry._registerMap = function(map){
 /** @ignore */
 bbbfly.map.registry._registerControl = function(ctrl){
   if(!ctrl || !String.isString(ctrl.ID)){return false;}
-  if(this._UnlinkedControls[ctrl.ID]){return false;}
   if(this._MapControls[ctrl.ID]){return false;}
 
   if(
     Function.isFunction(ctrl.CtrlInheritsFrom)
     && ctrl.CtrlInheritsFrom('bbbfly.MapControl')
   ){
-
-    var stack = this.LinkControl(ctrl)
-      ? this._MapControls
-      : this._UnlinkedControls;
-
-    stack[ctrl.ID] = ctrl;
-    return true;
+    if(this.LinkControl(ctrl)){
+      this._MapControls[ctrl.ID] = ctrl;
+      delete(this._UnlinkedControls[ctrl.ID]);
+      return true;
+    }
+    else if(!this._UnlinkedControls[ctrl.ID]){
+      this._UnlinkedControls[ctrl.ID] = ctrl;
+      return true;
+    }
   }
   return false;
 };
