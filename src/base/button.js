@@ -256,7 +256,7 @@ bbbfly.button._doUpdateHolder = function(){
 
   if(hasText){
     if(this.HTMLEncode){text = ng_htmlEncode(text,true);}
-    var style = [];
+    var style = ['word-wrap: normal'];
 
     switch(this.TextAlign){
       case bbbfly.Btn.textalign.right:
