@@ -31,9 +31,9 @@ bbbfly.map.map._onCreated = function(map){
 
 /** @ignore */
 bbbfly.map.map._onUpdate = function(){
-  if(!this._ControlsRegistered){
+  if(!this._MapControlsRegistered){
     this.RegisterControls();
-    this._ControlsRegistered = true;
+    this._MapControlsRegistered = true;
   }
   return true;
 };
@@ -136,6 +136,82 @@ bbbfly.map.map._destroyMap = function(){
     return true;
   }
   return false;
+};
+
+/** @ignore */
+bbbfly.map.map._linkMapControl = function(type,ctrl){
+  if(!String.isString(type) || !ctrl){return false;}
+  if(!Function.isFunction(ctrl.GetListener)){return false;}
+  if(!Function.isFunction(this.AddListener)){return false;}
+
+  var listener = ctrl.GetListener();
+  if(listener && !this.AddListener(listener.Listen,listener)){
+    return false;
+  }
+
+  if(!Array.isArray(this._MapControls[type])){
+    this._MapControls[type] = [];
+  }
+
+  var stack = this._MapControls[type];
+  if(!stack.includes(ctrl)){stack.push(ctrl);}
+  return true;
+};
+
+/** @ignore */
+bbbfly.map.map._unlinkMapControl = function(type,ctrl){
+  if(!String.isString(type) || !ctrl){return false;}
+  if(!Function.isFunction(ctrl.GetListener)){return false;}
+  if(!Function.isFunction(this.RemoveListener)){return false;}
+
+  var listener = ctrl.GetListener();
+  if(listener && !this.RemoveListener(listener.Listen,listener)){
+    return false;
+  }
+
+  var stack = this._MapControls[type];
+  var idx = Array.indexOf(stack,ctrl);
+  if(idx > 0){stack.splice(idx,1);}
+  return true;
+};
+
+/** @ignore */
+bbbfly.map.map._getMapControls = function(type){
+  var ctrls = [];
+  var ids = {};
+
+  for(var tp in this._MapControls){
+    if(String.isString(type) && (tp !== type)){continue;}
+
+    var stack = this._MapControls[type];
+    if(!Array.isArray(stack)){continue;}
+
+    for(var i in stack){
+      var ctrl = stack[i];
+
+      if(String.isString(ctrl.ID)){
+        if(ids[ctrl.ID]){continue;}
+        ids[ctrl.ID] = true;
+      }
+
+      ctrls.push(ctrl);
+    }
+  }
+  return ctrls;
+};
+
+/** @ignore */
+bbbfly.map.map._setMapControlsVisible = function(type,visible){
+  if(!String.isString(type)){return false;}
+  if(!Boolean.isBoolean(visible)){visible = true;}
+
+  var ctrls = this.GetMapControls(type);
+  for(var i in ctrls){
+    var ctrl = ctrls[i];
+    if(ctrl && Function.isFunction(ctrl.SetVisible)){
+      ctrl.SetVisible(visible);
+    }
+  }
 };
 
 /** @ignore */
@@ -687,8 +763,11 @@ bbbfly.Map = function(def,ref,parent){
       _LayerId: 1,
       /** @private */
       _LayersChanging: 0,
+
       /** @private */
-      _ControlsRegistered: false
+      _MapControls: {},
+      /** @private */
+      _MapControlsRegistered: false
     },
     OnCreated: bbbfly.map.map._onCreated,
     Controls: {
@@ -703,8 +782,6 @@ bbbfly.Map = function(def,ref,parent){
       OnUpdate: bbbfly.map.map._onUpdate,
       /** @private */
       OnUpdated: bbbfly.map.map._onUpdated,
-      /** @private */
-      RegisterControls: bbbfly.map.map._registerControls,
 
       /**
        * @event
@@ -737,6 +814,8 @@ bbbfly.Map = function(def,ref,parent){
       Dispose: bbbfly.map.map._dispose,
       /** @private */
       LayerInterface: bbbfly.map.map._layerInterface,
+      /** @private */
+      RegisterControls: bbbfly.map.map._registerControls,
 
       /**
        * @function
@@ -802,6 +881,51 @@ bbbfly.Map = function(def,ref,parent){
 
       /**
        * @function
+       * @name LinkMapControl
+       * @memberof bbbfly.Map#
+       *
+       * @description Link map control to map.
+       *
+       * @param {string} type
+       * @param {bbbfly.MapControl} ctrl
+       * @return {boolean} If control was linked
+       */
+      LinkMapControl: bbbfly.map.map._linkMapControl,
+      /**
+       * @function
+       * @name UnlinkMapControl
+       * @memberof bbbfly.Map#
+       *
+       * @description Unlink map control from map.
+       *
+       * @param {string} type
+       * @param {bbbfly.MapControl} ctrl
+       * @return {boolean} If control was unlinked
+       */
+      UnlinkMapControl: bbbfly.map.map._unlinkMapControl,
+      /**
+       * @function
+       * @name GetMapControls
+       * @memberof bbbfly.Map#
+       * @description Get passed type linked map controls.
+       *
+       * @param {string} [type=undefined]
+       * @return {bbbfly.MapControl[]}
+       */
+      GetMapControls: bbbfly.map.map._getMapControls,
+      /**
+       * @function
+       * @name SetMapControlsVisible
+       * @memberof bbbfly.Map#
+       * @description Set visibility of passed type map controls.
+       *
+       * @param {string} type
+       * @param {boolean} [visible=true]
+       * @return {boolean} If map control visibility was set.
+       */
+      SetMapControlsVisible: bbbfly.map.map._setMapControlsVisible,
+      /**
+       * @function
        * @name SetMaxBounds
        * @memberof bbbfly.Map#
        *
@@ -813,7 +937,6 @@ bbbfly.Map = function(def,ref,parent){
        * @see {@link bbbfly.Map#FitBounds|FitBounds()}
        */
       SetMaxBounds: bbbfly.map.map._setMaxBounds,
-
       /**
        * @function
        * @name SetBoundsPadding
@@ -827,7 +950,6 @@ bbbfly.Map = function(def,ref,parent){
        * @see {@link bbbfly.Map#FitBounds|FitBounds()}
        */
       SetBoundsPadding: bbbfly.map.map._setBoundsPadding,
-
       /**
        * @function
        * @name FitBounds
@@ -845,7 +967,6 @@ bbbfly.Map = function(def,ref,parent){
        * @see {@link bbbfly.Map#SetMaxBounds|SetMaxBounds()}
        */
       FitBounds: bbbfly.map.map._fitBounds,
-
       /**
        * @function
        * @name SetMinZoom
@@ -862,7 +983,6 @@ bbbfly.Map = function(def,ref,parent){
        * @see {@link bbbfly.Map#SetMaxZoom|SetMaxZoom()}
        */
       SetMinZoom: bbbfly.map.map._setMinZoom,
-
       /**
        * @function
        * @name GetMinZoom
@@ -919,7 +1039,6 @@ bbbfly.Map = function(def,ref,parent){
        * @return {boolean} If state has changed
        */
       EnableAnimation: bbbfly.map.map._enableAnimation,
-
       /**
        * @function
        * @name SetView
