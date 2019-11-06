@@ -1346,7 +1346,16 @@ bbbfly.Map.crs = {
  * @property {mapLayer} Layer
  */
 
-
+/**
+ * @typedef {object} listener
+ * @memberOf bbbfly.Map
+ *
+ * @description
+ *   Map Events listener.
+ *
+ * @property {string[]} Listen - Names of events to listen
+ * @property {function} EventName... - Event function implementations
+ */
 
 /** @ignore */
 ngUserControls = ngUserControls || new Array();
