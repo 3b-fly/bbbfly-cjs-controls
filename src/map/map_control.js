@@ -13,6 +13,11 @@ bbbfly.map = bbbfly.map || {};
 /** @ignore */
 bbbfly.map.control = {};
 
+bbbfly.map.control._doDispose = function(){
+  bbbfly.MapRegistry.UnregisterControl(this);
+  return this.DoDispose.callParent();
+};
+
 /** @ignore */
 bbbfly.map.control._onCreated = function(ctrl){
   bbbfly.MapRegistry.RegisterControl(ctrl);
@@ -30,10 +35,9 @@ bbbfly.map.control._linkToMap = function(map){
     && !this.OnLinkToMap(map)
   ){return false;}
 
-  if(!Function.isFunction(map.AddListener)){return false;}
-
-  var listener = this.GetListener() || this.CreateListener();
-  if(!map.AddListener(listener.Listen,listener)){return false;}
+  if(!map.LinkMapControl(this.ControlType,this)){
+    return false;
+  }
 
   if(Function.isFunction(this.OnLinkedToMap)){
     this.OnLinkedToMap(map);
@@ -44,15 +48,13 @@ bbbfly.map.control._linkToMap = function(map){
 /** @ignore */
 bbbfly.map.control._unlinkFromMap = function(map){
   if(
-    Function.isFunction(this.OnUnlinkFronMap)
-    && !this.OnUnlinkFronMap(map)
+    Function.isFunction(this.OnUnlinkFromMap)
+    && !this.OnUnlinkFromMap(map)
   ){return false;}
 
-  if(!Function.isFunction(map.RemoveListener)){return false;}
-
-  var listener = this.GetListener();
-  if(!map.RemoveListener(listener.Listen,listener)){return false;}
-
+  if(!map.UnlinkMapControl(this.ControlType,this)){
+    return false;
+  }
 
   if(Function.isFunction(this.OnUnlinkedFromMap)){
     this.OnUnlinkedFromMap(map);
@@ -62,18 +64,19 @@ bbbfly.map.control._unlinkFromMap = function(map){
 
 /** @ignore */
 bbbfly.map.control._getListener = function(){
-  return Object.isObject(this._Listener) ? this._Listener : null;
+  if(!Object.isObject(this._Listener)){
+    var listener = this.CreateListener();
+    if(listener){listener.Owner = this;}
+
+    this._Listener = listener;
+  }
+
+  return this._Listener;
 };
 
 /** @ignore */
 bbbfly.map.control._createListener = function(){
-  this._Listener = {
-    _byRef: {Owner:true},
-    Owner: this,
-    Listen: []
-  };
-
-  return this.GetListener();
+  return null;
 };
 
 /**
@@ -87,7 +90,8 @@ bbbfly.map.control._createListener = function(){
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
- * @property {string} MapID - Target map control ID
+ * @property {string} MapID - Target bbbfly.Map control ID
+ * @property {string} [ControlType=null] - Map control type
  */
 bbbfly.MapControl = function(def,ref,parent){
   def = def || {};
@@ -97,6 +101,7 @@ bbbfly.MapControl = function(def,ref,parent){
     ParentReferences: false,
     Data: {
       MapID: null,
+      ControlType: null,
 
       /** @private */
       _Listener: null
@@ -151,6 +156,9 @@ bbbfly.MapControl = function(def,ref,parent){
       OnUnlinkedFromMap: null
     },
     Methods: {
+      /** @private */
+      DoDispose: bbbfly.map.control._doDispose,
+
       /**
        * @function
        * @name GetMap
@@ -191,7 +199,7 @@ bbbfly.MapControl = function(def,ref,parent){
        * @name GetListener
        * @memberof bbbfly.MapControl#
        *
-       * @return {object|null}
+       * @return {bbbflt.Map.listener|null}
        */
       GetListener: bbbfly.map.control._getListener,
       /**
@@ -199,7 +207,7 @@ bbbfly.MapControl = function(def,ref,parent){
        * @name CreateListener
        * @memberof bbbfly.MapControl#
        *
-       * @return {object}
+       * @return {object|null}
        */
       CreateListener: bbbfly.map.control._createListener
     }
