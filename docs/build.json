@@ -21,6 +21,8 @@
       "../src/base/wrapper.js",
 
       "../src/map/map.js",
+      "../src/map/map_control.js",
+      "../src/map/map_registry.js",
 
       "../src/special/file.js",
       "../src/special/lang/file_cs.js",

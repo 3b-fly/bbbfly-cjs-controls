@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Interface: layer_def</title>
+    <title>Class: MapControl</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -379,6 +379,9 @@
         <li data-name="bbbfly.Btn#GetText">
           <a href="bbbfly.Btn.html#GetText">GetText</a>
         </li>
+        <li data-name="bbbfly.Btn#SetAlt">
+          <a href="bbbfly.Btn.html#SetAlt">SetAlt</a>
+        </li>
         <li data-name="bbbfly.Btn#SetEnabled">
           <a href="bbbfly.Btn.html#SetEnabled">SetEnabled</a>
         </li>
@@ -390,6 +393,9 @@
         </li>
         <li data-name="bbbfly.Btn#SetSelected">
           <a href="bbbfly.Btn.html#SetSelected">SetSelected</a>
+        </li>
+        <li data-name="bbbfly.Btn#SetText">
+          <a href="bbbfly.Btn.html#SetText">SetText</a>
         </li>
     </ul>
     <ul class="events itemMembers">
@@ -1143,16 +1149,19 @@
           <a href="bbbfly.Map.html#property:DefaultLayer">DefaultLayer</a>
         </li>
     </ul>
+    <ul class="typedefs itemMembers">
+      <span class="subtitle">Typedefs</span>
+        <li data-name="bbbfly.Map.layer">
+          <a href="bbbfly.Map.html#.layer">layer</a>
+        </li>
+        <li data-name="bbbfly.Map.listener">
+          <a href="bbbfly.Map.html#.listener">listener</a>
+        </li>
+    </ul>
     <ul class="members itemMembers">
       <span class="subtitle">Members</span>
         <li data-name="bbbfly.Map.crs">
           <a href="bbbfly.Map.html#.crs">crs</a>
-        </li>
-        <li data-name="bbbfly.Map.display">
-          <a href="bbbfly.Map.html#.display">display</a>
-        </li>
-        <li data-name="bbbfly.Map.layer_type">
-          <a href="bbbfly.Map.html#.layer_type">layer_type</a>
         </li>
     </ul>
     <ul class="methods itemMembers">
@@ -1171,9 +1180,6 @@
         </li>
         <li data-name="bbbfly.Map.Layer">
           <a href="bbbfly.Map.Layer.html">Layer</a>
-        </li>
-        <li data-name="bbbfly.Map.layer_def">
-          <a href="bbbfly.Map.layer_def.html">layer_def</a>
         </li>
         <li data-name="bbbfly.Map.MapboxStyleLayer">
           <a href="bbbfly.Map.MapboxStyleLayer.html">MapboxStyleLayer</a>
@@ -1195,6 +1201,9 @@
         </li>
         <li data-name="bbbfly.Map#AddLayers">
           <a href="bbbfly.Map.html#AddLayers">AddLayers</a>
+        </li>
+        <li data-name="bbbfly.Map#CreateLayer">
+          <a href="bbbfly.Map.html#CreateLayer">CreateLayer</a>
         </li>
         <li data-name="bbbfly.Map#CreateMap">
           <a href="bbbfly.Map.html#CreateMap">CreateMap</a>
@@ -1238,17 +1247,32 @@
         <li data-name="bbbfly.Map#GetLayer">
           <a href="bbbfly.Map.html#GetLayer">GetLayer</a>
         </li>
+        <li data-name="bbbfly.Map#GetLayerName">
+          <a href="bbbfly.Map.html#GetLayerName">GetLayerName</a>
+        </li>
         <li data-name="bbbfly.Map#GetLayers">
           <a href="bbbfly.Map.html#GetLayers">GetLayers</a>
         </li>
         <li data-name="bbbfly.Map#GetMap">
           <a href="bbbfly.Map.html#GetMap">GetMap</a>
         </li>
+        <li data-name="bbbfly.Map#GetMapControls">
+          <a href="bbbfly.Map.html#GetMapControls">GetMapControls</a>
+        </li>
+        <li data-name="bbbfly.Map#GetMaxZoom">
+          <a href="bbbfly.Map.html#GetMaxZoom">GetMaxZoom</a>
+        </li>
+        <li data-name="bbbfly.Map#GetMinZoom">
+          <a href="bbbfly.Map.html#GetMinZoom">GetMinZoom</a>
+        </li>
         <li data-name="bbbfly.Map#GetState">
           <a href="bbbfly.Map.html#GetState">GetState</a>
         </li>
         <li data-name="bbbfly.Map#GetZoom">
           <a href="bbbfly.Map.html#GetZoom">GetZoom</a>
+        </li>
+        <li data-name="bbbfly.Map#LinkMapControl">
+          <a href="bbbfly.Map.html#LinkMapControl">LinkMapControl</a>
         </li>
         <li data-name="bbbfly.Map#RemoveLayer">
           <a href="bbbfly.Map.html#RemoveLayer">RemoveLayer</a>
@@ -1271,6 +1295,9 @@
         <li data-name="bbbfly.Map#SetLayerVisible">
           <a href="bbbfly.Map.html#SetLayerVisible">SetLayerVisible</a>
         </li>
+        <li data-name="bbbfly.Map#SetMapControlsVisible">
+          <a href="bbbfly.Map.html#SetMapControlsVisible">SetMapControlsVisible</a>
+        </li>
         <li data-name="bbbfly.Map#SetMaxBounds">
           <a href="bbbfly.Map.html#SetMaxBounds">SetMaxBounds</a>
         </li>
@@ -1291,6 +1318,9 @@
         </li>
         <li data-name="bbbfly.Map#SetZoom">
           <a href="bbbfly.Map.html#SetZoom">SetZoom</a>
+        </li>
+        <li data-name="bbbfly.Map#UnlinkMapControl">
+          <a href="bbbfly.Map.html#UnlinkMapControl">UnlinkMapControl</a>
         </li>
         <li data-name="bbbfly.Map#ZoomIn">
           <a href="bbbfly.Map.html#ZoomIn">ZoomIn</a>
@@ -1330,6 +1360,136 @@
         </li>
         <li data-name="OnZoomChanged">
           <a href="bbbfly.Map.html#event:OnZoomChanged">OnZoomChanged</a>
+        </li>
+    </ul>
+</li>
+<li class="item" data-name="bbbfly.MapControl">
+  <span class="title">
+        <span class="type-signature control">
+          control
+        </span>
+        <span class="type-signature class">
+          class
+        </span>
+    <a href="bbbfly.MapControl.html">bbbfly.MapControl</a>
+  </span>
+    <ul class="members itemMembers">
+      <span class="subtitle">Properties</span>
+        <li data-name="MapID">
+          <a href="bbbfly.MapControl.html#property:MapID">MapID</a>
+        </li>
+        <li data-name="ControlType">
+          <a href="bbbfly.MapControl.html#property:ControlType">ControlType</a>
+        </li>
+    </ul>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.MapControl#CreateListener">
+          <a href="bbbfly.MapControl.html#CreateListener">CreateListener</a>
+        </li>
+        <li data-name="bbbfly.MapControl#GetClassName">
+          <a href="bbbfly.MapControl.html#GetClassName">GetClassName</a>
+        </li>
+        <li data-name="bbbfly.MapControl#GetControlsHolder">
+          <a href="bbbfly.MapControl.html#GetControlsHolder">GetControlsHolder</a>
+        </li>
+        <li data-name="bbbfly.MapControl#GetListener">
+          <a href="bbbfly.MapControl.html#GetListener">GetListener</a>
+        </li>
+        <li data-name="bbbfly.MapControl#GetMap">
+          <a href="bbbfly.MapControl.html#GetMap">GetMap</a>
+        </li>
+        <li data-name="bbbfly.MapControl#GetState">
+          <a href="bbbfly.MapControl.html#GetState">GetState</a>
+        </li>
+        <li data-name="bbbfly.MapControl#LinkToMap">
+          <a href="bbbfly.MapControl.html#LinkToMap">LinkToMap</a>
+        </li>
+        <li data-name="bbbfly.MapControl#SetEnabled">
+          <a href="bbbfly.MapControl.html#SetEnabled">SetEnabled</a>
+        </li>
+        <li data-name="bbbfly.MapControl#SetInvalid">
+          <a href="bbbfly.MapControl.html#SetInvalid">SetInvalid</a>
+        </li>
+        <li data-name="bbbfly.MapControl#SetReadOnly">
+          <a href="bbbfly.MapControl.html#SetReadOnly">SetReadOnly</a>
+        </li>
+        <li data-name="bbbfly.MapControl#SetSelected">
+          <a href="bbbfly.MapControl.html#SetSelected">SetSelected</a>
+        </li>
+        <li data-name="bbbfly.MapControl#UnlinkFromMap">
+          <a href="bbbfly.MapControl.html#UnlinkFromMap">UnlinkFromMap</a>
+        </li>
+    </ul>
+    <ul class="events itemMembers">
+      <span class="subtitle">Events</span>
+        <li data-name="OnEnabledChanged">
+          <a href="bbbfly.MapControl.html#event:OnEnabledChanged">OnEnabledChanged</a>
+        </li>
+        <li data-name="OnInvalidChanged">
+          <a href="bbbfly.MapControl.html#event:OnInvalidChanged">OnInvalidChanged</a>
+        </li>
+        <li data-name="OnLinkedToMap">
+          <a href="bbbfly.MapControl.html#event:OnLinkedToMap">OnLinkedToMap</a>
+        </li>
+        <li data-name="OnLinkToMap">
+          <a href="bbbfly.MapControl.html#event:OnLinkToMap">OnLinkToMap</a>
+        </li>
+        <li data-name="OnReadOnlyChanged">
+          <a href="bbbfly.MapControl.html#event:OnReadOnlyChanged">OnReadOnlyChanged</a>
+        </li>
+        <li data-name="OnSelectedChanged">
+          <a href="bbbfly.MapControl.html#event:OnSelectedChanged">OnSelectedChanged</a>
+        </li>
+        <li data-name="OnSetEnabled">
+          <a href="bbbfly.MapControl.html#event:OnSetEnabled">OnSetEnabled</a>
+        </li>
+        <li data-name="OnSetInvalid">
+          <a href="bbbfly.MapControl.html#event:OnSetInvalid">OnSetInvalid</a>
+        </li>
+        <li data-name="OnSetReadOnly">
+          <a href="bbbfly.MapControl.html#event:OnSetReadOnly">OnSetReadOnly</a>
+        </li>
+        <li data-name="OnSetSelected">
+          <a href="bbbfly.MapControl.html#event:OnSetSelected">OnSetSelected</a>
+        </li>
+        <li data-name="OnUnlinkedFromMap">
+          <a href="bbbfly.MapControl.html#event:OnUnlinkedFromMap">OnUnlinkedFromMap</a>
+        </li>
+        <li data-name="OnUnlinkFromMap">
+          <a href="bbbfly.MapControl.html#event:OnUnlinkFromMap">OnUnlinkFromMap</a>
+        </li>
+    </ul>
+</li>
+<li class="item" data-name="bbbfly.MapRegistry">
+  <span class="title">
+        <span class="type-signature object">
+          object
+        </span>
+    <a href="bbbfly.MapRegistry.html">bbbfly.MapRegistry</a>
+  </span>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.MapRegistry#GetMap">
+          <a href="bbbfly.MapRegistry.html#GetMap">GetMap</a>
+        </li>
+        <li data-name="bbbfly.MapRegistry#LinkControl">
+          <a href="bbbfly.MapRegistry.html#LinkControl">LinkControl</a>
+        </li>
+        <li data-name="bbbfly.MapRegistry#RegisterMap">
+          <a href="bbbfly.MapRegistry.html#RegisterMap">RegisterMap</a>
+        </li>
+        <li data-name="bbbfly.MapRegistry#RegisterMap">
+          <a href="bbbfly.MapRegistry.html#RegisterMap">RegisterMap</a>
+        </li>
+        <li data-name="bbbfly.MapRegistry#RegisterMap">
+          <a href="bbbfly.MapRegistry.html#RegisterMap">RegisterMap</a>
+        </li>
+        <li data-name="bbbfly.MapRegistry#UnlinkControl">
+          <a href="bbbfly.MapRegistry.html#UnlinkControl">UnlinkControl</a>
+        </li>
+        <li data-name="bbbfly.MapRegistry#UnregisterMap">
+          <a href="bbbfly.MapRegistry.html#UnregisterMap">UnregisterMap</a>
         </li>
     </ul>
 </li>
@@ -1976,16 +2136,86 @@
   }
 })();</script>
     <div class="main">
-<section class="kind-interface">
+<section class="kind-class">
 <header>
     <h1 class="name">
-          <span class="ancestors"><a href="bbbfly.html">bbbfly</a><a href="bbbfly.Map.html">.Map</a>.</span>
-        layer_def
+          <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
+        MapControl
+  <span class="types">
+      <span class="type-signature class">
+        class
+      </span>
+      <span class="type-signature control">
+        control
+      </span>
+  </span>
     </h1>
 </header>
 <article>
     <div class="container-overview">
-            <div class="description">Generic layer definitions.</div>
+<dt>
+    <div class="nameContainer">
+        <h2 id="MapControl">
+          new 
+          bbbfly.MapControl
+          <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
+        </h2>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_control.js#L121">map/map_control.js, line 121</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h3>Parameters</h3>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">def</span>
+                </td>
+            <td class="type">
+<span class="param-type">object</span>
+            </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Descendant definition
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">ref</span>
+                </td>
+            <td class="type">
+<span class="param-type">object</span>
+            </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Reference owner
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">parent</span>
+                </td>
+            <td class="type">
+<span class="param-type">object</span>
+|
+<span class="param-type">string</span>
+            </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Parent DIV element or it's ID
+            </td>
+        </tr>
+	</tbody>
+</table>
 <dl class="details">
     <h3>Properties</h3>
     <table class="props" my="test">
@@ -1993,60 +2223,36 @@
         <tr>
             <th>Name</th>
             <th>Type</th>
+            <th>Default</th>
             <th class="last">Description</th>
         </tr>
         </thead>
         <tbody>
-            <tr id="property:Id">
+            <tr id="property:MapID">
                     <td class="name">
-                      <span class="param-name">Id</span>
+                      <span class="param-name">MapID</span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:Type">
-                    <td class="name">
-                      <span class="param-name">Type</span>
+                    <td class="default">
                     </td>
-                <td class="type">
-<span class="param-type">bbbfly.Map.layer</span>
-                </td>
                 <td class="description last">
+                  Target bbbfly.Map control ID
                 </td>
             </tr>
-            <tr id="property:NameRes">
+            <tr id="property:ControlType">
                     <td class="name">
-                      <span class="param-name">NameRes</span>
+                      <span class="param-name">ControlType</span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
-                <td class="description last">
-                  Layer name resource ID
-                </td>
-            </tr>
-            <tr id="property:Name">
-                    <td class="name">
-                      <span class="param-name">Name</span>
+                    <td class="default">
+                        null
                     </td>
-                <td class="type">
-<span class="param-type">object</span>
-                </td>
                 <td class="description last">
-                  Layer name by language in format {lang: 'name'}
-                </td>
-            </tr>
-            <tr id="property:Display">
-                    <td class="name">
-                      <span class="param-name">Display</span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="bbbfly.Map.html#.display">bbbfly.Map.display</a></span>
-                </td>
-                <td class="description last">
+                  Map control type
                 </td>
             </tr>
         </tbody>
@@ -2054,7 +2260,1322 @@
 </dl>
 <dl class="details">
 </dl>
+</dd>
     </div>
+        <h3>Extends</h3>
+        <ul>
+            <li><a href="bbbfly.Panel.html">bbbfly.Panel</a></li>
+        </ul>
+        <h3>In Packages</h3>
+        <ul>
+              <li><a href="packages.html#package:map">map</a></li>
+        </ul>
+        <h3>Methods</h3>
+        <dl>
+<dt>
+    <div class="nameContainer">
+        <h4 id="CreateListener">
+          CreateListener
+          <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{object|null}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_control.js#L235">map/map_control.js, line 235</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        object
+                         | 
+                        null
+            </td>
+            <td class="description last"></td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="GetClassName">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#GetClassName">inherited</a>
+      </span>
+  </span>
+          GetClassName
+          <span class="signature">(<span class="optional">suffix</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{string}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L813">base/panel.js, line 813</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">suffix</span>
+                </td>
+            <td class="type">
+<span class="param-type">string</span>
+            </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Control part class name
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        string
+            </td>
+            <td class="description last">Control class name</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="GetControlsHolder">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#GetControlsHolder">inherited</a>
+      </span>
+  </span>
+          GetControlsHolder
+          <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{object}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L822">base/panel.js, line 822</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        object
+            </td>
+            <td class="description last">self</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="GetListener">
+          GetListener
+          <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{bbbflt.Map.listener|null}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_control.js#L227">map/map_control.js, line 227</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        bbbflt.Map.listener
+                         | 
+                        null
+            </td>
+            <td class="description last"></td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="GetMap">
+          GetMap
+          <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="bbbfly.Map.html">bbbfly.Map</a>|null}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_control.js#L192">map/map_control.js, line 192</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Get map control by MapID</div>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        <a href="bbbfly.Map.html">bbbfly.Map</a>
+                         | 
+                        null
+            </td>
+            <td class="description last"></td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="GetState">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#GetState">inherited</a>
+      </span>
+  </span>
+          GetState
+          <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{bbbfly.Renderer.state}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L805">base/panel.js, line 805</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        bbbfly.Renderer.state
+            </td>
+            <td class="description last">Control state</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="LinkToMap">
+          LinkToMap
+          <span class="signature">(map)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_control.js#L201">map/map_control.js, line 201</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">map</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.Map.html">bbbfly.Map</a></span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.MapControl.html#UnlinkFromMap">UnlinkFromMap()</a></li>
+          <li><a href="bbbfly.MapControl.html#event:OnLinkToMap">OnLinkToMap</a></li>
+          <li><a href="bbbfly.MapControl.html#event:OnLinkedToMap">OnLinkedToMap</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">If control was linked</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="SetEnabled">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#SetEnabled">inherited</a>
+      </span>
+  </span>
+          SetEnabled
+          <span class="signature">(<span class="optional">enabled</span>, <span class="optional">update</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L831">base/panel.js, line 831</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">enabled</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+                <td class="default">
+                    true
+                </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Value to set
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">update</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+                <td class="default">
+                    true
+                </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                If update control
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Panel.html#event:OnSetEnabled">OnSetEnabled</a></li>
+          <li><a href="bbbfly.Panel.html#event:OnEnabledChanged">OnEnabledChanged</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">False if change was denied</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="SetInvalid">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#SetInvalid">inherited</a>
+      </span>
+  </span>
+          SetInvalid
+          <span class="signature">(<span class="optional">invalid</span>, <span class="optional">update</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L844">base/panel.js, line 844</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">invalid</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+                <td class="default">
+                    true
+                </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Value to set
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">update</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+                <td class="default">
+                    true
+                </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                If update control
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Panel.html#event:OnSetInvalid">OnSetInvalid</a></li>
+          <li><a href="bbbfly.Panel.html#event:OnInvalidChanged">OnInvalidChanged</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">False if change was denied</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="SetReadOnly">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#SetReadOnly">inherited</a>
+      </span>
+  </span>
+          SetReadOnly
+          <span class="signature">(<span class="optional">readonly</span>, <span class="optional">update</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L857">base/panel.js, line 857</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">readonly</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+                <td class="default">
+                    true
+                </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Value to set
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">update</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+                <td class="default">
+                    true
+                </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                If update control
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Panel.html#event:OnSetReadOnly">OnSetReadOnly</a></li>
+          <li><a href="bbbfly.Panel.html#event:OnReadOnlyChanged">OnReadOnlyChanged</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">False if change was denied</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="SetSelected">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#SetSelected">inherited</a>
+      </span>
+  </span>
+          SetSelected
+          <span class="signature">(<span class="optional">selected</span>, <span class="optional">update</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L870">base/panel.js, line 870</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">selected</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+                <td class="default">
+                    true
+                </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Value to set
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">update</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+                <td class="default">
+                    true
+                </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                If update control
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Panel.html#event:OnSetSelected">OnSetSelected</a></li>
+          <li><a href="bbbfly.Panel.html#event:OnSelectedChanged">OnSelectedChanged</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">False if change was denied</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="UnlinkFromMap">
+          UnlinkFromMap
+          <span class="signature">(map)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_control.js#L214">map/map_control.js, line 214</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">map</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.Map.html">bbbfly.Map</a></span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.MapControl.html#LinkToMap">LinkToMap()</a></li>
+          <li>OnUnLinkFromMap</li>
+          <li>OnUnLinkedFromMap</li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">If control was unlinked</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+        </dl>
+        <h3>Events</h3>
+        <dl>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="event:OnEnabledChanged">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#event:OnEnabledChanged">inherited</a>
+      </span>
+  </span>
+          OnEnabledChanged
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L714">base/panel.js, line 714</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Panel.html#SetEnabled">SetEnabled()</a></li>
+          <li><a href="bbbfly.Panel.html#event:OnSetEnabled">OnSetEnabled</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="event:OnInvalidChanged">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#event:OnInvalidChanged">inherited</a>
+      </span>
+  </span>
+          OnInvalidChanged
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L735">base/panel.js, line 735</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Panel.html#SetInvalid">SetInvalid()</a></li>
+          <li><a href="bbbfly.Panel.html#event:OnSetInvalid">OnSetInvalid</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="event:OnLinkedToMap">
+          OnLinkedToMap
+          <span class="signature">(map)</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_control.js#L151">map/map_control.js, line 151</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">map</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.Map.html">bbbfly.Map</a></span>
+            </td>
+            <td class="description last">
+                Linked map
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.MapControl.html#LinkToMap">LinkToMap()</a></li>
+          <li><a href="bbbfly.MapControl.html#event:OnLinkToMap">OnLinkToMap</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="event:OnLinkToMap">
+          OnLinkToMap
+          <span class="signature">(map)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_control.js#L139">map/map_control.js, line 139</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">map</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.Map.html">bbbfly.Map</a></span>
+            </td>
+            <td class="description last">
+                Map to be linked
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.MapControl.html#LinkToMap">LinkToMap()</a></li>
+          <li><a href="bbbfly.MapControl.html#event:OnLinkedToMap">OnLinkedToMap</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">Return false to deny linking</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="event:OnReadOnlyChanged">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#event:OnReadOnlyChanged">inherited</a>
+      </span>
+  </span>
+          OnReadOnlyChanged
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L756">base/panel.js, line 756</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Panel.html#SetReadOnly">SetReadOnly()</a></li>
+          <li><a href="bbbfly.Panel.html#event:OnSetReadOnly">OnSetReadOnly</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="event:OnSelectedChanged">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#event:OnSelectedChanged">inherited</a>
+      </span>
+  </span>
+          OnSelectedChanged
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L777">base/panel.js, line 777</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Panel.html#SetSelected">SetSelected()</a></li>
+          <li><a href="bbbfly.Panel.html#event:OnSetSelected">OnSetSelected</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="event:OnSetEnabled">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#event:OnSetEnabled">inherited</a>
+      </span>
+  </span>
+          OnSetEnabled
+          <span class="signature">(enabled)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L702">base/panel.js, line 702</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">enabled</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+            <td class="description last">
+                Value to set
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Panel.html#SetEnabled">SetEnabled()</a></li>
+          <li><a href="bbbfly.Panel.html#event:OnEnabledChanged">OnEnabledChanged</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">Return false to deny value change</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="event:OnSetInvalid">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#event:OnSetInvalid">inherited</a>
+      </span>
+  </span>
+          OnSetInvalid
+          <span class="signature">(invalid)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L723">base/panel.js, line 723</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">invalid</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+            <td class="description last">
+                Value to set
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Panel.html#SetInvalid">SetInvalid()</a></li>
+          <li><a href="bbbfly.Panel.html#event:OnInvalidChanged">OnInvalidChanged</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">Return false to deny value change</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="event:OnSetReadOnly">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#event:OnSetReadOnly">inherited</a>
+      </span>
+  </span>
+          OnSetReadOnly
+          <span class="signature">(readonly)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L744">base/panel.js, line 744</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">readonly</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+            <td class="description last">
+                Value to set
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Panel.html#SetReadOnly">SetReadOnly()</a></li>
+          <li><a href="bbbfly.Panel.html#event:OnReadOnlyChanged">OnReadOnlyChanged</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">Return false to deny value change</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="event:OnSetSelected">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Panel.html#event:OnSetSelected">inherited</a>
+      </span>
+  </span>
+          OnSetSelected
+          <span class="signature">(selected)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/panel.js#L765">base/panel.js, line 765</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">selected</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+            <td class="description last">
+                Value to set
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Panel.html#SetSelected">SetSelected()</a></li>
+          <li><a href="bbbfly.Panel.html#event:OnSelectedChanged">OnSelectedChanged</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">Return false to deny value change</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="event:OnUnlinkedFromMap">
+          OnUnlinkedFromMap
+          <span class="signature">(map)</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_control.js#L174">map/map_control.js, line 174</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">map</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.Map.html">bbbfly.Map</a></span>
+            </td>
+            <td class="description last">
+                Linked map
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.MapControl.html#UnlinkFromMap">UnlinkFromMap()</a></li>
+          <li><a href="bbbfly.MapControl.html#event:OnUnlinkFromMap">OnUnlinkFromMap</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="event:OnUnlinkFromMap">
+          OnUnlinkFromMap
+          <span class="signature">(map)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_control.js#L162">map/map_control.js, line 162</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">map</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.Map.html">bbbfly.Map</a></span>
+            </td>
+            <td class="description last">
+                Map to be linked
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.MapControl.html#UnlinkFromMap">UnlinkFromMap()</a></li>
+          <li><a href="bbbfly.MapControl.html#event:OnUnlinkedFromMap">OnUnlinkedFromMap</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">Return false to deny linking</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+        </dl>
 </article>
 </section>
         <footer>

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: DropDownList</title>
+    <title>Class: MapRegistry</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -2140,13 +2140,10 @@
 <header>
     <h1 class="name">
           <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
-        DropDownList
+        MapRegistry
   <span class="types">
-      <span class="type-signature class">
-        class
-      </span>
-      <span class="type-signature control">
-        control
+      <span class="type-signature object">
+        object
       </span>
   </span>
     </h1>
@@ -2155,18 +2152,38 @@
     <div class="container-overview">
 <dt>
     <div class="nameContainer">
-        <h2 id="DropDownList">
-          new 
-          bbbfly.DropDownList
-          <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
+        <h2 id="MapRegistry">
+          bbbfly.MapRegistry
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L553">base/list.js, line 553</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_registry.js#L142">map/map_registry.js, line 142</a>
         </div>
     </div>
 </dt>
 <dd>
-        <h3>Parameters</h3>
+<dl class="details">
+</dl>
+</dd>
+    </div>
+        <h3>In Packages</h3>
+        <ul>
+              <li><a href="packages.html#package:map">map</a></li>
+        </ul>
+        <h3>Methods</h3>
+        <dl>
+<dt>
+    <div class="nameContainer">
+        <h4 id="GetMap">
+          GetMap
+          <span class="signature">(mapId)</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="bbbfly.Map.html">bbbfly.Map</a>|null}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_registry.js#L158">map/map_registry.js, line 158</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
 <table class="params">
     <thead>
 	<tr>
@@ -2178,165 +2195,17 @@
 	<tbody>
         <tr>
                 <td class="name">
-                  <span class="param-name">def</span>
+                  <span class="param-name">mapId</span>
                 </td>
             <td class="type">
-<span class="param-type">ngControl.Definition</span>
-            </td>
-            <td class="description last">
-                        <span class="optional">optional</span>
-                Descendant definition
-            </td>
-        </tr>
-        <tr>
-                <td class="name">
-                  <span class="param-name">ref</span>
-                </td>
-            <td class="type">
-<span class="param-type">object</span>
-            </td>
-            <td class="description last">
-                        <span class="optional">optional</span>
-                Reference owner
-            </td>
-        </tr>
-        <tr>
-                <td class="name">
-                  <span class="param-name">parent</span>
-                </td>
-            <td class="type">
-<span class="param-type">object</span>
-|
 <span class="param-type">string</span>
             </td>
             <td class="description last">
-                        <span class="optional">optional</span>
-                Parent DIV element or it's ID
             </td>
         </tr>
 	</tbody>
 </table>
 <dl class="details">
-    <h3>Properties</h3>
-    <table class="props" my="test">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Default</th>
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr id="property:ShowIcon">
-                    <td class="name">
-                      <span class="param-name">ShowIcon</span>
-                    </td>
-                <td class="type">
-<span class="param-type">boolean</span>
-                </td>
-                    <td class="default">
-                        false
-                    </td>
-                <td class="description last">
-                  If DropDownList should show selected item icon
-                </td>
-            </tr>
-            <tr id="property:DefaultIconImg">
-                    <td class="name">
-                      <span class="param-name">DefaultIconImg</span>
-                    </td>
-                <td class="type">
-<span class="param-type">boolean</span>
-                </td>
-                    <td class="default">
-                        null
-                    </td>
-                <td class="description last">
-                  Icon shown when no item is selected
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</dl>
-<dl class="details">
-</dl>
-</dd>
-    </div>
-        <h3>Extends</h3>
-        <ul>
-            <li>ngDropDownList</li>
-        </ul>
-        <h3>In Packages</h3>
-        <ul>
-              <li><a href="packages.html#package:list">list</a></li>
-        </ul>
-        <h3>Type Definitions</h3>
-        <dl>
-<dt>
-  <div class="nameContainer">
-    <h4 class="name" id=".ListItem">
-      ListItem
-  <span class="types">
-      <span class="type-signature nglistitem">
-        ngListItem
-      </span>
-  </span>
-    </h4>
-  </div>
-</dt>
-<dd class="member-content">
-<dl class="details">
-      <h5>Properties:</h5>
-    <table class="props" my="test">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr id="property:EditIconImg">
-                    <td class="name">
-                      <span class="param-name">EditIconImg</span>
-                    </td>
-                <td class="type">
-<span class="param-type">integer</span>
-                </td>
-                <td class="description last">
-                  Icon shown in edit when item is selected
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</dl>
-<dl class="details">
-</dl>
-</dd>
-        </dl>
-        <h3>Methods</h3>
-        <dl>
-<dt>
-    <div class="nameContainer">
-        <h4 id="GetIconImg">
-          GetIconImg
-          <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="global.html#image">image</a>}</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/list.js#L592">base/list.js, line 592</a>
-        </div>
-    </div>
-</dt>
-<dd>
-<dl class="details">
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-      <ul class="dummy">
-          <li><a href="bbbfly.DropDownList.html">DefaultIconImg</a></li>
-          <li><a href="bbbfly.DropDownList.html#.ListItem">EditIconImg</a></li>
-      </ul>
-    </dd>
 </dl>
     <h5>Returns:</h5>
 <table class="params">
@@ -2349,9 +2218,335 @@
     <tbody>
         <tr>
             <td class="type">
-                        <a href="global.html#image">image</a>
+                        <a href="bbbfly.Map.html">bbbfly.Map</a>
+                         | 
+                        null
             </td>
-            <td class="description last">Image to display in edit</td>
+            <td class="description last"></td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="LinkControl">
+          LinkControl
+          <span class="signature">(ctrl)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_registry.js#L177">map/map_registry.js, line 177</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">ctrl</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.MapControl.html">bbbfly.MapControl</a></span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last"></td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="RegisterMap">
+          RegisterMap
+          <span class="signature">(ctrl)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_registry.js#L168">map/map_registry.js, line 168</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">ctrl</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.MapControl.html">bbbfly.MapControl</a></span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last"></td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="RegisterMap">
+          RegisterMap
+          <span class="signature">(map)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_registry.js#L159">map/map_registry.js, line 159</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">map</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.Map.html">bbbfly.Map</a></span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last"></td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="RegisterMap">
+          RegisterMap
+          <span class="signature">(ctrl)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_registry.js#L195">map/map_registry.js, line 195</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">ctrl</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.MapControl.html">bbbfly.MapControl</a></span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last"></td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="UnlinkControl">
+          UnlinkControl
+          <span class="signature">(ctrl)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_registry.js#L204">map/map_registry.js, line 204</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">ctrl</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.MapControl.html">bbbfly.MapControl</a></span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last"></td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="UnregisterMap">
+          UnregisterMap
+          <span class="signature">(map)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_registry.js#L186">map/map_registry.js, line 186</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">map</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.Map.html">bbbfly.Map</a></span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last"></td>
         </tr>
     </tbody>
 </table>
