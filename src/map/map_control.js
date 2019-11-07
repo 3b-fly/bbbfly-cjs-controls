@@ -13,6 +13,7 @@ bbbfly.map = bbbfly.map || {};
 /** @ignore */
 bbbfly.map.control = {};
 
+/** @ignore */
 bbbfly.map.control._doDispose = function(){
   bbbfly.MapRegistry.UnregisterControl(this);
   return this.DoDispose.callParent();
@@ -21,6 +22,20 @@ bbbfly.map.control._doDispose = function(){
 /** @ignore */
 bbbfly.map.control._onCreated = function(ctrl){
   bbbfly.MapRegistry.RegisterControl(ctrl);
+};
+
+/** @ignore */
+bbbfly.map.control._onVisibleChanged = function(){
+  this.MapControlChanged();
+};
+
+/** @ignore */
+bbbfly.map.control._mapControlChanged = function(){
+  var map = this.GetMap();
+  
+  if(map && Function.isFunction(map.OnMapControlChanged)){
+    map.OnMapControlChanged(this.ControlType);
+  }
 };
 
 /** @ignore */
@@ -60,6 +75,16 @@ bbbfly.map.control._unlinkFromMap = function(map){
     this.OnUnlinkedFromMap(map);
   }
   return true;
+};
+
+/** @ignore */
+bbbfly.map.control._onLinkedToMap = function(){
+  this.MapControlChanged();
+};
+
+/** @ignore */
+bbbfly.map.control._onUnlinkedFromMap = function(){
+  this.MapControlChanged();
 };
 
 /** @ignore */
@@ -108,6 +133,9 @@ bbbfly.MapControl = function(def,ref,parent){
     },
     OnCreated: bbbfly.map.control._onCreated,
     Events: {
+      /** @private */
+      OnVisibleChanged: bbbfly.map.control._onVisibleChanged,
+
       /**
        * @event
        * @name OnLinkToMap
@@ -130,7 +158,7 @@ bbbfly.MapControl = function(def,ref,parent){
        * @see {@link bbbfly.MapControl#LinkToMap|LinkToMap()}
        * @see {@link bbbfly.MapControl#event:OnLinkToMap|OnLinkToMap}
        */
-      OnLinkedToMap: null,
+      OnLinkedToMap: bbbfly.map.control._onLinkedToMap,
       /**
        * @event
        * @name OnUnlinkFromMap
@@ -153,11 +181,13 @@ bbbfly.MapControl = function(def,ref,parent){
        * @see {@link bbbfly.MapControl#UnlinkFromMap|UnlinkFromMap()}
        * @see {@link bbbfly.MapControl#event:OnUnlinkFromMap|OnUnlinkFromMap}
        */
-      OnUnlinkedFromMap: null
+      OnUnlinkedFromMap: bbbfly.map.control._onUnlinkedFromMap
     },
     Methods: {
       /** @private */
       DoDispose: bbbfly.map.control._doDispose,
+      /** @private */
+      MapControlChanged: bbbfly.map.control._mapControlChanged,
 
       /**
        * @function
