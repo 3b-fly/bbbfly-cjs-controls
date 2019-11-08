@@ -234,18 +234,12 @@
     "map": {
       "DebugFiles": [
         "debug/map/map.js",
-        "debug/map/map_box.js",
-        "debug/map/map_control.js",
-        "debug/map/map_registry.js",
         "debug/map/libs/leaflet_1.4.0/leaflet.js",
         "debug/map/libs/leaflet_1.4.0/leaflet.css",
         "debug/map/libs/esri-leaflet_2.2.3/esri-leaflet.js"
       ],
       "ReleaseFiles": [
         "release/map/map.js",
-        "release/map/map_box.js",
-        "release/map/map_control.js",
-        "release/map/map_registry.js",
         "release/map/libs/leaflet_1.4.0/leaflet.js",
         "release/map/libs/leaflet_1.4.0/leaflet.css",
         "release/map/libs/esri-leaflet_2.2.3/esri-leaflet.js"
@@ -264,6 +258,37 @@
         "bbbfly-cjs-controls": {
           "Packages": [
             "panel"
+          ]
+        }
+      }
+    },
+    "mapbox": {
+      "DebugFiles": [
+        "debug/map/map_box.js",
+        "debug/map/map_control.js",
+        "debug/map/map_registry.js"
+      ],
+      "ReleaseFiles": [
+        "release/map/map_box.js",
+        "release/map/map_control.js",
+        "release/map/map_registry.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": [
+            "Controls.js"
+          ]
+        },
+        "bbbfly-cjs": {
+          "Packages": [
+            "crossbrowser",
+            "listener"
+          ]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": [
+            "panel",
+            "map"
           ]
         }
       }

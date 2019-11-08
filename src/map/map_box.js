@@ -3,7 +3,7 @@
  * @author Jan Nejedly [support@3b-fly.eu]
  * @copyright Jan Nejedly
  *
- * @inpackage map
+ * @inpackage mapbox
  */
 
 /** @ignore */
@@ -129,7 +129,7 @@ bbbfly.map.box._setMapControlsVisible = function(type,visible){
  * @type control
  * @extends bbbfly.Map
  *
- * @inpackage map
+ * @inpackage mapbox
  *
  * @param {object} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
@@ -140,6 +140,8 @@ bbbfly.MapBox = function(def,ref,parent){
 
   ng_MergeDef(def,{
     Data: {
+      AllowListeners: true,
+
       /** @private */
       _MapControls: {},
       /** @private */

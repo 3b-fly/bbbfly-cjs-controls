@@ -110,6 +110,7 @@ bbbfly.MapBox = function(def,ref,parent){
 
   ng_MergeDef(def,{
     Data: {
+      AllowListeners: true,
       _MapControls: {},
       _MapControlsRegistered: false
     },
