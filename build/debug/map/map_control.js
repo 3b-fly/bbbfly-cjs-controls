@@ -20,7 +20,7 @@ bbbfly.map.control._onVisibleChanged = function(){
 };
 bbbfly.map.control._mapControlChanged = function(){
   var map = this.GetMap();
-  
+
   if(map && Function.isFunction(map.OnMapControlChanged)){
     map.OnMapControlChanged(this.ControlType);
   }

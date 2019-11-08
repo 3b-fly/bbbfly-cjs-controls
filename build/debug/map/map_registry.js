@@ -18,7 +18,7 @@ bbbfly.map.registry._registerMap = function(map){
 
   if(
     Function.isFunction(map.CtrlInheritsFrom)
-    && map.CtrlInheritsFrom('bbbfly.Map')
+    && map.CtrlInheritsFrom('bbbfly.MapBox')
   ){
     this._Maps[map.ID] = map;
 

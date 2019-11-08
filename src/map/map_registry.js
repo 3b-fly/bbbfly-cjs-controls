@@ -26,7 +26,7 @@ bbbfly.map.registry._registerMap = function(map){
 
   if(
     Function.isFunction(map.CtrlInheritsFrom)
-    && map.CtrlInheritsFrom('bbbfly.Map')
+    && map.CtrlInheritsFrom('bbbfly.MapBox')
   ){
     this._Maps[map.ID] = map;
 
@@ -153,7 +153,7 @@ bbbfly.MapRegistry = {
    * @memberof bbbfly.MapRegistry#
    *
    * @param {string} mapId
-   * @return {bbbfly.Map|null}
+   * @return {bbbfly.MapBox|null}
    */
   GetMap: bbbfly.map.registry._getMap,
   /**
@@ -161,7 +161,7 @@ bbbfly.MapRegistry = {
    * @name RegisterMap
    * @memberof bbbfly.MapRegistry#
    *
-   * @param {bbbfly.Map} map
+   * @param {bbbfly.MapBox} map
    * @return {boolean}
    */
   RegisterMap: bbbfly.map.registry._registerMap,
@@ -188,7 +188,7 @@ bbbfly.MapRegistry = {
    * @name UnregisterMap
    * @memberof bbbfly.MapRegistry#
    *
-   * @param {bbbfly.Map} map
+   * @param {bbbfly.MapBox} map
    * @return {boolean}
    */
   UnregisterMap: bbbfly.map.registry._unregisterMap,

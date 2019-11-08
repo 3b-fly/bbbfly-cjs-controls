@@ -14,35 +14,16 @@ bbbfly.map.layer = {
   mapbox_style: {}
 };
 bbbfly.map.map._onCreated = function(map){
-  bbbfly.MapRegistry.RegisterMap(map);
-
   var cHolder = map.GetControlsHolder();
   cHolder.SetScrollBars(ssNone);
 
   map.CreateMap();
   return true;
 };
-bbbfly.map.map._onUpdate = function(){
-  if(!this._MapControlsRegistered){
-    this.RegisterControls();
-    this._MapControlsRegistered = true;
-  }
-  return true;
-};
 bbbfly.map.map._onUpdated = function(){
   var map = this.GetMap();
   if(map && Function.isFunction(map.invalidateSize)){
     map.invalidateSize();
-  }
-};
-bbbfly.map.map._registerControls = function(){
-  if(!this.Controls){return;}
-
-  for(var i in this.Controls){
-    var ctrl = this.Controls[i];
-
-    if(!String.isString(ctrl.MapID)){ctrl.MapID = this.ID;}
-    bbbfly.MapRegistry.RegisterControl(ctrl);
   }
 };
 bbbfly.map.map._dispose = function(){
@@ -103,79 +84,10 @@ bbbfly.map.map._doCreateMap = function(options){
 };
 bbbfly.map.map._destroyMap = function(){
   var map = this.GetMap();
-  if(map){
-    map.remove();
-    return true;
-  }
-  return false;
-};
-bbbfly.map.map._linkMapControl = function(type,ctrl){
-  if(!String.isString(type) || !ctrl){return false;}
-  if(!Function.isFunction(ctrl.GetListener)){return false;}
-  if(!Function.isFunction(this.AddListener)){return false;}
+  if(!map){return false;}
 
-  var listener = ctrl.GetListener();
-  if(listener && !this.AddListener(listener.Listen,listener)){
-    return false;
-  }
-
-  if(!Array.isArray(this._MapControls[type])){
-    this._MapControls[type] = [];
-  }
-
-  var stack = this._MapControls[type];
-  if(!stack.includes(ctrl)){stack.push(ctrl);}
+  map.remove();
   return true;
-};
-bbbfly.map.map._unlinkMapControl = function(type,ctrl){
-  if(!String.isString(type) || !ctrl){return false;}
-  if(!Function.isFunction(ctrl.GetListener)){return false;}
-  if(!Function.isFunction(this.RemoveListener)){return false;}
-
-  var listener = ctrl.GetListener();
-  if(listener && !this.RemoveListener(listener.Listen,listener)){
-    return false;
-  }
-
-  var stack = this._MapControls[type];
-  var idx = Array.indexOf(stack,ctrl);
-  if(idx > 0){stack.splice(idx,1);}
-  return true;
-};
-bbbfly.map.map._getMapControls = function(type){
-  var ctrls = [];
-  var ids = {};
-
-  for(var tp in this._MapControls){
-    if(String.isString(type) && (tp !== type)){continue;}
-
-    var stack = this._MapControls[type];
-    if(!Array.isArray(stack)){continue;}
-
-    for(var i in stack){
-      var ctrl = stack[i];
-
-      if(String.isString(ctrl.ID)){
-        if(ids[ctrl.ID]){continue;}
-        ids[ctrl.ID] = true;
-      }
-
-      ctrls.push(ctrl);
-    }
-  }
-  return ctrls;
-};
-bbbfly.map.map._setMapControlsVisible = function(type,visible){
-  if(!String.isString(type)){return false;}
-  if(!Boolean.isBoolean(visible)){visible = true;}
-
-  var ctrls = this.GetMapControls(type);
-  for(var i in ctrls){
-    var ctrl = ctrls[i];
-    if(ctrl && Function.isFunction(ctrl.SetVisible)){
-      ctrl.SetVisible(visible);
-    }
-  }
 };
 bbbfly.map.map._setMaxBounds = function(bounds){
   if(Array.isArray(bounds)){
@@ -476,7 +388,6 @@ bbbfly.map.map._removeLayer = function(id){
   }
   return false;
 };
-
 bbbfly.map.map._setLayerVisible = function(id,visible){
   var map = this.GetMap();
   if(!map){return false;}
@@ -609,9 +520,7 @@ bbbfly.Map = function(def,ref,parent){
       _Map: null,
       _Layers: {},
       _LayerId: 1,
-      _LayersChanging: 0,
-      _MapControls: {},
-      _MapControlsRegistered: false
+      _LayersChanging: 0
     },
     OnCreated: bbbfly.map.map._onCreated,
     Controls: {
@@ -622,7 +531,6 @@ bbbfly.Map = function(def,ref,parent){
       }
     },
     Events: {
-      OnUpdate: bbbfly.map.map._onUpdate,
       OnUpdated: bbbfly.map.map._onUpdated,
       OnZoomChanged: null,
       OnLayersChanged: null
@@ -630,15 +538,10 @@ bbbfly.Map = function(def,ref,parent){
     Methods: {
       Dispose: bbbfly.map.map._dispose,
       LayerInterface: bbbfly.map.map._layerInterface,
-      RegisterControls: bbbfly.map.map._registerControls,
       GetMap: bbbfly.map.map._getMap,
       CreateMap: bbbfly.map.map._createMap,
       DoCreateMap: bbbfly.map.map._doCreateMap,
       DestroyMap: bbbfly.map.map._destroyMap,
-      LinkMapControl: bbbfly.map.map._linkMapControl,
-      UnlinkMapControl: bbbfly.map.map._unlinkMapControl,
-      GetMapControls: bbbfly.map.map._getMapControls,
-      SetMapControlsVisible: bbbfly.map.map._setMapControlsVisible,
       SetMaxBounds: bbbfly.map.map._setMaxBounds,
       SetBoundsPadding: bbbfly.map.map._setBoundsPadding,
       FitBounds: bbbfly.map.map._fitBounds,

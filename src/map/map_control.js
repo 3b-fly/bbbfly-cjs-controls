@@ -32,7 +32,7 @@ bbbfly.map.control._onVisibleChanged = function(){
 /** @ignore */
 bbbfly.map.control._mapControlChanged = function(){
   var map = this.GetMap();
-  
+
   if(map && Function.isFunction(map.OnMapControlChanged)){
     map.OnMapControlChanged(this.ControlType);
   }
@@ -115,7 +115,7 @@ bbbfly.map.control._createListener = function(){
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
- * @property {string} MapID - Target bbbfly.Map control ID
+ * @property {string} MapID - Target bbbfly.MapBox control ID
  * @property {string} [ControlType=null] - Map control type
  */
 bbbfly.MapControl = function(def,ref,parent){
@@ -141,7 +141,7 @@ bbbfly.MapControl = function(def,ref,parent){
        * @name OnLinkToMap
        * @memberof bbbfly.MapControl#
        *
-       * @param {bbbfly.Map} map - Map to be linked
+       * @param {bbbfly.MapBox} map - Map to be linked
        * @return {boolean} Return false to deny linking
        *
        * @see {@link bbbfly.MapControl#LinkToMap|LinkToMap()}
@@ -153,7 +153,7 @@ bbbfly.MapControl = function(def,ref,parent){
        * @name OnLinkedToMap
        * @memberof bbbfly.MapControl#
        *
-       * @param {bbbfly.Map} map - Linked map
+       * @param {bbbfly.MapBox} map - Linked map
        *
        * @see {@link bbbfly.MapControl#LinkToMap|LinkToMap()}
        * @see {@link bbbfly.MapControl#event:OnLinkToMap|OnLinkToMap}
@@ -164,7 +164,7 @@ bbbfly.MapControl = function(def,ref,parent){
        * @name OnUnlinkFromMap
        * @memberof bbbfly.MapControl#
        *
-       * @param {bbbfly.Map} map - Map to be linked
+       * @param {bbbfly.MapBox} map - Map to be linked
        * @return {boolean} Return false to deny linking
        *
        * @see {@link bbbfly.MapControl#UnlinkFromMap|UnlinkFromMap()}
@@ -176,7 +176,7 @@ bbbfly.MapControl = function(def,ref,parent){
        * @name OnUnlinkedFromMap
        * @memberof bbbfly.MapControl#
        *
-       * @param {bbbfly.Map} map - Linked map
+       * @param {bbbfly.MapBox} map - Linked map
        *
        * @see {@link bbbfly.MapControl#UnlinkFromMap|UnlinkFromMap()}
        * @see {@link bbbfly.MapControl#event:OnUnlinkFromMap|OnUnlinkFromMap}
@@ -195,7 +195,7 @@ bbbfly.MapControl = function(def,ref,parent){
        * @memberof bbbfly.MapControl#
        * @description Get map control by MapID
        *
-       * @return {bbbfly.Map|null}
+       * @return {bbbfly.MapBox|null}
        */
       GetMap: bbbfly.map.control._getMap,
       /**
@@ -203,7 +203,7 @@ bbbfly.MapControl = function(def,ref,parent){
        * @name LinkToMap
        * @memberof bbbfly.MapControl#
        *
-       * @param {bbbfly.Map} map
+       * @param {bbbfly.MapBox} map
        * @return {boolean} If control was linked
        *
        * @see {@link bbbfly.MapControl#UnlinkFromMap|UnlinkFromMap()}
@@ -216,7 +216,7 @@ bbbfly.MapControl = function(def,ref,parent){
        * @name UnlinkFromMap
        * @memberof bbbfly.MapControl#
        *
-       * @param {bbbfly.Map} map
+       * @param {bbbfly.MapBox} map
        * @return {boolean} If control was unlinked
        *
        * @see {@link bbbfly.MapControl#LinkToMap|LinkToMap()}

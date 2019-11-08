@@ -234,6 +234,7 @@
     "map": {
       "DebugFiles": [
         "debug/map/map.js",
+        "debug/map/map_box.js",
         "debug/map/map_control.js",
         "debug/map/map_registry.js",
         "debug/map/libs/leaflet_1.4.0/leaflet.js",
@@ -242,6 +243,7 @@
       ],
       "ReleaseFiles": [
         "release/map/map.js",
+        "release/map/map_box.js",
         "release/map/map_control.js",
         "release/map/map_registry.js",
         "release/map/libs/leaflet_1.4.0/leaflet.js",
