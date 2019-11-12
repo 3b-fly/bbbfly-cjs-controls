@@ -52,7 +52,7 @@ bbbfly.map.box._linkMapControl = function(type,ctrl){
   }
 
   var stack = this._MapControls[type];
-  if(!stack.includes(ctrl)){stack.push(ctrl);}
+  if(!Array.includes(stack,ctrl)){stack.push(ctrl);}
   return true;
 };
 bbbfly.map.box._unlinkMapControl = function(type,ctrl){
