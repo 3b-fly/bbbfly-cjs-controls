@@ -16,8 +16,8 @@ bbbfly.search._normalizeText = function(text){
     /[.*+?^${}()|[\]\\]/g, "\\$&"
   );
 
-  var inChars= "áäąăčćďđéěęíĺľłńňóôőöŕřšśşťţúůűüýžźż";
-  var outChars="aaaaccddeeeilllnnoooorrsssttuuuuyzzz";
+  var inChars = "áäąăčćďđéěęíĺľłńňóôőöŕřšśşťţúůűüýžźż";
+  var outChars = "aaaaccddeeeilllnnoooorrsssttuuuuyzzz";
 
   var normalized = '';
   for(var i=0;i<text.length;i++){
