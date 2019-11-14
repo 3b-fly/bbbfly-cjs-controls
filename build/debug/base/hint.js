@@ -30,8 +30,10 @@ bbbfly.hint.hintified._showHint = function(hintId,message){
     ){return false;}
 
     hint = ngCreateTextHint(hintDef,'');
-    hint.Owner = this;
-    this._Hints[hintId] = hint;
+    if(hint){
+      hint.Owner = this;
+      this._Hints[hintId] = hint;
+    }
   }
 
   if(hint){
@@ -111,7 +113,7 @@ bbbfly.hint.Hintify = function(def){
   ng_MergeDef(def,{
     Data: {
       HintDef: {
-        Data: { HintId: null }
+        Type: 'ngTextHint'
       },
       HintDefs: null,
       HintMessages: null,
