@@ -113,7 +113,7 @@ bbbfly.hint.Hintify = function(def){
   ng_MergeDef(def,{
     Data: {
       HintDef: {
-        Type: 'ngTextHint'
+        Type: 'bbbfly.TextHint'
       },
       HintDefs: null,
       HintMessages: null,
@@ -138,4 +138,13 @@ bbbfly.hint.Hintify = function(def){
   });
 
   return def;
+};
+bbbfly.TextHint = function(def,ref,parent){
+  return ngCreateControlAsType(def,'ngTextHint',ref,parent);
+};
+ngUserControls = ngUserControls || new Array();
+ngUserControls['bbbfly_hint'] = {
+  OnInit: function(){
+    ngRegisterControlType('bbbfly.TextHint',bbbfly.TextHint);
+  }
 };

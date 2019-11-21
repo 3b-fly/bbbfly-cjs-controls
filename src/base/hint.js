@@ -161,7 +161,7 @@ bbbfly.hint.Hintify = function(def){
   ng_MergeDef(def,{
     Data: {
       HintDef: {
-        Type: 'ngTextHint'
+        Type: 'bbbfly.TextHint'
       },
       HintDefs: null,
       HintMessages: null,
@@ -250,4 +250,30 @@ bbbfly.hint.Hintify = function(def){
   });
 
   return def;
+};
+
+/**
+ * @class
+ * @type control
+ * @extends ngTextHint
+ *
+ * @description
+ *   Generic text hint control to ensure future backward compatibility.
+ *
+ * @inpackage hint
+ *
+ * @param {ngControl.Definition} [def=undefined] - Descendant definition
+ * @param {object} [ref=undefined] - Reference owner
+ * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
+ */
+bbbfly.TextHint = function(def,ref,parent){
+  return ngCreateControlAsType(def,'ngTextHint',ref,parent);
+};
+
+/** @ignore */
+ngUserControls = ngUserControls || new Array();
+ngUserControls['bbbfly_hint'] = {
+  OnInit: function(){
+    ngRegisterControlType('bbbfly.TextHint',bbbfly.TextHint);
+  }
 };
