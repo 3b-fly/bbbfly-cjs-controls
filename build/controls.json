@@ -185,7 +185,8 @@
       "Libraries": {
         "controls.js": {
           "Packages": [
-            "Controls.js"
+            "Controls.js",
+            "Controls.js UI"
           ]
         }
       }
