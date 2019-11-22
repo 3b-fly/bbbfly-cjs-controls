@@ -38,55 +38,52 @@ bbbfly.hint.hintified._showHint = function(hintId,message){
     ){return false;}
 
     hint = ngCreateTextHint(hintDef,'');
-    if(hint){
-      hint.Owner = this;
-      this._Hints[hintId] = hint;
-    }
+    if(!hint){return false;}
+
+    hint.Owner = this;
+    this._Hints[hintId] = hint;
   }
 
-  if(hint){
-    var resId = (this.HintMessages && this.HintMessages[hintId])
-      ? this.HintMessages[hintId] : null;
-    hint.SetText(String.isString(message) ? message : ngTxt(resId));
-  }
+  var resId = (this.HintMessages && this.HintMessages[hintId])
+    ? this.HintMessages[hintId] : null;
+  hint.SetText(String.isString(message) ? message : ngTxt(resId));
 
   if(
     Function.isFunction(this.OnShowHint)
     && (!this.OnShowHint(this,hintId,hint))
   ){return false;}
 
-  hint = this._Hints[hintId];
-  if(hint){
-    var node = this.Elm();
-    ng_BeginMeasureElement(node);
+  var node = this.Elm();
+  ng_BeginMeasureElement(node);
 
-    if(Number.isInteger(this.HintXR)){
-      this.HintX = ng_ClientWidth(node) - this.HintXR;
-    }
-    else if(Number.isInteger(this.HintXL)){
-      this.HintX = this.HintXL;
-    }
-
-    if(Number.isInteger(this.HintYB)){
-      this.HintY = ng_ClientHeight(node) - this.HintYB;
-    }
-    else if(Number.isInteger(this.HintYT)){
-      this.HintY = this.HintYT;
-    }
-
-    ng_EndMeasureElement(node);
-
-    var anchor = hint.Anchor ? hint.Anchor : 'auto';
-    hint.PopupCtrl(this,anchor);
-    return true;
+  if(Number.isInteger(this.HintXR)){
+    this.HintX = ng_ClientWidth(node) - this.HintXR;
   }
-  return false;
+  else if(Number.isInteger(this.HintXL)){
+    this.HintX = this.HintXL;
+  }
+
+  if(Number.isInteger(this.HintYB)){
+    this.HintY = ng_ClientHeight(node) - this.HintYB;
+  }
+  else if(Number.isInteger(this.HintYT)){
+    this.HintY = this.HintYT;
+  }
+
+  ng_EndMeasureElement(node);
+
+  var anchor = hint.Anchor ? hint.Anchor : 'auto';
+  hint.PopupCtrl(this,anchor);
+  return true;
 };
 
 /** @ignore */
 bbbfly.hint.hintified._hideHint = function(hintId){
-  if(this._Hints && this._Hints[hintId] && this._Hints[hintId].Visible){
-    this._Hints[hintId].SetVisible(false);
+  if(!this._Hints){return false;}
+  var hint = this._Hints[hintId];
+
+  if(hint && hint.Visible){
+    hint.SetVisible(false);
     return true;
   }
   return false;
@@ -94,13 +91,15 @@ bbbfly.hint.hintified._hideHint = function(hintId){
 
 /** @ignore */
 bbbfly.hint.hintified._hideHints = function(){
+  if(!this._Hints){return false;}
   var hidden = false;
-  if(this._Hints){
-    for(var hintId in this._Hints){
-      if(this._Hints[hintId].Visible){
-        this._Hints[hintId].SetVisible(false);
-        hidden = true;
-      }
+
+  for(var hintId in this._Hints){
+    var hint = this._Hints[hintId];
+
+    if(hint.Visible){
+      hint.SetVisible(false);
+      hidden = true;
     }
   }
   return hidden;
@@ -120,6 +119,7 @@ bbbfly.hint.hintified._onEnabledChanged = function(){
 bbbfly.hint.hintified._onUpdated = function(){
   for(var i in this._Hints){
     var hint = this._Hints[i];
+
     if(hint && hint.Visible){
       this.ShowHint(i,hint.GetText());
     }
@@ -171,7 +171,7 @@ bbbfly.hint.Hintify = function(def){
       HintYB: undefined,
 
       /** @private */
-      _Hints: []
+      _Hints: {}
     },
     Events: {
       /** @private */
