@@ -107,6 +107,9 @@ bbbfly.hint.hintified._onUpdated = function(){
     }
   }
 };
+bbbfly.hint._isInsidePopup = function(){
+  return false;
+};
 bbbfly.hint.Hintify = function(def){
   def = def || {};
 
@@ -140,6 +143,12 @@ bbbfly.hint.Hintify = function(def){
   return def;
 };
 bbbfly.TextHint = function(def,ref,parent){
+  ng_MergeDef(def,{
+    Events: {
+      IsInsidePopup: bbbfly.hint._isInsidePopup
+    }
+  });
+
   return ngCreateControlAsType(def,'ngTextHint',ref,parent);
 };
 ngUserControls = ngUserControls || new Array();

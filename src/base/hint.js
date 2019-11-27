@@ -126,6 +126,11 @@ bbbfly.hint.hintified._onUpdated = function(){
   }
 };
 
+/** @ignore */
+bbbfly.hint._isInsidePopup = function(){
+  return false;
+};
+
 /**
  * @function
  * @name Hintify
@@ -267,6 +272,13 @@ bbbfly.hint.Hintify = function(def){
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
 bbbfly.TextHint = function(def,ref,parent){
+  ng_MergeDef(def,{
+    Events: {
+      /** @private */
+      IsInsidePopup: bbbfly.hint._isInsidePopup
+    }
+  });
+
   return ngCreateControlAsType(def,'ngTextHint',ref,parent);
 };
 
