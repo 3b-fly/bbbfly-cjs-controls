@@ -272,6 +272,8 @@ bbbfly.hint.Hintify = function(def){
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
 bbbfly.TextHint = function(def,ref,parent){
+  def = def || {};
+  
   ng_MergeDef(def,{
     Events: {
       /** @private */

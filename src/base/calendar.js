@@ -27,6 +27,7 @@ var bbbfly = bbbfly || {};
  */
 bbbfly.EditDate = function(def,ref,parent){
   def = def || {};
+
   return (bbbfly.Edit)
     ? bbbfly.Edit(def,ref,parent,'ngEditDate')
     : ngCreateControlAsType(def,'ngEditDate',ref,parent);
@@ -50,6 +51,7 @@ bbbfly.EditDate = function(def,ref,parent){
  */
 bbbfly.EditTime = function(def,ref,parent){
   def = def || {};
+  
   return (bbbfly.Edit)
     ? bbbfly.Edit(def,ref,parent,'ngEditTime')
     : ngCreateControlAsType(def,'ngEditTime',ref,parent);

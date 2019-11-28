@@ -310,6 +310,7 @@ bbbfly.dropdownlist._onReadOnlyChanged = function(edit,readOnly){
 };
 bbbfly.List = function(def,ref,parent){
   def = def || {};
+  
   ng_MergeDef(def,{
     Data: {
       ListIndent: 0,

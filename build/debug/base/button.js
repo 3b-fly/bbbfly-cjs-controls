@@ -425,6 +425,8 @@ bbbfly.button._ngGetState = function(){
   };
 };
 bbbfly.Btn = function(def,ref,parent){
+  def = def || {};
+  
   ng_MergeDef(def,{
     Data: {
       Alt: null,

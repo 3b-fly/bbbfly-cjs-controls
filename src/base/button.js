@@ -507,6 +507,8 @@ bbbfly.button._ngGetState = function(){
  * @property {boolean} [HTMLEncode=true]
  */
 bbbfly.Btn = function(def,ref,parent){
+  def = def || {};
+  
   ng_MergeDef(def,{
     Data: {
       Alt: null,
