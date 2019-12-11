@@ -129,8 +129,6 @@ bbbfly.button._doUpdate = function(node){
 
   var alt = this.GetAlt();
   var hasAlt = !!(String.isString(alt) && alt);
-  var hasClick = !!(this.Enabled && !this.ReadOnly && this.OnClick);
-  var hasDblClick = !!(this.Enabled && !this.ReadOnly && this.OnDblClick);
 
   if(hasAlt){
     if(this.HTMLEncode){alt = ng_htmlEncode(alt,false);}
@@ -140,8 +138,8 @@ bbbfly.button._doUpdate = function(node){
     node.title = '';
   }
 
-  var cursor = ((hasClick || hasDblClick) ? 'pointer' : 'default');
-  node.style.cursor = cursor;
+  node.style.cursor = (this.HasClick() || this.HasDblClick())
+    ? 'pointer' : 'default';
 
   this.DoUpdateHolder();
   this.DoAutoSize();
@@ -371,18 +369,18 @@ bbbfly.button._doPtrDblClick = function(ptrInfo){
   this.DblClick(ptrInfo.Event);
 };
 bbbfly.button._click = function(event){
-  if(!this.Enabled || this.ReadOnly){return;}
-
-  if(Function.isFunction(this.OnClick)){
-    this.OnClick(event);
-  }
+  if(this.HasClick){this.OnClick(event);}
 };
 bbbfly.button._dblClick = function(event){
-  if(!this.Enabled || this.ReadOnly){return;}
-
-  if(Function.isFunction(this.OnDblClick)){
-    this.OnDblClick(event);
-  }
+  if(this.HasDblClick){this.OnDblClick(event);}
+};
+bbbfly.button._hasClick = function(){
+  if(!this.Enabled || this.ReadOnly){return false;}
+  return Function.isFunction(this.OnClick);
+};
+bbbfly.button._hasDblClick = function(){
+  if(!this.Enabled || this.ReadOnly){return false;}
+  return Function.isFunction(this.OnDblClick);
 };
 bbbfly.button._onClick = function(){
   if(this.SelectType & bbbfly.Btn.selecttype.click){
@@ -426,7 +424,7 @@ bbbfly.button._ngGetState = function(){
 };
 bbbfly.Btn = function(def,ref,parent){
   def = def || {};
-  
+
   ng_MergeDef(def,{
     Data: {
       Alt: null,
@@ -476,7 +474,9 @@ bbbfly.Btn = function(def,ref,parent){
       GetText: bbbfly.button._getText,
       GetIcon: bbbfly.button._getIcon,
       Click: bbbfly.button._click,
-      DblClick: bbbfly.button._dblClick
+      DblClick: bbbfly.button._dblClick,
+      HasClick: bbbfly.button._hasClick,
+      HasDblClick: bbbfly.button._hasDblClick
     }
   });
 

@@ -143,8 +143,6 @@ bbbfly.button._doUpdate = function(node){
 
   var alt = this.GetAlt();
   var hasAlt = !!(String.isString(alt) && alt);
-  var hasClick = !!(this.Enabled && !this.ReadOnly && this.OnClick);
-  var hasDblClick = !!(this.Enabled && !this.ReadOnly && this.OnDblClick);
 
   if(hasAlt){
     if(this.HTMLEncode){alt = ng_htmlEncode(alt,false);}
@@ -154,8 +152,8 @@ bbbfly.button._doUpdate = function(node){
     node.title = '';
   }
 
-  var cursor = ((hasClick || hasDblClick) ? 'pointer' : 'default');
-  node.style.cursor = cursor;
+  node.style.cursor = (this.HasClick() || this.HasDblClick())
+    ? 'pointer' : 'default';
 
   this.DoUpdateHolder();
   this.DoAutoSize();
@@ -404,20 +402,24 @@ bbbfly.button._doPtrDblClick = function(ptrInfo){
 
 /** @ignore */
 bbbfly.button._click = function(event){
-  if(!this.Enabled || this.ReadOnly){return;}
-
-  if(Function.isFunction(this.OnClick)){
-    this.OnClick(event);
-  }
+  if(this.HasClick){this.OnClick(event);}
 };
 
 /** @ignore */
 bbbfly.button._dblClick = function(event){
-  if(!this.Enabled || this.ReadOnly){return;}
+  if(this.HasDblClick){this.OnDblClick(event);}
+};
 
-  if(Function.isFunction(this.OnDblClick)){
-    this.OnDblClick(event);
-  }
+/** @ignore */
+bbbfly.button._hasClick = function(){
+  if(!this.Enabled || this.ReadOnly){return false;}
+  return Function.isFunction(this.OnClick);
+};
+
+/** @ignore */
+bbbfly.button._hasDblClick = function(){
+  if(!this.Enabled || this.ReadOnly){return false;}
+  return Function.isFunction(this.OnDblClick);
 };
 
 /** @ignore */
@@ -508,7 +510,7 @@ bbbfly.button._ngGetState = function(){
  */
 bbbfly.Btn = function(def,ref,parent){
   def = def || {};
-  
+
   ng_MergeDef(def,{
     Data: {
       Alt: null,
@@ -649,7 +651,29 @@ bbbfly.Btn = function(def,ref,parent){
        * @see {@link bbbfly.Btn#Click|Click()}
        * @see {@link bbbfly.Btn#event:OnDblClick|OnDblClick}
        */
-      DblClick: bbbfly.button._dblClick
+      DblClick: bbbfly.button._dblClick,
+      /**
+       * @function
+       * @name HasClick
+       * @memberof bbbfly.Btn#
+       *
+       * @return {boolean} If has active click action
+       *
+       * @see {@link bbbfly.Btn#Click|Click()}
+       * @see {@link bbbfly.Btn#event:OnClick|OnClick}
+       */
+      HasClick: bbbfly.button._hasClick,
+      /**
+       * @function
+       * @name HasDblClick
+       * @memberof bbbfly.Btn#
+       *
+       * @return {boolean} If has active double click action
+       *
+       * @see {@link bbbfly.Btn#DblClick|DblClick()}
+       * @see {@link bbbfly.Btn#event:OnDblClick|OnDblClick}
+       */
+      HasDblClick: bbbfly.button._hasDblClick
     }
   });
 
