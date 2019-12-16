@@ -496,7 +496,7 @@ bbbfly.button._ngGetState = function(){
  * @property {string} [TextRes=null] - Text resource ID
  * @property {bbbfly.Btn.textalign} [TextAlign=left]
  *
- * @property {booleanbbbfly.Renderer.image} [Icon=null] - Icon definition
+ * @property {boolean|bbbfly.Renderer.image} [Icon=null] - Icon definition
  *   Define define or set it to true before button creation to support icon
  * @property {bbbfly.Btn.iconalign} [IconAlign=left]
  *
@@ -684,7 +684,7 @@ bbbfly.Btn = function(def,ref,parent){
 /**
  * @enum {integer}
  * @description
- *   Possible values for {@link bbbfly.Btn.TextAlign}
+ *   Possible values for {@link bbbfly.Btn|bbbfly.Btn.TextAlign}
  */
 bbbfly.Btn.textalign = {
   left: 1,
@@ -695,7 +695,7 @@ bbbfly.Btn.textalign = {
 /**
  * @enum {integer}
  * @description
- *   Possible values for {@link bbbfly.Btn.IconAlign}
+ *   Possible values for {@link bbbfly.Btn|bbbfly.Btn.IconAlign}
  */
 bbbfly.Btn.iconalign = {
   left: 1,
@@ -707,7 +707,7 @@ bbbfly.Btn.iconalign = {
 /**
  * @enum {integer}
  * @description
- *   Possible values for {@link bbbfly.Btn.AutoSize}
+ *   Possible values for {@link bbbfly.Btn|bbbfly.Btn.AutoSize}
  */
 bbbfly.Btn.autosize = {
   none: 0,
@@ -719,7 +719,7 @@ bbbfly.Btn.autosize = {
 /**
  * @enum {integer}
  * @description
- *   Possible values for {@link bbbfly.Btn.SelectType}
+ *   Possible values for {@link bbbfly.Btn|bbbfly.Btn.SelectType}
  */
 bbbfly.Btn.selecttype = {
   none: 0,
@@ -733,7 +733,7 @@ bbbfly.Btn.selecttype = {
  * @memberOf bbbfly.Btn
  *
  * @description
- *   Possible values for {@link bbbfly.Btn.Indent|Indent}
+ *   Possible values for {@link bbbfly.Btn|bbbfly.Btn.Indent}
  *
  * @property {px} [L] - Gap between left frame and content
  * @property {px} [T] - Gap between top frame and content

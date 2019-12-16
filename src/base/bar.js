@@ -199,8 +199,7 @@ ngUserControls['bbbfly_layout'] = {
 /**
  * @enum {string}
  * @description
- *   Possible values for
- *   {@link bbbfly.ToolBar|bbbfly.ToolBar.VAlign}
+ *   Possible values for {@link bbbfly.ToolBar|bbbfly.ToolBar.VAlign}
  */
 bbbfly.ToolBar.valign = {
   top: 'top',
@@ -210,8 +209,7 @@ bbbfly.ToolBar.valign = {
 /**
  * @enum {string}
  * @description
- *   Possible values for
- *   {@link bbbfly.ToolBar|bbbfly.ToolBar.HAlign}
+ *   Possible values for {@link bbbfly.ToolBar|bbbfly.ToolBar.HAlign}
  */
 bbbfly.ToolBar.halign = {
   left: 'left',

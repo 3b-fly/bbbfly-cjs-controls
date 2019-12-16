@@ -1020,7 +1020,7 @@ bbbfly.Line = function(def,ref,parent){
 /**
  * @enum {integer}
  * @description
- *   Possible values for {@link bbbfly.Line.Orientation}
+ *   Possible values for {@link bbbfly.Line|bbbfly.Line.Orientation}
  */
 bbbfly.Line.orientation = {
   vertical: 1,
