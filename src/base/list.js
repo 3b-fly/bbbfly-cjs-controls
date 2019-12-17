@@ -288,6 +288,36 @@ bbbfly.list._onEnabledChanged = function(){
 };
 
 /** @ignore */
+bbbfly.list._onGetColumnCaption = function(list,column){
+  if(!column){return null;}
+
+  if(String.isString(column.Text)){
+    return column.Text;
+  }
+  else if(String.isString(column.TextRes)){
+    return ngTxt(column.TextRes);
+  }
+  return null;
+};
+
+/** @ignore */
+bbbfly.list._onGetText = function(list,item,column){
+  if(!item){return null;}
+
+  var text = item.Text;
+  var textRes = item.TextRes;
+
+  if(column){
+    if(text){text = text[column.ID];}
+    if(textRes){textRes = textRes[column.ID];}
+  }
+
+  if(String.isString(text)){return text;}
+  else if(String.isString(textRes)){return ngTxt(textRes);}
+  return null;
+};
+
+/** @ignore */
 bbbfly.list._selectDropDownItemWithFocus = function(item){
   var selected = this.SelectDropDownItem(item);
   var owner = this.DropDownOwner;
@@ -382,7 +412,7 @@ bbbfly.dropdownlist._onReadOnlyChanged = function(edit,readOnly){
  */
 bbbfly.List = function(def,ref,parent){
   def = def || {};
-  
+
   ng_MergeDef(def,{
     Data: {
       ListIndent: 0,
@@ -430,6 +460,12 @@ bbbfly.List = function(def,ref,parent){
        * @see {@link bbbfly.List#event:OnSetInvalid|OnSetInvalid}
        */
       OnInvalidChanged: bbbfly.list._onInvalidChanged
+    },
+    OverrideEvents: {
+      /** @private */
+      OnGetColumnCaption: bbbfly.list._onGetColumnCaption,
+      /** @private */
+      OnGetText: bbbfly.list._onGetText
     },
     Methods: {
       /** @private */
