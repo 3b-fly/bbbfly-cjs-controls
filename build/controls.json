@@ -150,7 +150,8 @@
         },
         "bbbfly-cjs-controls": {
           "Packages": [
-            "panel"
+            "panel",
+            "button"
           ]
         }
       }

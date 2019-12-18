@@ -10,6 +10,7 @@ var ngc_Lang = ngc_Lang || {};
 ngc_Lang.cs = ngc_Lang.cs || {};
 
 //FileUploader
+ngc_Lang.cs.bbbfly_fileuploader_file = 'Název souboru';
 ngc_Lang.cs.bbbfly_fileuploader_add_one = 'Přidat soubor';
 ngc_Lang.cs.bbbfly_fileuploader_add_more = 'Přidat soubory';
 ngc_Lang.cs.bbbfly_fileuploader_remove_one = 'Odebrat soubor';

@@ -10,6 +10,7 @@ var ngc_Lang = ngc_Lang || {};
 ngc_Lang.en = ngc_Lang.en || {};
 
 //FileUploader
+ngc_Lang.en.bbbfly_fileuploader_file = 'File name';
 ngc_Lang.en.bbbfly_fileuploader_add_one = 'Add file';
 ngc_Lang.en.bbbfly_fileuploader_add_more = 'Add files';
 ngc_Lang.en.bbbfly_fileuploader_remove_one = 'Remove file';
