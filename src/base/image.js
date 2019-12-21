@@ -53,19 +53,30 @@ bbbfly.image._doUpdateImage = function(){
     image,state,this.ID+'_I'
   );
 
-  var width = Number.isInteger(proxy.W) ? proxy.W : 0;
-  var height = Number.isInteger(proxy.H) ? proxy.H : 0;
+  var indent = this.GetFrameDims();
+  var iWidth = Number.isInteger(proxy.W) ? proxy.W : 0;
+  var iHeight = Number.isInteger(proxy.H) ? proxy.H : 0;
 
   if(iNode){
-    bbbfly.Renderer.SetImage(iNode,proxy,0,0,0,0,state,'Image');
-    iNode.style.visibility = (width && height) ? 'visible' : 'hidden';
+    bbbfly.Renderer.SetImage(
+      iNode,proxy,
+      indent.L,indent.T,
+      indent.R,indent.B,
+      state,'Image'
+    );
+
+    iNode.style.visibility = (iWidth && iHeight)
+      ? 'visible' : 'hidden';
   }
 
   this._ImageProxy = proxy;
   state.mouseover = over;
 
   if(over){bbbfly.Renderer.UpdateImageHTML(proxy,state);}
-  this.SetBounds({ W:width,H:height});
+
+  var cWidth = iWidth+indent.L+indent.R;
+  var cHeight = iHeight+indent.T+indent.B;
+  this.SetBounds({ W:cWidth,H:cHeight});
 };
 
 /** @ignore */
@@ -147,7 +158,7 @@ bbbfly.imagepreview._onCreated = function(ctrl){
 /**
  * @class
  * @type control
- * @extends bbbfly.Panel
+ * @extends bbbfly.Frame
  *
  * @inpackage image
  *
@@ -190,7 +201,7 @@ bbbfly.Image = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Frame',ref,parent);
 };
 
 /**
