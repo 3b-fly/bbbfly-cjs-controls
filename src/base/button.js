@@ -531,7 +531,9 @@ bbbfly.Btn = function(def,ref,parent){
       Multiline: false,
       HTMLEncode: true,
 
+      /** @private */
       _IconProxy: null,
+      /** @private */
       _HolderHtml: ''
     },
     ControlsPanel: {

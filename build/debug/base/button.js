@@ -444,7 +444,6 @@ bbbfly.Btn = function(def,ref,parent){
 
       Multiline: false,
       HTMLEncode: true,
-
       _IconProxy: null,
       _HolderHtml: ''
     },

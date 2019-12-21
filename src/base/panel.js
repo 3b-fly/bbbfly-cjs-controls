@@ -602,6 +602,7 @@ bbbfly.line._setBounds = function(bounds){
 bbbfly.PanelGroup = {
   /** @private */
   _Groups: {},
+  /** @private */
   _ControlGroups: {},
 
   /**
