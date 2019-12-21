@@ -9,7 +9,82 @@
 /** @ignore */
 var bbbfly = bbbfly || {};
 /** @ignore */
+bbbfly.image = {};
+/** @ignore */
 bbbfly.imagepreview = {};
+
+/** @ignore */
+bbbfly.image._doCreate = function(def,ref,node){
+  this.DoCreate.callParent(def,ref,node);
+
+  var icon = document.createElement('DIV');
+  icon.id = this.ID+'_I';
+
+  icon.style.zIndex = 3;
+  icon.style.visibility = 'hidden';
+  node.appendChild(icon);
+};
+
+/** @ignore */
+bbbfly.image._getImage = function(){
+  return (Object.isObject(this.Image) ? this.Image : {});
+};
+
+/** @ignore */
+bbbfly.image._doUpdate = function(node){
+  if(!node){return;}
+
+  this.DoUpdateImage();
+
+  this.DoUpdate.callParent(node);
+};
+
+/** @ignore */
+bbbfly.image._doUpdateImage = function(){
+  var iNode = document.getElementById(this.ID+'_I');
+
+  var image = this.GetImage();
+  var state = this.GetState();
+
+  var over = state.mouseover;
+  state.mouseover = false;
+
+  var proxy = bbbfly.Renderer.ImageProxy(
+    image,state,this.ID+'_I'
+  );
+
+  var width = Number.isInteger(proxy.W) ? proxy.W : 0;
+  var height = Number.isInteger(proxy.H) ? proxy.H : 0;
+
+  if(iNode){
+    bbbfly.Renderer.SetImage(iNode,proxy,0,0,0,0,state,'Image');
+    iNode.style.visibility = (width && height) ? 'visible' : 'hidden';
+  }
+
+  this._ImageProxy = proxy;
+  state.mouseover = over;
+
+  if(over){bbbfly.Renderer.UpdateImageHTML(proxy,state);}
+  this.SetBounds({ W:width,H:height});
+};
+
+/** @ignore */
+bbbfly.image._doMouseEnter = function(event,options){
+  var state = this.DoMouseEnter.callParent(event,options);
+  var proxy = this._ImageProxy;
+
+  bbbfly.Renderer.UpdateImageHTML(proxy,state);
+  return state;
+};
+
+/** @ignore */
+bbbfly.image._doMouseLeave = function(event,options){
+  var state = this.DoMouseLeave.callParent(event,options);
+  var proxy = this._ImageProxy;
+
+  bbbfly.Renderer.UpdateImageHTML(proxy,state);
+  return state;
+};
 
 /** @ignore */
 bbbfly.imagepreview._getImgHolder = function(){
@@ -72,6 +147,55 @@ bbbfly.imagepreview._onCreated = function(ctrl){
 /**
  * @class
  * @type control
+ * @extends bbbfly.Panel
+ *
+ * @inpackage image
+ *
+ * @param {bbbfly.Edit.Definition} [def=undefined] - Descendant definition
+ * @param {object} [ref=undefined] - Reference owner
+ * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
+ *
+ * @property {bbbfly.Renderer.image} [Icon=null] - Image definition
+ */
+bbbfly.Image = function(def,ref,parent){
+  def = def || {};
+
+  ng_MergeDef(def,{
+    Data: {
+      Image: null,
+
+      /** @private */
+      _ImageProxy: null
+    },
+    Methods: {
+      /** @private */
+      DoCreate: bbbfly.image._doCreate,
+      /** @private */
+      DoUpdate: bbbfly.image._doUpdate,
+      /** @private */
+      DoUpdateImage: bbbfly.image._doUpdateImage,
+      /** @private */
+      DoMouseEnter: bbbfly.image._doMouseEnter,
+      /** @private */
+      DoMouseLeave: bbbfly.image._doMouseLeave,
+
+      /**
+       * @function
+       * @name GetImage
+       * @memberof bbbfly.Btn#
+       *
+       * @return {bbbfly.Renderer.image} Image definition
+       */
+      GetImage: bbbfly.image._getImage
+    }
+  });
+
+  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+};
+
+/**
+ * @class
+ * @type control
  * @extends bbbfly.Frame
  *
  * @description
@@ -121,6 +245,7 @@ bbbfly.ImagePreview = function(def,ref,parent){
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_image'] = {
   OnInit: function(){
+    ngRegisterControlType('bbbfly.Image',bbbfly.Image);
     ngRegisterControlType('bbbfly.ImagePreview',bbbfly.ImagePreview);
   }
 };

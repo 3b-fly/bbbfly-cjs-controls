@@ -7,7 +7,69 @@
 
 
 var bbbfly = bbbfly || {};
+bbbfly.image = {};
 bbbfly.imagepreview = {};
+bbbfly.image._doCreate = function(def,ref,node){
+  this.DoCreate.callParent(def,ref,node);
+
+  var icon = document.createElement('DIV');
+  icon.id = this.ID+'_I';
+
+  icon.style.zIndex = 3;
+  icon.style.visibility = 'hidden';
+  node.appendChild(icon);
+};
+bbbfly.image._getImage = function(){
+  return (Object.isObject(this.Image) ? this.Image : {});
+};
+bbbfly.image._doUpdate = function(node){
+  if(!node){return;}
+
+  this.DoUpdateImage();
+
+  this.DoUpdate.callParent(node);
+};
+bbbfly.image._doUpdateImage = function(){
+  var iNode = document.getElementById(this.ID+'_I');
+
+  var image = this.GetImage();
+  var state = this.GetState();
+
+  var over = state.mouseover;
+  state.mouseover = false;
+
+  var proxy = bbbfly.Renderer.ImageProxy(
+    image,state,this.ID+'_I'
+  );
+
+  var width = Number.isInteger(proxy.W) ? proxy.W : 0;
+  var height = Number.isInteger(proxy.H) ? proxy.H : 0;
+
+  if(iNode){
+    bbbfly.Renderer.SetImage(iNode,proxy,0,0,0,0,state,'Image');
+    iNode.style.visibility = (width && height) ? 'visible' : 'hidden';
+  }
+
+  this._ImageProxy = proxy;
+  state.mouseover = over;
+
+  if(over){bbbfly.Renderer.UpdateImageHTML(proxy,state);}
+  this.SetBounds({ W:width,H:height});
+};
+bbbfly.image._doMouseEnter = function(event,options){
+  var state = this.DoMouseEnter.callParent(event,options);
+  var proxy = this._ImageProxy;
+
+  bbbfly.Renderer.UpdateImageHTML(proxy,state);
+  return state;
+};
+bbbfly.image._doMouseLeave = function(event,options){
+  var state = this.DoMouseLeave.callParent(event,options);
+  var proxy = this._ImageProxy;
+
+  bbbfly.Renderer.UpdateImageHTML(proxy,state);
+  return state;
+};
 bbbfly.imagepreview._getImgHolder = function(){
   var imgCtrl = this.Controls.Image;
   return imgCtrl.GetControlsHolder();
@@ -58,6 +120,26 @@ bbbfly.imagepreview._onCreated = function(ctrl){
   }
   return true;
 };
+bbbfly.Image = function(def,ref,parent){
+  def = def || {};
+
+  ng_MergeDef(def,{
+    Data: {
+      Image: null,
+      _ImageProxy: null
+    },
+    Methods: {
+      DoCreate: bbbfly.image._doCreate,
+      DoUpdate: bbbfly.image._doUpdate,
+      DoUpdateImage: bbbfly.image._doUpdateImage,
+      DoMouseEnter: bbbfly.image._doMouseEnter,
+      DoMouseLeave: bbbfly.image._doMouseLeave,
+      GetImage: bbbfly.image._getImage
+    }
+  });
+
+  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+};
 bbbfly.ImagePreview = function(def,ref,parent){
   def = def || {};
 
@@ -83,6 +165,7 @@ bbbfly.ImagePreview = function(def,ref,parent){
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_image'] = {
   OnInit: function(){
+    ngRegisterControlType('bbbfly.Image',bbbfly.Image);
     ngRegisterControlType('bbbfly.ImagePreview',bbbfly.ImagePreview);
   }
 };

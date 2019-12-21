@@ -205,6 +205,11 @@
             "Controls.js"
           ]
         },
+        "bbbfly-cjs": {
+          "Packages": [
+            "renderer"
+          ]
+        },
         "bbbfly-cjs-controls": {
           "Packages": [
             "panel"
