@@ -657,7 +657,7 @@ bbbfly.fileuploader._showProgress = function(process){
   var progressPanel = this.Controls.ProgressPanel;
   var progressBar = progressPanel.Controls.ProgressBar;
 
-  if(process){progressBar.BeginProcess();}
+  if(process){progressBar.StartProcess();}
   else{this.UpdateProgress(0);}
 
   progressPanel.SetVisible(true);
@@ -671,7 +671,7 @@ bbbfly.fileuploader._updateProgress = function(progress){
   if(!Number.isNumber(progress)){progress = 0;}
 
   progressBar.EndProcess();
-  progressBar.SetPosition(progress);
+  progressBar.SetProgress(progress);
 };
 
 /** @ignore */
@@ -918,10 +918,10 @@ bbbfly.FileUploader = function(def,ref,parent){
         Data: { Visible: false },
         Controls: {
           ProgressBar: {
-            Type: 'ngProgressBar'
+            Type: 'bbbfly.ProgressBar'
           },
           ProgressMessage: {
-            Type: 'ngText',
+            Type: 'ngText', //TODO: add bbbfly.Text control
             Events: {
               OnGetText: bbbfly.fileuploader._onGetProgressText
             }
