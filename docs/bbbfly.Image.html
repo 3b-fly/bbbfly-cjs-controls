@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: Grid</title>
+    <title>Class: Image</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -2511,7 +2511,7 @@
 <header>
     <h1 class="name">
           <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
-        Grid
+        Image
   <span class="types">
       <span class="type-signature class">
         class
@@ -2526,18 +2526,17 @@
     <div class="container-overview">
 <dt>
     <div class="nameContainer">
-        <h2 id="Grid">
+        <h2 id="Image">
           new 
-          bbbfly.Grid
+          bbbfly.Image
           <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/grid.js#L155">base/grid.js, line 155</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/image.js#L171">base/image.js, line 171</a>
         </div>
     </div>
 </dt>
 <dd>
-      <div class="description">Panel which places its child controls in columns grid.</div>
         <h3>Parameters</h3>
 <table class="params">
     <thead>
@@ -2553,7 +2552,7 @@
                   <span class="param-name">def</span>
                 </td>
             <td class="type">
-<span class="param-type"><a href="bbbfly.Frame.Definition.html">bbbfly.Frame.Definition</a></span>
+<span class="param-type"><a href="bbbfly.Edit.Definition.html">bbbfly.Edit.Definition</a></span>
             </td>
             <td class="description last">
                         <span class="optional">optional</span>
@@ -2583,7 +2582,7 @@
             </td>
             <td class="description last">
                         <span class="optional">optional</span>
-                Parent DIV element or its ID
+                Parent DIV element or it's ID
             </td>
         </tr>
 	</tbody>
@@ -2600,42 +2599,18 @@
         </tr>
         </thead>
         <tbody>
-            <tr id="property:AutoSize">
+            <tr id="property:Icon">
                     <td class="name">
-                      <span class="param-name">AutoSize</span>
+                      <span class="param-name">Icon</span>
                     </td>
                 <td class="type">
-<span class="param-type">boolean</span>
+<span class="param-type">bbbfly.Renderer.image</span>
                 </td>
                     <td class="default">
-                        true
+                        null
                     </td>
                 <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:MinColumnWidth">
-                    <td class="name">
-                      <span class="param-name">MinColumnWidth</span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#px">px</a></span>
-                </td>
-                    <td class="default">
-                        200
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:MaxColumnWidth">
-                    <td class="name">
-                      <span class="param-name">MaxColumnWidth</span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#px">px</a></span>
-                </td>
-                    <td class="default">
-                    </td>
-                <td class="description last">
+                  Image definition
                 </td>
             </tr>
         </tbody>
@@ -2651,7 +2626,7 @@
         </ul>
         <h3>In Packages</h3>
         <ul>
-              <li><a href="packages.html#package:grid">grid</a></li>
+              <li><a href="packages.html#package:image">image</a></li>
         </ul>
         <h3>Methods</h3>
         <dl>
@@ -3314,21 +3289,6 @@
         </dl>
         <h3>Events</h3>
         <dl>
-<dt>
-    <div class="nameContainer">
-        <h4 id="event:OnAutoSized">
-          OnAutoSized
-          <span class="signature">()</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/grid.js#L174">base/grid.js, line 174</a>
-        </div>
-    </div>
-</dt>
-<dd>
-<dl class="details">
-</dl>
-</dd>
 <dt>
     <div class="nameContainer inherited">
         <h4 id="event:OnEnabledChanged">
