@@ -168,6 +168,22 @@
         }
       }
     },
+    "progress": {
+      "DebugFiles": [
+        "base/progress.js"
+      ],
+      "ReleaseFiles": [
+        "base/progress.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": ["Controls.js","Controls.js UI"]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": ["panel","image"]
+        }
+      }
+    },
     "list": {
       "DebugFiles": [
         "base/list.js"

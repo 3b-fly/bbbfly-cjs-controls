@@ -1,0 +1,14 @@
+/*!
+ * @author Jan Nejedly support@3b-fly.eu
+ * @copyright Jan Nejedly
+ * @version 2.0.0
+ * @license see license in 'LICENSE' file
+*/
+
+var $jscomp=$jscomp||{};$jscomp.scope={};$jscomp.ASSUME_ES5=!1;$jscomp.ASSUME_NO_NATIVE_MAP=!1;$jscomp.ASSUME_NO_NATIVE_SET=!1;$jscomp.defineProperty=$jscomp.ASSUME_ES5||"function"==typeof Object.defineProperties?Object.defineProperty:function(a,b,c){a!=Array.prototype&&a!=Object.prototype&&(a[b]=c.value)};$jscomp.getGlobal=function(a){return"undefined"!=typeof window&&window===a?a:"undefined"!=typeof global&&null!=global?global:a};$jscomp.global=$jscomp.getGlobal(this);
+$jscomp.polyfill=function(a,b,c,d){if(b){c=$jscomp.global;a=a.split(".");for(d=0;d<a.length-1;d++){var e=a[d];e in c||(c[e]={});c=c[e]}a=a[a.length-1];d=c[a];b=b(d);b!=d&&null!=b&&$jscomp.defineProperty(c,a,{configurable:!0,writable:!0,value:b})}};$jscomp.polyfill("Number.isFinite",function(a){return a?a:function(a){return"number"!==typeof a?!1:!isNaN(a)&&Infinity!==a&&-Infinity!==a}},"es6","es3");
+$jscomp.polyfill("Number.isInteger",function(a){return a?a:function(a){return Number.isFinite(a)?a===Math.floor(a):!1}},"es6","es3");var bbbfly=bbbfly||{};bbbfly.progressbar={};bbbfly.progressbar._reset=function(){this.EndProcess()};
+bbbfly.progressbar._setProgress=function(a,b){Number.isInteger(b)||(b=0);Number.isInteger(a)||(a=0);this._Progress={start:b,end:a};var c=this.Controls.Indicator;if(c){var d=this.GetControlsHolder().Elm();if(d){var e=c.GetFrameDims();e=e.L+e.R;d=ng_ClientWidth(d);d=Math.floor(d-e);c.SetBounds({W:Math.floor(d/100*(a-b))+e+"px",L:Math.floor(d/100*b)+"px",R:null})&&c.Update()}}};bbbfly.progressbar._doProcess=function(a){this.Enabled&&(a%=16,8<a&&(a=16-a),a=Math.floor(10*a),this.SetProgress(a+20,a))};
+bbbfly.progressbar._startProcess=function(){if(!this._ProcessTimer){var a=0,b=this;this._ProcessTimer=function(){b.DoProcess(a++);setTimeout(b._ProcessTimer,100)};this.SetProgress(0,0);this._ProcessTimer()}};bbbfly.progressbar._endProcess=function(){this._ProcessTimer&&(clearTimeout(this._ProcessTimer),this._ProcessTimer=null,this.SetProgress(0,0))};bbbfly.ProgressRing=function(a,b,c){return ngCreateControlAsType(a,"bbbfly.Image",b,c)};
+bbbfly.ProgressBar=function(a,b,c){a=a||{};ng_MergeDef(a,{ParentReferences:!1,Data:{_Progress:null,_ProcessTimer:null},Controls:{Indicator:{Type:"bbbfly.Frame",className:"Indicator",style:{transitionProperty:"left,right",transitionDuration:"100ms"}}},Methods:{DoProcess:bbbfly.progressbar._doProcess,Reset:bbbfly.progressbar._reset,SetProgress:bbbfly.progressbar._setProgress,StartProcess:bbbfly.progressbar._startProcess,EndProcess:bbbfly.progressbar._endProcess}});return ngCreateControlAsType(a,"bbbfly.Frame",
+b,c)};ngUserControls=ngUserControls||[];ngUserControls.bbbfly_progress={OnInit:function(){ngRegisterControlType("bbbfly.ProgressRing",bbbfly.ProgressRing);ngRegisterControlType("bbbfly.ProgressBar",bbbfly.ProgressBar)}};
