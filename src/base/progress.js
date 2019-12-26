@@ -66,7 +66,14 @@ bbbfly.progressbar._doProcess = function(step){
 
 /** @ignore */
 bbbfly.progressbar._startProcess = function(){
-  if(this._ProcessTimer){return;}
+  var indicator = this.Controls.Indicator;
+  if(!indicator || this._ProcessTimer){return;}
+
+  var node = indicator.Elm();
+  if(node){
+    node.style.transitionProperty = 'left, right';
+    node.style.transitionDuration = '99ms';
+  }
 
   var step = 0;
   var self = this;
@@ -82,7 +89,14 @@ bbbfly.progressbar._startProcess = function(){
 
 /** @ignore */
 bbbfly.progressbar._endProcess = function(){
-  if(!this._ProcessTimer){return;}
+  var indicator = this.Controls.Indicator;
+  if(!indicator || !this._ProcessTimer){return;}
+
+  var node = indicator.Elm();
+  if(node){
+    node.style.transitionProperty = '';
+    node.style.transitionDuration = '';
+  }
 
   clearTimeout(this._ProcessTimer);
   this._ProcessTimer = null;
@@ -129,11 +143,7 @@ bbbfly.ProgressBar = function(def,ref,parent){
     Controls: {
       Indicator: {
         Type: 'bbbfly.Frame',
-        className: 'Indicator',
-        style: {
-          transitionProperty: 'left,right',
-          transitionDuration: '100ms'
-        }
+        className: 'Indicator'
       }
     },
     Methods: {
