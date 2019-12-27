@@ -103,6 +103,12 @@ bbbfly.progressbar._endProcess = function(){
   this.SetProgress(0,0);
 };
 
+/** @ignore */
+bbbfly.progressbar._onEnabledChanged = function(){
+  var indicator = this.Controls.Indicator;
+  if(indicator){indicator.SetVisible(this.Enabled);}
+};
+
 /**
  * @class
  * @type control
@@ -145,6 +151,10 @@ bbbfly.ProgressBar = function(def,ref,parent){
         Type: 'bbbfly.Frame',
         className: 'Indicator'
       }
+    },
+    Events: {
+      /** @private */
+      OnEnabledChanged: bbbfly.progressbar._onEnabledChanged
     },
     Methods: {
       /** @private */

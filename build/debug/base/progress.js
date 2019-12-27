@@ -90,6 +90,10 @@ bbbfly.progressbar._endProcess = function(){
   this._ProcessTimer = null;
   this.SetProgress(0,0);
 };
+bbbfly.progressbar._onEnabledChanged = function(){
+  var indicator = this.Controls.Indicator;
+  if(indicator){indicator.SetVisible(this.Enabled);}
+};
 bbbfly.ProgressRing = function(def,ref,parent){
   return ngCreateControlAsType(def,'bbbfly.Image',ref,parent);
 };
@@ -107,6 +111,9 @@ bbbfly.ProgressBar = function(def,ref,parent){
         Type: 'bbbfly.Frame',
         className: 'Indicator'
       }
+    },
+    Events: {
+      OnEnabledChanged: bbbfly.progressbar._onEnabledChanged
     },
     Methods: {
       DoProcess: bbbfly.progressbar._doProcess,
