@@ -320,7 +320,6 @@ bbbfly.button._doUpdateImages = function(){
 
   this.DoUpdateImages.callParent();
 };
-
 bbbfly.button._doAutoSize = function(){
   var hNode = document.getElementById(this.ID+'_H');
 
