@@ -798,7 +798,7 @@ bbbfly.fileuploader._getRemoveBtnText = function(){
 };
 
 /** @ignore */
-bbbfly.fileuploader._onGetProgressText = function(){
+bbbfly.fileuploader._getProgressText = function(){
   var uploader = this.ParentControl.ParentControl;
   return (uploader.MaxFilesCount === 1)
     ? ngTxt('bbbfly_fileuploader_upload_one')
@@ -921,9 +921,9 @@ bbbfly.FileUploader = function(def,ref,parent){
             Type: 'bbbfly.ProgressBar'
           },
           ProgressMessage: {
-            Type: 'ngText', //TODO: add bbbfly.Text control
-            Events: {
-              OnGetText: bbbfly.fileuploader._onGetProgressText
+            Type: 'bbbfly.Text',
+            Methods: {
+              GetText: bbbfly.fileuploader._getProgressText
             }
           }
         }
