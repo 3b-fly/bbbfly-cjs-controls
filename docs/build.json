@@ -19,6 +19,7 @@
       "../src/base/lang/search_cs.js",
       "../src/base/lang/search_en.js",
       "../src/base/wrapper.js",
+      "../src/base/text.js",
 
       "../src/map/map.js",
       "../src/map/map_box.js",
