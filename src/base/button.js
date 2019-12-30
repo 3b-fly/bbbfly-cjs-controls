@@ -770,7 +770,7 @@ bbbfly.Button = function(def,ref,parent){
 
 /** @ignore */
 ngUserControls = ngUserControls || new Array();
-ngUserControls['bbbfly_strl_button'] = {
+ngUserControls['bbbfly_button'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.Btn',bbbfly.Btn);
     ngRegisterControlType('bbbfly.Button',bbbfly.Button);
