@@ -116,7 +116,7 @@
           "Packages": ["crossbrowser"]
         },
         "bbbfly-cjs-controls": {
-          "Packages": ["panel","button","list"]
+          "Packages": ["panel","button","progress","text","list"]
         }
       }
     },
@@ -297,6 +297,28 @@
       "Libraries": {
         "controls.js": {
           "Packages": ["Controls.js"]
+        },
+        "bbbfly-cjs": {
+          "Packages": ["crossbrowser"]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": ["panel"]
+        }
+      }
+    },
+    "text": {
+      "DebugFiles": [
+        "base/text.js"
+      ],
+      "ReleaseFiles": [
+        "base/text.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": ["Controls.js"]
+        },
+        "bbbfly-cjs": {
+          "Packages": ["crossbrowser"]
         },
         "bbbfly-cjs-controls": {
           "Packages": ["panel"]
