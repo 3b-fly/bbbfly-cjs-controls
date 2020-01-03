@@ -11,6 +11,7 @@ var bbbfly = bbbfly || {};
 /** @ignore */
 bbbfly.button = {};
 
+/** @ignore */
 bbbfly.button._setAlt = function(alt,update){
   if(!String.isString(alt) && (alt !== null)){return;}
 
@@ -23,6 +24,7 @@ bbbfly.button._setAlt = function(alt,update){
   }
 };
 
+/** @ignore */
 bbbfly.button._setText = function(text,update){
   if(!String.isString(text) && (text !== null)){return;}
 
