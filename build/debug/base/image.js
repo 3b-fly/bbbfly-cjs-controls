@@ -19,8 +19,19 @@ bbbfly.image._doCreate = function(def,ref,node){
   icon.style.visibility = 'hidden';
   node.appendChild(icon);
 };
+bbbfly.image._setImage = function(img,update){
+  if(!Object.isObject(img) && (img !== null)){return;}
+
+  if(img !== this.Image){
+    this.Image = img;
+
+    if(!Boolean.isBoolean(update) || update){
+      this.Update();
+    }
+  }
+};
 bbbfly.image._getImage = function(){
-  return (Object.isObject(this.Image) ? this.Image : {});
+  return (Object.isObject(this.Image) ? this.Image : null);
 };
 bbbfly.image._doUpdate = function(node){
   if(!node){return;}
@@ -145,6 +156,7 @@ bbbfly.Image = function(def,ref,parent){
       DoUpdateImage: bbbfly.image._doUpdateImage,
       DoMouseEnter: bbbfly.image._doMouseEnter,
       DoMouseLeave: bbbfly.image._doMouseLeave,
+      SetImage: bbbfly.image._setImage,
       GetImage: bbbfly.image._getImage
     }
   });

@@ -26,8 +26,21 @@ bbbfly.image._doCreate = function(def,ref,node){
 };
 
 /** @ignore */
+bbbfly.image._setImage = function(img,update){
+  if(!Object.isObject(img) && (img !== null)){return;}
+
+  if(img !== this.Image){
+    this.Image = img;
+
+    if(!Boolean.isBoolean(update) || update){
+      this.Update();
+    }
+  }
+};
+
+/** @ignore */
 bbbfly.image._getImage = function(){
-  return (Object.isObject(this.Image) ? this.Image : {});
+  return (Object.isObject(this.Image) ? this.Image : null);
 };
 
 /** @ignore */
@@ -166,7 +179,7 @@ bbbfly.imagepreview._onCreated = function(ctrl){
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
- * @property {bbbfly.Renderer.image} [Icon=null] - Image definition
+ * @property {bbbfly.Renderer.image} [Image=null] - Image definition
  */
 bbbfly.Image = function(def,ref,parent){
   def = def || {};
@@ -192,10 +205,20 @@ bbbfly.Image = function(def,ref,parent){
 
       /**
        * @function
-       * @name GetImage
-       * @memberof bbbfly.Btn#
+       * @name SetImage
+       * @memberof bbbfly.Image#
        *
-       * @return {bbbfly.Renderer.image} Image definition
+       * @param {bbbfly.Renderer.image|null} img
+       * @param {boolean} [update=true]
+       */
+      SetImage: bbbfly.image._setImage,
+
+      /**
+       * @function
+       * @name GetImage
+       * @memberof bbbfly.Image#
+       *
+       * @return {bbbfly.Renderer.image|null} Image definition
        */
       GetImage: bbbfly.image._getImage
     }
