@@ -160,7 +160,7 @@ bbbfly.text._doUpdateText = function(){
   tNode.style.right = bbbfly.Renderer.StyleDim(tPosition.R);
   tNode.style.bottom = bbbfly.Renderer.StyleDim(tPosition.B);
 
-  tNode.innerText = (hasText) ? text : '';
+  tNode.innerHTML = (hasText) ? text : '';
 };
 
 /** @ignore */
