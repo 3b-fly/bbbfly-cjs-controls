@@ -19,6 +19,17 @@ bbbfly.image._doCreate = function(def,ref,node){
   icon.style.visibility = 'hidden';
   node.appendChild(icon);
 };
+bbbfly.image._setAlt = function(alt,update){
+  if(!String.isString(alt) && (alt !== null)){return;}
+
+  if(alt !== this.Alt){
+    this.Alt = alt;
+
+    if(!Boolean.isBoolean(update) || update){
+      this.Update();
+    }
+  }
+};
 bbbfly.image._setImage = function(img,update){
   if(!Object.isObject(img) && (img !== null)){return;}
 
@@ -30,15 +41,35 @@ bbbfly.image._setImage = function(img,update){
     }
   }
 };
+bbbfly.image._getAlt = function(){
+  if(String.isString(this.AltRes)){
+    return ngTxt(this.AltRes);
+  }
+  else if(String.isString(this.Alt)){
+    return this.Alt;
+  }
+  return null;
+};
 bbbfly.image._getImage = function(){
   return (Object.isObject(this.Image) ? this.Image : null);
 };
 bbbfly.image._doUpdate = function(node){
   if(!node){return;}
 
-  this.DoUpdateImage();
-
   this.DoUpdate.callParent(node);
+
+  var alt = this.GetAlt();
+  var hasAlt = !!(String.isString(alt) && alt);
+
+  if(hasAlt){
+    if(this.HTMLEncode){alt = ng_htmlEncode(alt,false);}
+    node.title = alt;
+  }
+  else{
+    node.title = '';
+  }
+
+  this.DoUpdateImage();
 };
 bbbfly.image._doUpdateImage = function(){
   var iNode = document.getElementById(this.ID+'_I');
@@ -76,7 +107,7 @@ bbbfly.image._doUpdateImage = function(){
 
   var cWidth = iWidth+indent.L+indent.R;
   var cHeight = iHeight+indent.T+indent.B;
-  this.SetBounds({ W:cWidth,H:cHeight});
+  this.SetBounds({W:cWidth,H:cHeight});
 };
 bbbfly.image._doMouseEnter = function(event,options){
   var state = this.DoMouseEnter.callParent(event,options);
@@ -147,7 +178,11 @@ bbbfly.Image = function(def,ref,parent){
 
   ng_MergeDef(def,{
     Data: {
+      Alt: null,
+      AltRes: null,
+
       Image: null,
+      HTMLEncode: true,
       _ImageProxy: null
     },
     Methods: {
@@ -156,7 +191,9 @@ bbbfly.Image = function(def,ref,parent){
       DoUpdateImage: bbbfly.image._doUpdateImage,
       DoMouseEnter: bbbfly.image._doMouseEnter,
       DoMouseLeave: bbbfly.image._doMouseLeave,
+      SetAlt: bbbfly.image._setAlt,
       SetImage: bbbfly.image._setImage,
+      GetAlt: bbbfly.image._getAlt,
       GetImage: bbbfly.image._getImage
     }
   });
