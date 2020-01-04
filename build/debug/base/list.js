@@ -309,9 +309,9 @@ bbbfly.dropdownlist._onDropDownChanged = function(){
 };
 bbbfly.dropdownlist._onListItemGetText = function(edit,list,item,text){
   if(Function.isFunction(list.OnGetText)){
-    return list.OnGetText(list,item);
+    text = list.OnGetText(list,item);
   }
-  return text;
+  return String.isString(text) ? text : '';
 };
 bbbfly.dropdownlist._onListItemChanged = function(edit,list,item){
   if(this.Icon){

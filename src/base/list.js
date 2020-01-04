@@ -358,9 +358,9 @@ bbbfly.dropdownlist._onDropDownChanged = function(){
 /** @ignore */
 bbbfly.dropdownlist._onListItemGetText = function(edit,list,item,text){
   if(Function.isFunction(list.OnGetText)){
-    return list.OnGetText(list,item);
+    text = list.OnGetText(list,item);
   }
-  return text;
+  return String.isString(text) ? text : '';
 };
 
 /** @ignore */
