@@ -747,34 +747,10 @@ bbbfly.Btn.selecttype = {
  * @property {px} [I=undefined] - Gap between icon and text
  */
 
-/**
- * @class
- * @type control
- * @extends ngButton
- * @implements bbbfly.hint.Hintified
- * @deprecated will be replaced by {@link bbbbfly.Btn}
- *
- * @description
- *   Implements {@link bbbfly.hint.Hintified|Hintified} interface
- *   if {@link package:hint|hint} package is inluded.
- *
- * @inpackage button
- *
- * @param {ngControl.Definition} [def=undefined] - Descendant definition
- * @param {object} [ref=undefined] - Reference owner
- * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
- */
-bbbfly.Button = function(def,ref,parent){
-  def = bbbfly.button.NormalizeDef(def);
-  if(bbbfly.hint){bbbfly.hint.Hintify(def);}
-  return ngCreateControlAsType(def,'ngButton',ref,parent);
-};
-
 /** @ignore */
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_button'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.Btn',bbbfly.Btn);
-    ngRegisterControlType('bbbfly.Button',bbbfly.Button);
   }
 };
