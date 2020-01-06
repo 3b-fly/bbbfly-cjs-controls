@@ -98,12 +98,12 @@ bbbfly.text._doUpdateText = function(){
     if(!this.Multiline){whiteSpace = 'nowrap';}
 
     switch(this.TextAlign){
-      case bbbfly.Btn.textalign.right:
+      case bbbfly.Text.textalign.right:
         float = 'right';
         textAlign = 'right';
         tPosition.R = 0;
       break;
-      case bbbfly.Btn.textalign.center:
+      case bbbfly.Text.textalign.center:
         float = 'none';
         textAlign = 'center';
         tPosition.L = 0;
