@@ -865,7 +865,7 @@ bbbfly.FileUploader = function(def,ref,parent){
         ParentReferences: false,
         Controls: {
           AddFiles: {
-            Type: 'bbbfly.Btn',
+            Type: 'bbbfly.Button',
             Events: {
               OnUpdate: bbbfly.fileuploader._onAddBtnUpdate
             },
@@ -875,7 +875,7 @@ bbbfly.FileUploader = function(def,ref,parent){
             }
           },
           RemoveFiles: {
-            Type: 'bbbfly.Btn',
+            Type: 'bbbfly.Button',
             Events: {
               OnUpdate: bbbfly.fileuploader._onRemoveBtnUpdate,
               OnClick: bbbfly.fileuploader._onRemoveBtnClick
