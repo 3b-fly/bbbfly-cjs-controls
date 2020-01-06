@@ -61,22 +61,22 @@ bbbfly.button._setIcon = function(node,proxy,indent,align,state){
   var margin = {L:null,T:null};
 
   switch(align){
-    case bbbfly.Btn.iconalign.left:
+    case bbbfly.Button.iconalign.left:
       pos.L = Number.isInteger(indent.L) ? indent.L : 0;
       margin.T = Math.floor(height/2);
       pos.T = '50%';
     break;
-    case bbbfly.Btn.iconalign.top:
+    case bbbfly.Button.iconalign.top:
       pos.T = Number.isInteger(indent.T) ? indent.T : 0;
       margin.L = Math.floor(width/2);
       pos.L = '50%';
     break;
-    case bbbfly.Btn.iconalign.right:
+    case bbbfly.Button.iconalign.right:
       pos.R = Number.isInteger(indent.R) ? indent.R : 0;
       margin.T = Math.floor(height/2);
       pos.T = '50%';
     break;
-    case bbbfly.Btn.iconalign.bottom:
+    case bbbfly.Button.iconalign.bottom:
       pos.B = Number.isInteger(indent.B) ? indent.B : 0;
       margin.L = Math.floor(width/2);
       pos.L = '50%';
@@ -188,7 +188,7 @@ bbbfly.button._doUpdateHolder = function(){
   var minHDim = {W:0,H:0};
 
   switch(this.IconAlign){
-    case bbbfly.Btn.iconalign.left:
+    case bbbfly.Button.iconalign.left:
       if(iSize.W){
         hPosSet = true;
         hPosition.L = 0;
@@ -197,7 +197,7 @@ bbbfly.button._doUpdateHolder = function(){
       }
       minHDim.H = iSize.H;
     break;
-    case bbbfly.Btn.iconalign.top:
+    case bbbfly.Button.iconalign.top:
       if(iSize.H){
         hPosSet = true;
         hPosition.T = 0;
@@ -206,7 +206,7 @@ bbbfly.button._doUpdateHolder = function(){
       }
       minHDim.H = iSize.W;
     break;
-    case bbbfly.Btn.iconalign.right:
+    case bbbfly.Button.iconalign.right:
       if(iSize.W){
         hPosSet = true;
         hPosition.R = 0;
@@ -215,7 +215,7 @@ bbbfly.button._doUpdateHolder = function(){
       }
       minHDim.H = iSize.H;
     break;
-    case bbbfly.Btn.iconalign.bottom:
+    case bbbfly.Button.iconalign.bottom:
       if(iSize.H){
         hPosSet = true;
         hPosition.B = 0;
@@ -239,12 +239,12 @@ bbbfly.button._doUpdateHolder = function(){
     var style = ['word-wrap: normal'];
 
     switch(this.TextAlign){
-      case bbbfly.Btn.textalign.right:
+      case bbbfly.Button.textalign.right:
         style.push('float: right');
         style.push('text-align: right');
         if(!hPosSet){hPosition.R = 0;}
       break;
-      case bbbfly.Btn.textalign.center:
+      case bbbfly.Button.textalign.center:
         style.push('float: none');
         style.push('text-align: center');
         if(!hPosSet){hPosition.L = 0;}
@@ -268,13 +268,13 @@ bbbfly.button._doUpdateHolder = function(){
   }
 
   switch(this.AutoSize){
-    case bbbfly.Btn.autosize.both:
+    case bbbfly.Button.autosize.both:
     break;
-    case bbbfly.Btn.autosize.horizontal:
+    case bbbfly.Button.autosize.horizontal:
       hPosition.T = 0;
       hPosition.B = 0;
     break;
-    case bbbfly.Btn.autosize.vertical:
+    case bbbfly.Button.autosize.vertical:
       hPosition.L = 0;
       hPosition.R = 0;
     break;
@@ -325,10 +325,10 @@ bbbfly.button._doAutoSize = function(){
     var bounds = {};
     ng_BeginMeasureElement(hNode);
 
-    if(this.AutoSize & bbbfly.Btn.autosize.horizontal){
+    if(this.AutoSize & bbbfly.Button.autosize.horizontal){
       bounds.W = ng_OuterWidth(hNode);
     }
-    if(this.AutoSize & bbbfly.Btn.autosize.vertical){
+    if(this.AutoSize & bbbfly.Button.autosize.vertical){
       bounds.H = ng_OuterHeight(hNode);
     }
 
@@ -380,12 +380,12 @@ bbbfly.button._hasDblClick = function(){
   return Function.isFunction(this.OnDblClick);
 };
 bbbfly.button._onClick = function(){
-  if(this.SelectType & bbbfly.Btn.selecttype.click){
+  if(this.SelectType & bbbfly.Button.selecttype.click){
     this.SetSelected(!this.Selected);
   }
 };
 bbbfly.button._onDblClick = function(){
-  if(this.SelectType & bbbfly.Btn.selecttype.dblclick){
+  if(this.SelectType & bbbfly.Button.selecttype.dblclick){
     this.SetSelected(!this.Selected);
   }
 };
@@ -419,7 +419,7 @@ bbbfly.button._ngGetState = function(){
     )
   };
 };
-bbbfly.Btn = function(def,ref,parent){
+bbbfly.Button = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
@@ -429,15 +429,15 @@ bbbfly.Btn = function(def,ref,parent){
 
       Text: null,
       TextRes: null,
-      TextAlign: bbbfly.Btn.textalign.left,
+      TextAlign: bbbfly.Button.textalign.left,
 
       Icon: null,
-      IconAlign: bbbfly.Btn.iconalign.left,
+      IconAlign: bbbfly.Button.iconalign.left,
 
       Indent: null,
 
-      AutoSize: bbbfly.Btn.autosize.none,
-      SelectType: bbbfly.Btn.selecttype.none,
+      AutoSize: bbbfly.Button.autosize.none,
+      SelectType: bbbfly.Button.selecttype.none,
 
       Multiline: false,
       HTMLEncode: true,
@@ -479,24 +479,24 @@ bbbfly.Btn = function(def,ref,parent){
   if(bbbfly.hint){bbbfly.hint.Hintify(def);}
   return ngCreateControlAsType(def,'bbbfly.Frame',ref,parent);
 };
-bbbfly.Btn.textalign = {
+bbbfly.Button.textalign = {
   left: 1,
   center: 2,
   right: 3
 };
-bbbfly.Btn.iconalign = {
+bbbfly.Button.iconalign = {
   left: 1,
   top: 2,
   right: 3,
   bottom: 4
 };
-bbbfly.Btn.autosize = {
+bbbfly.Button.autosize = {
   none: 0,
   horizontal: 1,
   vertical: 2,
   both: 3
 };
-bbbfly.Btn.selecttype = {
+bbbfly.Button.selecttype = {
   none: 0,
   click: 1,
   dblclick: 2,
@@ -505,6 +505,6 @@ bbbfly.Btn.selecttype = {
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_button'] = {
   OnInit: function(){
-    ngRegisterControlType('bbbfly.Btn',bbbfly.Btn);
+    ngRegisterControlType('bbbfly.Button',bbbfly.Button);
   }
 };

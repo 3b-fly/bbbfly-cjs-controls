@@ -75,22 +75,22 @@ bbbfly.button._setIcon = function(node,proxy,indent,align,state){
   var margin = {L:null,T:null};
 
   switch(align){
-    case bbbfly.Btn.iconalign.left:
+    case bbbfly.Button.iconalign.left:
       pos.L = Number.isInteger(indent.L) ? indent.L : 0;
       margin.T = Math.floor(height/2);
       pos.T = '50%';
     break;
-    case bbbfly.Btn.iconalign.top:
+    case bbbfly.Button.iconalign.top:
       pos.T = Number.isInteger(indent.T) ? indent.T : 0;
       margin.L = Math.floor(width/2);
       pos.L = '50%';
     break;
-    case bbbfly.Btn.iconalign.right:
+    case bbbfly.Button.iconalign.right:
       pos.R = Number.isInteger(indent.R) ? indent.R : 0;
       margin.T = Math.floor(height/2);
       pos.T = '50%';
     break;
-    case bbbfly.Btn.iconalign.bottom:
+    case bbbfly.Button.iconalign.bottom:
       pos.B = Number.isInteger(indent.B) ? indent.B : 0;
       margin.L = Math.floor(width/2);
       pos.L = '50%';
@@ -208,7 +208,7 @@ bbbfly.button._doUpdateHolder = function(){
   var minHDim = {W:0,H:0};
 
   switch(this.IconAlign){
-    case bbbfly.Btn.iconalign.left:
+    case bbbfly.Button.iconalign.left:
       if(iSize.W){
         hPosSet = true;
         hPosition.L = 0;
@@ -217,7 +217,7 @@ bbbfly.button._doUpdateHolder = function(){
       }
       minHDim.H = iSize.H;
     break;
-    case bbbfly.Btn.iconalign.top:
+    case bbbfly.Button.iconalign.top:
       if(iSize.H){
         hPosSet = true;
         hPosition.T = 0;
@@ -226,7 +226,7 @@ bbbfly.button._doUpdateHolder = function(){
       }
       minHDim.H = iSize.W;
     break;
-    case bbbfly.Btn.iconalign.right:
+    case bbbfly.Button.iconalign.right:
       if(iSize.W){
         hPosSet = true;
         hPosition.R = 0;
@@ -235,7 +235,7 @@ bbbfly.button._doUpdateHolder = function(){
       }
       minHDim.H = iSize.H;
     break;
-    case bbbfly.Btn.iconalign.bottom:
+    case bbbfly.Button.iconalign.bottom:
       if(iSize.H){
         hPosSet = true;
         hPosition.B = 0;
@@ -259,12 +259,12 @@ bbbfly.button._doUpdateHolder = function(){
     var style = ['word-wrap: normal'];
 
     switch(this.TextAlign){
-      case bbbfly.Btn.textalign.right:
+      case bbbfly.Button.textalign.right:
         style.push('float: right');
         style.push('text-align: right');
         if(!hPosSet){hPosition.R = 0;}
       break;
-      case bbbfly.Btn.textalign.center:
+      case bbbfly.Button.textalign.center:
         style.push('float: none');
         style.push('text-align: center');
         if(!hPosSet){hPosition.L = 0;}
@@ -288,14 +288,14 @@ bbbfly.button._doUpdateHolder = function(){
   }
 
   switch(this.AutoSize){
-    case bbbfly.Btn.autosize.both:
+    case bbbfly.Button.autosize.both:
       //let stretch
     break;
-    case bbbfly.Btn.autosize.horizontal:
+    case bbbfly.Button.autosize.horizontal:
       hPosition.T = 0;
       hPosition.B = 0;
     break;
-    case bbbfly.Btn.autosize.vertical:
+    case bbbfly.Button.autosize.vertical:
       hPosition.L = 0;
       hPosition.R = 0;
     break;
@@ -350,10 +350,10 @@ bbbfly.button._doAutoSize = function(){
     var bounds = {};
     ng_BeginMeasureElement(hNode);
 
-    if(this.AutoSize & bbbfly.Btn.autosize.horizontal){
+    if(this.AutoSize & bbbfly.Button.autosize.horizontal){
       bounds.W = ng_OuterWidth(hNode);
     }
-    if(this.AutoSize & bbbfly.Btn.autosize.vertical){
+    if(this.AutoSize & bbbfly.Button.autosize.vertical){
       bounds.H = ng_OuterHeight(hNode);
     }
 
@@ -427,14 +427,14 @@ bbbfly.button._hasDblClick = function(){
 
 /** @ignore */
 bbbfly.button._onClick = function(){
-  if(this.SelectType & bbbfly.Btn.selecttype.click){
+  if(this.SelectType & bbbfly.Button.selecttype.click){
     this.SetSelected(!this.Selected);
   }
 };
 
 /** @ignore */
 bbbfly.button._onDblClick = function(){
-  if(this.SelectType & bbbfly.Btn.selecttype.dblclick){
+  if(this.SelectType & bbbfly.Button.selecttype.dblclick){
     this.SetSelected(!this.Selected);
   }
 };
@@ -497,21 +497,21 @@ bbbfly.button._ngGetState = function(){
  *
  * @property {string} [Text=null] - Text string
  * @property {string} [TextRes=null] - Text resource ID
- * @property {bbbfly.Btn.textalign} [TextAlign=left]
+ * @property {bbbfly.Button.textalign} [TextAlign=left]
  *
  * @property {boolean|bbbfly.Renderer.image} [Icon=null] - Icon definition
  *   Define define or set it to true before button creation to support icon
- * @property {bbbfly.Btn.iconalign} [IconAlign=left]
+ * @property {bbbfly.Button.iconalign} [IconAlign=left]
  *
- * @property {bbbfly.Btn.indent} [Indent=null]
+ * @property {bbbfly.Button.indent} [Indent=null]
  *
- * @property {bbbfly.Btn.autosize} [AutoSize=none]
- * @property {bbbfly.Btn.selecttype} [SelectType=none]
+ * @property {bbbfly.Button.autosize} [AutoSize=none]
+ * @property {bbbfly.Button.selecttype} [SelectType=none]
  *
  * @property {boolean} [Multiline=false]
  * @property {boolean} [HTMLEncode=true]
  */
-bbbfly.Btn = function(def,ref,parent){
+bbbfly.Button = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
@@ -521,15 +521,15 @@ bbbfly.Btn = function(def,ref,parent){
 
       Text: null,
       TextRes: null,
-      TextAlign: bbbfly.Btn.textalign.left,
+      TextAlign: bbbfly.Button.textalign.left,
 
       Icon: null,
-      IconAlign: bbbfly.Btn.iconalign.left,
+      IconAlign: bbbfly.Button.iconalign.left,
 
       Indent: null,
 
-      AutoSize: bbbfly.Btn.autosize.none,
-      SelectType: bbbfly.Btn.selecttype.none,
+      AutoSize: bbbfly.Button.autosize.none,
+      SelectType: bbbfly.Button.selecttype.none,
 
       Multiline: false,
       HTMLEncode: true,
@@ -548,25 +548,25 @@ bbbfly.Btn = function(def,ref,parent){
       /**
        * @event
        * @name OnClick
-       * @memberof bbbfly.Btn#
+       * @memberof bbbfly.Button#
        *
        * @param {MouseEvent} event
        * @return {boolean} Return false to suppress event
        *
-       * @see {@link bbbfly.Btn#Click|Click()}
-       * @see {@link bbbfly.Btn#event:OnDblClick|OnDblClick}
+       * @see {@link bbbfly.Button#Click|Click()}
+       * @see {@link bbbfly.Button#event:OnDblClick|OnDblClick}
        */
       OnClick: bbbfly.button._onClick,
       /**
        * @event
        * @name OnDblClick
-       * @memberof bbbfly.Btn#
+       * @memberof bbbfly.Button#
        *
        * @param {MouseEvent} event
        * @return {boolean} Return false to suppress event
        *
-       * @see {@link bbbfly.Btn#DblClick|DblClick()}
-       * @see {@link bbbfly.Btn#event:OnClick|OnClick}
+       * @see {@link bbbfly.Button#DblClick|DblClick()}
+       * @see {@link bbbfly.Button#event:OnClick|OnClick}
        */
       OnDblClick: bbbfly.button._onDblClick
     },
@@ -595,7 +595,7 @@ bbbfly.Btn = function(def,ref,parent){
       /**
        * @function
        * @name SetAlt
-       * @memberof bbbfly.Btn#
+       * @memberof bbbfly.Button#
        *
        * @param {string|null} alt
        * @param {boolean} [update=true]
@@ -604,7 +604,7 @@ bbbfly.Btn = function(def,ref,parent){
       /**
        * @function
        * @name SetText
-       * @memberof bbbfly.Btn#
+       * @memberof bbbfly.Button#
        *
        * @param {string|null} text
        * @param {boolean} [update=true]
@@ -614,7 +614,7 @@ bbbfly.Btn = function(def,ref,parent){
       /**
        * @function
        * @name GetAlt
-       * @memberof bbbfly.Btn#
+       * @memberof bbbfly.Button#
        *
        * @return {string|null}
        */
@@ -622,7 +622,7 @@ bbbfly.Btn = function(def,ref,parent){
       /**
        * @function
        * @name GetText
-       * @memberof bbbfly.Btn#
+       * @memberof bbbfly.Button#
        *
        * @return {string|null}
        */
@@ -630,7 +630,7 @@ bbbfly.Btn = function(def,ref,parent){
       /**
        * @function
        * @name GetIcon
-       * @memberof bbbfly.Btn#
+       * @memberof bbbfly.Button#
        *
        * @return {bbbfly.Renderer.image} Icon definition
        */
@@ -638,45 +638,45 @@ bbbfly.Btn = function(def,ref,parent){
       /**
        * @function
        * @name Click
-       * @memberof bbbfly.Btn#
+       * @memberof bbbfly.Button#
        *
        * @param {MouseEvent} event
        *
-       * @see {@link bbbfly.Btn#DblClick|DblClick()}
-       * @see {@link bbbfly.Btn#event:OnClick|OnClick}
+       * @see {@link bbbfly.Button#DblClick|DblClick()}
+       * @see {@link bbbfly.Button#event:OnClick|OnClick}
        */
       Click: bbbfly.button._click,
       /**
        * @function
        * @name DblClick
-       * @memberof bbbfly.Btn#
+       * @memberof bbbfly.Button#
        *
        * @param {MouseEvent} event
        *
-       * @see {@link bbbfly.Btn#Click|Click()}
-       * @see {@link bbbfly.Btn#event:OnDblClick|OnDblClick}
+       * @see {@link bbbfly.Button#Click|Click()}
+       * @see {@link bbbfly.Button#event:OnDblClick|OnDblClick}
        */
       DblClick: bbbfly.button._dblClick,
       /**
        * @function
        * @name HasClick
-       * @memberof bbbfly.Btn#
+       * @memberof bbbfly.Button#
        *
        * @return {boolean} If has active click action
        *
-       * @see {@link bbbfly.Btn#Click|Click()}
-       * @see {@link bbbfly.Btn#event:OnClick|OnClick}
+       * @see {@link bbbfly.Button#Click|Click()}
+       * @see {@link bbbfly.Button#event:OnClick|OnClick}
        */
       HasClick: bbbfly.button._hasClick,
       /**
        * @function
        * @name HasDblClick
-       * @memberof bbbfly.Btn#
+       * @memberof bbbfly.Button#
        *
        * @return {boolean} If has active double click action
        *
-       * @see {@link bbbfly.Btn#DblClick|DblClick()}
-       * @see {@link bbbfly.Btn#event:OnDblClick|OnDblClick}
+       * @see {@link bbbfly.Button#DblClick|DblClick()}
+       * @see {@link bbbfly.Button#event:OnDblClick|OnDblClick}
        */
       HasDblClick: bbbfly.button._hasDblClick
     }
@@ -689,9 +689,9 @@ bbbfly.Btn = function(def,ref,parent){
 /**
  * @enum {integer}
  * @description
- *   Possible values for {@link bbbfly.Btn|bbbfly.Btn.TextAlign}
+ *   Possible values for {@link bbbfly.Button|bbbfly.Button.TextAlign}
  */
-bbbfly.Btn.textalign = {
+bbbfly.Button.textalign = {
   left: 1,
   center: 2,
   right: 3
@@ -700,9 +700,9 @@ bbbfly.Btn.textalign = {
 /**
  * @enum {integer}
  * @description
- *   Possible values for {@link bbbfly.Btn|bbbfly.Btn.IconAlign}
+ *   Possible values for {@link bbbfly.Button|bbbfly.Button.IconAlign}
  */
-bbbfly.Btn.iconalign = {
+bbbfly.Button.iconalign = {
   left: 1,
   top: 2,
   right: 3,
@@ -712,9 +712,9 @@ bbbfly.Btn.iconalign = {
 /**
  * @enum {integer}
  * @description
- *   Possible values for {@link bbbfly.Btn|bbbfly.Btn.AutoSize}
+ *   Possible values for {@link bbbfly.Button|bbbfly.Button.AutoSize}
  */
-bbbfly.Btn.autosize = {
+bbbfly.Button.autosize = {
   none: 0,
   horizontal: 1,
   vertical: 2,
@@ -724,9 +724,9 @@ bbbfly.Btn.autosize = {
 /**
  * @enum {integer}
  * @description
- *   Possible values for {@link bbbfly.Btn|bbbfly.Btn.SelectType}
+ *   Possible values for {@link bbbfly.Button|bbbfly.Button.SelectType}
  */
-bbbfly.Btn.selecttype = {
+bbbfly.Button.selecttype = {
   none: 0,
   click: 1,
   dblclick: 2,
@@ -735,10 +735,10 @@ bbbfly.Btn.selecttype = {
 
 /**
  * @typedef {object} indent
- * @memberOf bbbfly.Btn
+ * @memberOf bbbfly.Button
  *
  * @description
- *   Possible values for {@link bbbfly.Btn|bbbfly.Btn.Indent}
+ *   Possible values for {@link bbbfly.Button|bbbfly.Button.Indent}
  *
  * @property {px} [L] - Gap between left frame and content
  * @property {px} [T] - Gap between top frame and content
@@ -751,6 +751,6 @@ bbbfly.Btn.selecttype = {
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_button'] = {
   OnInit: function(){
-    ngRegisterControlType('bbbfly.Btn',bbbfly.Btn);
+    ngRegisterControlType('bbbfly.Button',bbbfly.Button);
   }
 };
