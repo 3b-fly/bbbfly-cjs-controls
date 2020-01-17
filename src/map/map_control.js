@@ -3,7 +3,7 @@
  * @author Jan Nejedly [support@3b-fly.eu]
  * @copyright Jan Nejedly
  *
- * @inpackage map
+ * @inpackage mapbox
  */
 
 /** @ignore */
@@ -109,7 +109,7 @@ bbbfly.map.control._createListener = function(){
  * @type control
  * @extends bbbfly.Panel
  *
- * @inpackage map
+ * @inpackage mapbox
  *
  * @param {object} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner

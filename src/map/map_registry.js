@@ -3,7 +3,7 @@
  * @author Jan Nejedly [support@3b-fly.eu]
  * @copyright Jan Nejedly
  *
- * @inpackage map
+ * @inpackage mapbox
  */
 
 /** @ignore */
@@ -137,7 +137,7 @@ bbbfly.map.registry._unlinkControl = function(ctrl){
  * @class
  * @hideconstructor
  *
- * @inpackage map
+ * @inpackage mapbox
  */
 bbbfly.MapRegistry = {
   /** @private */
