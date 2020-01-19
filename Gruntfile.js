@@ -95,7 +95,8 @@ module.exports = function(grunt) {
       options: {
         compilerFile: 'node_jar/closure-compiler.jar',
         compilerOpts: {
-          compilation_level: 'SIMPLE_OPTIMIZATIONS'
+          compilation_level: 'SIMPLE_OPTIMIZATIONS',
+          jscomp_off: ['misplacedTypeAnnotation']
         }
       },
       release: {
