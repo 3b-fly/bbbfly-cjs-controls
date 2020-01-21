@@ -19,6 +19,22 @@ bbbfly.map.box._onUpdate = function(){
   }
   return true;
 };
+
+bbbfly.map.box._doCreateMap = function(options){
+  var map = this.DoCreateMap.callParent(options);
+
+  if(this.Drawings !== false){
+    var feature = new L.FeatureGroup();
+    var handler = new bbbfly.MapDrawingsHandler(feature);
+
+    if(handler){
+      feature.addTo(map);
+      this.Drawings = handler;
+      this._DrawingsFeature = feature;
+    }
+  }
+  return map;
+};
 bbbfly.map.box._registerControls = function(){
   if(!this.Controls){return;}
 
@@ -111,6 +127,9 @@ bbbfly.MapBox = function(def,ref,parent){
   ng_MergeDef(def,{
     Data: {
       AllowListeners: true,
+
+      Drawings: null,
+      _DrawingsFeature: null,
       _MapControls: {},
       _MapControlsRegistered: false
     },
@@ -119,6 +138,7 @@ bbbfly.MapBox = function(def,ref,parent){
       OnUpdate: bbbfly.map.box._onUpdate
     },
     Methods: {
+      DoCreateMap: bbbfly.map.box._doCreateMap,
       RegisterControls: bbbfly.map.box._registerControls,
       LinkMapControl: bbbfly.map.box._linkMapControl,
       UnlinkMapControl: bbbfly.map.box._unlinkMapControl,

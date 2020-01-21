@@ -28,6 +28,22 @@ bbbfly.map.box._onUpdate = function(){
   return true;
 };
 
+bbbfly.map.box._doCreateMap = function(options){
+  var map = this.DoCreateMap.callParent(options);
+
+  if(this.Drawings !== false){
+    var feature = new L.FeatureGroup();
+    var handler = new bbbfly.MapDrawingsHandler(feature);
+
+    if(handler){
+      feature.addTo(map);
+      this.Drawings = handler;
+      this._DrawingsFeature = feature;
+    }
+  }
+  return map;
+};
+
 /** @ignore */
 bbbfly.map.box._registerControls = function(){
   if(!this.Controls){return;}
@@ -131,6 +147,8 @@ bbbfly.map.box._setMapControlsVisible = function(type,visible){
  *
  * @inpackage mapbox
  *
+ * @property {bbbfly.MapDrawingsHandler} Drawings - Drawings handler
+ *
  * @param {object} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
@@ -141,6 +159,10 @@ bbbfly.MapBox = function(def,ref,parent){
   ng_MergeDef(def,{
     Data: {
       AllowListeners: true,
+
+      Drawings: null,
+      /** @private */
+      _DrawingsFeature: null,
 
       /** @private */
       _MapControls: {},
@@ -153,6 +175,8 @@ bbbfly.MapBox = function(def,ref,parent){
       OnUpdate: bbbfly.map.box._onUpdate
     },
     Methods: {
+      /** @private */
+      DoCreateMap: bbbfly.map.box._doCreateMap,
       /** @private */
       RegisterControls: bbbfly.map.box._registerControls,
 
