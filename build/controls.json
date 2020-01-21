@@ -297,12 +297,14 @@
       "DebugFiles": [
         "debug/map/map_box.js",
         "debug/map/map_control.js",
-        "debug/map/map_registry.js"
+        "debug/map/map_registry.js",
+        "debug/map/map_drawings.js"
       ],
       "ReleaseFiles": [
         "release/map/map_box.js",
         "release/map/map_control.js",
-        "release/map/map_registry.js"
+        "release/map/map_registry.js",
+        "release/map/map_drawings.js"
       ],
       "Libraries": {
         "controls.js": {
@@ -313,6 +315,7 @@
         "bbbfly-cjs": {
           "Packages": [
             "crossbrowser",
+            "renderer",
             "listener"
           ]
         },

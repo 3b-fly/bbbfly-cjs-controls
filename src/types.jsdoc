@@ -52,8 +52,28 @@
  */
 
 /**
+ * @typedef {object} geoJSON
+ * @description {@link http://geojson.org/geojson-spec.html|GeoJSON} object
+ */
+
+/**
  * @typedef {L.Layer} mapLayer
  * @description {@link http://leafletjs.com/reference-1.4.0.html#layer|Leaflet layer.}
+ */
+
+/**
+ * @typedef {L.FeatureGroup} mapFeature
+ * @description {@link https://leafletjs.com/reference-1.4.0.html#featuregroup|Leaflet feature group.}
+ */
+
+/**
+ * @typedef {L.Marker} mapMarker
+ * @description {@link http://leafletjs.com/reference-1.4.0.html#marker|Leaflet marker.}
+ */
+
+/**
+ * @typedef {L.Path} mapGeometry
+ * @description {@link http://leafletjs.com/reference-1.4.0.html#path|Leaflet geometry.}
  */
 
 /**
