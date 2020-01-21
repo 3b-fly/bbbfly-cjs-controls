@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: TextHint</title>
+    <title>Class: MapDrawingsHandler</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -2395,6 +2395,9 @@
         <li data-name="HintMessages">
           <a href="bbbfly.SearchEdit.html#property:HintMessages">HintMessages</a>
         </li>
+        <li data-name="HintMessages.noresults">
+          <a href="bbbfly.SearchEdit.html#property:HintMessages.noresults">HintMessages.noresults</a>
+        </li>
         <li data-name="SearchImg">
           <a href="bbbfly.SearchEdit.html#property:SearchImg">SearchImg</a>
         </li>
@@ -2887,13 +2890,10 @@
 <header>
     <h1 class="name">
           <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
-        TextHint
+        MapDrawingsHandler
   <span class="types">
       <span class="type-signature class">
         class
-      </span>
-      <span class="type-signature control">
-        control
       </span>
   </span>
     </h1>
@@ -2902,18 +2902,17 @@
     <div class="container-overview">
 <dt>
     <div class="nameContainer">
-        <h2 id="TextHint">
+        <h2 id="MapDrawingsHandler">
           new 
-          bbbfly.TextHint
-          <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
+          bbbfly.MapDrawingsHandler
+          <span class="signature">(feature)</span>
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/hint.js#L274">base/hint.js, line 274</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawings.js#L611">map/map_drawings.js, line 611</a>
         </div>
     </div>
 </dt>
 <dd>
-      <div class="description">Generic text hint control to ensure future backward compatibility.</div>
         <h3>Parameters</h3>
 <table class="params">
     <thead>
@@ -2926,40 +2925,12 @@
 	<tbody>
         <tr>
                 <td class="name">
-                  <span class="param-name">def</span>
+                  <span class="param-name">feature</span>
                 </td>
             <td class="type">
-<span class="param-type">ngControl.Definition</span>
+<span class="param-type"><a href="global.html#mapFeature">mapFeature</a></span>
             </td>
             <td class="description last">
-                        <span class="optional">optional</span>
-                Descendant definition
-            </td>
-        </tr>
-        <tr>
-                <td class="name">
-                  <span class="param-name">ref</span>
-                </td>
-            <td class="type">
-<span class="param-type">object</span>
-            </td>
-            <td class="description last">
-                        <span class="optional">optional</span>
-                Reference owner
-            </td>
-        </tr>
-        <tr>
-                <td class="name">
-                  <span class="param-name">parent</span>
-                </td>
-            <td class="type">
-<span class="param-type">object</span>
-|
-<span class="param-type">string</span>
-            </td>
-            <td class="description last">
-                        <span class="optional">optional</span>
-                Parent DIV element or it's ID
             </td>
         </tr>
 	</tbody>
@@ -2968,14 +2939,177 @@
 </dl>
 </dd>
     </div>
-        <h3>Extends</h3>
-        <ul>
-            <li>ngTextHint</li>
-        </ul>
         <h3>In Packages</h3>
         <ul>
-              <li><a href="packages.html#package:hint">hint</a></li>
+              <li><a href="packages.html#package:mapbox">mapbox</a></li>
         </ul>
+        <h3>Methods</h3>
+        <dl>
+<dt>
+    <div class="nameContainer">
+        <h4 id="AddDrawing">
+          AddDrawing
+          <span class="signature">(drawing)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawings.js#L628">map/map_drawings.js, line 628</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">drawing</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.MapDrawing.html">bbbfly.MapDrawing</a></span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">- If added</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="AddDrawing">
+          AddDrawing
+          <span class="signature">(drawing)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawings.js#L637">map/map_drawings.js, line 637</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">drawing</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.MapDrawing.html">bbbfly.MapDrawing</a></span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">- If removed</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="GetDrawing">
+          GetDrawing
+          <span class="signature">(id)</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="bbbfly.MapDrawing.html">bbbfly.MapDrawing</a>|null}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawings.js#L619">map/map_drawings.js, line 619</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">id</span>
+                </td>
+            <td class="type">
+<span class="param-type">string</span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        <a href="bbbfly.MapDrawing.html">bbbfly.MapDrawing</a>
+                         | 
+                        null
+            </td>
+            <td class="description last"></td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+        </dl>
 </article>
 </section>
         <footer>
