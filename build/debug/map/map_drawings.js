@@ -325,14 +325,14 @@ bbbfly.MapDrawing.state = {
   selected: 4,
   grayed: 8
 };
-bbbfly.MapDrawing.Marker = function(options){
+bbbfly.MapIcon = function(options){
   var drawing = new bbbfly.MapDrawing(options);
   var ns = bbbfly.map.drawing.marker;
   ng_OverrideMethod(drawing,'Create',ns._create);
 
   this.__proto__ = drawing;
 };
-bbbfly.MapDrawing.Geometry = function(options){
+bbbfly.MapGeometry = function(options){
   var drawing = new bbbfly.MapDrawing(options);
   var ns = bbbfly.map.drawing.geometry;
   ng_OverrideMethod(drawing,'Create',ns._create);

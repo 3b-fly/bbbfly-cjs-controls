@@ -559,11 +559,11 @@ bbbfly.MapDrawing.state = {
  * @extends bbbfly.MapDrawing
  * @inpackage mapbox
  *
- * @param {bbbfly.MapDrawing.Marker.options} options
+ * @param {bbbfly.MapIcon.options} options
  *
- * @property {bbbfly.MapDrawing.Marker.options} Options
+ * @property {bbbfly.MapIcon.options} Options
  */
-bbbfly.MapDrawing.Marker = function(options){
+bbbfly.MapIcon = function(options){
   var drawing = new bbbfly.MapDrawing(options);
   var ns = bbbfly.map.drawing.marker;
 
@@ -572,7 +572,7 @@ bbbfly.MapDrawing.Marker = function(options){
    * @name Create
    * @memberof bbbfly.MapDrawing#
    *
-   * @param {bbbfly.MapDrawing.Marker.options} options
+   * @param {bbbfly.MapIcon.options} options
    * @return {mapMarker[]} Leaflet marker
    */
   ng_OverrideMethod(drawing,'Create',ns._create);
@@ -585,11 +585,11 @@ bbbfly.MapDrawing.Marker = function(options){
  * @extends bbbfly.MapDrawing
  * @inpackage mapbox
  *
- * @param {bbbfly.MapDrawing.Geometry.options} options
+ * @param {bbbfly.MapGeometry.options} options
  *
- * @property {bbbfly.MapDrawing.Geometry.options} Options
+ * @property {bbbfly.MapGeometry.options} Options
  */
-bbbfly.MapDrawing.Geometry = function(options){
+bbbfly.MapGeometry = function(options){
   var drawing = new bbbfly.MapDrawing(options);
   var ns = bbbfly.map.drawing.geometry;
 
@@ -598,7 +598,7 @@ bbbfly.MapDrawing.Geometry = function(options){
    * @name Create
    * @memberof bbbfly.MapDrawing#
    *
-   * @param {bbbfly.MapDrawing.Geometry.options} options
+   * @param {bbbfly.MapGeometry.options} options
    * @return {mapGeometry[]} Leaflet geometry
    */
   ng_OverrideMethod(drawing,'Create',ns._create);
@@ -660,15 +660,17 @@ bbbfly.MapDrawingsHandler = function(feature){
 
 /**
  * @typedef {bbbfly.MapDrawing.options} options
- * @memberOf bbbfly.MapDrawing.Marker
+ * @memberOf bbbfly.MapIcon
  *
  * @property {mapPoint} Coordinates
  */
 
 /**
  * @typedef {bbbfly.MapDrawing.options} options
- * @memberOf bbbfly.MapDrawing.Geometry
+ * @memberOf bbbfly.MapGeometry
  *
  * @property {geoJSON|mapGeoJSON} GeoJSON
  * @property {px} [MinPartSize=0] - Hide smaller geometry parts
+ *
+ * @property {object} Style
  */
