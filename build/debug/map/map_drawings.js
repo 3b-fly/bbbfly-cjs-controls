@@ -218,9 +218,13 @@ bbbfly.map.drawing.geometry._create = function(options){
   if(!Object.isObject(options)){return null;}
 
   var json = options.GeoJSON;
-  json = bbbfly.map.drawing.utils.NormalizeGeoJSON(json);
 
-  var geometries = L.geoJson(json).getLayers();
+  if(!(json instanceof L.GeoJSON)){
+    json = bbbfly.map.drawing.utils.NormalizeGeoJSON(json);
+    json = new L.GeoJSON(json);
+  }
+
+  var geometries = json.getLayers();
   if(!Array.isArray(geometries)){return [];}
 
   for(var i in geometries){
