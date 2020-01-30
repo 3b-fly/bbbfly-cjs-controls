@@ -92,16 +92,11 @@ bbbfly.map.drawing._getStateValue = function(state){
 /** @ignore */
 bbbfly.map.drawing._setStateValue = function(state,value){
   var hasState = !!(this._State & state);
-  if(value && !hasState){
-    this._State = (this._State | state);
-    //TODO: bring to front
-    this.Update();
-  }
-  else if(!value && hasState){
-    this._State = (this._State ^ state);
-    //TODO: bring to back
-    this.Update();
-  }
+  if(value === hasState){return false;}
+
+  if(value){this._State = (this._State | state);}
+  else{this._State = (this._State ^ state);}
+  return true;
 };
 
 /** @ignore */
@@ -183,6 +178,8 @@ bbbfly.map.drawing._add = function(feature){
     }
 
     this._ParentFeature = feature;
+
+    this.Update();
     return true;
   }
   return false;
@@ -264,7 +261,32 @@ bbbfly.map.drawing.icon._create = function(){
     );
   }
 
-  return [marker];
+  return marker;
+};
+
+/** @ignore */
+bbbfly.map.drawing.icon._update = function(){
+  var state = this.GetState();
+
+  var proxy = bbbfly.Renderer.StackProxy([],state,this.ID+'_I');
+  var html = bbbfly.Renderer.StackHTML(proxy,state,'');
+
+  this._IconProxy = proxy;
+
+  if(html !== this._IconHtml){
+    this._IconHtml = html;
+
+    var icon = L.divIcon({
+      iconSize: [proxy.W,proxy.H],
+      iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
+      html: html
+    });
+
+    var layer = this._Layers[0];
+    if(layer){layer.setIcon(icon);}
+  }
+
+  this.Update.callParent();
 };
 
 /** @ignore */
@@ -578,6 +600,11 @@ bbbfly.MapDrawing.state = {
 bbbfly.MapIcon = function(options){
   var drawing = new bbbfly.MapDrawing(options);
 
+  /** @private */
+  drawing._IconProxy = null;
+  /** @private */
+  drawing._IconHtml = '';
+
   /**
    * @function
    * @name Create
@@ -587,6 +614,16 @@ bbbfly.MapIcon = function(options){
    */
   ng_OverrideMethod(drawing,'Create',
     bbbfly.map.drawing.icon._create
+  );
+  /**
+   * @function
+   * @name Update
+   * @memberof bbbfly.MapIcon#
+   *
+   * @return {boolean} If created properly
+   */
+  ng_OverrideMethod(drawing,'Update',
+    bbbfly.map.drawing.icon._update
   );
 
   return drawing;

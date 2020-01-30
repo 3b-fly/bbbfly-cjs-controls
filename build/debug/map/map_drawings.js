@@ -77,14 +77,11 @@ bbbfly.map.drawing._getStateValue = function(state){
 };
 bbbfly.map.drawing._setStateValue = function(state,value){
   var hasState = !!(this._State & state);
-  if(value && !hasState){
-    this._State = (this._State | state);
-    this.Update();
-  }
-  else if(!value && hasState){
-    this._State = (this._State ^ state);
-    this.Update();
-  }
+  if(value === hasState){return false;}
+
+  if(value){this._State = (this._State | state);}
+  else{this._State = (this._State ^ state);}
+  return true;
 };
 bbbfly.map.drawing._toggleStateValue = function(state){
   this.SetStateValue(state,!this.GetStateValue(state));
@@ -152,6 +149,8 @@ bbbfly.map.drawing._add = function(feature){
     }
 
     this._ParentFeature = feature;
+
+    this.Update();
     return true;
   }
   return false;
@@ -221,7 +220,30 @@ bbbfly.map.drawing.icon._create = function(){
     );
   }
 
-  return [marker];
+  return marker;
+};
+bbbfly.map.drawing.icon._update = function(){
+  var state = this.GetState();
+
+  var proxy = bbbfly.Renderer.StackProxy([],state,this.ID+'_I');
+  var html = bbbfly.Renderer.StackHTML(proxy,state,'');
+
+  this._IconProxy = proxy;
+
+  if(html !== this._IconHtml){
+    this._IconHtml = html;
+
+    var icon = L.divIcon({
+      iconSize: [proxy.W,proxy.H],
+      iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
+      html: html
+    });
+
+    var layer = this._Layers[0];
+    if(layer){layer.setIcon(icon);}
+  }
+
+  this.Update.callParent();
 };
 bbbfly.map.drawing.geometry._create = function(){
   if(!Object.isObject(this.Options)){return null;}
@@ -332,8 +354,13 @@ bbbfly.MapDrawing.state = {
 };
 bbbfly.MapIcon = function(options){
   var drawing = new bbbfly.MapDrawing(options);
+  drawing._IconProxy = null;
+  drawing._IconHtml = '';
   ng_OverrideMethod(drawing,'Create',
     bbbfly.map.drawing.icon._create
+  );
+  ng_OverrideMethod(drawing,'Update',
+    bbbfly.map.drawing.icon._update
   );
 
   return drawing;
