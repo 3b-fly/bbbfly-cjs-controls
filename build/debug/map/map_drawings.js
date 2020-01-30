@@ -91,16 +91,18 @@ bbbfly.map.drawing._getState = function(){
 bbbfly.map.drawing._getStateValue = function(state){
   return !!(this._State & state);
 };
-bbbfly.map.drawing._setStateValue = function(state,value){
+bbbfly.map.drawing._setStateValue = function(state,value,update){
   var hasState = !!(this._State & state);
   if(value === hasState){return false;}
 
   if(value){this._State = (this._State | state);}
   else{this._State = (this._State ^ state);}
+
+  if(update){this.Update();}
   return true;
 };
-bbbfly.map.drawing._toggleStateValue = function(state){
-  this.SetStateValue(state,!this.GetStateValue(state));
+bbbfly.map.drawing._toggleStateValue = function(state,update){
+  this.SetStateValue(state,!this.GetStateValue(state),update);
 };
 bbbfly.map.drawing._initialize = function(){
   if(this._Initialized){return true;}
@@ -186,12 +188,14 @@ bbbfly.map.drawing._remove = function(feature){
 };
 bbbfly.map.drawing._onMouseEnter = function(){
   this.SetStateValue(bbbfly.MapDrawing.state.mouseover,true);
+  bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
 };
 bbbfly.map.drawing._onMouseLeave = function(){
   this.SetStateValue(bbbfly.MapDrawing.state.mouseover,false);
+  bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
 };
 bbbfly.map.drawing._onClick = function(){
-  this.ToggleStateValue(bbbfly.MapDrawing.state.selected);
+  this.ToggleStateValue(bbbfly.MapDrawing.state.selected,true);
 };
 bbbfly.map.drawing.layer._onEvent = function(event){
   var drawing = event.target.Owner;
@@ -251,7 +255,7 @@ bbbfly.map.drawing.icon._update = function(){
   state.mouseover = false;
 
   var proxy = bbbfly.Renderer.StackProxy(style.images,state,this.ID+'_I');
-  var html = bbbfly.Renderer.StackHTML(proxy,state,style.className+'Img');
+  var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg');
 
   this._IconProxy = proxy;
   state.mouseover = over;

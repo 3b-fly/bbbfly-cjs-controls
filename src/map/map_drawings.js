@@ -110,18 +110,20 @@ bbbfly.map.drawing._getStateValue = function(state){
 };
 
 /** @ignore */
-bbbfly.map.drawing._setStateValue = function(state,value){
+bbbfly.map.drawing._setStateValue = function(state,value,update){
   var hasState = !!(this._State & state);
   if(value === hasState){return false;}
 
   if(value){this._State = (this._State | state);}
   else{this._State = (this._State ^ state);}
+
+  if(update){this.Update();}
   return true;
 };
 
 /** @ignore */
-bbbfly.map.drawing._toggleStateValue = function(state){
-  this.SetStateValue(state,!this.GetStateValue(state));
+bbbfly.map.drawing._toggleStateValue = function(state,update){
+  this.SetStateValue(state,!this.GetStateValue(state),update);
 };
 
 /** @ignore */
@@ -223,16 +225,18 @@ bbbfly.map.drawing._remove = function(feature){
 /** @ignore */
 bbbfly.map.drawing._onMouseEnter = function(){
   this.SetStateValue(bbbfly.MapDrawing.state.mouseover,true);
+  bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
 };
 
 /** @ignore */
 bbbfly.map.drawing._onMouseLeave = function(){
   this.SetStateValue(bbbfly.MapDrawing.state.mouseover,false);
+  bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
 };
 
 /** @ignore */
 bbbfly.map.drawing._onClick = function(){
-  this.ToggleStateValue(bbbfly.MapDrawing.state.selected);
+  this.ToggleStateValue(bbbfly.MapDrawing.state.selected,true);
 };
 
 /** @ignore */
@@ -298,7 +302,7 @@ bbbfly.map.drawing.icon._update = function(){
   state.mouseover = false;
 
   var proxy = bbbfly.Renderer.StackProxy(style.images,state,this.ID+'_I');
-  var html = bbbfly.Renderer.StackHTML(proxy,state,style.className+'Img');
+  var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg');
 
   this._IconProxy = proxy;
   state.mouseover = over;
@@ -309,6 +313,7 @@ bbbfly.map.drawing.icon._update = function(){
     var icon = L.divIcon({
       iconSize: [proxy.W,proxy.H],
       iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
+      className: style.className,
       html: html
     });
 
@@ -474,6 +479,7 @@ bbbfly.MapDrawing = function(options){
    *
    * @param {bbbfly.MapDrawing.state} state
    * @param {boolean} [value=false] Value
+   * @param {boolean} [update=true]
    * @return {boolean} If value has changed
    *
    * @see {@link bbbfly.MapDrawing#GetState|GetState()}
@@ -490,6 +496,7 @@ bbbfly.MapDrawing = function(options){
    *   Reverse drawing state value
    *
    * @param {bbbfly.MapDrawing.state} state
+   * @param {boolean} [update=true]
    *
    * @see {@link bbbfly.MapDrawing#GetState|GetState()}
    * @see {@link bbbfly.MapDrawing#GetStateValue|GetStateValue()}
