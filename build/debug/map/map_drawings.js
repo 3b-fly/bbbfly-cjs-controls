@@ -10,6 +10,7 @@ var bbbfly = bbbfly || {};
 bbbfly.map = bbbfly.map || {};
 bbbfly.map.drawing = {
   _lastId: 0,
+  _styles: {},
 
   utils: {},
   layer: {},
@@ -20,6 +21,21 @@ bbbfly.map.drawing = {
 bbbfly.map.drawing.utils.GetDrawingId = function(options){
   var id = (options) ? options.ID : null;
   return String.isString(id) ? id : '_'+(++bbbfly.map.drawing._lastId);
+};
+bbbfly.map.drawing.utils.GetDrawingStyle = function(options){
+  var style = (options) ? options.Style : null;
+  if(String.isString(style)){style = bbbfly.map.drawing._styles[style];}
+  return Object.isObject(style) ? style : null;
+};
+bbbfly.map.drawing.utils.DefineDrawingStyle = function(id,style){
+  if(!Object.isObject(style)){return false;}
+  if(!String.isString(id)){return false;}
+
+  var stack = bbbfly.map.drawing._styles;
+  if((typeof stack[id] !== 'undefined')){return false;}
+
+  stack[id] = style;
+  return true;
 };
 bbbfly.map.drawing.utils.IsLatLng = function(latLng){
   return (Array.isArray(latLng) || (latLng instanceof L.LatLng));
@@ -205,6 +221,9 @@ bbbfly.map.drawing.layer._updateZIndex = function(offset){
 bbbfly.map.drawing.icon._create = function(){
   if(!Object.isObject(this.Options)){return null;}
 
+  var style = bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
+  if(!(style instanceof bbbfly.MapIcon.Style)){return null;}
+
   var coords = this.Options.Coordinates;
   var marker = null;
 
@@ -223,12 +242,19 @@ bbbfly.map.drawing.icon._create = function(){
   return marker;
 };
 bbbfly.map.drawing.icon._update = function(){
+  var style = bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
+  if(!(style instanceof bbbfly.MapIcon.Style)){style = {};}
+
   var state = this.GetState();
 
-  var proxy = bbbfly.Renderer.StackProxy([],state,this.ID+'_I');
-  var html = bbbfly.Renderer.StackHTML(proxy,state,'');
+  var over = state.mouseover;
+  state.mouseover = false;
+
+  var proxy = bbbfly.Renderer.StackProxy(style.images,state,this.ID+'_I');
+  var html = bbbfly.Renderer.StackHTML(proxy,state,style.className+'Img');
 
   this._IconProxy = proxy;
+  state.mouseover = over;
 
   if(html !== this._IconHtml){
     this._IconHtml = html;
@@ -236,17 +262,23 @@ bbbfly.map.drawing.icon._update = function(){
     var icon = L.divIcon({
       iconSize: [proxy.W,proxy.H],
       iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
+      className: style.className,
       html: html
     });
 
     var layer = this._Layers[0];
     if(layer){layer.setIcon(icon);}
+
+    if(over){bbbfly.Renderer.UpdateStackHTML(proxy,state);}
   }
 
   this.Update.callParent();
 };
 bbbfly.map.drawing.geometry._create = function(){
   if(!Object.isObject(this.Options)){return null;}
+
+  var style = bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
+  if(!(style instanceof bbbfly.MapGeometry.Style)){return null;}
 
   var json = this.Options.GeoJSON;
 
@@ -260,6 +292,7 @@ bbbfly.map.drawing.geometry._create = function(){
 
   for(var i in geometries){
     var geometry = geometries[i];
+    geometry.setStyle(style);
 
     ng_OverrideMethod(
       geometry,'_project',
@@ -365,6 +398,13 @@ bbbfly.MapIcon = function(options){
 
   return drawing;
 };
+bbbfly.MapIcon.Style = function(images,className){
+  if(!Array.isArray(images)){images = null;}
+  if(!String.isString(className)){className = '';}
+
+  this.images = images;
+  this.className = className;
+};
 bbbfly.MapGeometry = function(options){
   var drawing = new bbbfly.MapDrawing(options);
   ng_OverrideMethod(drawing,'Create',
@@ -372,6 +412,18 @@ bbbfly.MapGeometry = function(options){
   );
 
   return drawing;
+};
+bbbfly.MapGeometry.Style = function(color,borderWidth){
+  if(!String.isString(color)){color = '#000000';}
+  if(!Number.isInteger(borderWidth)){borderWidth = 0;}
+
+  this.color = color;
+  this.weight = borderWidth;
+  this.stroke = (borderWidth > 0);
+
+  this.fill = true;
+  this.fillColor = color;
+  this.fillOpacity = 0.2;
 };
 bbbfly.MapDrawingsHandler = function(feature){
   if(!(feature instanceof L.FeatureGroup)){return null;}
