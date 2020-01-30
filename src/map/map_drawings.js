@@ -114,14 +114,25 @@ bbbfly.map.drawing._initialize = function(){
   if(this._Initialized){return true;}
 
   if(!Function.isFunction(this.Create)){return false;}
-  var layers = this.Create(this.Options);
+  var layers = this.Create();
 
-  if(!Array.isArray(layers)){return false;}
-
+  if(Object.isObject(layers)){
+    this.DoInitialize(layers);
+  }
+  else if(Array.isArray(layers)){
     for(var i in layers){
-    var layer = layers[i];
+      this.DoInitialize(layers[i]);
+    }
+  }
 
-    if(Object.isObject(layer) && (layer instanceof L.Layer)){
+  this._Initialized = true;
+  return true;
+};
+
+/** @ignore */
+bbbfly.map.drawing._doInitialize = function(layer){
+  if(!(layer instanceof L.Layer)){return false;}
+
   layer.Owner = this;
 
   layer.on('mouseover',bbbfly.map.drawing.layer._onEvent);
@@ -132,10 +143,7 @@ bbbfly.map.drawing._initialize = function(){
 
   L.Util.stamp(layer);
   this._Layers.push(layer);
-    }
-  }
 
-  this._Initialized = true;
   return true;
 };
 
@@ -241,7 +249,7 @@ bbbfly.map.drawing.layer._updateZIndex = function(offset){
 bbbfly.map.drawing.icon._create = function(){
   if(!Object.isObject(this.Options)){return null;}
 
-  var coords = options.Coordinates;
+  var coords = this.Options.Coordinates;
   var marker = null;
 
   if(bbbfly.map.drawing.utils.IsLatLng(coords)){
@@ -260,7 +268,7 @@ bbbfly.map.drawing.icon._create = function(){
 };
 
 /** @ignore */
-bbbfly.map.drawing.icon._update = function(){
+bbbfly.map.drawing.geometry._create = function(){
   if(!Object.isObject(this.Options)){return null;}
 
   var json = this.Options.GeoJSON;
@@ -364,6 +372,8 @@ bbbfly.MapDrawing = function(options){
 
   /** @private */
   this.Initialize = bbbfly.map.drawing._initialize;
+  /** @private */
+  this.DoInitialize = bbbfly.map.drawing._doInitialize;
 
   /**
    * @function
@@ -567,19 +577,19 @@ bbbfly.MapDrawing.state = {
  */
 bbbfly.MapIcon = function(options){
   var drawing = new bbbfly.MapDrawing(options);
-  var ns = bbbfly.map.drawing.icon;
 
   /**
    * @function
    * @name Create
    * @memberof bbbfly.MapIcon#
    *
-   * @param {bbbfly.MapIcon.options} options
-   * @return {mapMarker[]} Leaflet marker
+   * @return {mapMarker} Leaflet marker
    */
-  ng_OverrideMethod(drawing,'Create',ns._create);
+  ng_OverrideMethod(drawing,'Create',
+    bbbfly.map.drawing.icon._create
+  );
 
-  this.__proto__ = drawing;
+  return drawing;
 };
 
 /**
@@ -593,19 +603,19 @@ bbbfly.MapIcon = function(options){
  */
 bbbfly.MapGeometry = function(options){
   var drawing = new bbbfly.MapDrawing(options);
-  var ns = bbbfly.map.drawing.geometry;
 
   /**
    * @function
    * @name Create
    * @memberof bbbfly.MapGeometry#
    *
-   * @param {bbbfly.MapGeometry.options} options
    * @return {mapGeometry[]} Leaflet geometry
    */
-  ng_OverrideMethod(drawing,'Create',ns._create);
+  ng_OverrideMethod(drawing,'Create',
+    bbbfly.map.drawing.geometry._create
+  );
 
-  this.__proto__ = drawing;
+  return drawing;
 };
 
 /**

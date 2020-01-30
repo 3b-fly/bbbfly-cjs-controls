@@ -93,14 +93,23 @@ bbbfly.map.drawing._initialize = function(){
   if(this._Initialized){return true;}
 
   if(!Function.isFunction(this.Create)){return false;}
-  var layers = this.Create(this.Options);
+  var layers = this.Create();
 
-  if(!Array.isArray(layers)){return false;}
-
+  if(Object.isObject(layers)){
+    this.DoInitialize(layers);
+  }
+  else if(Array.isArray(layers)){
     for(var i in layers){
-    var layer = layers[i];
+      this.DoInitialize(layers[i]);
+    }
+  }
 
-    if(Object.isObject(layer) && (layer instanceof L.Layer)){
+  this._Initialized = true;
+  return true;
+};
+bbbfly.map.drawing._doInitialize = function(layer){
+  if(!(layer instanceof L.Layer)){return false;}
+
   layer.Owner = this;
 
   layer.on('mouseover',bbbfly.map.drawing.layer._onEvent);
@@ -111,10 +120,7 @@ bbbfly.map.drawing._initialize = function(){
 
   L.Util.stamp(layer);
   this._Layers.push(layer);
-    }
-  }
 
-  this._Initialized = true;
   return true;
 };
 bbbfly.map.drawing._dispose = function(){
@@ -200,7 +206,7 @@ bbbfly.map.drawing.layer._updateZIndex = function(offset){
 bbbfly.map.drawing.icon._create = function(){
   if(!Object.isObject(this.Options)){return null;}
 
-  var coords = options.Coordinates;
+  var coords = this.Options.Coordinates;
   var marker = null;
 
   if(bbbfly.map.drawing.utils.IsLatLng(coords)){
@@ -217,7 +223,7 @@ bbbfly.map.drawing.icon._create = function(){
 
   return [marker];
 };
-bbbfly.map.drawing.icon._update = function(){
+bbbfly.map.drawing.geometry._create = function(){
   if(!Object.isObject(this.Options)){return null;}
 
   var json = this.Options.GeoJSON;
@@ -302,6 +308,7 @@ bbbfly.MapDrawing = function(options){
   this._ParentFeature = null;
   this._Initialized = false;
   this.Initialize = bbbfly.map.drawing._initialize;
+  this.DoInitialize = bbbfly.map.drawing._doInitialize;
   this.GetState = bbbfly.map.drawing._getState;
   this.GetStateValue = bbbfly.map.drawing._getStateValue;
   this.SetStateValue = bbbfly.map.drawing._setStateValue;
@@ -325,17 +332,19 @@ bbbfly.MapDrawing.state = {
 };
 bbbfly.MapIcon = function(options){
   var drawing = new bbbfly.MapDrawing(options);
-  var ns = bbbfly.map.drawing.icon;
-  ng_OverrideMethod(drawing,'Create',ns._create);
+  ng_OverrideMethod(drawing,'Create',
+    bbbfly.map.drawing.icon._create
+  );
 
-  this.__proto__ = drawing;
+  return drawing;
 };
 bbbfly.MapGeometry = function(options){
   var drawing = new bbbfly.MapDrawing(options);
-  var ns = bbbfly.map.drawing.geometry;
-  ng_OverrideMethod(drawing,'Create',ns._create);
+  ng_OverrideMethod(drawing,'Create',
+    bbbfly.map.drawing.geometry._create
+  );
 
-  this.__proto__ = drawing;
+  return drawing;
 };
 bbbfly.MapDrawingsHandler = function(feature){
   if(!(feature instanceof L.FeatureGroup)){return null;}
