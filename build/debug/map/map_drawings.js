@@ -93,20 +93,20 @@ bbbfly.map.drawing._initialize = function(){
 
   if(!Array.isArray(layers)){return false;}
 
-  for(var i in layers){
+    for(var i in layers){
     var layer = layers[i];
 
     if(Object.isObject(layer) && (layer instanceof L.Layer)){
-      layer.Owner = this;
+  layer.Owner = this;
 
-      layer.on('mouseover',bbbfly.map.drawing.layer._onEvent);
-      layer.on('mouseout',bbbfly.map.drawing.layer._onEvent);
-      layer.on('click',bbbfly.map.drawing.layer._onEvent);
-      layer.on('dblclick',bbbfly.map.drawing.layer._onEvent);
-      layer.on('contextmenu',bbbfly.map.drawing.layer._onEvent);
+  layer.on('mouseover',bbbfly.map.drawing.layer._onEvent);
+  layer.on('mouseout',bbbfly.map.drawing.layer._onEvent);
+  layer.on('click',bbbfly.map.drawing.layer._onEvent);
+  layer.on('dblclick',bbbfly.map.drawing.layer._onEvent);
+  layer.on('contextmenu',bbbfly.map.drawing.layer._onEvent);
 
-      L.Util.stamp(layer);
-      this._Layers.push(layer);
+  L.Util.stamp(layer);
+  this._Layers.push(layer);
     }
   }
 
@@ -159,10 +159,10 @@ bbbfly.map.drawing._remove = function(feature){
   }
   return false;
 };
-bbbfly.map.drawing._onMouseIn = function(){
+bbbfly.map.drawing._onMouseEnter = function(){
   this.SetStateValue(bbbfly.MapDrawing.state.mouseover,true);
 };
-bbbfly.map.drawing._onMouseOut = function(){
+bbbfly.map.drawing._onMouseLeave = function(){
   this.SetStateValue(bbbfly.MapDrawing.state.mouseover,false);
 };
 bbbfly.map.drawing._onClick = function(){
@@ -173,8 +173,8 @@ bbbfly.map.drawing.layer._onEvent = function(event){
 
   var callback = null;
   switch(event.type){
-    case 'mouseover': callback = drawing.OnMouseIn; break;
-    case 'mouseout': callback = drawing.OnMouseOut; break;
+    case 'mouseover': callback = drawing.OnMouseEnter; break;
+    case 'mouseout': callback = drawing.OnMouseLeave; break;
     case 'click': callback = drawing.OnClick; break;
     case 'dblclick': callback = drawing.OnDblClick; break;
     case 'contextmenu': callback = drawing.OnRightClick; break;
@@ -267,11 +267,11 @@ bbbfly.map.drawing.handler._getDrawing = function(id){
 bbbfly.map.drawing.handler._addDrawing = function(drawing){
   if(
     (drawing instanceof bbbfly.MapDrawing)
-    && String.isString(drawing.Id)
-    && !this._Drawings[drawing.Id]
+    && String.isString(drawing.ID)
+    && !this._Drawings[drawing.ID]
     && drawing.Add(this._Feature)
   ){
-    this._Drawings[drawing.Id] = drawing;
+    this._Drawings[drawing.ID] = drawing;
     return true;
   }
   return false;
@@ -280,11 +280,11 @@ bbbfly.map.drawing.handler._addDrawing = function(drawing){
 bbbfly.map.drawing.handler._removeDrawing = function(drawing){
   if(
     (drawing instanceof bbbfly.MapDrawing)
-    && String.isString(drawing.Id)
-    && this._Drawings[drawing.Id]
+    && String.isString(drawing.ID)
+    && this._Drawings[drawing.ID]
     && drawing.Remove(this._Feature)
   ){
-    delete(this._Drawings[drawing.Id]);
+    delete(this._Drawings[drawing.ID]);
     return true;
   }
   return false;
@@ -297,7 +297,7 @@ bbbfly.MapDrawing = function(options){
     id = '_'+(++bbbfly.map.drawing._lastId);
   }
 
-  this.Id =  id;
+  this.ID =  id;
   this.Options = options;
   this._State = 0;
   this._Layers = [];
@@ -313,8 +313,8 @@ bbbfly.MapDrawing = function(options){
   this.Update = bbbfly.map.drawing._update;
   this.Add = bbbfly.map.drawing._add;
   this.Remove = bbbfly.map.drawing._remove;
-  this.OnMouseIn = bbbfly.map.drawing._onMouseIn;
-  this.OnMouseOut = bbbfly.map.drawing._onMouseOut;
+  this.OnMouseEnter = bbbfly.map.drawing._onMouseEnter;
+  this.OnMouseLeave = bbbfly.map.drawing._onMouseLeave;
   this.OnClick = bbbfly.map.drawing._onClick;
   this.OnDblClick = bbbfly.map.drawing._onClick;
   this.OnRightClick = null;

@@ -112,20 +112,20 @@ bbbfly.map.drawing._initialize = function(){
 
   if(!Array.isArray(layers)){return false;}
 
-  for(var i in layers){
+    for(var i in layers){
     var layer = layers[i];
 
     if(Object.isObject(layer) && (layer instanceof L.Layer)){
-      layer.Owner = this;
+  layer.Owner = this;
 
-      layer.on('mouseover',bbbfly.map.drawing.layer._onEvent);
-      layer.on('mouseout',bbbfly.map.drawing.layer._onEvent);
-      layer.on('click',bbbfly.map.drawing.layer._onEvent);
-      layer.on('dblclick',bbbfly.map.drawing.layer._onEvent);
-      layer.on('contextmenu',bbbfly.map.drawing.layer._onEvent);
+  layer.on('mouseover',bbbfly.map.drawing.layer._onEvent);
+  layer.on('mouseout',bbbfly.map.drawing.layer._onEvent);
+  layer.on('click',bbbfly.map.drawing.layer._onEvent);
+  layer.on('dblclick',bbbfly.map.drawing.layer._onEvent);
+  layer.on('contextmenu',bbbfly.map.drawing.layer._onEvent);
 
-      L.Util.stamp(layer);
-      this._Layers.push(layer);
+  L.Util.stamp(layer);
+  this._Layers.push(layer);
     }
   }
 
@@ -190,12 +190,12 @@ bbbfly.map.drawing._remove = function(feature){
 };
 
 /** @ignore */
-bbbfly.map.drawing._onMouseIn = function(){
+bbbfly.map.drawing._onMouseEnter = function(){
   this.SetStateValue(bbbfly.MapDrawing.state.mouseover,true);
 };
 
 /** @ignore */
-bbbfly.map.drawing._onMouseOut = function(){
+bbbfly.map.drawing._onMouseLeave = function(){
   this.SetStateValue(bbbfly.MapDrawing.state.mouseover,false);
 };
 
@@ -210,8 +210,8 @@ bbbfly.map.drawing.layer._onEvent = function(event){
 
   var callback = null;
   switch(event.type){
-    case 'mouseover': callback = drawing.OnMouseIn; break;
-    case 'mouseout': callback = drawing.OnMouseOut; break;
+    case 'mouseover': callback = drawing.OnMouseEnter; break;
+    case 'mouseout': callback = drawing.OnMouseLeave; break;
     case 'click': callback = drawing.OnClick; break;
     case 'dblclick': callback = drawing.OnDblClick; break;
     case 'contextmenu': callback = drawing.OnRightClick; break;
@@ -308,11 +308,11 @@ bbbfly.map.drawing.handler._getDrawing = function(id){
 bbbfly.map.drawing.handler._addDrawing = function(drawing){
   if(
     (drawing instanceof bbbfly.MapDrawing)
-    && String.isString(drawing.Id)
-    && !this._Drawings[drawing.Id]
+    && String.isString(drawing.ID)
+    && !this._Drawings[drawing.ID]
     && drawing.Add(this._Feature)
   ){
-    this._Drawings[drawing.Id] = drawing;
+    this._Drawings[drawing.ID] = drawing;
     return true;
   }
   return false;
@@ -321,11 +321,11 @@ bbbfly.map.drawing.handler._addDrawing = function(drawing){
 bbbfly.map.drawing.handler._removeDrawing = function(drawing){
   if(
     (drawing instanceof bbbfly.MapDrawing)
-    && String.isString(drawing.Id)
-    && this._Drawings[drawing.Id]
+    && String.isString(drawing.ID)
+    && this._Drawings[drawing.ID]
     && drawing.Remove(this._Feature)
   ){
-    delete(this._Drawings[drawing.Id]);
+    delete(this._Drawings[drawing.ID]);
     return true;
   }
   return false;
@@ -337,7 +337,7 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
  *
  * @param {bbbfly.MapDrawing.options} options
  *
- * @property {string|null} Id
+ * @property {string|null} ID
  * @property {bbbfly.MapDrawing.options|null} Options
  */
 bbbfly.MapDrawing = function(options){
@@ -348,7 +348,7 @@ bbbfly.MapDrawing = function(options){
     id = '_'+(++bbbfly.map.drawing._lastId);
   }
 
-  this.Id =  id;
+  this.ID =  id;
   this.Options = options;
 
   /** @private */
@@ -485,34 +485,34 @@ bbbfly.MapDrawing = function(options){
 
   /**
    * @event
-   * @name OnMouseIn
+   * @name OnMouseEnter
    * @memberof bbbfly.MapDrawing#
    *
-   * @see {@link bbbfly.MapDrawing#event:OnMouseOut|OnMouseOut}
+   * @see {@link bbbfly.MapDrawing#event:OnMouseLeave|OnMouseLeave}
    * @see {@link bbbfly.MapDrawing#event:OnClick|OnClick}
    * @see {@link bbbfly.MapDrawing#event:OnDblClick|OnDblClick}
    * @see {@link bbbfly.MapDrawing#event:OnRightClick|OnRightClick}
    */
-  this.OnMouseIn = bbbfly.map.drawing._onMouseIn;
+  this.OnMouseEnter = bbbfly.map.drawing._onMouseEnter;
   /**
    * @event
-   * @name OnMouseOut
+   * @name OnMouseLeave
    * @memberof bbbfly.MapDrawing#
    *
-   * @see {@link bbbfly.MapDrawing#event:OnMouseIn|OnMouseIn}
+   * @see {@link bbbfly.MapDrawing#event:OnMouseEnter|OnMouseEnter}
    * @see {@link bbbfly.MapDrawing#event:OnClick|OnClick}
    * @see {@link bbbfly.MapDrawing#event:OnDblClick|OnDblClick}
    * @see {@link bbbfly.MapDrawing#event:OnRightClick|OnRightClick}
    */
-  this.OnMouseOut = bbbfly.map.drawing._onMouseOut;
+  this.OnMouseLeave = bbbfly.map.drawing._onMouseLeave;
 
   /**
    * @event
    * @name OnClick
    * @memberof bbbfly.MapDrawing#
    *
-   * @see {@link bbbfly.MapDrawing#event:OnMouseIn|OnMouseIn}
-   * @see {@link bbbfly.MapDrawing#event:OnMouseOut|OnMouseOut}
+   * @see {@link bbbfly.MapDrawing#event:OnMouseEnter|OnMouseEnter}
+   * @see {@link bbbfly.MapDrawing#event:OnMouseLeave|OnMouseLeave}
    * @see {@link bbbfly.MapDrawing#event:OnDblClick|OnDblClick}
    * @see {@link bbbfly.MapDrawing#event:OnRightClick|OnRightClick}
    */
@@ -522,8 +522,8 @@ bbbfly.MapDrawing = function(options){
    * @name OnDblClick
    * @memberof bbbfly.MapDrawing#
    *
-   * @see {@link bbbfly.MapDrawing#event:OnMouseIn|OnMouseIn}
-   * @see {@link bbbfly.MapDrawing#event:OnMouseOut|OnMouseOut}
+   * @see {@link bbbfly.MapDrawing#event:OnMouseEnter|OnMouseEnter}
+   * @see {@link bbbfly.MapDrawing#event:OnMouseLeave|OnMouseLeave}
    * @see {@link bbbfly.MapDrawing#event:OnClick|OnClick}
    * @see {@link bbbfly.MapDrawing#event:OnRightClick|OnRightClick}
    */
@@ -533,8 +533,8 @@ bbbfly.MapDrawing = function(options){
    * @name OnRightClick
    * @memberof bbbfly.MapDrawing#
    *
-   * @see {@link bbbfly.MapDrawing#event:OnMouseIn|OnMouseIn}
-   * @see {@link bbbfly.MapDrawing#event:OnMouseOut|OnMouseOut}
+   * @see {@link bbbfly.MapDrawing#event:OnMouseEnter|OnMouseEnter}
+   * @see {@link bbbfly.MapDrawing#event:OnMouseLeave|OnMouseLeave}
    * @see {@link bbbfly.MapDrawing#event:OnClick|OnClick}
    * @see {@link bbbfly.MapDrawing#event:OnDblClick|OnDblClick}
    */
@@ -655,7 +655,7 @@ bbbfly.MapDrawingsHandler = function(feature){
  * @typedef {object} options
  * @memberOf bbbfly.MapDrawing
  *
- * @property {string} Id
+ * @property {string} ID
  */
 
 /**
