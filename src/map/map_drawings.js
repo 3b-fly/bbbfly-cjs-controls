@@ -16,9 +16,15 @@ bbbfly.map.drawing = {
 
   utils: {},
   layer: {},
-  marker: {},
+  icon: {},
   geometry: {},
   handler: {}
+};
+
+/** @ignore */
+bbbfly.map.drawing.utils.GetDrawingId = function(options){
+  var id = (options) ? options.ID : null;
+  return String.isString(id) ? id : '_'+(++bbbfly.map.drawing._lastId);
 };
 
 /** @ignore */
@@ -68,10 +74,10 @@ bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
 /** @ignore */
 bbbfly.map.drawing._getState = function(){
   var state = {
-    mouseover: !!(this._State & bbbfly.MapDrawing.state.mouseover),
-    disabled: !!(this._State & bbbfly.MapDrawing.state.disabled),
-    selected: !!(this._State & bbbfly.MapDrawing.state.selected),
-    grayed: !!(this._State & bbbfly.MapDrawing.state.grayed)
+    mouseover: this.GetStateValue(bbbfly.MapDrawing.state.mouseover),
+    disabled: this.GetStateValue(bbbfly.MapDrawing.state.disabled),
+    selected: this.GetStateValue(bbbfly.MapDrawing.state.selected),
+    grayed: this.GetStateValue(bbbfly.MapDrawing.state.grayed)
   };
 
   if(state.disabled){state.mouseover = false;}
@@ -232,8 +238,8 @@ bbbfly.map.drawing.layer._updateZIndex = function(offset){
   this._updateZIndex.callParent(offset);
 };
 
-bbbfly.map.drawing.marker._create = function(options){
-  if(!Object.isObject(options)){return null;}
+bbbfly.map.drawing.icon._create = function(){
+  if(!Object.isObject(this.Options)){return null;}
 
   var coords = options.Coordinates;
   var marker = null;
@@ -253,10 +259,11 @@ bbbfly.map.drawing.marker._create = function(options){
   return [marker];
 };
 
-bbbfly.map.drawing.geometry._create = function(options){
-  if(!Object.isObject(options)){return null;}
+/** @ignore */
+bbbfly.map.drawing.icon._update = function(){
+  if(!Object.isObject(this.Options)){return null;}
 
-  var json = options.GeoJSON;
+  var json = this.Options.GeoJSON;
 
   if(!(json instanceof L.GeoJSON)){
     json = bbbfly.map.drawing.utils.NormalizeGeoJSON(json);
@@ -342,13 +349,8 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
  */
 bbbfly.MapDrawing = function(options){
   if(!Object.isObject(options)){options = null;}
-  var id = (options) ? options.Id : null;
 
-  if(!String.isString(id)){
-    id = '_'+(++bbbfly.map.drawing._lastId);
-  }
-
-  this.ID =  id;
+  this.ID = bbbfly.map.drawing.utils.GetDrawingId(options);
   this.Options = options;
 
   /** @private */
@@ -403,7 +405,8 @@ bbbfly.MapDrawing = function(options){
    *   Set drawing state value
    *
    * @param {bbbfly.MapDrawing.state} state
-   * @param {boolean} [value=false]
+   * @param {boolean} [value=false] Value
+   * @return {boolean} If value has changed
    *
    * @see {@link bbbfly.MapDrawing#GetState|GetState()}
    * @see {@link bbbfly.MapDrawing#GetStateValue|GetStateValue()}
@@ -441,8 +444,7 @@ bbbfly.MapDrawing = function(options){
    * @name Create
    * @memberof bbbfly.MapDrawing#
    *
-   * @param {bbbfly.MapDrawing.options} options
-   * @return {mapLayer} Leaflet marker or geometry
+   * @return {mapLayer|mapLayer[]} Leaflet layer
    *
    * @see {@link bbbfly.MapDrawing#Dispose|Dispose()}
    * @see {@link bbbfly.MapDrawing#Update|Update()}
@@ -565,12 +567,12 @@ bbbfly.MapDrawing.state = {
  */
 bbbfly.MapIcon = function(options){
   var drawing = new bbbfly.MapDrawing(options);
-  var ns = bbbfly.map.drawing.marker;
+  var ns = bbbfly.map.drawing.icon;
 
   /**
    * @function
    * @name Create
-   * @memberof bbbfly.MapDrawing#
+   * @memberof bbbfly.MapIcon#
    *
    * @param {bbbfly.MapIcon.options} options
    * @return {mapMarker[]} Leaflet marker
@@ -596,7 +598,7 @@ bbbfly.MapGeometry = function(options){
   /**
    * @function
    * @name Create
-   * @memberof bbbfly.MapDrawing#
+   * @memberof bbbfly.MapGeometry#
    *
    * @param {bbbfly.MapGeometry.options} options
    * @return {mapGeometry[]} Leaflet geometry

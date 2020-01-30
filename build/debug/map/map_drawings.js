@@ -13,9 +13,13 @@ bbbfly.map.drawing = {
 
   utils: {},
   layer: {},
-  marker: {},
+  icon: {},
   geometry: {},
   handler: {}
+};
+bbbfly.map.drawing.utils.GetDrawingId = function(options){
+  var id = (options) ? options.ID : null;
+  return String.isString(id) ? id : '_'+(++bbbfly.map.drawing._lastId);
 };
 bbbfly.map.drawing.utils.IsLatLng = function(latLng){
   return (Array.isArray(latLng) || (latLng instanceof L.LatLng));
@@ -59,10 +63,10 @@ bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
 };
 bbbfly.map.drawing._getState = function(){
   var state = {
-    mouseover: !!(this._State & bbbfly.MapDrawing.state.mouseover),
-    disabled: !!(this._State & bbbfly.MapDrawing.state.disabled),
-    selected: !!(this._State & bbbfly.MapDrawing.state.selected),
-    grayed: !!(this._State & bbbfly.MapDrawing.state.grayed)
+    mouseover: this.GetStateValue(bbbfly.MapDrawing.state.mouseover),
+    disabled: this.GetStateValue(bbbfly.MapDrawing.state.disabled),
+    selected: this.GetStateValue(bbbfly.MapDrawing.state.selected),
+    grayed: this.GetStateValue(bbbfly.MapDrawing.state.grayed)
   };
 
   if(state.disabled){state.mouseover = false;}
@@ -193,8 +197,8 @@ bbbfly.map.drawing.layer._updateZIndex = function(offset){
   this._updateZIndex.callParent(offset);
 };
 
-bbbfly.map.drawing.marker._create = function(options){
-  if(!Object.isObject(options)){return null;}
+bbbfly.map.drawing.icon._create = function(){
+  if(!Object.isObject(this.Options)){return null;}
 
   var coords = options.Coordinates;
   var marker = null;
@@ -213,11 +217,10 @@ bbbfly.map.drawing.marker._create = function(options){
 
   return [marker];
 };
+bbbfly.map.drawing.icon._update = function(){
+  if(!Object.isObject(this.Options)){return null;}
 
-bbbfly.map.drawing.geometry._create = function(options){
-  if(!Object.isObject(options)){return null;}
-
-  var json = options.GeoJSON;
+  var json = this.Options.GeoJSON;
 
   if(!(json instanceof L.GeoJSON)){
     json = bbbfly.map.drawing.utils.NormalizeGeoJSON(json);
@@ -291,13 +294,8 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
 };
 bbbfly.MapDrawing = function(options){
   if(!Object.isObject(options)){options = null;}
-  var id = (options) ? options.Id : null;
 
-  if(!String.isString(id)){
-    id = '_'+(++bbbfly.map.drawing._lastId);
-  }
-
-  this.ID =  id;
+  this.ID = bbbfly.map.drawing.utils.GetDrawingId(options);
   this.Options = options;
   this._State = 0;
   this._Layers = [];
@@ -327,7 +325,7 @@ bbbfly.MapDrawing.state = {
 };
 bbbfly.MapIcon = function(options){
   var drawing = new bbbfly.MapDrawing(options);
-  var ns = bbbfly.map.drawing.marker;
+  var ns = bbbfly.map.drawing.icon;
   ng_OverrideMethod(drawing,'Create',ns._create);
 
   this.__proto__ = drawing;
