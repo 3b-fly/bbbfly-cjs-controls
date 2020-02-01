@@ -101,8 +101,17 @@ bbbfly.map.drawing._setStateValue = function(state,value,update){
   if(update){this.Update();}
   return true;
 };
-bbbfly.map.drawing._toggleStateValue = function(state,update){
-  this.SetStateValue(state,!this.GetStateValue(state),update);
+bbbfly.map.drawing._getSelected = function(){
+  return this.GetStateValue(bbbfly.MapDrawing.state.selected);
+};
+bbbfly.map.drawing._setSelected = function(selected,update){
+  if(!Boolean.isBoolean(selected)){selected = true;}
+  if(this.GetSelected() === selected){return true;}
+  if(!Boolean.isBoolean(update)){update = true;}
+
+  var state = bbbfly.MapDrawing.state.selected;
+  this.SetStateValue(state,selected,update);
+  return true;
 };
 bbbfly.map.drawing._initialize = function(){
   if(this._Initialized){return true;}
@@ -195,7 +204,14 @@ bbbfly.map.drawing._onMouseLeave = function(){
   bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
 };
 bbbfly.map.drawing._onClick = function(){
-  this.ToggleStateValue(bbbfly.MapDrawing.state.selected,true);
+  if((this.Options.SelectType & bbbfly.MapDrawing.selecttype.click)){
+    this.SetSelected(!this.GetSelected(),true);
+  }
+};
+bbbfly.map.drawing._onDblClick = function(){
+  if((this.Options.SelectType & bbbfly.MapDrawing.selecttype.dblclick)){
+    this.SetSelected(!this.GetSelected(),true);
+  }
 };
 bbbfly.map.drawing.layer._onEvent = function(event){
   var drawing = event.target.Owner;
@@ -223,8 +239,6 @@ bbbfly.map.drawing.layer._updateZIndex = function(offset){
 };
 
 bbbfly.map.drawing.icon._create = function(){
-  if(!Object.isObject(this.Options)){return null;}
-
   var style = bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
   if(!(style instanceof bbbfly.MapIcon.Style)){return null;}
 
@@ -279,8 +293,6 @@ bbbfly.map.drawing.icon._update = function(){
   this.Update.callParent();
 };
 bbbfly.map.drawing.geometry._create = function(){
-  if(!Object.isObject(this.Options)){return null;}
-
   var style = bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
   if(!(style instanceof bbbfly.MapGeometry.Style)){return null;}
 
@@ -312,8 +324,7 @@ bbbfly.map.drawing.geometry._project = function(){
   var node = this.getElement();
   if(!node){return;}
 
-  var opts = this.Owner.Options;
-  var minSize = opts ? opts.MinPartSize : null;
+  var minSize = this.Owner.Options.MinPartSize;
   var display = 'block';
 
   if(Number.isInteger(minSize)){
@@ -361,7 +372,7 @@ bbbfly.MapDrawing = function(options){
   if(!Object.isObject(options)){options = null;}
 
   this.ID = bbbfly.map.drawing.utils.GetDrawingId(options);
-  this.Options = options;
+  this.Options = Object.isObject(options) ? options : {};
   this._State = 0;
   this._Layers = [];
   this._ParentFeature = null;
@@ -371,7 +382,8 @@ bbbfly.MapDrawing = function(options){
   this.GetState = bbbfly.map.drawing._getState;
   this.GetStateValue = bbbfly.map.drawing._getStateValue;
   this.SetStateValue = bbbfly.map.drawing._setStateValue;
-  this.ToggleStateValue = bbbfly.map.drawing._toggleStateValue;
+  this.GetSelected = bbbfly.map.drawing._getSelected;
+  this.SetSelected = bbbfly.map.drawing._setSelected;
   this.Dispose = bbbfly.map.drawing._dispose;
   this.Create = null;
   this.Update = bbbfly.map.drawing._update;
@@ -380,7 +392,7 @@ bbbfly.MapDrawing = function(options){
   this.OnMouseEnter = bbbfly.map.drawing._onMouseEnter;
   this.OnMouseLeave = bbbfly.map.drawing._onMouseLeave;
   this.OnClick = bbbfly.map.drawing._onClick;
-  this.OnDblClick = bbbfly.map.drawing._onClick;
+  this.OnDblClick = bbbfly.map.drawing._onDblClick;
   this.OnRightClick = null;
 };
 bbbfly.MapDrawing.state = {
@@ -388,6 +400,12 @@ bbbfly.MapDrawing.state = {
   disabled: 2,
   selected: 4,
   grayed: 8
+};
+bbbfly.MapDrawing.selecttype = {
+  none: 0,
+  click: 1,
+  dblclick: 2,
+  both: 3
 };
 bbbfly.MapIcon = function(options){
   var drawing = new bbbfly.MapDrawing(options);

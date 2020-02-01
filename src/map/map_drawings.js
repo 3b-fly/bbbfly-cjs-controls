@@ -122,8 +122,19 @@ bbbfly.map.drawing._setStateValue = function(state,value,update){
 };
 
 /** @ignore */
-bbbfly.map.drawing._toggleStateValue = function(state,update){
-  this.SetStateValue(state,!this.GetStateValue(state),update);
+bbbfly.map.drawing._getSelected = function(){
+  return this.GetStateValue(bbbfly.MapDrawing.state.selected);
+};
+
+/** @ignore */
+bbbfly.map.drawing._setSelected = function(selected,update){
+  if(!Boolean.isBoolean(selected)){selected = true;}
+  if(this.GetSelected() === selected){return true;}
+  if(!Boolean.isBoolean(update)){update = true;}
+
+  var state = bbbfly.MapDrawing.state.selected;
+  this.SetStateValue(state,selected,update);
+  return true;
 };
 
 /** @ignore */
@@ -236,7 +247,16 @@ bbbfly.map.drawing._onMouseLeave = function(){
 
 /** @ignore */
 bbbfly.map.drawing._onClick = function(){
-  this.ToggleStateValue(bbbfly.MapDrawing.state.selected,true);
+  if((this.Options.SelectType & bbbfly.MapDrawing.selecttype.click)){
+    this.SetSelected(!this.GetSelected(),true);
+  }
+};
+
+/** @ignore */
+bbbfly.map.drawing._onDblClick = function(){
+  if((this.Options.SelectType & bbbfly.MapDrawing.selecttype.dblclick)){
+    this.SetSelected(!this.GetSelected(),true);
+  }
 };
 
 /** @ignore */
@@ -268,8 +288,6 @@ bbbfly.map.drawing.layer._updateZIndex = function(offset){
 };
 
 bbbfly.map.drawing.icon._create = function(){
-  if(!Object.isObject(this.Options)){return null;}
-
   var style = bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
   if(!(style instanceof bbbfly.MapIcon.Style)){return null;}
 
@@ -314,6 +332,7 @@ bbbfly.map.drawing.icon._update = function(){
       iconSize: [proxy.W,proxy.H],
       iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
       className: style.className,
+//    tooltipAnchor: ttAnchor, //TODO
       html: html
     });
 
@@ -328,8 +347,6 @@ bbbfly.map.drawing.icon._update = function(){
 
 /** @ignore */
 bbbfly.map.drawing.geometry._create = function(){
-  if(!Object.isObject(this.Options)){return null;}
-
   var style = bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
   if(!(style instanceof bbbfly.MapGeometry.Style)){return null;}
 
@@ -363,8 +380,7 @@ bbbfly.map.drawing.geometry._project = function(){
   var node = this.getElement();
   if(!node){return;}
 
-  var opts = this.Owner.Options;
-  var minSize = opts ? opts.MinPartSize : null;
+  var minSize = this.Owner.Options.MinPartSize;
   var display = 'block';
 
   if(Number.isInteger(minSize)){
@@ -416,13 +432,13 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
  * @param {bbbfly.MapDrawing.options} options
  *
  * @property {string|null} ID
- * @property {bbbfly.MapDrawing.options|null} Options
+ * @property {bbbfly.MapDrawing.options} Options
  */
 bbbfly.MapDrawing = function(options){
   if(!Object.isObject(options)){options = null;}
 
   this.ID = bbbfly.map.drawing.utils.GetDrawingId(options);
-  this.Options = options;
+  this.Options = Object.isObject(options) ? options : {};
 
   /** @private */
   this._State = 0;
@@ -450,7 +466,6 @@ bbbfly.MapDrawing = function(options){
    *
    * @see {@link bbbfly.MapDrawing#GetStateValue|GetStateValue()}
    * @see {@link bbbfly.MapDrawing#SetStateValue|SetStateValue()}
-   * @see {@link bbbfly.MapDrawing#ToggleStateValue|ToggleStateValue()}
    */
   this.GetState = bbbfly.map.drawing._getState;
   /**
@@ -466,7 +481,6 @@ bbbfly.MapDrawing = function(options){
    *
    * @see {@link bbbfly.MapDrawing#GetState|GetState()}
    * @see {@link bbbfly.MapDrawing#SetStateValue|SetStateValue()}
-   * @see {@link bbbfly.MapDrawing#ToggleStateValue|ToggleStateValue()}
    */
   this.GetStateValue = bbbfly.map.drawing._getStateValue;
   /**
@@ -484,25 +498,29 @@ bbbfly.MapDrawing = function(options){
    *
    * @see {@link bbbfly.MapDrawing#GetState|GetState()}
    * @see {@link bbbfly.MapDrawing#GetStateValue|GetStateValue()}
-   * @see {@link bbbfly.MapDrawing#ToggleStateValue|ToggleStateValue()}
    */
   this.SetStateValue = bbbfly.map.drawing._setStateValue;
-  /**
+    /**
    * @function
-   * @name ToggleStateValue
+   * @name SetSelected
    * @memberof bbbfly.MapDrawing#
    *
-   * @description
-   *   Reverse drawing state value
+   * @return {boolean} Value
    *
-   * @param {bbbfly.MapDrawing.state} state
-   * @param {boolean} [update=true]
-   *
-   * @see {@link bbbfly.MapDrawing#GetState|GetState()}
-   * @see {@link bbbfly.MapDrawing#GetStateValue|GetStateValue()}
-   * @see {@link bbbfly.MapDrawing#SetStateValue|SetStateValue()}
+   * @see {@link bbbfly.MapDrawing#SetSelected|SetSelected()}
    */
-  this.ToggleStateValue = bbbfly.map.drawing._toggleStateValue;
+  this.GetSelected = bbbfly.map.drawing._getSelected;
+  /**
+   * @function
+   * @name SetSelected
+   * @memberof bbbfly.MapDrawing#
+   *
+   * @param {boolean} [selected=true] - Value to set
+   * @param {boolean} [update=true] - If update control
+   *
+   * @see {@link bbbfly.MapDrawing#GetSelected|GetSelected()}
+   */
+  this.SetSelected = bbbfly.map.drawing._setSelected;
 
   /**
    * @function
@@ -604,7 +622,7 @@ bbbfly.MapDrawing = function(options){
    * @see {@link bbbfly.MapDrawing#event:OnClick|OnClick}
    * @see {@link bbbfly.MapDrawing#event:OnRightClick|OnRightClick}
    */
-  this.OnDblClick = bbbfly.map.drawing._onClick;
+  this.OnDblClick = bbbfly.map.drawing._onDblClick;
   /**
    * @event
    * @name OnRightClick
@@ -629,6 +647,16 @@ bbbfly.MapDrawing.state = {
   disabled: 2,
   selected: 4,
   grayed: 8
+};
+
+/**
+ * @enum {integer}
+ */
+bbbfly.MapDrawing.selecttype = {
+  none: 0,
+  click: 1,
+  dblclick: 2,
+  both: 3
 };
 
 /**
@@ -783,6 +811,7 @@ bbbfly.MapDrawingsHandler = function(feature){
  * @memberOf bbbfly.MapDrawing
  *
  * @property {string} ID
+ * @property {bbbfly.MapDrawing.selecttype} [SelectType=none]
  */
 
 /**
