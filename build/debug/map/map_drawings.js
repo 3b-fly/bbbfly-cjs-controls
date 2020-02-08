@@ -9,6 +9,8 @@
 var bbbfly = bbbfly || {};
 bbbfly.map = bbbfly.map || {};
 bbbfly.map.drawing = {
+  _leafletPrefix: 'lf-',
+
   _lastId: 0,
   _styles: {},
 
@@ -18,6 +20,10 @@ bbbfly.map.drawing = {
   icon: {},
   geometry: {},
   handler: {}
+};
+bbbfly.map.drawing.utils.LeafletId = function(obj){
+  var id = Object.isObject(obj) ? obj._leaflet_id : null;
+  return Number.isInteger(id) ? bbbfly.map.drawing._leafletPrefix+id : id;
 };
 bbbfly.map.drawing.utils.GetDrawingId = function(options){
   var id = (options) ? options.ID : null;
