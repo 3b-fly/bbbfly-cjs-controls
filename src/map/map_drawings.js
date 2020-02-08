@@ -207,7 +207,9 @@ bbbfly.map.drawing.core._update = function(){
 
 /** @ignore */
 bbbfly.map.drawing.core._addTo = function(feature){
-  if((feature instanceof L.FeatureGroup) && !this._ParentFeature){
+  if(this._ParentFeature){return false;}
+
+  if(feature instanceof L.FeatureGroup){
     this.Initialize();
 
     this.Scan(function(layer){
@@ -225,10 +227,11 @@ bbbfly.map.drawing.core._addTo = function(feature){
 
 /** @ignore */
 bbbfly.map.drawing.core._removeFrom = function(feature){
-  if(feature && (feature === this._ParentFeature)){
+  if(!feature){feature = this._ParentFeature;}
 
+  if(feature === this._ParentFeature){
     this.Scan(function(layer){
-      layer.removeFrom(this._ParentFeature);
+      layer.removeFrom(feature);
     });
 
     this._ParentFeature = null;
@@ -434,7 +437,7 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
     (drawing instanceof bbbfly.MapDrawing)
     && String.isString(drawing.ID)
     && this._Drawings[drawing.ID]
-    && drawing.RemoveFrom(this._Feature)
+    && drawing.RemoveFrom()
   ){
     delete(this._Drawings[drawing.ID]);
     return true;
@@ -596,7 +599,7 @@ bbbfly.MapDrawing = function(options){
    * @name RemoveFrom
    * @memberof bbbfly.MapDrawing#
    *
-   * @param {mapFeature} feature - Feature to remove drawing from
+   * @param {mapFeature} [feature=undefined] - Feature to remove drawing from
    * @return {boolean} If removed properly
    *
    * @see {@link bbbfly.MapDrawing#AddTo|AddTo()}
