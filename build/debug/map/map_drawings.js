@@ -343,7 +343,6 @@ bbbfly.map.drawing.handler._getDrawing = function(id){
   var drawing = this._Drawings[id];
   return (drawing instanceof bbbfly.MapDrawing) ? drawing : null;
 };
-
 bbbfly.map.drawing.handler._addDrawing = function(drawing){
   if(
     (drawing instanceof bbbfly.MapDrawing)
@@ -356,7 +355,6 @@ bbbfly.map.drawing.handler._addDrawing = function(drawing){
     }
   return false;
 };
-
 bbbfly.map.drawing.handler._removeDrawing = function(drawing){
   if(
     (drawing instanceof bbbfly.MapDrawing)
@@ -465,6 +463,5 @@ bbbfly.MapDrawingsHandler = function(feature){
  *
  * @property {geoJSON|mapGeoJSON} GeoJSON
  * @property {px} [MinPartSize=0] - Hide smaller geometry parts
- *
- * @property {bbbfly.MapGeometry.Style|string} Geometry style or style ID
+ * @property {bbbfly.MapGeometry.Style|string} Style
  */

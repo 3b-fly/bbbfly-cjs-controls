@@ -400,6 +400,7 @@ bbbfly.map.drawing.handler._getDrawing = function(id){
   return (drawing instanceof bbbfly.MapDrawing) ? drawing : null;
 };
 
+/** @ignore */
 bbbfly.map.drawing.handler._addDrawing = function(drawing){
   if(
     (drawing instanceof bbbfly.MapDrawing)
@@ -413,6 +414,7 @@ bbbfly.map.drawing.handler._addDrawing = function(drawing){
   return false;
 };
 
+/** @ignore */
 bbbfly.map.drawing.handler._removeDrawing = function(drawing){
   if(
     (drawing instanceof bbbfly.MapDrawing)
@@ -677,23 +679,11 @@ bbbfly.MapIcon = function(options){
   /** @private */
   drawing._IconHtml = '';
 
-  /**
-   * @function
-   * @name Create
-   * @memberof bbbfly.MapIcon#
-   *
-   * @return {mapMarker} Leaflet marker
-   */
+  /** @private */
   ng_OverrideMethod(drawing,'Create',
     bbbfly.map.drawing.icon._create
   );
-  /**
-   * @function
-   * @name Update
-   * @memberof bbbfly.MapIcon#
-   *
-   * @return {boolean} If created properly
-   */
+  /** @private */
   ng_OverrideMethod(drawing,'Update',
     bbbfly.map.drawing.icon._update
   );
@@ -728,13 +718,7 @@ bbbfly.MapIcon.Style = function(images,className){
 bbbfly.MapGeometry = function(options){
   var drawing = new bbbfly.MapDrawing(options);
 
-  /**
-   * @function
-   * @name Create
-   * @memberof bbbfly.MapGeometry#
-   *
-   * @return {mapGeometry[]} Leaflet geometry
-   */
+  /** @private */
   ng_OverrideMethod(drawing,'Create',
     bbbfly.map.drawing.geometry._create
   );
@@ -813,6 +797,7 @@ bbbfly.MapDrawingsHandler = function(feature){
  *
  * @property {string} ID
  * @property {bbbfly.MapDrawing.selecttype} [SelectType=none]
+ * @property {object|string} Style - Drawing style or style ID
  */
 
 /**
@@ -820,8 +805,7 @@ bbbfly.MapDrawingsHandler = function(feature){
  * @memberOf bbbfly.MapIcon
  *
  * @property {mapPoint} Coordinates
- *
- * @property {bbbfly.MapIcon.Style|string} Icon style or style ID
+ * @property {bbbfly.MapIcon.Style|string} Style
  */
 
 /**
@@ -830,6 +814,5 @@ bbbfly.MapDrawingsHandler = function(feature){
  *
  * @property {geoJSON|mapGeoJSON} GeoJSON
  * @property {px} [MinPartSize=0] - Hide smaller geometry parts
- *
- * @property {bbbfly.MapGeometry.Style|string} Geometry style or style ID
+ * @property {bbbfly.MapGeometry.Style|string} Style
  */
