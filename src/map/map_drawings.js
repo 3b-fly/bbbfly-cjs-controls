@@ -33,7 +33,7 @@ bbbfly.map.drawing.utils.GetDrawingId = function(options){
 bbbfly.map.drawing.utils.GetDrawingStyle = function(options){
   var style = (options) ? options.Style : null;
   if(String.isString(style)){style = bbbfly.map.drawing._styles[style];}
-  return Object.isObject(style) ? style : null;
+  return Object.isObject(style) ? style : {};
 };
 
 /** @ignore */
@@ -90,6 +90,11 @@ bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
     json.features = newFeatures;
   }
   return json;
+};
+
+/** @ignore */
+bbbfly.map.drawing.core._getStyle = function(){
+  return bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
 };
 
 /** @ignore */
@@ -178,10 +183,9 @@ bbbfly.map.drawing.core._doInitialize = function(layer){
 
 /** @ignore */
 bbbfly.map.drawing.core._dispose = function(){
-  for(var i in this._Layers){
-    var layer = this._Layers[i];
+  this.Scan(function(layer){
     layer.remove();
-  }
+  });
 
   this._Layers = [];
   this._ParentFeature = null;
@@ -206,10 +210,9 @@ bbbfly.map.drawing.core._addTo = function(feature){
   if((feature instanceof L.FeatureGroup) && !this._ParentFeature){
     this.Initialize();
 
-    for(var i in this._Layers){
-      var layer = this._Layers[i];
+    this.Scan(function(layer){
       layer.addTo(feature);
-    }
+    });
 
     this._ParentFeature = feature;
 
@@ -224,15 +227,31 @@ bbbfly.map.drawing.core._addTo = function(feature){
 bbbfly.map.drawing.core._removeFrom = function(feature){
   if(feature && (feature === this._ParentFeature)){
 
-    for(var i in this._Layers){
-      var layer = this._Layers[i];
+    this.Scan(function(layer){
       layer.removeFrom(this._ParentFeature);
-    }
+    });
 
     this._ParentFeature = null;
     return true;
   }
   return false;
+};
+
+/** @ignore */
+bbbfly.map.drawing.core._scan = function(callback,def){
+  if(!Boolean.isBoolean(def)){def = false;}
+
+  if(Function.isFunction(callback)){
+    for(var i in this._Layers){
+      var layer = this._Layers[i];
+      var val = callback(layer);
+
+      if(Boolean.isBoolean(val)){
+        return val;
+      }
+    }
+  }
+  return def;
 };
 
 /** @ignore */
@@ -290,9 +309,6 @@ bbbfly.map.drawing.layer._updateZIndex = function(offset){
 };
 
 bbbfly.map.drawing.icon._create = function(){
-  var style = bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
-  if(!(style instanceof bbbfly.MapIcon.Style)){return null;}
-
   var coords = this.Options.Coordinates;
   var marker = null;
 
@@ -313,9 +329,7 @@ bbbfly.map.drawing.icon._create = function(){
 
 /** @ignore */
 bbbfly.map.drawing.icon._update = function(){
-  var style = bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
-  if(!(style instanceof bbbfly.MapIcon.Style)){style = {};}
-
+  var style = this.GetStyle();
   var state = this.GetState();
 
   var over = state.mouseover;
@@ -338,8 +352,9 @@ bbbfly.map.drawing.icon._update = function(){
       html: html
     });
 
-    var layer = this._Layers[0];
-    if(layer){layer.setIcon(icon);}
+    this.Scan(function(layer){
+      layer.setIcon(icon);
+    });
 
     if(over){bbbfly.Renderer.UpdateStackHTML(proxy,state);}
   }
@@ -349,9 +364,7 @@ bbbfly.map.drawing.icon._update = function(){
 
 /** @ignore */
 bbbfly.map.drawing.geometry._create = function(){
-  var style = bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
-  if(!(style instanceof bbbfly.MapGeometry.Style)){return null;}
-
+  var style = this.GetStyle();
   var json = this.Options.GeoJSON;
 
   if(!(json instanceof L.GeoJSON)){
@@ -458,6 +471,14 @@ bbbfly.MapDrawing = function(options){
   /** @private */
   this.DoInitialize = bbbfly.map.drawing.core._doInitialize;
 
+  /**
+   * @function
+   * @name GetStyle
+   * @memberof bbbfly.MapDrawing#
+   *
+   * @return {object} Drawing style definition
+   */
+  this.GetStyle = bbbfly.map.drawing.core._getStyle;
   /**
    * @function
    * @name GetState
@@ -581,6 +602,16 @@ bbbfly.MapDrawing = function(options){
    * @see {@link bbbfly.MapDrawing#AddTo|AddTo()}
    */
   this.RemoveFrom = bbbfly.map.drawing.core._removeFrom;
+  /**
+   * @function
+   * @name Scan
+   * @memberof bbbfly.MapDrawing#
+   *
+   * @param {bbbfly.MapDrawing.scancallback} callback
+   * @param {boolean} def - Default return value
+   * @return {boolean} Scan result value
+   */
+  this.Scan = bbbfly.map.drawing.core._scan;
 
   /**
    * @event

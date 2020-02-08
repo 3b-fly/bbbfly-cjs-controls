@@ -26,7 +26,7 @@ bbbfly.map.drawing.utils.GetDrawingId = function(options){
 bbbfly.map.drawing.utils.GetDrawingStyle = function(options){
   var style = (options) ? options.Style : null;
   if(String.isString(style)){style = bbbfly.map.drawing._styles[style];}
-  return Object.isObject(style) ? style : null;
+  return Object.isObject(style) ? style : {};
 };
 bbbfly.map.drawing.utils.DefineDrawingStyle = function(id,style){
   if(!Object.isObject(style)){return false;}
@@ -77,6 +77,9 @@ bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
     json.features = newFeatures;
   }
   return json;
+};
+bbbfly.map.drawing.core._getStyle = function(){
+  return bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
 };
 bbbfly.map.drawing.core._getState = function(){
   var state = {
@@ -149,10 +152,9 @@ bbbfly.map.drawing.core._doInitialize = function(layer){
   return true;
 };
 bbbfly.map.drawing.core._dispose = function(){
-  for(var i in this._Layers){
-    var layer = this._Layers[i];
+  this.Scan(function(layer){
     layer.remove();
-  }
+  });
 
   this._Layers = [];
   this._ParentFeature = null;
@@ -171,10 +173,9 @@ bbbfly.map.drawing.core._addTo = function(feature){
   if((feature instanceof L.FeatureGroup) && !this._ParentFeature){
     this.Initialize();
 
-    for(var i in this._Layers){
-      var layer = this._Layers[i];
+    this.Scan(function(layer){
       layer.addTo(feature);
-    }
+    });
 
     this._ParentFeature = feature;
 
@@ -187,15 +188,29 @@ bbbfly.map.drawing.core._addTo = function(feature){
 bbbfly.map.drawing.core._removeFrom = function(feature){
   if(feature && (feature === this._ParentFeature)){
 
-    for(var i in this._Layers){
-      var layer = this._Layers[i];
+    this.Scan(function(layer){
       layer.removeFrom(this._ParentFeature);
-    }
+    });
 
     this._ParentFeature = null;
     return true;
   }
   return false;
+};
+bbbfly.map.drawing.core._scan = function(callback,def){
+  if(!Boolean.isBoolean(def)){def = false;}
+
+  if(Function.isFunction(callback)){
+    for(var i in this._Layers){
+      var layer = this._Layers[i];
+      var val = callback(layer);
+
+      if(Boolean.isBoolean(val)){
+        return val;
+      }
+    }
+  }
+  return def;
 };
 bbbfly.map.drawing.core._onMouseEnter = function(){
   this.SetStateValue(bbbfly.MapDrawing.state.mouseover,true);
@@ -241,9 +256,6 @@ bbbfly.map.drawing.layer._updateZIndex = function(offset){
 };
 
 bbbfly.map.drawing.icon._create = function(){
-  var style = bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
-  if(!(style instanceof bbbfly.MapIcon.Style)){return null;}
-
   var coords = this.Options.Coordinates;
   var marker = null;
 
@@ -262,9 +274,7 @@ bbbfly.map.drawing.icon._create = function(){
   return marker;
 };
 bbbfly.map.drawing.icon._update = function(){
-  var style = bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
-  if(!(style instanceof bbbfly.MapIcon.Style)){style = {};}
-
+  var style = this.GetStyle();
   var state = this.GetState();
 
   var over = state.mouseover;
@@ -286,8 +296,9 @@ bbbfly.map.drawing.icon._update = function(){
       html: html
     });
 
-    var layer = this._Layers[0];
-    if(layer){layer.setIcon(icon);}
+    this.Scan(function(layer){
+      layer.setIcon(icon);
+    });
 
     if(over){bbbfly.Renderer.UpdateStackHTML(proxy,state);}
   }
@@ -295,9 +306,7 @@ bbbfly.map.drawing.icon._update = function(){
   this.Update.callParent();
 };
 bbbfly.map.drawing.geometry._create = function(){
-  var style = bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
-  if(!(style instanceof bbbfly.MapGeometry.Style)){return null;}
-
+  var style = this.GetStyle();
   var json = this.Options.GeoJSON;
 
   if(!(json instanceof L.GeoJSON)){
@@ -379,6 +388,7 @@ bbbfly.MapDrawing = function(options){
   this._Initialized = false;
   this.Initialize = bbbfly.map.drawing.core._initialize;
   this.DoInitialize = bbbfly.map.drawing.core._doInitialize;
+  this.GetStyle = bbbfly.map.drawing.core._getStyle;
   this.GetState = bbbfly.map.drawing.core._getState;
   this.GetStateValue = bbbfly.map.drawing.core._getStateValue;
   this.SetStateValue = bbbfly.map.drawing.core._setStateValue;
@@ -389,6 +399,7 @@ bbbfly.MapDrawing = function(options){
   this.Update = bbbfly.map.drawing.core._update;
   this.AddTo = bbbfly.map.drawing.core._addTo;
   this.RemoveFrom = bbbfly.map.drawing.core._removeFrom;
+  this.Scan = bbbfly.map.drawing.core._scan;
   this.OnMouseEnter = bbbfly.map.drawing.core._onMouseEnter;
   this.OnMouseLeave = bbbfly.map.drawing.core._onMouseLeave;
   this.OnClick = bbbfly.map.drawing.core._onClick;
@@ -457,12 +468,3 @@ bbbfly.MapDrawingsHandler = function(feature){
 
   return this;
 };
-
-/**
- * @typedef {bbbfly.MapDrawing.options} options
- * @memberOf bbbfly.MapGeometry
- *
- * @property {geoJSON|mapGeoJSON} GeoJSON
- * @property {px} [MinPartSize=0] - Hide smaller geometry parts
- * @property {bbbfly.MapGeometry.Style|string} Style
- */
