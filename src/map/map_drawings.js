@@ -208,10 +208,11 @@ bbbfly.map.drawing.core._initialize = function(){
 };
 
 /** @ignore */
-bbbfly.map.drawing.core._doInitialize = function(layer){
+bbbfly.map.drawing.core._doInitialize = function(layer,prefix){
   if(!(layer instanceof L.Layer)){return false;}
+  if(!String.isString(prefix)){prefix = '';}
 
-  bbbfly.map.drawing.utils.InitMouseEvents(layer);
+  bbbfly.map.drawing.utils.InitMouseEvents(layer,prefix);
 
   layer.Owner = this;
   L.Util.stamp(layer);
