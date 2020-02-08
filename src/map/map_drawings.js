@@ -93,6 +93,50 @@ bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
 };
 
 /** @ignore */
+bbbfly.map.drawing.utils.InitMouseEvents = function(layer,prefix,callback){
+  if(!(layer instanceof L.Layer)){return;}
+  if(!String.isString(prefix)){prefix = '';}
+
+  if(!Function.isFunction(callback)){
+    callback = bbbfly.map.drawing.layer._onMouseEvent;
+  }
+
+  layer.on(prefix+'mouseover',callback);
+  layer.on(prefix+'mouseout',callback);
+  layer.on(prefix+'click',callback);
+  layer.on(prefix+'dblclick',callback);
+  layer.on(prefix+'contextmenu',callback);
+};
+
+/** @ignore */
+bbbfly.map.drawing.layer._onMouseEvent = function(event){
+  var drawing = event.target.Owner;
+
+  var callback = null;
+  switch(event.type){
+    case 'mouseover': callback = drawing.OnMouseEnter; break;
+    case 'mouseout': callback = drawing.OnMouseLeave; break;
+    case 'click': callback = drawing.OnClick; break;
+    case 'dblclick': callback = drawing.OnDblClick; break;
+    case 'contextmenu': callback = drawing.OnRightClick; break;
+  }
+
+  if(Function.isFunction(callback)){
+    callback.apply(drawing,[event.target,event.sourceTarget]);
+  }
+};
+
+/** @ignore */
+bbbfly.map.drawing.layer._updateZIndex = function(offset){
+  if(this.Owner.GetStateValue(bbbfly.MapDrawing.state.selected)){
+    var rise = (this.options) ? this.options.riseOffset : 0;
+    offset = (offset > rise) ? offset : rise;
+  }
+
+  this._updateZIndex.callParent(offset);
+};
+
+/** @ignore */
 bbbfly.map.drawing.core._getStyle = function(){
   return bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
 };
@@ -167,14 +211,9 @@ bbbfly.map.drawing.core._initialize = function(){
 bbbfly.map.drawing.core._doInitialize = function(layer){
   if(!(layer instanceof L.Layer)){return false;}
 
+  bbbfly.map.drawing.utils.InitMouseEvents(layer);
+
   layer.Owner = this;
-
-  layer.on('mouseover',bbbfly.map.drawing.layer._onEvent);
-  layer.on('mouseout',bbbfly.map.drawing.layer._onEvent);
-  layer.on('click',bbbfly.map.drawing.layer._onEvent);
-  layer.on('dblclick',bbbfly.map.drawing.layer._onEvent);
-  layer.on('contextmenu',bbbfly.map.drawing.layer._onEvent);
-
   L.Util.stamp(layer);
   this._Layers.push(layer);
 
@@ -284,33 +323,6 @@ bbbfly.map.drawing.core._onDblClick = function(){
 };
 
 /** @ignore */
-bbbfly.map.drawing.layer._onEvent = function(event){
-  var drawing = event.target.Owner;
-
-  var callback = null;
-  switch(event.type){
-    case 'mouseover': callback = drawing.OnMouseEnter; break;
-    case 'mouseout': callback = drawing.OnMouseLeave; break;
-    case 'click': callback = drawing.OnClick; break;
-    case 'dblclick': callback = drawing.OnDblClick; break;
-    case 'contextmenu': callback = drawing.OnRightClick; break;
-  }
-
-  if(Function.isFunction(callback)){
-    callback.apply(drawing);
-  }
-};
-
-/** @ignore */
-bbbfly.map.drawing.layer._updateZIndex = function(offset){
-  if(this.Owner.GetStateValue(bbbfly.MapDrawing.state.selected)){
-    var rise = (this.options) ? this.options.riseOffset : 0;
-    offset = (offset > rise) ? offset : rise;
-  }
-
-  this._updateZIndex.callParent(offset);
-};
-
 bbbfly.map.drawing.icon._create = function(){
   var coords = this.Options.Coordinates;
   var marker = null;
