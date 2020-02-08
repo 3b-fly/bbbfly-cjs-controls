@@ -202,7 +202,7 @@ bbbfly.map.drawing.core._update = function(){
 };
 
 /** @ignore */
-bbbfly.map.drawing.core._add = function(feature){
+bbbfly.map.drawing.core._addTo = function(feature){
   if((feature instanceof L.FeatureGroup) && !this._ParentFeature){
     this.Initialize();
 
@@ -216,11 +216,12 @@ bbbfly.map.drawing.core._add = function(feature){
     this.Update();
     return true;
   }
+
   return false;
 };
 
 /** @ignore */
-bbbfly.map.drawing.core._remove = function(feature){
+bbbfly.map.drawing.core._removeFrom = function(feature){
   if(feature && (feature === this._ParentFeature)){
 
     for(var i in this._Layers){
@@ -406,11 +407,11 @@ bbbfly.map.drawing.handler._addDrawing = function(drawing){
     (drawing instanceof bbbfly.MapDrawing)
     && String.isString(drawing.ID)
     && !this._Drawings[drawing.ID]
-    && drawing.Add(this._Feature)
+    && drawing.AddTo(this._Feature)
   ){
-      this._Drawings[drawing.ID] = drawing;
-      return true;
-    }
+    this._Drawings[drawing.ID] = drawing;
+    return true;
+  }
   return false;
 };
 
@@ -420,7 +421,7 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
     (drawing instanceof bbbfly.MapDrawing)
     && String.isString(drawing.ID)
     && this._Drawings[drawing.ID]
-    && drawing.Remove(this._Feature)
+    && drawing.RemoveFrom(this._Feature)
   ){
     delete(this._Drawings[drawing.ID]);
     return true;
@@ -560,26 +561,26 @@ bbbfly.MapDrawing = function(options){
 
   /**
    * @function
-   * @name Add
+   * @name AddTo
    * @memberof bbbfly.MapDrawing#
    *
    * @param {mapFeature} feature - Feature to add drawing to
    * @return {boolean} If added properly
    *
-   * @see {@link bbbfly.MapDrawing#Remove|Remove()}
+   * @see {@link bbbfly.MapDrawing#RemoveFrom|RemoveFrom()}
    */
-  this.Add = bbbfly.map.drawing.core._add;
+  this.AddTo = bbbfly.map.drawing.core._addTo;
   /**
    * @function
-   * @name Remove
+   * @name RemoveFrom
    * @memberof bbbfly.MapDrawing#
    *
    * @param {mapFeature} feature - Feature to remove drawing from
    * @return {boolean} If removed properly
    *
-   * @see {@link bbbfly.MapDrawing#Add|Add()}
+   * @see {@link bbbfly.MapDrawing#AddTo|AddTo()}
    */
-  this.Remove = bbbfly.map.drawing.core._remove;
+  this.RemoveFrom = bbbfly.map.drawing.core._removeFrom;
 
   /**
    * @event
