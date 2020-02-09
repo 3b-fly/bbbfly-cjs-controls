@@ -29,6 +29,13 @@
  */
 
 /**
+ * @typedef {image} image-icon
+ * @property {object} Anchor
+ * @property {px} Anchor.L
+ * @property {px} Anchor.T
+ */
+
+/**
  * @typedef {object} frame
  * @property {image} LeftTop
  * @property {image} RightTop
@@ -72,6 +79,11 @@
  */
 
 /**
+ * @typedef {L.DivIcon} mapIcon
+ * @description {@link http://leafletjs.com/reference-1.4.0.html#divicon|Leaflet div icon}
+ */
+
+/**
  * @typedef {L.Marker} mapMarker
  * @description {@link http://leafletjs.com/reference-1.4.0.html#marker|Leaflet marker}
  */
@@ -79,6 +91,11 @@
 /**
  * @typedef {L.Path} mapGeometry
  * @description {@link http://leafletjs.com/reference-1.4.0.html#path|Leaflet geometry}
+ */
+
+/**
+ * @typedef {L.MarkerClusterGroup} mapCluster
+ * @description {@link http://leaflet.github.io/Leaflet.markercluster/#markercluster|Leaflet markercluster}
  */
 
 /**

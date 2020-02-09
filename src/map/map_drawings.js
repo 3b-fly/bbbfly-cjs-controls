@@ -906,6 +906,17 @@ bbbfly.MapDrawingsHandler = function(feature){
 };
 
 /**
+ * @typedef {function} scancallback
+ * @memberOf bbbfly.MapDrawing
+ *
+ * @description Scans drawing Leaflet layers.
+ *
+ * @param {L.Layer} layer
+ * @return {boolean|undefind}
+ *   Return boolean to stop scan and return that value
+ */
+
+/**
  * @typedef {object} options
  * @memberOf bbbfly.MapDrawing
  *
