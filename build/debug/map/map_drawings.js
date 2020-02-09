@@ -17,8 +17,10 @@ bbbfly.map.drawing = {
   utils: {},
   layer: {},
   core: {},
+  item: {},
   icon: {},
   geometry: {},
+  cluster: {},
   handler: {}
 };
 bbbfly.map.drawing.utils.LeafletId = function(obj){
@@ -103,11 +105,26 @@ bbbfly.map.drawing.layer._onMouseEvent = function(event){
 
   var callback = null;
   switch(event.type){
-    case 'mouseover': callback = drawing.OnMouseEnter; break;
-    case 'mouseout': callback = drawing.OnMouseLeave; break;
-    case 'click': callback = drawing.OnClick; break;
-    case 'dblclick': callback = drawing.OnDblClick; break;
-    case 'contextmenu': callback = drawing.OnRightClick; break;
+    case 'mouseover':
+    case 'clustermouseover':
+      callback = drawing.OnMouseEnter;
+    break;
+    case 'mouseout':
+    case 'clustermouseout':
+      callback = drawing.OnMouseLeave;
+    break;
+    case 'click':
+    case 'clusterclick':
+      callback = drawing.OnClick;
+    break;
+    case 'dblclick':
+    case 'clusterdblclick':
+      callback = drawing.OnDblClick;
+    break;
+    case 'contextmenu':
+    case 'clustercontextmenu':
+      callback = drawing.OnRightClick;
+    break;
   }
 
   if(Function.isFunction(callback)){
@@ -124,42 +141,6 @@ bbbfly.map.drawing.layer._updateZIndex = function(offset){
 };
 bbbfly.map.drawing.core._getStyle = function(){
   return bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
-};
-bbbfly.map.drawing.core._getState = function(){
-  var state = {
-    mouseover: this.GetStateValue(bbbfly.MapDrawing.state.mouseover),
-    disabled: this.GetStateValue(bbbfly.MapDrawing.state.disabled),
-    selected: this.GetStateValue(bbbfly.MapDrawing.state.selected),
-    grayed: this.GetStateValue(bbbfly.MapDrawing.state.grayed)
-  };
-
-  if(state.disabled){state.mouseover = false;}
-  return state;
-};
-bbbfly.map.drawing.core._getStateValue = function(state){
-  return !!(this._State & state);
-};
-bbbfly.map.drawing.core._setStateValue = function(state,value,update){
-  var hasState = !!(this._State & state);
-  if(value === hasState){return false;}
-
-  if(value){this._State = (this._State | state);}
-  else{this._State = (this._State ^ state);}
-
-  if(update){this.Update();}
-  return true;
-};
-bbbfly.map.drawing.core._getSelected = function(){
-  return this.GetStateValue(bbbfly.MapDrawing.state.selected);
-};
-bbbfly.map.drawing.core._setSelected = function(selected,update){
-  if(!Boolean.isBoolean(selected)){selected = true;}
-  if(this.GetSelected() === selected){return true;}
-  if(!Boolean.isBoolean(update)){update = true;}
-
-  var state = bbbfly.MapDrawing.state.selected;
-  this.SetStateValue(state,selected,update);
-  return true;
 };
 bbbfly.map.drawing.core._initialize = function(){
   if(this._Initialized){return true;}
@@ -200,19 +181,13 @@ bbbfly.map.drawing.core._dispose = function(){
   this._ParentFeature = null;
   this._Initialized = false;
 };
-bbbfly.map.drawing.core._update = function(){
-  if(!this.GetStateValue(bbbfly.MapDrawing.state.disabled)){
-    if(
-      this.GetStateValue(bbbfly.MapDrawing.state.mouseover)
-      || this.GetStateValue(bbbfly.MapDrawing.state.selected)
-    ){
-    }
-  }
-};
 bbbfly.map.drawing.core._addTo = function(feature){
   if(this._ParentFeature){return false;}
 
-  if(feature instanceof L.FeatureGroup){
+  if(
+    (feature instanceof L.FeatureGroup)
+    || (feature instanceof L.MarkerClusterGroup)
+  ){
     this.Initialize();
 
     this.Scan(function(layer){
@@ -221,7 +196,9 @@ bbbfly.map.drawing.core._addTo = function(feature){
 
     this._ParentFeature = feature;
 
-    this.Update();
+    if(Function.isFunction(this.Update)){
+      this.Update();
+    }
     return true;
   }
 
@@ -255,20 +232,63 @@ bbbfly.map.drawing.core._scan = function(callback,def){
   }
   return def;
 };
-bbbfly.map.drawing.core._onMouseEnter = function(){
+bbbfly.map.drawing.item._update = function(){
+  if(!this.GetStateValue(bbbfly.MapDrawing.state.disabled)){
+    if(
+      this.GetStateValue(bbbfly.MapDrawing.state.mouseover)
+      || this.GetStateValue(bbbfly.MapDrawing.state.selected)
+    ){
+    }
+  }
+};
+bbbfly.map.drawing.item._getState = function(){
+  var state = {
+    mouseover: this.GetStateValue(bbbfly.MapDrawing.state.mouseover),
+    disabled: this.GetStateValue(bbbfly.MapDrawing.state.disabled),
+    selected: this.GetStateValue(bbbfly.MapDrawing.state.selected),
+    grayed: this.GetStateValue(bbbfly.MapDrawing.state.grayed)
+  };
+
+  if(state.disabled){state.mouseover = false;}
+  return state;
+};
+bbbfly.map.drawing.item._getStateValue = function(state){
+  return !!(this._State & state);
+};
+bbbfly.map.drawing.item._setStateValue = function(state,value,update){
+  var hasState = !!(this._State & state);
+  if(value === hasState){return false;}
+
+  if(value){this._State = (this._State | state);}
+  else{this._State = (this._State ^ state);}
+
+  if(update){this.Update();}
+  return true;
+};
+bbbfly.map.drawing.item._getSelected = function(){
+  return this.GetStateValue(bbbfly.MapDrawing.state.selected);
+};
+bbbfly.map.drawing.item._setSelected = function(selected,update){
+  if(!Boolean.isBoolean(selected)){selected = true;}
+  if(this.GetSelected() === selected){return true;}
+  if(!Boolean.isBoolean(update)){update = true;}
+
+  var state = bbbfly.MapDrawing.state.selected;
+  this.SetStateValue(state,selected,update);
+  return true;
+};
+bbbfly.map.drawing.item._onMouseEnter = function(){
   this.SetStateValue(bbbfly.MapDrawing.state.mouseover,true);
-  bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
 };
-bbbfly.map.drawing.core._onMouseLeave = function(){
+bbbfly.map.drawing.item._onMouseLeave = function(){
   this.SetStateValue(bbbfly.MapDrawing.state.mouseover,false);
-  bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
 };
-bbbfly.map.drawing.core._onClick = function(){
+bbbfly.map.drawing.item._onClick = function(){
   if((this.Options.SelectType & bbbfly.MapDrawing.selecttype.click)){
     this.SetSelected(!this.GetSelected(),true);
   }
 };
-bbbfly.map.drawing.core._onDblClick = function(){
+bbbfly.map.drawing.item._onDblClick = function(){
   if((this.Options.SelectType & bbbfly.MapDrawing.selecttype.dblclick)){
     this.SetSelected(!this.GetSelected(),true);
   }
@@ -323,6 +343,14 @@ bbbfly.map.drawing.icon._update = function(){
 
   this.Update.callParent();
 };
+bbbfly.map.drawing.icon._onMouseEnter = function(){
+  this.OnMouseEnter.callParent();
+  bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
+};
+bbbfly.map.drawing.icon._onMouseLeave = function(){
+  this.OnMouseLeave.callParent();
+  bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
+};
 bbbfly.map.drawing.geometry._create = function(){
   var style = this.GetStyle();
   var json = this.Options.GeoJSON;
@@ -366,7 +394,108 @@ bbbfly.map.drawing.geometry._project = function(){
 
   node.style.display = display;
 };
+bbbfly.map.drawing.cluster._create = function(){
+  var style = this.GetStyle();
+  var state = this.GetState();
 
+  var proxy = bbbfly.Renderer.StackProxy(style.images,state);
+  this._IconProxy = proxy;
+
+  var group = new L.MarkerClusterGroup({
+    spiderfyOnMaxZoom: true,
+    spiderLegPolylineOptions: {}, //TODO
+    iconCreateFunction: bbbfly.map.drawing.cluster._createIcon,
+
+    showCoverageOnHover: false,
+    removeOutsideVisibleBounds: false,
+    maxClusterRadius: 50, //TODO
+    zoomToBoundsOnClick: true
+  });
+
+  group.on('spiderfied',bbbfly.map.drawing.cluster._onSpiderfyChanged);
+  group.on('unspiderfied',bbbfly.map.drawing.cluster._onSpiderfyChanged);
+
+  return group;
+};
+bbbfly.map.drawing.cluster._update = function(){
+  this.Scan(function(layer){
+    layer.refreshClusters();
+  });
+};
+bbbfly.map.drawing.cluster._getState = function(){
+  var state = {};
+  console.log('CLUSTER STATE',state); //TODO
+  return state;
+};
+bbbfly.map.drawing.cluster._doInitialize = function(layer){
+  this.DoInitialize.callParent(layer,'cluster');
+};
+bbbfly.map.drawing.cluster._onMouseEnter = function(group,cluster){
+  console.log('CLUSTER',cluster); //TODO
+  var id = bbbfly.map.drawing.utils.LeafletId(cluster);
+  bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState(),id);
+};
+bbbfly.map.drawing.cluster._onMouseLeave = function(group,cluster){
+  var id = bbbfly.map.drawing.utils.LeafletId(cluster);
+  bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState(),id);
+};
+bbbfly.map.drawing.cluster._addDrawing = function(drawing){
+  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
+
+  return this.Scan(function(layer){
+    if(drawing.AddTo(layer)){return true;}
+  });
+};
+bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
+  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
+
+  return this.Scan(function(layer){
+    if(drawing.RemoveFrom(layer)){return true;}
+  });
+};
+bbbfly.map.drawing.cluster._createIcon = function(cluster){
+  var drawing = cluster._group.Owner;
+  var proxy = drawing._IconProxy;
+  if(!proxy){return null;}
+
+  var style = drawing.GetStyle();
+  var state = drawing.GetState();
+
+  var id = bbbfly.map.drawing.utils.LeafletId(cluster);
+  var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg',id);
+
+  var showNumber = drawing.Options.ShowNumber;
+  if(!Boolean.isBoolean(showNumber)){showNumber = true;}
+
+  if(showNumber){
+    var childCnt = cluster.getChildCount();
+    var imgCnt = Array.isArray(proxy.Imgs) ? proxy.Imgs.length : 0;
+
+    var textStyle = {
+      'display': 'block',
+      'position': 'absolute',
+      'text-align': 'center',
+      'padding': bbbfly.Renderer.StyleDim(0),
+      'margin': bbbfly.Renderer.StyleDim(0),
+      'z-index': (imgCnt+1).toString()
+    };
+
+    textStyle = bbbfly.Renderer.StyleToString(textStyle);
+    html += '<span id="'+id+'_T" class="MapIconText"'+textStyle+'>'
+        +childCnt
+      +'</span>';
+  }
+
+  return L.divIcon({
+      iconSize: [proxy.W,proxy.H],
+      iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
+      className: style.className,
+      html: html
+    });
+};
+bbbfly.map.drawing.cluster._onSpiderfyChanged = function(){
+  this.Owner.Update();
+};
 bbbfly.map.drawing.handler._getDrawing = function(id){
   var drawing = this._Drawings[id];
   return (drawing instanceof bbbfly.MapDrawing) ? drawing : null;
@@ -376,10 +505,15 @@ bbbfly.map.drawing.handler._addDrawing = function(drawing){
     (drawing instanceof bbbfly.MapDrawing)
     && String.isString(drawing.ID)
     && !this._Drawings[drawing.ID]
-    && drawing.AddTo(this._Feature)
   ){
-    this._Drawings[drawing.ID] = drawing;
-    return true;
+    var added = (this._MarkerCluster)
+      ? this._MarkerCluster.AddDrawing(drawing)
+      : drawing.AddTo(this._Feature);
+
+    if(added){
+      this._Drawings[drawing.ID] = drawing;
+      return true;
+    }
   }
   return false;
 };
@@ -395,33 +529,41 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
   }
   return false;
 };
+bbbfly.map.drawing.handler._beginClustering = function(cluster){
+  if(!cluster){return;}
+
+  cluster.Initialize();
+  this._MarkerCluster = cluster;
+};
+bbbfly.map.drawing.handler._endClustering = function(){
+  if(!this._MarkerCluster){return false;}
+
+  var cluster = this._MarkerCluster;
+  this._MarkerCluster = null;
+
+  return this.AddDrawing(cluster);
+};
 bbbfly.MapDrawing = function(options){
   if(!Object.isObject(options)){options = null;}
 
   this.ID = bbbfly.map.drawing.utils.GetDrawingId(options);
   this.Options = Object.isObject(options) ? options : {};
-  this._State = 0;
   this._Layers = [];
   this._ParentFeature = null;
   this._Initialized = false;
   this.Initialize = bbbfly.map.drawing.core._initialize;
   this.DoInitialize = bbbfly.map.drawing.core._doInitialize;
-  this.GetStyle = bbbfly.map.drawing.core._getStyle;
-  this.GetState = bbbfly.map.drawing.core._getState;
-  this.GetStateValue = bbbfly.map.drawing.core._getStateValue;
-  this.SetStateValue = bbbfly.map.drawing.core._setStateValue;
-  this.GetSelected = bbbfly.map.drawing.core._getSelected;
-  this.SetSelected = bbbfly.map.drawing.core._setSelected;
-  this.Dispose = bbbfly.map.drawing.core._dispose;
   this.Create = null;
-  this.Update = bbbfly.map.drawing.core._update;
+  this.Update = null;
+  this.Dispose = bbbfly.map.drawing.core._dispose;
+  this.GetStyle = bbbfly.map.drawing.core._getStyle;
   this.AddTo = bbbfly.map.drawing.core._addTo;
   this.RemoveFrom = bbbfly.map.drawing.core._removeFrom;
   this.Scan = bbbfly.map.drawing.core._scan;
-  this.OnMouseEnter = bbbfly.map.drawing.core._onMouseEnter;
-  this.OnMouseLeave = bbbfly.map.drawing.core._onMouseLeave;
-  this.OnClick = bbbfly.map.drawing.core._onClick;
-  this.OnDblClick = bbbfly.map.drawing.core._onDblClick;
+  this.OnMouseEnter = null;
+  this.OnMouseLeave = null;
+  this.OnClick = null;
+  this.OnDblClick = null;
   this.OnRightClick = null;
 };
 bbbfly.MapDrawing.state = {
@@ -436,8 +578,34 @@ bbbfly.MapDrawing.selecttype = {
   dblclick: 2,
   both: 3
 };
-bbbfly.MapIcon = function(options){
+bbbfly.MapDrawingItem = function(options){
   var drawing = new bbbfly.MapDrawing(options);
+  drawing._State = 0;
+  ng_OverrideMethod(drawing,'Update',
+    bbbfly.map.drawing.item._update
+  );
+  ng_OverrideMethod(drawing,'OnMouseEnter',
+    bbbfly.map.drawing.item._onMouseEnter
+  );
+  ng_OverrideMethod(drawing,'OnMouseLeave',
+    bbbfly.map.drawing.item._onMouseLeave
+  );
+  ng_OverrideMethod(drawing,'OnClick',
+    bbbfly.map.drawing.item._onClick
+  );
+  ng_OverrideMethod(drawing,'OnDblClick',
+    bbbfly.map.drawing.item._onDblClick
+  );
+  drawing.GetState = bbbfly.map.drawing.item._getState;
+  drawing.GetStateValue = bbbfly.map.drawing.item._getStateValue;
+  drawing.SetStateValue = bbbfly.map.drawing.item._setStateValue;
+  drawing.GetSelected = bbbfly.map.drawing.item._getSelected;
+  drawing.SetSelected = bbbfly.map.drawing.item._setSelected;
+
+  return drawing;
+};
+bbbfly.MapIcon = function(options){
+  var drawing = new bbbfly.MapDrawingItem(options);
   drawing._IconProxy = null;
   drawing._IconHtml = '';
   ng_OverrideMethod(drawing,'Create',
@@ -445,6 +613,12 @@ bbbfly.MapIcon = function(options){
   );
   ng_OverrideMethod(drawing,'Update',
     bbbfly.map.drawing.icon._update
+  );
+  ng_OverrideMethod(drawing,'OnMouseEnter',
+    bbbfly.map.drawing.icon._onMouseEnter
+  );
+  ng_OverrideMethod(drawing,'OnMouseLeave',
+    bbbfly.map.drawing.icon._onMouseLeave
   );
 
   return drawing;
@@ -457,7 +631,7 @@ bbbfly.MapIcon.Style = function(images,className){
   this.className = className;
 };
 bbbfly.MapGeometry = function(options){
-  var drawing = new bbbfly.MapDrawing(options);
+  var drawing = new bbbfly.MapDrawingItem(options);
   ng_OverrideMethod(drawing,'Create',
     bbbfly.map.drawing.geometry._create
   );
@@ -476,13 +650,46 @@ bbbfly.MapGeometry.Style = function(color,borderWidth){
   this.fillColor = color;
   this.fillOpacity = 0.2;
 };
+bbbfly.MapMarkerCluster = function(options){
+  var drawing = new bbbfly.MapDrawing(options);
+  drawing._IconProxy = null;
+  ng_OverrideMethod(drawing,'Create',
+    bbbfly.map.drawing.cluster._create
+  );
+  ng_OverrideMethod(drawing,'Update',
+    bbbfly.map.drawing.cluster._update
+  );
+  ng_OverrideMethod(drawing,'DoInitialize',
+    bbbfly.map.drawing.cluster._doInitialize
+  );
+  ng_OverrideMethod(drawing,'OnMouseEnter',
+    bbbfly.map.drawing.cluster._onMouseEnter
+  );
+  ng_OverrideMethod(drawing,'OnMouseLeave',
+    bbbfly.map.drawing.cluster._onMouseLeave
+  );
+  drawing.GetState = bbbfly.map.drawing.cluster._getState;
+  drawing.AddDrawing = bbbfly.map.drawing.cluster._addDrawing;
+  drawing.RemoveDrawing = bbbfly.map.drawing.cluster._removeDrawing;
+
+  return drawing;
+};
 bbbfly.MapDrawingsHandler = function(feature){
   if(!(feature instanceof L.FeatureGroup)){return null;}
   this._Feature = feature;
   this._Drawings = {};
+  this._MarkerCluster = null;
   this.GetDrawing = bbbfly.map.drawing.handler._getDrawing;
   this.AddDrawing = bbbfly.map.drawing.handler._addDrawing;
   this.RemoveDrawing = bbbfly.map.drawing.handler._removeDrawing;
-
-  return this;
+  this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;
+  this.EndClustering = bbbfly.map.drawing.handler._endClustering;
 };
+
+/**
+ * @typedef {bbbfly.MapDrawing.options} options
+ * @memberOf bbbfly.MapMarkerCluster
+ *
+ * @property {boolean} [ShowNumber=true]
+ * @property {bbbfly.MapIcon.Style|string} Style
+ */
