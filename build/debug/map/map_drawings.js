@@ -20,6 +20,7 @@ bbbfly.map.drawing = {
   item: {},
   icon: {},
   geometry: {},
+  cluster: {},
   handler: {}
 };
 bbbfly.map.drawing.utils.LeafletId = function(obj){
@@ -104,15 +105,30 @@ bbbfly.map.drawing.layer._onMouseEvent = function(event){
 
   var callback = null;
   switch(event.type){
-    case 'mouseover': callback = drawing.OnMouseEnter; break;
-    case 'mouseout': callback = drawing.OnMouseLeave; break;
-    case 'click': callback = drawing.OnClick; break;
-    case 'dblclick': callback = drawing.OnDblClick; break;
-    case 'contextmenu': callback = drawing.OnRightClick; break;
+    case 'mouseover':
+    case 'clustermouseover':
+      callback = drawing.OnMouseEnter;
+    break;
+    case 'mouseout':
+    case 'clustermouseout':
+      callback = drawing.OnMouseLeave;
+    break;
+    case 'click':
+    case 'clusterclick':
+      callback = drawing.OnClick;
+    break;
+    case 'dblclick':
+    case 'clusterdblclick':
+      callback = drawing.OnDblClick;
+    break;
+    case 'contextmenu':
+    case 'clustercontextmenu':
+      callback = drawing.OnRightClick;
+    break;
   }
 
   if(Function.isFunction(callback)){
-    callback.apply(drawing,[event.target,event.sourceTarget]);
+    callback.apply(drawing,[event.sourceTarget]);
   }
 };
 bbbfly.map.drawing.layer._updateZIndex = function(offset){
@@ -378,7 +394,129 @@ bbbfly.map.drawing.geometry._project = function(){
 
   node.style.display = display;
 };
+bbbfly.map.drawing.cluster._create = function(){
 
+  var group = new L.MarkerClusterGroup({
+    spiderfyOnMaxZoom: true,
+    spiderLegPolylineOptions: {}, //TODO
+    iconCreateFunction: bbbfly.map.drawing.cluster._createIcon,
+
+    showCoverageOnHover: false,
+    removeOutsideVisibleBounds: false,
+    maxClusterRadius: 50, //TODO
+    zoomToBoundsOnClick: true
+  });
+
+  group.on('spiderfied',bbbfly.map.drawing.cluster._onSpiderfyChanged);
+  group.on('unspiderfied',bbbfly.map.drawing.cluster._onSpiderfyChanged);
+
+  return group;
+};
+bbbfly.map.drawing.cluster._update = function(){
+  this.Scan(function(layer){
+    layer.refreshClusters();
+  });
+};
+bbbfly.map.drawing.cluster._getState = function(cluster,def){
+  var state = {};
+
+  if(cluster instanceof L.MarkerCluster){
+    var spiderfied = (cluster._group._spiderfied === cluster);
+
+    if(!spiderfied){
+      var markers = cluster.getAllChildMarkers();
+
+      for(var i in markers){
+        var marker = markers[i];
+
+        var selected = marker.Owner.GetStateValue(
+          bbbfly.MapDrawing.state.selected
+        );
+
+        if(selected){
+          state.selected = true;
+          break;
+        }
+      }
+    }
+  }
+
+  if(Object.isObject(def)){
+    ng_MergeVarReplace(state,def,true);
+  }
+  return state;
+};
+bbbfly.map.drawing.cluster._doInitialize = function(layer){
+  this.DoInitialize.callParent(layer,'cluster');
+};
+bbbfly.map.drawing.cluster._onMouseEnter = function(cluster){
+  var state = this.GetState(cluster,{mouseover:true});
+  var id = bbbfly.map.drawing.utils.LeafletId(cluster);
+  bbbfly.Renderer.UpdateStackHTML(cluster._iconProxy,state,id);
+};
+bbbfly.map.drawing.cluster._onMouseLeave = function(cluster){
+  var state = this.GetState(cluster,{mouseover:false});
+  var id = bbbfly.map.drawing.utils.LeafletId(cluster);
+  bbbfly.Renderer.UpdateStackHTML(cluster._iconProxy,state,id);
+};
+bbbfly.map.drawing.cluster._addDrawing = function(drawing){
+  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
+
+  return this.Scan(function(layer){
+    if(drawing.AddTo(layer)){return true;}
+  });
+};
+bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
+  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
+
+  return this.Scan(function(layer){
+    if(drawing.RemoveFrom(layer)){return true;}
+  });
+};
+bbbfly.map.drawing.cluster._createIcon = function(cluster){
+  var drawing = cluster._group.Owner;
+
+  var style = drawing.GetStyle();
+  var state = drawing.GetState(cluster);
+
+  var id = bbbfly.map.drawing.utils.LeafletId(cluster);
+  var proxy = bbbfly.Renderer.StackProxy(style.images,state);
+  var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg',id);
+
+  var showNumber = drawing.Options.ShowNumber;
+  if(!Boolean.isBoolean(showNumber)){showNumber = true;}
+
+  if(showNumber){
+    var childCnt = cluster.getChildCount();
+    var imgCnt = Array.isArray(proxy.Imgs) ? proxy.Imgs.length : 0;
+
+    var textStyle = {
+      'display': 'block',
+      'position': 'absolute',
+      'text-align': 'center',
+      'padding': bbbfly.Renderer.StyleDim(0),
+      'margin': bbbfly.Renderer.StyleDim(0),
+      'z-index': (imgCnt+1).toString()
+    };
+
+    textStyle = bbbfly.Renderer.StyleToString(textStyle);
+    html += '<span id="'+id+'_T" class="MapIconText"'+textStyle+'>'
+        +childCnt
+      +'</span>';
+  }
+
+  cluster._iconProxy = proxy;
+
+  return L.divIcon({
+      iconSize: [proxy.W,proxy.H],
+      iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
+      className: style.className,
+      html: html
+    });
+};
+bbbfly.map.drawing.cluster._onSpiderfyChanged = function(){
+  this.Owner.Update();
+};
 bbbfly.map.drawing.handler._getDrawing = function(id){
   var drawing = this._Drawings[id];
   return (drawing instanceof bbbfly.MapDrawing) ? drawing : null;
@@ -388,10 +526,15 @@ bbbfly.map.drawing.handler._addDrawing = function(drawing){
     (drawing instanceof bbbfly.MapDrawing)
     && String.isString(drawing.ID)
     && !this._Drawings[drawing.ID]
-    && drawing.AddTo(this._Feature)
   ){
-    this._Drawings[drawing.ID] = drawing;
-    return true;
+    var added = (this._CurrentCluster)
+      ? this._CurrentCluster.AddDrawing(drawing)
+      : drawing.AddTo(this._Feature);
+
+    if(added){
+      this._Drawings[drawing.ID] = drawing;
+      return true;
+    }
   }
   return false;
 };
@@ -406,6 +549,20 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
     return true;
   }
   return false;
+};
+bbbfly.map.drawing.handler._beginClustering = function(cluster){
+  if(!cluster){return;}
+
+  cluster.Initialize();
+  this._CurrentCluster = cluster;
+};
+bbbfly.map.drawing.handler._endClustering = function(){
+  if(!this._CurrentCluster){return false;}
+
+  var cluster = this._CurrentCluster;
+  this._CurrentCluster = null;
+
+  return this.AddDrawing(cluster);
 };
 bbbfly.MapDrawing = function(options){
   if(!Object.isObject(options)){options = null;}
@@ -514,13 +671,45 @@ bbbfly.MapGeometry.Style = function(color,borderWidth){
   this.fillColor = color;
   this.fillOpacity = 0.2;
 };
+bbbfly.MapMarkerCluster = function(options){
+  var drawing = new bbbfly.MapDrawing(options);
+  ng_OverrideMethod(drawing,'Create',
+    bbbfly.map.drawing.cluster._create
+  );
+  ng_OverrideMethod(drawing,'Update',
+    bbbfly.map.drawing.cluster._update
+  );
+  ng_OverrideMethod(drawing,'DoInitialize',
+    bbbfly.map.drawing.cluster._doInitialize
+  );
+  ng_OverrideMethod(drawing,'OnMouseEnter',
+    bbbfly.map.drawing.cluster._onMouseEnter
+  );
+  ng_OverrideMethod(drawing,'OnMouseLeave',
+    bbbfly.map.drawing.cluster._onMouseLeave
+  );
+  drawing.GetState = bbbfly.map.drawing.cluster._getState;
+  drawing.AddDrawing = bbbfly.map.drawing.cluster._addDrawing;
+  drawing.RemoveDrawing = bbbfly.map.drawing.cluster._removeDrawing;
+
+  return drawing;
+};
 bbbfly.MapDrawingsHandler = function(feature){
   if(!(feature instanceof L.FeatureGroup)){return null;}
   this._Feature = feature;
   this._Drawings = {};
+  this._CurrentCluster = null;
   this.GetDrawing = bbbfly.map.drawing.handler._getDrawing;
   this.AddDrawing = bbbfly.map.drawing.handler._addDrawing;
   this.RemoveDrawing = bbbfly.map.drawing.handler._removeDrawing;
-
-  return this;
+  this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;
+  this.EndClustering = bbbfly.map.drawing.handler._endClustering;
 };
+
+/**
+ * @typedef {bbbfly.MapDrawing.options} options
+ * @memberOf bbbfly.MapMarkerCluster
+ *
+ * @property {boolean} [ShowNumber=true]
+ * @property {bbbfly.MapIcon.Style|string} Style
+ */

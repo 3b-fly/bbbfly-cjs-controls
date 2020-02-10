@@ -111,8 +111,10 @@
  * @version 2.0.0
  *
  * @description
- *   Contains {@link https://leafletjs.com/reference-1.4.0.html|Leaflet library 1.4.0}
- *   and {@link https://esri.github.io/esri-leaflet/api-reference/|Esri Leaflet library 2.2.3}
+ *   Contains:
+ *   {@link https://leafletjs.com/reference-1.4.0.html|Leaflet library 1.4.0}
+ *   {@link https://esri.github.io/esri-leaflet/api-reference/|Esri Leaflet library 2.2.3}
+ *   {@link https://leaflet.github.io/Leaflet.markercluster/#markercluster|Leaflet MarkerCluster library 1.4.1}
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.0): crossbrowser}
