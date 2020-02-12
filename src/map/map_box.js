@@ -140,6 +140,15 @@ bbbfly.map.box._setMapControlsVisible = function(type,visible){
   }
 };
 
+/** @ignore */
+bbbfly.map.box._fitDrawings = function(){
+  if(this._DrawingsFeature){
+    var bounds = this._DrawingsFeature.getBounds();
+    if(bounds.isValid()){return this.FitBounds(bounds);}
+  }
+  return false;
+};
+
 /**
  * @class
  * @type control
@@ -224,7 +233,17 @@ bbbfly.MapBox = function(def,ref,parent){
        * @param {boolean} [visible=true]
        * @return {boolean} If map control visibility was set.
        */
-      SetMapControlsVisible: bbbfly.map.box._setMapControlsVisible
+      SetMapControlsVisible: bbbfly.map.box._setMapControlsVisible,
+
+      /**
+      * @function
+      * @name FitDrawings
+      * @memberof bbbfly.MapBox#
+      * @description Pan and zoom to see all drawings
+      *
+      * @return {boolean} If fit was successful
+      */
+      FitDrawings: bbbfly.map.box._fitDrawings
     }
   });
 

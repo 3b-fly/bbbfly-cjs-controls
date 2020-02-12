@@ -121,6 +121,13 @@ bbbfly.map.box._setMapControlsVisible = function(type,visible){
     }
   }
 };
+bbbfly.map.box._fitDrawings = function(){
+  if(this._DrawingsFeature){
+    var bounds = this._DrawingsFeature.getBounds();
+    if(bounds.isValid()){return this.FitBounds(bounds);}
+  }
+  return false;
+};
 bbbfly.MapBox = function(def,ref,parent){
   def = def || {};
 
@@ -143,7 +150,8 @@ bbbfly.MapBox = function(def,ref,parent){
       LinkMapControl: bbbfly.map.box._linkMapControl,
       UnlinkMapControl: bbbfly.map.box._unlinkMapControl,
       GetMapControls: bbbfly.map.box._getMapControls,
-      SetMapControlsVisible: bbbfly.map.box._setMapControlsVisible
+      SetMapControlsVisible: bbbfly.map.box._setMapControlsVisible,
+      FitDrawings: bbbfly.map.box._fitDrawings
     }
   });
 
