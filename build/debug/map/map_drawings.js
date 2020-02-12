@@ -27,7 +27,7 @@ bbbfly.map.drawing.utils.LeafletId = function(obj){
   var id = Object.isObject(obj) ? obj._leaflet_id : null;
   return Number.isInteger(id) ? bbbfly.map.drawing._leafletPrefix+id : id;
 };
-bbbfly.map.drawing.utils.GetDrawingId = function(options){
+bbbfly.map.drawing.utils.DrawingId = function(options){
   var id = (options) ? options.ID : null;
   return String.isString(id) ? id : '_'+(++bbbfly.map.drawing._lastId);
 };
@@ -584,7 +584,7 @@ bbbfly.map.drawing.handler._endClustering = function(){
 bbbfly.MapDrawing = function(options){
   if(!Object.isObject(options)){options = {};}
 
-  this.ID = bbbfly.map.drawing.utils.GetDrawingId(options);
+  this.ID = bbbfly.map.drawing.utils.DrawingId(options);
   this.Options = options;
   this._Layers = [];
   this._ParentFeature = null;
