@@ -672,16 +672,25 @@ bbbfly.map.drawing.handler._addDrawing = function(drawing){
 
 /** @ignore */
 bbbfly.map.drawing.handler._removeDrawing = function(drawing){
-  if(
-    (drawing instanceof bbbfly.MapDrawing)
-    && String.isString(drawing.ID)
-    && this._Drawings[drawing.ID]
-    && drawing.RemoveFrom()
-  ){
+  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
+  if(drawing !== this._Drawings[drawing.ID]){return false;}
+
+  if(drawing.RemoveFrom()){
     delete(this._Drawings[drawing.ID]);
     return true;
   }
   return false;
+};
+
+/** @ignore */
+bbbfly.map.drawing.handler._clearDrawings = function(){
+  for(var id in this._Drawings){
+    var drawing = this._Drawings[id];
+
+    if(drawing.RemoveFrom()){
+      delete(this._Drawings[id]);
+    }
+  }
 };
 
 /** @ignore */
@@ -1204,6 +1213,13 @@ bbbfly.MapDrawingsHandler = function(feature){
    * @return {boolean} - If removed
    */
   this.RemoveDrawing = bbbfly.map.drawing.handler._removeDrawing;
+  /**
+   * @function
+   * @name ClearDrawings
+   * @memberof bbbfly.MapDrawingsHandler#
+   * @description Remove all drawings
+   */
+  this.ClearDrawings = bbbfly.map.drawing.handler._clearDrawings;
 
   /**
    * @function
