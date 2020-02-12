@@ -884,21 +884,21 @@ bbbfly.MapDrawingItem = function(options){
   /**
    * @function
    * @name GetState
-   * @memberof bbbfly.MapDrawing#
+   * @memberof bbbfly.MapDrawingItem#
    *
    * @description
    *   Get computed renderer state
    *
    * @return {bbbfly.Renderer.state} Drawing state
    *
-   * @see {@link bbbfly.MapDrawing#GetStateValue|GetStateValue()}
-   * @see {@link bbbfly.MapDrawing#SetStateValue|SetStateValue()}
+   * @see {@link bbbfly.MapDrawingItem#GetStateValue|GetStateValue()}
+   * @see {@link bbbfly.MapDrawingItem#SetStateValue|SetStateValue()}
    */
   drawing.GetState = bbbfly.map.drawing.item._getState;
   /**
    * @function
    * @name GetStateValue
-   * @memberof bbbfly.MapDrawing#
+   * @memberof bbbfly.MapDrawingItem#
    *
    * @description
    *   Get drawing state value
@@ -906,14 +906,14 @@ bbbfly.MapDrawingItem = function(options){
    * @param {bbbfly.MapDrawing.state} state
    * @return {boolean} Value
    *
-   * @see {@link bbbfly.MapDrawing#GetState|GetState()}
-   * @see {@link bbbfly.MapDrawing#SetStateValue|SetStateValue()}
+   * @see {@link bbbfly.MapDrawingItem#GetState|GetState()}
+   * @see {@link bbbfly.MapDrawingItem#SetStateValue|SetStateValue()}
    */
   drawing.GetStateValue = bbbfly.map.drawing.item._getStateValue;
   /**
    * @function
    * @name SetStateValue
-   * @memberof bbbfly.MapDrawing#
+   * @memberof bbbfly.MapDrawingItem#
    *
    * @description
    *   Set drawing state value
@@ -923,29 +923,29 @@ bbbfly.MapDrawingItem = function(options){
    * @param {boolean} [update=true]
    * @return {boolean} If value has changed
    *
-   * @see {@link bbbfly.MapDrawing#GetState|GetState()}
-   * @see {@link bbbfly.MapDrawing#GetStateValue|GetStateValue()}
+   * @see {@link bbbfly.MapDrawingItem#GetState|GetState()}
+   * @see {@link bbbfly.MapDrawingItem#GetStateValue|GetStateValue()}
    */
   drawing.SetStateValue = bbbfly.map.drawing.item._setStateValue;
     /**
    * @function
    * @name SetSelected
-   * @memberof bbbfly.MapDrawing#
+   * @memberof bbbfly.MapDrawingItem#
    *
    * @return {boolean} Value
    *
-   * @see {@link bbbfly.MapDrawing#SetSelected|SetSelected()}
+   * @see {@link bbbfly.MapDrawingItem#SetSelected|SetSelected()}
    */
   drawing.GetSelected = bbbfly.map.drawing.item._getSelected;
   /**
    * @function
    * @name SetSelected
-   * @memberof bbbfly.MapDrawing#
+   * @memberof bbbfly.MapDrawingItem#
    *
    * @param {boolean} [selected=true] - Value to set
    * @param {boolean} [update=true] - If update control
    *
-   * @see {@link bbbfly.MapDrawing#GetSelected|GetSelected()}
+   * @see {@link bbbfly.MapDrawingItem#GetSelected|GetSelected()}
    */
   drawing.SetSelected = bbbfly.map.drawing.item._setSelected;
 
