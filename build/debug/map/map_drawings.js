@@ -31,10 +31,12 @@ bbbfly.map.drawing.utils.GetDrawingId = function(options){
   var id = (options) ? options.ID : null;
   return String.isString(id) ? id : '_'+(++bbbfly.map.drawing._lastId);
 };
-bbbfly.map.drawing.utils.GetDrawingStyle = function(options){
-  var style = (options) ? options.Style : null;
-  if(String.isString(style)){style = bbbfly.map.drawing._styles[style];}
-  return Object.isObject(style) ? style : {};
+bbbfly.map.drawing.utils.GetDrawingStyle = function(style){
+  if(String.isString(style)){
+    style = bbbfly.map.drawing._styles[style];
+    if(Object.isObject(style)){return style;}
+  }
+  return null;
 };
 bbbfly.map.drawing.utils.DefineDrawingStyle = function(id,style){
   if(!Object.isObject(style)){return false;}
@@ -139,9 +141,6 @@ bbbfly.map.drawing.layer._updateZIndex = function(offset){
 
   this._updateZIndex.callParent(offset);
 };
-bbbfly.map.drawing.core._getStyle = function(){
-  return bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
-};
 bbbfly.map.drawing.core._initialize = function(){
   if(this._Initialized){return true;}
 
@@ -241,6 +240,15 @@ bbbfly.map.drawing.item._update = function(){
     }
   }
 };
+bbbfly.map.drawing.item._getStyle = function(type){
+  var style = this.Options.Style;
+
+  if(String.isString(style)){
+    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+  }
+
+  return (style instanceof type) ? style : new type();
+};
 bbbfly.map.drawing.item._getState = function(){
   var state = {
     mouseover: this.GetStateValue(bbbfly.MapDrawing.state.mouseover),
@@ -312,7 +320,7 @@ bbbfly.map.drawing.icon._create = function(){
   return marker;
 };
 bbbfly.map.drawing.icon._update = function(){
-  var style = this.GetStyle();
+  var style = this.GetStyle(bbbfly.MapIcon.Style);
   var state = this.GetState();
 
   var over = state.mouseover;
@@ -352,7 +360,7 @@ bbbfly.map.drawing.icon._onMouseLeave = function(){
   bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
 };
 bbbfly.map.drawing.geometry._create = function(){
-  var style = this.GetStyle();
+  var style = this.GetStyle(bbbfly.MapGeometry.Style);
   var json = this.Options.GeoJSON;
 
   if(!(json instanceof L.GeoJSON)){
@@ -417,6 +425,15 @@ bbbfly.map.drawing.cluster._update = function(){
     layer.refreshClusters();
   });
 };
+bbbfly.map.drawing.cluster._getStyle = function(cnt,type){
+  var style = this.Options.Style;
+
+  if(String.isString(style)){
+    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+  }
+
+  return (style instanceof type) ? style : new type();
+};
 bbbfly.map.drawing.cluster._getState = function(cluster,def){
   var state = {};
 
@@ -476,7 +493,7 @@ bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
 bbbfly.map.drawing.cluster._createIcon = function(cluster){
   var drawing = cluster._group.Owner;
 
-  var style = drawing.GetStyle();
+  var style = drawing.GetStyle(bbbfly.MapIcon.Style);
   var state = drawing.GetState(cluster);
 
   var id = bbbfly.map.drawing.utils.LeafletId(cluster);
@@ -577,7 +594,6 @@ bbbfly.MapDrawing = function(options){
   this.Create = null;
   this.Update = null;
   this.Dispose = bbbfly.map.drawing.core._dispose;
-  this.GetStyle = bbbfly.map.drawing.core._getStyle;
   this.AddTo = bbbfly.map.drawing.core._addTo;
   this.RemoveFrom = bbbfly.map.drawing.core._removeFrom;
   this.Scan = bbbfly.map.drawing.core._scan;
@@ -617,6 +633,7 @@ bbbfly.MapDrawingItem = function(options){
   ng_OverrideMethod(drawing,'OnDblClick',
     bbbfly.map.drawing.item._onDblClick
   );
+  drawing.GetStyle = bbbfly.map.drawing.item._getStyle;
   drawing.GetState = bbbfly.map.drawing.item._getState;
   drawing.GetStateValue = bbbfly.map.drawing.item._getStateValue;
   drawing.SetStateValue = bbbfly.map.drawing.item._setStateValue;
@@ -688,6 +705,7 @@ bbbfly.MapMarkerCluster = function(options){
   ng_OverrideMethod(drawing,'OnMouseLeave',
     bbbfly.map.drawing.cluster._onMouseLeave
   );
+  drawing.GetStyle = bbbfly.map.drawing.cluster._getStyle;
   drawing.GetState = bbbfly.map.drawing.cluster._getState;
   drawing.AddDrawing = bbbfly.map.drawing.cluster._addDrawing;
   drawing.RemoveDrawing = bbbfly.map.drawing.cluster._removeDrawing;

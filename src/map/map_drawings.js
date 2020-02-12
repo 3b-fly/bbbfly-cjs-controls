@@ -40,10 +40,12 @@ bbbfly.map.drawing.utils.GetDrawingId = function(options){
 };
 
 /** @ignore */
-bbbfly.map.drawing.utils.GetDrawingStyle = function(options){
-  var style = (options) ? options.Style : null;
-  if(String.isString(style)){style = bbbfly.map.drawing._styles[style];}
-  return Object.isObject(style) ? style : {};
+bbbfly.map.drawing.utils.GetDrawingStyle = function(style){
+  if(String.isString(style)){
+    style = bbbfly.map.drawing._styles[style];
+    if(Object.isObject(style)){return style;}
+  }
+  return null;
 };
 
 /** @ignore */
@@ -162,11 +164,6 @@ bbbfly.map.drawing.layer._updateZIndex = function(offset){
 };
 
 /** @ignore */
-bbbfly.map.drawing.core._getStyle = function(){
-  return bbbfly.map.drawing.utils.GetDrawingStyle(this.Options);
-};
-
-/** @ignore */
 bbbfly.map.drawing.core._initialize = function(){
   if(this._Initialized){return true;}
 
@@ -282,6 +279,17 @@ bbbfly.map.drawing.item._update = function(){
 };
 
 /** @ignore */
+bbbfly.map.drawing.item._getStyle = function(type){
+  var style = this.Options.Style;
+
+  if(String.isString(style)){
+    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+  }
+
+  return (style instanceof type) ? style : new type();
+};
+
+/** @ignore */
 bbbfly.map.drawing.item._getState = function(){
   var state = {
     mouseover: this.GetStateValue(bbbfly.MapDrawing.state.mouseover),
@@ -373,7 +381,7 @@ bbbfly.map.drawing.icon._create = function(){
 
 /** @ignore */
 bbbfly.map.drawing.icon._update = function(){
-  var style = this.GetStyle();
+  var style = this.GetStyle(bbbfly.MapIcon.Style);
   var state = this.GetState();
 
   var over = state.mouseover;
@@ -420,7 +428,7 @@ bbbfly.map.drawing.icon._onMouseLeave = function(){
 
 /** @ignore */
 bbbfly.map.drawing.geometry._create = function(){
-  var style = this.GetStyle();
+  var style = this.GetStyle(bbbfly.MapGeometry.Style);
   var json = this.Options.GeoJSON;
 
   if(!(json instanceof L.GeoJSON)){
@@ -490,6 +498,17 @@ bbbfly.map.drawing.cluster._update = function(){
   this.Scan(function(layer){
     layer.refreshClusters();
   });
+};
+
+/** @ignore */
+bbbfly.map.drawing.cluster._getStyle = function(cnt,type){
+  var style = this.Options.Style;
+
+  if(String.isString(style)){
+    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+  }
+
+  return (style instanceof type) ? style : new type();
 };
 
 /** @ignore */
@@ -564,7 +583,7 @@ bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
 bbbfly.map.drawing.cluster._createIcon = function(cluster){
   var drawing = cluster._group.Owner;
 
-  var style = drawing.GetStyle();
+  var style = drawing.GetStyle(bbbfly.MapIcon.Style);
   var state = drawing.GetState(cluster);
 
   var id = bbbfly.map.drawing.utils.LeafletId(cluster);
@@ -727,14 +746,6 @@ bbbfly.MapDrawing = function(options){
 
   /**
    * @function
-   * @name GetStyle
-   * @memberof bbbfly.MapDrawing#
-   *
-   * @return {object} Drawing style definition
-   */
-  this.GetStyle = bbbfly.map.drawing.core._getStyle;
-  /**
-   * @function
    * @name AddTo
    * @memberof bbbfly.MapDrawing#
    *
@@ -852,7 +863,10 @@ bbbfly.MapDrawing.selecttype = {
  * @extends bbbfly.MapDrawing
  * @inpackage mapbox
  *
- * @param {bbbfly.MapDrawing.options} options
+ * @param {bbbfly.MapDrawingItem.options} options
+ *
+ * @property {string|null} ID
+ * @property {bbbfly.MapDrawingItem.options} Options
  */
 bbbfly.MapDrawingItem = function(options){
   var drawing = new bbbfly.MapDrawing(options);
@@ -881,6 +895,15 @@ bbbfly.MapDrawingItem = function(options){
     bbbfly.map.drawing.item._onDblClick
   );
 
+  /**
+   * @function
+   * @name GetStyle
+   * @memberof bbbfly.MapDrawingItem#
+   *
+   * @param {function} type - Accepted style type
+   * @return {object} Drawing style definition
+   */
+  drawing.GetStyle = bbbfly.map.drawing.item._getStyle;
   /**
    * @function
    * @name GetState
@@ -1078,6 +1101,15 @@ bbbfly.MapMarkerCluster = function(options){
     bbbfly.map.drawing.cluster._onMouseLeave
   );
 
+    /**
+   * @function
+   * @name GetStyle
+   * @memberof bbbfly.MapMarkerCluster#
+   *
+   * @param {function} type - Accepted style type
+   * @return {object} Drawing style definition
+   */
+  drawing.GetStyle = bbbfly.map.drawing.cluster._getStyle;
   /**
    * @function
    * @name GetState
@@ -1088,6 +1120,7 @@ bbbfly.MapMarkerCluster = function(options){
    * @return {bbbfly.Renderer.state} Drawing state
    */
   drawing.GetState = bbbfly.map.drawing.cluster._getState;
+
   /**
    * @function
    * @name AddDrawing
@@ -1188,12 +1221,19 @@ bbbfly.MapDrawingsHandler = function(feature){
  * @memberOf bbbfly.MapDrawing
  *
  * @property {string} ID
+ */
+
+/**
+ * @typedef {bbbfly.MapDrawing.options} options
+ * @memberOf bbbfly.MapDrawingItem
+ *
+ * @property {string} ID
  * @property {bbbfly.MapDrawing.selecttype} [SelectType=none]
  * @property {object|string} Style - Drawing style or style ID
  */
 
 /**
- * @typedef {bbbfly.MapDrawing.options} options
+ * @typedef {bbbfly.MapDrawingItem.options} options
  * @memberOf bbbfly.MapIcon
  *
  * @property {mapPoint} Coordinates
@@ -1201,7 +1241,7 @@ bbbfly.MapDrawingsHandler = function(feature){
  */
 
 /**
- * @typedef {bbbfly.MapDrawing.options} options
+ * @typedef {bbbfly.MapDrawingItem.options} options
  * @memberOf bbbfly.MapGeometry
  *
  * @property {geoJSON|mapGeoJSON} GeoJSON
