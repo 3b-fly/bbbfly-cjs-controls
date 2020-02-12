@@ -427,6 +427,23 @@ bbbfly.map.drawing.cluster._update = function(){
 };
 bbbfly.map.drawing.cluster._getStyle = function(cnt,type){
   var style = this.Options.Style;
+  if(style instanceof type){return style;}
+
+  if(Array.isArray(style) && Number.isInteger(cnt)){
+    for(var i in style){
+      var styleDef = style[i];
+      var from = Number.isInteger(styleDef.from) ? styleDef.from : null;
+      var to = Number.isInteger(styleDef.to) ? styleDef.to : null;
+
+      if(
+        ((from === null) || (cnt >= from))
+        && ((to === null) || (cnt <= to))
+      ){
+        style = styleDef.style;
+        break;
+      }
+    }
+  }
 
   if(String.isString(style)){
     style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
@@ -492,8 +509,9 @@ bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
 };
 bbbfly.map.drawing.cluster._createIcon = function(cluster){
   var drawing = cluster._group.Owner;
+  var childCnt = cluster.getChildCount();
 
-  var style = drawing.GetStyle(bbbfly.MapIcon.Style);
+  var style = drawing.GetStyle(childCnt,bbbfly.MapIcon.Style);
   var state = drawing.GetState(cluster);
 
   var id = bbbfly.map.drawing.utils.LeafletId(cluster);
@@ -504,7 +522,6 @@ bbbfly.map.drawing.cluster._createIcon = function(cluster){
   if(!Boolean.isBoolean(showNumber)){showNumber = true;}
 
   if(showNumber){
-    var childCnt = cluster.getChildCount();
     var imgCnt = Array.isArray(proxy.Imgs) ? proxy.Imgs.length : 0;
 
     var textStyle = {
@@ -729,5 +746,5 @@ bbbfly.MapDrawingsHandler = function(feature){
  * @memberOf bbbfly.MapMarkerCluster
  *
  * @property {boolean} [ShowNumber=true]
- * @property {bbbfly.MapIcon.Style|string} Style
+ * @property {bbbfly.MapIcon.Style|string|array} Style
  */
