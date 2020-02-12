@@ -695,10 +695,10 @@ bbbfly.map.drawing.handler._endClustering = function(){
  * @property {bbbfly.MapDrawing.options} Options
  */
 bbbfly.MapDrawing = function(options){
-  if(!Object.isObject(options)){options = null;}
+  if(!Object.isObject(options)){options = {};}
 
   this.ID = bbbfly.map.drawing.utils.GetDrawingId(options);
-  this.Options = Object.isObject(options) ? options : {};
+  this.Options = options;
 
   /** @private */
   this._Layers = [];

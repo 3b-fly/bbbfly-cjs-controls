@@ -582,10 +582,10 @@ bbbfly.map.drawing.handler._endClustering = function(){
   return this.AddDrawing(cluster);
 };
 bbbfly.MapDrawing = function(options){
-  if(!Object.isObject(options)){options = null;}
+  if(!Object.isObject(options)){options = {};}
 
   this.ID = bbbfly.map.drawing.utils.GetDrawingId(options);
-  this.Options = Object.isObject(options) ? options : {};
+  this.Options = options;
   this._Layers = [];
   this._ParentFeature = null;
   this._Initialized = false;
