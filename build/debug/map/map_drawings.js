@@ -754,8 +754,11 @@ bbbfly.MapIconCluster = function(options){
 
   return drawing;
 };
-bbbfly.MapDrawingsHandler = function(feature){
+bbbfly.MapDrawingsHandler = function(feature,options){
   if(!(feature instanceof L.FeatureGroup)){return null;}
+  if(!Object.isObject(options)){options = {};}
+
+  this.Options = options;
   this._Feature = feature;
   this._Drawings = {};
   this._CurrentCluster = null;
@@ -766,3 +769,15 @@ bbbfly.MapDrawingsHandler = function(feature){
   this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;
   this.EndClustering = bbbfly.map.drawing.handler._endClustering;
 };
+bbbfly.MapDrawingsHandler.selecttype = {
+  none: 0,
+  single: 1,
+  multi: 2
+};
+
+/**
+ * @typedef {object} options
+ * @memberOf bbbfly.MapDrawingsHandler
+ *
+ * @property {bbbfly.MapDrawingsHandler.selecttype} [SelectType=none]
+ */

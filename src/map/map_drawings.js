@@ -1202,9 +1202,15 @@ bbbfly.MapIconCluster = function(options){
  * @inpackage mapbox
  *
  * @param {mapFeature} feature
+ * @param {bbbfly.MapDrawingsHandler.options} options
+ *
+ * @property {bbbfly.MapDrawingsHandler.options} Options
  */
-bbbfly.MapDrawingsHandler = function(feature){
+bbbfly.MapDrawingsHandler = function(feature,options){
   if(!(feature instanceof L.FeatureGroup)){return null;}
+  if(!Object.isObject(options)){options = {};}
+
+  this.Options = options;
 
   /** @private */
   this._Feature = feature;
@@ -1267,6 +1273,15 @@ bbbfly.MapDrawingsHandler = function(feature){
 };
 
 /**
+ * @enum {integer}
+ */
+bbbfly.MapDrawingsHandler.selecttype = {
+  none: 0,
+  single: 1,
+  multi: 2
+};
+
+/**
  * @typedef {function} scancallback
  * @memberOf bbbfly.MapDrawing
  *
@@ -1317,4 +1332,11 @@ bbbfly.MapDrawingsHandler = function(feature){
  * @property {boolean} [ShowNumber=true]
  * @property {bbbfly.MapIcon.Style|string|array} IconStyle
  * @property {bbbfly.MapGeometry.Style|string|array} SpiderStyle
+ */
+
+/**
+ * @typedef {object} options
+ * @memberOf bbbfly.MapDrawingsHandler
+ *
+ * @property {bbbfly.MapDrawingsHandler.selecttype} [SelectType=none]
  */
