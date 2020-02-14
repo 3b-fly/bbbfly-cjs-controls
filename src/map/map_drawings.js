@@ -154,16 +154,6 @@ bbbfly.map.drawing.layer._onMouseEvent = function(event){
 };
 
 /** @ignore */
-bbbfly.map.drawing.layer._updateZIndex = function(offset){
-  if(this.Owner.GetStateValue(bbbfly.MapDrawing.state.selected)){
-    var rise = (this.options) ? this.options.riseOffset : 0;
-    offset = (offset > rise) ? offset : rise;
-  }
-
-  this._updateZIndex.callParent(offset);
-};
-
-/** @ignore */
 bbbfly.map.drawing.core._initialize = function(){
   if(this._Initialized){return true;}
 
@@ -372,7 +362,7 @@ bbbfly.map.drawing.icon._create = function(){
 
     ng_OverrideMethod(
       marker,'_updateZIndex',
-      bbbfly.map.drawing.layer._updateZIndex
+      bbbfly.map.drawing.icon._updateZIndex
     );
   }
 
@@ -424,6 +414,16 @@ bbbfly.map.drawing.icon._onMouseEnter = function(){
 bbbfly.map.drawing.icon._onMouseLeave = function(){
   this.OnMouseLeave.callParent();
   bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
+};
+
+/** @ignore */
+bbbfly.map.drawing.icon._updateZIndex = function(offset){
+  if(this.Owner.GetStateValue(bbbfly.MapDrawingItem.state.selected)){
+    var rise = (this.options) ? this.options.riseOffset : 0;
+    offset = (offset > rise) ? offset : rise;
+  }
+
+  this._updateZIndex.callParent(offset);
 };
 
 /** @ignore */
