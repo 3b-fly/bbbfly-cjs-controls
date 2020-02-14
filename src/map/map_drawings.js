@@ -1061,7 +1061,7 @@ bbbfly.MapIcon = function(options){
  * @inpackage mapbox
  *
  * @param {bbbfly.Renderer.image[]} [images=null] - Stack of icon images
- * @param {string} [className=''] - Leaflet marker div class
+ * @param {string} [className=''] - Leaflet marker div class name
  */
 bbbfly.MapIcon.Style = function(images,className){
   if(!Array.isArray(images)){images = null;}
@@ -1117,11 +1117,11 @@ bbbfly.MapGeometry.Style = function(color,borderWidth){
  * @extends bbbfly.MapDrawing
  * @inpackage mapbox
  *
- * @param {bbbfly.MapMarkerCluster.options} options
+ * @param {bbbfly.MapIconCluster.options} options
  *
- * @property {bbbfly.MapMarkerCluster.options} Options
+ * @property {bbbfly.MapIconCluster.options} Options
  */
-bbbfly.MapMarkerCluster = function(options){
+bbbfly.MapIconCluster = function(options){
   var drawing = new bbbfly.MapDrawing(options);
 
   /** @private */
@@ -1149,7 +1149,7 @@ bbbfly.MapMarkerCluster = function(options){
   /**
    * @function
    * @name GetStyle
-   * @memberof bbbfly.MapMarkerCluster#
+   * @memberof bbbfly.MapIconCluster#
    *
    * @param {integer} cnt - Child markers count
    * @return {bbbfly.MapIcon.Style}
@@ -1158,7 +1158,7 @@ bbbfly.MapMarkerCluster = function(options){
     /**
    * @function
    * @name GetSpiderStyle
-   * @memberof bbbfly.MapMarkerCluster#
+   * @memberof bbbfly.MapIconCluster#
    *
    * @return {bbbfly.MapGeometry.Style}
    */
@@ -1167,7 +1167,7 @@ bbbfly.MapMarkerCluster = function(options){
   /**
    * @function
    * @name GetState
-   * @memberof bbbfly.MapMarkerCluster#
+   * @memberof bbbfly.MapIconCluster#
    *
    * @param {mapCluster} cluster
    * @param {bbbfly.Renderer.state} def - State default values
@@ -1178,7 +1178,7 @@ bbbfly.MapMarkerCluster = function(options){
   /**
    * @function
    * @name AddDrawing
-   * @memberof bbbfly.MapMarkerCluster#
+   * @memberof bbbfly.MapIconCluster#
    *
    * @param {bbbfly.MapDrawing} drawing
    * @return {boolean} - If added
@@ -1187,7 +1187,7 @@ bbbfly.MapMarkerCluster = function(options){
   /**
    * @function
    * @name AddDrawing
-   * @memberof bbbfly.MapMarkerCluster#
+   * @memberof bbbfly.MapIconCluster#
    *
    * @param {bbbfly.MapDrawing} drawing
    * @return {boolean} - If removed
@@ -1253,7 +1253,7 @@ bbbfly.MapDrawingsHandler = function(feature){
    * @name BeginClustering
    * @memberof bbbfly.MapDrawingsHandler#
    *
-   * @param {bbbfly.MapMarkerCluster} cluster
+   * @param {bbbfly.MapIconCluster} cluster
    */
   this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;
   /**
@@ -1311,7 +1311,7 @@ bbbfly.MapDrawingsHandler = function(feature){
 
 /**
  * @typedef {bbbfly.MapDrawing.options} options
- * @memberOf bbbfly.MapMarkerCluster
+ * @memberOf bbbfly.MapIconCluster
  *
  * @property {integer} [Radius=50]
  * @property {boolean} [ShowNumber=true]

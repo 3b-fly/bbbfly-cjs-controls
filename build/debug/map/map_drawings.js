@@ -729,7 +729,7 @@ bbbfly.MapGeometry.Style = function(color,borderWidth){
   this.fillColor = color;
   this.fillOpacity = 0.2;
 };
-bbbfly.MapMarkerCluster = function(options){
+bbbfly.MapIconCluster = function(options){
   var drawing = new bbbfly.MapDrawing(options);
   ng_OverrideMethod(drawing,'Create',
     bbbfly.map.drawing.cluster._create
