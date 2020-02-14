@@ -403,16 +403,20 @@ bbbfly.map.drawing.geometry._project = function(){
   node.style.display = display;
 };
 bbbfly.map.drawing.cluster._create = function(){
+  var style = this.GetSpiderStyle();
+
+  var radius = this.Options.Radius;
+  if(!Number.isInteger(radius)){radius = 50;}
 
   var group = new L.MarkerClusterGroup({
-    spiderfyOnMaxZoom: true,
-    spiderLegPolylineOptions: {}, //TODO
     iconCreateFunction: bbbfly.map.drawing.cluster._createIcon,
-
-    showCoverageOnHover: false,
     removeOutsideVisibleBounds: false,
-    maxClusterRadius: 50, //TODO
-    zoomToBoundsOnClick: true
+    showCoverageOnHover: false,
+    zoomToBoundsOnClick: true,
+    maxClusterRadius: radius,
+
+    spiderfyOnMaxZoom: !!style,
+    spiderLegPolylineOptions: style
   });
 
   group.on('spiderfied',bbbfly.map.drawing.cluster._onSpiderfyChanged);
@@ -425,8 +429,9 @@ bbbfly.map.drawing.cluster._update = function(){
     layer.refreshClusters();
   });
 };
-bbbfly.map.drawing.cluster._getStyle = function(cnt,type){
-  var style = this.Options.Style;
+bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
+  var type = bbbfly.MapIcon.Style;
+  var style = this.Options.IconStyle;
   if(style instanceof type){return style;}
 
   if(Array.isArray(style) && Number.isInteger(cnt)){
@@ -444,6 +449,17 @@ bbbfly.map.drawing.cluster._getStyle = function(cnt,type){
       }
     }
   }
+
+  if(String.isString(style)){
+    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+  }
+
+  return (style instanceof type) ? style : new type();
+};
+bbbfly.map.drawing.cluster._getSpiderStyle = function(){
+  var type = bbbfly.MapGeometry.Style;
+  var style = this.Options.SpiderStyle;
+  if(style instanceof type){return style;}
 
   if(String.isString(style)){
     style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
@@ -511,7 +527,7 @@ bbbfly.map.drawing.cluster._createIcon = function(cluster){
   var drawing = cluster._group.Owner;
   var childCnt = cluster.getChildCount();
 
-  var style = drawing.GetStyle(childCnt,bbbfly.MapIcon.Style);
+  var style = drawing.GetIconStyle(childCnt);
   var state = drawing.GetState(cluster);
 
   var id = bbbfly.map.drawing.utils.LeafletId(cluster);
@@ -704,9 +720,10 @@ bbbfly.MapGeometry.Style = function(color,borderWidth){
   if(!String.isString(color)){color = '#000000';}
   if(!Number.isInteger(borderWidth)){borderWidth = 0;}
 
-  this.color = color;
-  this.weight = borderWidth;
   this.stroke = (borderWidth > 0);
+  this.weight = borderWidth;
+  this.color = color;
+  this.opacity = 1;
 
   this.fill = true;
   this.fillColor = color;
@@ -729,7 +746,8 @@ bbbfly.MapMarkerCluster = function(options){
   ng_OverrideMethod(drawing,'OnMouseLeave',
     bbbfly.map.drawing.cluster._onMouseLeave
   );
-  drawing.GetStyle = bbbfly.map.drawing.cluster._getStyle;
+  drawing.GetIconStyle = bbbfly.map.drawing.cluster._getIconStyle;
+  drawing.GetSpiderStyle = bbbfly.map.drawing.cluster._getSpiderStyle;
   drawing.GetState = bbbfly.map.drawing.cluster._getState;
   drawing.AddDrawing = bbbfly.map.drawing.cluster._addDrawing;
   drawing.RemoveDrawing = bbbfly.map.drawing.cluster._removeDrawing;
