@@ -232,10 +232,10 @@ bbbfly.map.drawing.core._scan = function(callback,def){
   return def;
 };
 bbbfly.map.drawing.item._update = function(){
-  if(!this.GetStateValue(bbbfly.MapDrawing.state.disabled)){
+  if(!this.GetStateValue(bbbfly.MapDrawingItem.state.disabled)){
     if(
-      this.GetStateValue(bbbfly.MapDrawing.state.mouseover)
-      || this.GetStateValue(bbbfly.MapDrawing.state.selected)
+      this.GetStateValue(bbbfly.MapDrawingItem.state.mouseover)
+      || this.GetStateValue(bbbfly.MapDrawingItem.state.selected)
     ){
     }
   }
@@ -251,10 +251,10 @@ bbbfly.map.drawing.item._getStyle = function(type){
 };
 bbbfly.map.drawing.item._getState = function(){
   var state = {
-    mouseover: this.GetStateValue(bbbfly.MapDrawing.state.mouseover),
-    disabled: this.GetStateValue(bbbfly.MapDrawing.state.disabled),
-    selected: this.GetStateValue(bbbfly.MapDrawing.state.selected),
-    grayed: this.GetStateValue(bbbfly.MapDrawing.state.grayed)
+    mouseover: this.GetStateValue(bbbfly.MapDrawingItem.state.mouseover),
+    disabled: this.GetStateValue(bbbfly.MapDrawingItem.state.disabled),
+    selected: this.GetStateValue(bbbfly.MapDrawingItem.state.selected),
+    grayed: this.GetStateValue(bbbfly.MapDrawingItem.state.grayed)
   };
 
   if(state.disabled){state.mouseover = false;}
@@ -274,30 +274,30 @@ bbbfly.map.drawing.item._setStateValue = function(state,value,update){
   return true;
 };
 bbbfly.map.drawing.item._getSelected = function(){
-  return this.GetStateValue(bbbfly.MapDrawing.state.selected);
+  return this.GetStateValue(bbbfly.MapDrawingItem.state.selected);
 };
 bbbfly.map.drawing.item._setSelected = function(selected,update){
   if(!Boolean.isBoolean(selected)){selected = true;}
   if(this.GetSelected() === selected){return true;}
   if(!Boolean.isBoolean(update)){update = true;}
 
-  var state = bbbfly.MapDrawing.state.selected;
+  var state = bbbfly.MapDrawingItem.state.selected;
   this.SetStateValue(state,selected,update);
   return true;
 };
 bbbfly.map.drawing.item._onMouseEnter = function(){
-  this.SetStateValue(bbbfly.MapDrawing.state.mouseover,true);
+  this.SetStateValue(bbbfly.MapDrawingItem.state.mouseover,true);
 };
 bbbfly.map.drawing.item._onMouseLeave = function(){
-  this.SetStateValue(bbbfly.MapDrawing.state.mouseover,false);
+  this.SetStateValue(bbbfly.MapDrawingItem.state.mouseover,false);
 };
 bbbfly.map.drawing.item._onClick = function(){
-  if((this.Options.SelectType & bbbfly.MapDrawing.selecttype.click)){
+  if((this.Options.SelectType & bbbfly.MapDrawingItem.selecttype.click)){
     this.SetSelected(!this.GetSelected(),true);
   }
 };
 bbbfly.map.drawing.item._onDblClick = function(){
-  if((this.Options.SelectType & bbbfly.MapDrawing.selecttype.dblclick)){
+  if((this.Options.SelectType & bbbfly.MapDrawingItem.selecttype.dblclick)){
     this.SetSelected(!this.GetSelected(),true);
   }
 };
@@ -464,7 +464,7 @@ bbbfly.map.drawing.cluster._getState = function(cluster,def){
         var marker = markers[i];
 
         var selected = marker.Owner.GetStateValue(
-          bbbfly.MapDrawing.state.selected
+          bbbfly.MapDrawingItem.state.selected
         );
 
         if(selected){
@@ -627,18 +627,6 @@ bbbfly.MapDrawing = function(options){
   this.OnDblClick = null;
   this.OnRightClick = null;
 };
-bbbfly.MapDrawing.state = {
-  mouseover: 1,
-  disabled: 2,
-  selected: 4,
-  grayed: 8
-};
-bbbfly.MapDrawing.selecttype = {
-  none: 0,
-  click: 1,
-  dblclick: 2,
-  both: 3
-};
 bbbfly.MapDrawingItem = function(options){
   var drawing = new bbbfly.MapDrawing(options);
   drawing._State = 0;
@@ -665,6 +653,18 @@ bbbfly.MapDrawingItem = function(options){
   drawing.SetSelected = bbbfly.map.drawing.item._setSelected;
 
   return drawing;
+};
+bbbfly.MapDrawingItem.state = {
+  mouseover: 1,
+  disabled: 2,
+  selected: 4,
+  grayed: 8
+};
+bbbfly.MapDrawingItem.selecttype = {
+  none: 0,
+  click: 1,
+  dblclick: 2,
+  both: 3
 };
 bbbfly.MapIcon = function(options){
   var drawing = new bbbfly.MapDrawingItem(options);
@@ -748,11 +748,3 @@ bbbfly.MapDrawingsHandler = function(feature){
   this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;
   this.EndClustering = bbbfly.map.drawing.handler._endClustering;
 };
-
-/**
- * @typedef {bbbfly.MapDrawing.options} options
- * @memberOf bbbfly.MapMarkerCluster
- *
- * @property {boolean} [ShowNumber=true]
- * @property {bbbfly.MapIcon.Style|string|array} Style
- */
