@@ -1095,21 +1095,44 @@ bbbfly.MapGeometry = function(options){
  * @class
  * @inpackage mapbox
  *
- * @param {string} color
- * @param {integer} borderWidth
+ * @param {object} opts
+ * @param {integer} [opts.weight=undefined]
+ * @param {string} [opts.color=undefined]
+ * @param {string} [opts.fillColor=undefined]
+ * @param {double} [opts.opacity=undefined]
+ * @param {double} [opts.fillOpacity=undefined]
+ *
+ * @property {boolean} fill
+ * @property {boolean} stroke
+ * @property {integer} [weight=1]
+ * @property {string} [color='#000000']
+ * @property {string} [fillColor=undefined]
+ * @property {double} [opacity=1]
+ * @property {double} [fillOpacity=0.2]
  */
-bbbfly.MapGeometry.Style = function(color,borderWidth){
-  if(!String.isString(color)){color = '#000000';}
-  if(!Number.isInteger(borderWidth)){borderWidth = 0;}
+bbbfly.MapGeometry.Style = function(opts){
+  this.stroke = false;
+  this.fill = false;
+  this.weight = 1;
 
-  this.stroke = (borderWidth > 0);
-  this.weight = borderWidth;
-  this.color = color;
+  this.color = '#000000';
+  this.fillColor = undefined;
+
   this.opacity = 1;
-
-  this.fill = true;
-  this.fillColor = color;
   this.fillOpacity = 0.2;
+
+  if(!Object.isObject(opts)){return;}
+
+  if(Number.isInteger(opts.weight)){this.weight = opts.weight;}
+
+  if(String.isString(opts.color)){this.color = opts.color;}
+  if(String.isString(opts.fillColor)){this.fillColor = opts.fillColor;}
+
+  if(Number.isNumber(opts.opacity)){this.opacity = opts.opacity;}
+  if(Number.isNumber(opts.fillOpacity)){this.fillOpacity = opts.fillOpacity;}
+
+  this.stroke = !!((this.weight > 0) && (this.opacity > 0));
+  this.fill = !!(this.fillColor && (this.fillOpacity > 0));
 };
 
 /**
