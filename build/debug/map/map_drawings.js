@@ -271,10 +271,20 @@ bbbfly.map.drawing.item._getSelected = function(){
 bbbfly.map.drawing.item._setSelected = function(selected,update){
   if(!Boolean.isBoolean(selected)){selected = true;}
   if(this.GetSelected() === selected){return true;}
-  if(!Boolean.isBoolean(update)){update = true;}
+
+  if(Function.isFunction(this.OnSetSelected)){
+    if(!this.OnSetSelected()){return false;}
+  }
 
   var state = bbbfly.MapDrawingItem.state.selected;
+  if(!Boolean.isBoolean(update)){update = true;}
+
   this.SetStateValue(state,selected,update);
+
+  if(Function.isFunction(this.OnSelectedChanged)){
+    this.OnSelectedChanged();
+  }
+
   return true;
 };
 bbbfly.map.drawing.item._onMouseEnter = function(){
@@ -583,6 +593,14 @@ bbbfly.map.drawing.handler._addDrawing = function(drawing){
 
     if(added){
       this._Drawings[drawing.ID] = drawing;
+
+      drawing.AddEvent(
+        'OnSetSelected',this._drawing_onSetSelected,true
+      );
+      drawing.AddEvent(
+        'OnSelectedChanged',this._drawing_onSelectedChanged,true
+      );
+
       return true;
     }
   }
@@ -594,6 +612,14 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
 
   if(drawing.RemoveFrom()){
     delete(this._Drawings[drawing.ID]);
+
+    drawing.RemoveEvent(
+      'OnSetSelected',this._drawing_onSetSelected
+    );
+    drawing.RemoveEvent(
+      'OnSelectedChanged',this._drawing_onSelectedChanged
+    );
+
     return true;
   }
   return false;
@@ -621,8 +647,44 @@ bbbfly.map.drawing.handler._endClustering = function(){
 
   return this.AddDrawing(cluster);
 };
+bbbfly.map.drawing.handler._onSetSelected = function(){
+  switch(this.Options.SelectType){
+    case bbbfly.MapDrawingsHandler.selecttype.single:
+    case bbbfly.MapDrawingsHandler.selecttype.multi:
+      return true;
+  }
+  return false;
+};
+bbbfly.map.drawing.handler._onSelectedChanged = function(drawing){
+
+  if(drawing.GetSelected()){
+    switch(this.Options.SelectType){
+      case bbbfly.MapDrawingsHandler.selecttype.single:
+
+        for(var id in this._Selected){
+          var selected = this._Selected[id];
+
+          if(Function.isFunction(selected.SetSelected)){
+            selected.SetSelected(false,true);
+          }
+        }
+
+      case bbbfly.MapDrawingsHandler.selecttype.multi:
+        this._Selected[drawing.ID] = drawing;
+      break;
+    }
+  }
+  else{
+    if(this._Selected[drawing.ID] === drawing){
+      delete(this._Selected[drawing.ID]);
+    }
+  }
+};
 bbbfly.MapDrawing = function(options){
   if(!Object.isObject(options)){options = {};}
+
+  this.AddEvent = ngObjAddEvent;
+  this.RemoveEvent = ngObjRemoveEvent;
 
   this.ID = bbbfly.map.drawing.utils.DrawingId(options);
   this.Options = options;
@@ -667,6 +729,8 @@ bbbfly.MapDrawingItem = function(options){
   drawing.SetStateValue = bbbfly.map.drawing.item._setStateValue;
   drawing.GetSelected = bbbfly.map.drawing.item._getSelected;
   drawing.SetSelected = bbbfly.map.drawing.item._setSelected;
+  this.OnSetSelected = null;
+  this.OnSelectedChanged = null;
 
   return drawing;
 };
@@ -768,17 +832,27 @@ bbbfly.MapIconCluster = function(options){
 bbbfly.MapDrawingsHandler = function(feature,options){
   if(!(feature instanceof L.FeatureGroup)){return null;}
   if(!Object.isObject(options)){options = {};}
+  var handler = this;
 
   this.Options = options;
   this._Feature = feature;
   this._Drawings = {};
+  this._Selected = {};
   this._CurrentCluster = null;
+  this._drawing_onSetSelected = function(){
+    return handler.OnSetSelected(this);
+  };
+  this._drawing_onSelectedChanged = function(){
+    handler.OnSelectedChanged(this);
+  };
   this.GetDrawing = bbbfly.map.drawing.handler._getDrawing;
   this.AddDrawing = bbbfly.map.drawing.handler._addDrawing;
   this.RemoveDrawing = bbbfly.map.drawing.handler._removeDrawing;
   this.ClearDrawings = bbbfly.map.drawing.handler._clearDrawings;
   this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;
   this.EndClustering = bbbfly.map.drawing.handler._endClustering;
+  this.OnSetSelected = bbbfly.map.drawing.handler._onSetSelected;
+  this.OnSelectedChanged = bbbfly.map.drawing.handler._onSelectedChanged;
 };
 bbbfly.MapDrawingsHandler.selecttype = {
   none: 0,
