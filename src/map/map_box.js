@@ -33,7 +33,7 @@ bbbfly.map.box._doCreateMap = function(options){
 
   if(this.Drawings !== false){
     var feature = new L.FeatureGroup();
-    var handler = new bbbfly.MapDrawingsHandler(feature);
+    var handler = new bbbfly.MapDrawingsHandler(feature,this.Drawings);
 
     if(handler){
       feature.addTo(map);
