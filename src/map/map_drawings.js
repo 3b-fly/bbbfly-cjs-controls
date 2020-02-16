@@ -756,6 +756,32 @@ bbbfly.map.drawing.handler._endClustering = function(){
 };
 
 /** @ignore */
+bbbfly.map.drawing.handler._getSelectedDrawings = function(selected){
+  var drawings = [];
+
+  for(var id in this._Drawings){
+    var drawing = this._Drawings[id];
+
+    if(Boolean.isBoolean(selected)){
+      if(drawing.GetSelected() !== selected){continue;}
+    }
+
+    drawings.push(drawing);
+  }
+};
+
+/** @ignore */
+bbbfly.map.drawing.handler._clearSelected = function(){
+  for(var id in this._Selected){
+    var drawing = this._Selected[id];
+
+    if(Function.isFunction(drawing.SetSelected)){
+      drawing.SetSelected(false,true);
+    }
+  }
+};
+
+/** @ignore */
 bbbfly.map.drawing.handler._onSetSelected = function(){
   switch(this.Options.SelectType){
     case bbbfly.MapDrawingsHandler.selecttype.single:
@@ -771,14 +797,7 @@ bbbfly.map.drawing.handler._onSelectedChanged = function(drawing){
   if(drawing.GetSelected()){
     switch(this.Options.SelectType){
       case bbbfly.MapDrawingsHandler.selecttype.single:
-
-        for(var id in this._Selected){
-          var selected = this._Selected[id];
-
-          if(Function.isFunction(selected.SetSelected)){
-            selected.SetSelected(false,true);
-          }
-        }
+        this.ClearSelected();
 
       case bbbfly.MapDrawingsHandler.selecttype.multi:
         this._Selected[drawing.ID] = drawing;
@@ -1039,7 +1058,7 @@ bbbfly.MapDrawingItem = function(options){
   drawing.SetStateValue = bbbfly.map.drawing.item._setStateValue;
     /**
    * @function
-   * @name SetSelected
+   * @name GetSelected
    * @memberof bbbfly.MapDrawingItem#
    *
    * @return {boolean} Value
@@ -1397,6 +1416,23 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @return {boolean} - If cluster was added
    */
   this.EndClustering = bbbfly.map.drawing.handler._endClustering;
+
+  /**
+   * @function
+   * @name GetSelectedDrawings
+   * @memberof bbbfly.MapDrawingsHandler#
+   * @description Get all drawings
+   *
+   * @param {boolean} [selected=undefined]
+   */
+  this.GetSelectedDrawings = bbbfly.map.drawing.handler._getSelectedDrawings;
+  /**
+   * @function
+   * @name ClearSelected
+   * @memberof bbbfly.MapDrawingsHandler#
+   * @description Unselect all drawings
+   */
+  this.ClearSelected = bbbfly.map.drawing.handler._clearSelected;
 
   /**
    * @event

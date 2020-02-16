@@ -647,6 +647,28 @@ bbbfly.map.drawing.handler._endClustering = function(){
 
   return this.AddDrawing(cluster);
 };
+bbbfly.map.drawing.handler._getSelectedDrawings = function(selected){
+  var drawings = [];
+
+  for(var id in this._Drawings){
+    var drawing = this._Drawings[id];
+
+    if(Boolean.isBoolean(selected)){
+      if(drawing.GetSelected() !== selected){continue;}
+    }
+
+    drawings.push(drawing);
+  }
+};
+bbbfly.map.drawing.handler._clearSelected = function(){
+  for(var id in this._Selected){
+    var drawing = this._Selected[id];
+
+    if(Function.isFunction(drawing.SetSelected)){
+      drawing.SetSelected(false,true);
+    }
+  }
+};
 bbbfly.map.drawing.handler._onSetSelected = function(){
   switch(this.Options.SelectType){
     case bbbfly.MapDrawingsHandler.selecttype.single:
@@ -660,14 +682,7 @@ bbbfly.map.drawing.handler._onSelectedChanged = function(drawing){
   if(drawing.GetSelected()){
     switch(this.Options.SelectType){
       case bbbfly.MapDrawingsHandler.selecttype.single:
-
-        for(var id in this._Selected){
-          var selected = this._Selected[id];
-
-          if(Function.isFunction(selected.SetSelected)){
-            selected.SetSelected(false,true);
-          }
-        }
+        this.ClearSelected();
 
       case bbbfly.MapDrawingsHandler.selecttype.multi:
         this._Selected[drawing.ID] = drawing;
@@ -851,6 +866,8 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   this.ClearDrawings = bbbfly.map.drawing.handler._clearDrawings;
   this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;
   this.EndClustering = bbbfly.map.drawing.handler._endClustering;
+  this.GetSelectedDrawings = bbbfly.map.drawing.handler._getSelectedDrawings;
+  this.ClearSelected = bbbfly.map.drawing.handler._clearSelected;
   this.OnSetSelected = bbbfly.map.drawing.handler._onSetSelected;
   this.OnSelectedChanged = bbbfly.map.drawing.handler._onSelectedChanged;
 };
