@@ -681,29 +681,27 @@ bbbfly.map.drawing.handler._getDrawing = function(id){
 
 /** @ignore */
 bbbfly.map.drawing.handler._addDrawing = function(drawing){
-  if(
-    (drawing instanceof bbbfly.MapDrawing)
-    && String.isString(drawing.ID)
-    && !this._Drawings[drawing.ID]
-  ){
-    var added = (this._CurrentCluster)
-      ? this._CurrentCluster.AddDrawing(drawing)
-      : drawing.AddTo(this._Feature);
+  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
+  if(!String.isString(drawing.ID)){return false;}
+  if(this._Drawings[drawing.ID]){return false;}
 
-    if(added){
-      this._Drawings[drawing.ID] = drawing;
+  var added = (this._CurrentCluster)
+    ? this._CurrentCluster.AddDrawing(drawing)
+    : drawing.AddTo(this._Feature);
 
-      drawing.AddEvent(
-        'OnSetSelected',this._drawing_onSetSelected,true
-      );
-      drawing.AddEvent(
-        'OnSelectedChanged',this._drawing_onSelectedChanged,true
-      );
-
-      return true;
-    }
+  if(!added){return false;}
+    
+  if(drawing instanceof bbbfly.MapDrawingItem){
+    drawing.AddEvent(
+      'OnSetSelected',this._drawing_onSetSelected,true
+    );
+    drawing.AddEvent(
+      'OnSelectedChanged',this._drawing_onSelectedChanged,true
+    );
   }
-  return false;
+
+  this._Drawings[drawing.ID] = drawing;
+  return true;
 };
 
 /** @ignore */
@@ -714,12 +712,14 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
   if(drawing.RemoveFrom()){
     delete(this._Drawings[drawing.ID]);
 
-    drawing.RemoveEvent(
-      'OnSetSelected',this._drawing_onSetSelected
-    );
-    drawing.RemoveEvent(
-      'OnSelectedChanged',this._drawing_onSelectedChanged
-    );
+    if(drawing instanceof bbbfly.MapDrawingItem){
+      drawing.RemoveEvent(
+        'OnSetSelected',this._drawing_onSetSelected
+      );
+      drawing.RemoveEvent(
+        'OnSelectedChanged',this._drawing_onSelectedChanged
+      );
+    }
 
     return true;
   }
@@ -974,137 +974,140 @@ bbbfly.MapDrawing = function(options){
  * @property {string|null} ID
  * @property {bbbfly.MapDrawingItem.options} Options
  */
-bbbfly.MapDrawingItem = function(options){
-  var drawing = new bbbfly.MapDrawing(options);
+bbbfly.MapDrawingItem = bbbfly.object.Extend(
+  bbbfly.MapDrawing,function(options){
 
-  /** @private */
-  drawing._State = 0;
+    bbbfly.MapDrawing.call(this,options);
 
-  /** @private */
-  ng_OverrideMethod(drawing,'Update',
-    bbbfly.map.drawing.item._update
-  );
-  /** @private */
-  ng_OverrideMethod(drawing,'OnMouseEnter',
-    bbbfly.map.drawing.item._onMouseEnter
-  );
-  /** @private */
-  ng_OverrideMethod(drawing,'OnMouseLeave',
-    bbbfly.map.drawing.item._onMouseLeave
-  );
-  /** @private */
-  ng_OverrideMethod(drawing,'OnClick',
-    bbbfly.map.drawing.item._onClick
-  );
-  /** @private */
-  ng_OverrideMethod(drawing,'OnDblClick',
-    bbbfly.map.drawing.item._onDblClick
-  );
+    /** @private */
+    this._State = 0;
 
-  /**
-   * @function
-   * @name GetStyle
-   * @memberof bbbfly.MapDrawingItem#
-   *
-   * @param {function} type - Accepted style type
-   * @return {object} Drawing style definition
-   */
-  drawing.GetStyle = bbbfly.map.drawing.item._getStyle;
-  /**
-   * @function
-   * @name GetState
-   * @memberof bbbfly.MapDrawingItem#
-   *
-   * @description
-   *   Get computed renderer state
-   *
-   * @return {bbbfly.Renderer.state} Drawing state
-   *
-   * @see {@link bbbfly.MapDrawingItem#GetStateValue|GetStateValue()}
-   * @see {@link bbbfly.MapDrawingItem#SetStateValue|SetStateValue()}
-   */
-  drawing.GetState = bbbfly.map.drawing.item._getState;
-  /**
-   * @function
-   * @name GetStateValue
-   * @memberof bbbfly.MapDrawingItem#
-   *
-   * @description
-   *   Get drawing state value
-   *
-   * @param {bbbfly.MapDrawingItem.state} state
-   * @return {boolean} Value
-   *
-   * @see {@link bbbfly.MapDrawingItem#GetState|GetState()}
-   * @see {@link bbbfly.MapDrawingItem#SetStateValue|SetStateValue()}
-   */
-  drawing.GetStateValue = bbbfly.map.drawing.item._getStateValue;
-  /**
-   * @function
-   * @name SetStateValue
-   * @memberof bbbfly.MapDrawingItem#
-   *
-   * @description
-   *   Set drawing state value
-   *
-   * @param {bbbfly.MapDrawingItem.state} state
-   * @param {boolean} [value=false] Value
-   * @param {boolean} [update=true]
-   * @return {boolean} If value has changed
-   *
-   * @see {@link bbbfly.MapDrawingItem#GetState|GetState()}
-   * @see {@link bbbfly.MapDrawingItem#GetStateValue|GetStateValue()}
-   */
-  drawing.SetStateValue = bbbfly.map.drawing.item._setStateValue;
+    /** @private */
+    ng_OverrideMethod(this,'Update',
+      bbbfly.map.drawing.item._update
+    );
+    /** @private */
+    ng_OverrideMethod(this,'OnMouseEnter',
+      bbbfly.map.drawing.item._onMouseEnter
+    );
+    /** @private */
+    ng_OverrideMethod(this,'OnMouseLeave',
+      bbbfly.map.drawing.item._onMouseLeave
+    );
+    /** @private */
+    ng_OverrideMethod(this,'OnClick',
+      bbbfly.map.drawing.item._onClick
+    );
+    /** @private */
+    ng_OverrideMethod(this,'OnDblClick',
+      bbbfly.map.drawing.item._onDblClick
+    );
+
     /**
-   * @function
-   * @name GetSelected
-   * @memberof bbbfly.MapDrawingItem#
-   *
-   * @return {boolean} Value
-   *
-   * @see {@link bbbfly.MapDrawingItem#SetSelected|SetSelected()}
-   * @see {@link bbbfly.MapDrawingItem#event:OnSetSelected|OnSetSelected}
-   * @see {@link bbbfly.MapDrawingItem#event:OnSelectedChanged|OnSelectedChanged}
-   */
-  drawing.GetSelected = bbbfly.map.drawing.item._getSelected;
-  /**
-   * @function
-   * @name SetSelected
-   * @memberof bbbfly.MapDrawingItem#
-   *
-   * @param {boolean} [selected=true] - Value to set
-   * @param {boolean} [update=true] - If update control
-   *
-   * @see {@link bbbfly.MapDrawingItem#GetSelected|GetSelected()}
-   * @see {@link bbbfly.MapDrawingItem#event:OnSetSelected|OnSetSelected}
-   * @see {@link bbbfly.MapDrawingItem#event:OnSelectedChanged|OnSelectedChanged}
-   */
-  drawing.SetSelected = bbbfly.map.drawing.item._setSelected;
+     * @function
+     * @name GetStyle
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @param {function} type - Accepted style type
+     * @return {object} Drawing style definition
+     */
+    this.GetStyle = bbbfly.map.drawing.item._getStyle;
+    /**
+     * @function
+     * @name GetState
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @description
+     *   Get computed renderer state
+     *
+     * @return {bbbfly.Renderer.state} Drawing state
+     *
+     * @see {@link bbbfly.MapDrawingItem#GetStateValue|GetStateValue()}
+     * @see {@link bbbfly.MapDrawingItem#SetStateValue|SetStateValue()}
+     */
+    this.GetState = bbbfly.map.drawing.item._getState;
+    /**
+     * @function
+     * @name GetStateValue
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @description
+     *   Get drawing state value
+     *
+     * @param {bbbfly.MapDrawingItem.state} state
+     * @return {boolean} Value
+     *
+     * @see {@link bbbfly.MapDrawingItem#GetState|GetState()}
+     * @see {@link bbbfly.MapDrawingItem#SetStateValue|SetStateValue()}
+     */
+    this.GetStateValue = bbbfly.map.drawing.item._getStateValue;
+    /**
+     * @function
+     * @name SetStateValue
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @description
+     *   Set drawing state value
+     *
+     * @param {bbbfly.MapDrawingItem.state} state
+     * @param {boolean} [value=false] Value
+     * @param {boolean} [update=true]
+     * @return {boolean} If value has changed
+     *
+     * @see {@link bbbfly.MapDrawingItem#GetState|GetState()}
+     * @see {@link bbbfly.MapDrawingItem#GetStateValue|GetStateValue()}
+     */
+    this.SetStateValue = bbbfly.map.drawing.item._setStateValue;
+      /**
+     * @function
+     * @name GetSelected
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @return {boolean} Value
+     *
+     * @see {@link bbbfly.MapDrawingItem#SetSelected|SetSelected()}
+     * @see {@link bbbfly.MapDrawingItem#event:OnSetSelected|OnSetSelected}
+     * @see {@link bbbfly.MapDrawingItem#event:OnSelectedChanged|OnSelectedChanged}
+     */
+    this.GetSelected = bbbfly.map.drawing.item._getSelected;
+    /**
+     * @function
+     * @name SetSelected
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @param {boolean} [selected=true] - Value to set
+     * @param {boolean} [update=true] - If update control
+     *
+     * @see {@link bbbfly.MapDrawingItem#GetSelected|GetSelected()}
+     * @see {@link bbbfly.MapDrawingItem#event:OnSetSelected|OnSetSelected}
+     * @see {@link bbbfly.MapDrawingItem#event:OnSelectedChanged|OnSelectedChanged}
+     */
+    this.SetSelected = bbbfly.map.drawing.item._setSelected;
 
-  /**
-   * @event
-   * @name OnSetSelected
-   * @memberof bbbfly.MapDrawingItem#
-   *
-   * @see {@link bbbfly.MapDrawingItem#SetSelected|SetSelected()}
-   * @see {@link bbbfly.MapDrawingItem#GetSelected|GetSelected()}
-   * @see {@link bbbfly.MapDrawingItem#event:OnSelectedChanged|OnSelectedChanged}
-   */
-  this.OnSetSelected = null;
-  /**
-   * @event
-   * @name OnSelectedChanged
-   * @memberof bbbfly.MapDrawingItem#
-   *
-   * @see {@link bbbfly.MapDrawingItem#SetSelected|SetSelected()}
-   * @see {@link bbbfly.MapDrawingItem#GetSelected|GetSelected()}
-   * @see {@link bbbfly.MapDrawingItem#event:OnSetSelected|OnSetSelected}
-   */
-  this.OnSelectedChanged = null;
+    /**
+     * @event
+     * @name OnSetSelected
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @see {@link bbbfly.MapDrawingItem#SetSelected|SetSelected()}
+     * @see {@link bbbfly.MapDrawingItem#GetSelected|GetSelected()}
+     * @see {@link bbbfly.MapDrawingItem#event:OnSelectedChanged|OnSelectedChanged}
+     */
+    this.OnSetSelected = null;
+    /**
+     * @event
+     * @name OnSelectedChanged
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @see {@link bbbfly.MapDrawingItem#SetSelected|SetSelected()}
+     * @see {@link bbbfly.MapDrawingItem#GetSelected|GetSelected()}
+     * @see {@link bbbfly.MapDrawingItem#event:OnSetSelected|OnSetSelected}
+     */
+    this.OnSelectedChanged = null;
 
-  return drawing;
-};
+    return this;
+  }
+);
 
 /**
  * @enum {integer}
@@ -1138,33 +1141,36 @@ bbbfly.MapDrawingItem.selecttype = {
  *
  * @property {bbbfly.MapIcon.options} Options
  */
-bbbfly.MapIcon = function(options){
-  var drawing = new bbbfly.MapDrawingItem(options);
+bbbfly.MapIcon = bbbfly.object.Extend(
+  bbbfly.MapDrawingItem,function(options){
 
-  /** @private */
-  drawing._IconProxy = null;
-  /** @private */
-  drawing._IconHtml = '';
+    bbbfly.MapDrawingItem.call(this,options);
 
-  /** @private */
-  ng_OverrideMethod(drawing,'Create',
-    bbbfly.map.drawing.icon._create
-  );
-  /** @private */
-  ng_OverrideMethod(drawing,'Update',
-    bbbfly.map.drawing.icon._update
-  );
-  /** @private */
-  ng_OverrideMethod(drawing,'OnMouseEnter',
-    bbbfly.map.drawing.icon._onMouseEnter
-  );
-  /** @private */
-  ng_OverrideMethod(drawing,'OnMouseLeave',
-    bbbfly.map.drawing.icon._onMouseLeave
-  );
+    /** @private */
+    this._IconProxy = null;
+    /** @private */
+    this._IconHtml = '';
 
-  return drawing;
-};
+    /** @private */
+    ng_OverrideMethod(this,'Create',
+      bbbfly.map.drawing.icon._create
+    );
+    /** @private */
+    ng_OverrideMethod(this,'Update',
+      bbbfly.map.drawing.icon._update
+    );
+    /** @private */
+    ng_OverrideMethod(this,'OnMouseEnter',
+      bbbfly.map.drawing.icon._onMouseEnter
+    );
+    /** @private */
+    ng_OverrideMethod(this,'OnMouseLeave',
+      bbbfly.map.drawing.icon._onMouseLeave
+    );
+
+    return this;
+  }
+);
 
 /**
  * @class
@@ -1190,16 +1196,19 @@ bbbfly.MapIcon.Style = function(images,className){
  *
  * @property {bbbfly.MapGeometry.options} Options
  */
-bbbfly.MapGeometry = function(options){
-  var drawing = new bbbfly.MapDrawingItem(options);
+bbbfly.MapGeometry = bbbfly.object.Extend(
+  bbbfly.MapDrawingItem,function(options){
 
-  /** @private */
-  ng_OverrideMethod(drawing,'Create',
-    bbbfly.map.drawing.geometry._create
-  );
+    bbbfly.MapDrawingItem.call(this,options);
 
-  return drawing;
-};
+    /** @private */
+    ng_OverrideMethod(this,'Create',
+      bbbfly.map.drawing.geometry._create
+    );
+
+    return this;
+  }
+);
 
 /**
  * @class
@@ -1250,85 +1259,110 @@ bbbfly.MapGeometry.Style = function(opts){
  * @extends bbbfly.MapDrawing
  * @inpackage mapbox
  *
+ * @param {bbbfly.MapGeometry.options} options
+ *
+ * @property {bbbfly.MapGeometry.options} Options
+ */
+bbbfly.MapDrawingCombo = bbbfly.object.Extend(
+  bbbfly.MapDrawing,function(options){
+
+//    bbbfly.MapDrawing.call(this,options);
+
+//    /** @private */
+//    ng_OverrideMethod(drawing,'Create',
+//      bbbfly.map.drawing.geometry._create
+//    );
+
+    return this;
+  }
+);
+
+/**
+ * @class
+ * @extends bbbfly.MapDrawing
+ * @inpackage mapbox
+ *
  * @param {bbbfly.MapIconCluster.options} options
  *
  * @property {bbbfly.MapIconCluster.options} Options
  */
-bbbfly.MapIconCluster = function(options){
-  var drawing = new bbbfly.MapDrawing(options);
+bbbfly.MapIconCluster = bbbfly.object.Extend(
+  bbbfly.MapDrawing,function(options){
+    bbbfly.MapDrawing.call(this,options);
 
-  /** @private */
-  ng_OverrideMethod(drawing,'Create',
-    bbbfly.map.drawing.cluster._create
-  );
-  /** @private */
-  ng_OverrideMethod(drawing,'Update',
-    bbbfly.map.drawing.cluster._update
-  );
+    /** @private */
+    ng_OverrideMethod(this,'Create',
+      bbbfly.map.drawing.cluster._create
+    );
+    /** @private */
+    ng_OverrideMethod(this,'Update',
+      bbbfly.map.drawing.cluster._update
+    );
 
-  /** @private */
-  ng_OverrideMethod(drawing,'DoInitialize',
-    bbbfly.map.drawing.cluster._doInitialize
-  );
-  /** @private */
-  ng_OverrideMethod(drawing,'OnMouseEnter',
-    bbbfly.map.drawing.cluster._onMouseEnter
-  );
-  /** @private */
-  ng_OverrideMethod(drawing,'OnMouseLeave',
-    bbbfly.map.drawing.cluster._onMouseLeave
-  );
+    /** @private */
+    ng_OverrideMethod(this,'DoInitialize',
+      bbbfly.map.drawing.cluster._doInitialize
+    );
+    /** @private */
+    ng_OverrideMethod(this,'OnMouseEnter',
+      bbbfly.map.drawing.cluster._onMouseEnter
+    );
+    /** @private */
+    ng_OverrideMethod(this,'OnMouseLeave',
+      bbbfly.map.drawing.cluster._onMouseLeave
+    );
 
-  /**
-   * @function
-   * @name GetStyle
-   * @memberof bbbfly.MapIconCluster#
-   *
-   * @param {integer} cnt - Child markers count
-   * @return {bbbfly.MapIcon.Style}
-   */
-  drawing.GetIconStyle = bbbfly.map.drawing.cluster._getIconStyle;
     /**
-   * @function
-   * @name GetSpiderStyle
-   * @memberof bbbfly.MapIconCluster#
-   *
-   * @return {bbbfly.MapGeometry.Style}
-   */
-  drawing.GetSpiderStyle = bbbfly.map.drawing.cluster._getSpiderStyle;
+     * @function
+     * @name GetStyle
+     * @memberof bbbfly.MapIconCluster#
+     *
+     * @param {integer} cnt - Child markers count
+     * @return {bbbfly.MapIcon.Style}
+     */
+    this.GetIconStyle = bbbfly.map.drawing.cluster._getIconStyle;
+      /**
+     * @function
+     * @name GetSpiderStyle
+     * @memberof bbbfly.MapIconCluster#
+     *
+     * @return {bbbfly.MapGeometry.Style}
+     */
+    this.GetSpiderStyle = bbbfly.map.drawing.cluster._getSpiderStyle;
 
-  /**
-   * @function
-   * @name GetState
-   * @memberof bbbfly.MapIconCluster#
-   *
-   * @param {mapCluster} cluster
-   * @param {bbbfly.Renderer.state} def - State default values
-   * @return {bbbfly.Renderer.state} Drawing state
-   */
-  drawing.GetState = bbbfly.map.drawing.cluster._getState;
+    /**
+     * @function
+     * @name GetState
+     * @memberof bbbfly.MapIconCluster#
+     *
+     * @param {mapCluster} cluster
+     * @param {bbbfly.Renderer.state} def - State default values
+     * @return {bbbfly.Renderer.state} Drawing state
+     */
+    this.GetState = bbbfly.map.drawing.cluster._getState;
 
-  /**
-   * @function
-   * @name AddDrawing
-   * @memberof bbbfly.MapIconCluster#
-   *
-   * @param {bbbfly.MapDrawing} drawing
-   * @return {boolean} - If added
-   */
-  drawing.AddDrawing = bbbfly.map.drawing.cluster._addDrawing;
-  /**
-   * @function
-   * @name AddDrawing
-   * @memberof bbbfly.MapIconCluster#
-   *
-   * @param {bbbfly.MapDrawing} drawing
-   * @return {boolean} - If removed
-   */
-  drawing.RemoveDrawing = bbbfly.map.drawing.cluster._removeDrawing;
+    /**
+     * @function
+     * @name AddDrawing
+     * @memberof bbbfly.MapIconCluster#
+     *
+     * @param {bbbfly.MapDrawing} drawing
+     * @return {boolean} - If added
+     */
+    this.AddDrawing = bbbfly.map.drawing.cluster._addDrawing;
+    /**
+     * @function
+     * @name AddDrawing
+     * @memberof bbbfly.MapIconCluster#
+     *
+     * @param {bbbfly.MapDrawing} drawing
+     * @return {boolean} - If removed
+     */
+    this.RemoveDrawing = bbbfly.map.drawing.cluster._removeDrawing;
 
-  return drawing;
-};
+    return this;
+  }
+);
 
 /**
  * @class

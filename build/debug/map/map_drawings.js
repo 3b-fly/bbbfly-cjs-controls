@@ -582,29 +582,27 @@ bbbfly.map.drawing.handler._getDrawing = function(id){
   return (drawing instanceof bbbfly.MapDrawing) ? drawing : null;
 };
 bbbfly.map.drawing.handler._addDrawing = function(drawing){
-  if(
-    (drawing instanceof bbbfly.MapDrawing)
-    && String.isString(drawing.ID)
-    && !this._Drawings[drawing.ID]
-  ){
-    var added = (this._CurrentCluster)
-      ? this._CurrentCluster.AddDrawing(drawing)
-      : drawing.AddTo(this._Feature);
+  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
+  if(!String.isString(drawing.ID)){return false;}
+  if(this._Drawings[drawing.ID]){return false;}
 
-    if(added){
-      this._Drawings[drawing.ID] = drawing;
+  var added = (this._CurrentCluster)
+    ? this._CurrentCluster.AddDrawing(drawing)
+    : drawing.AddTo(this._Feature);
 
-      drawing.AddEvent(
-        'OnSetSelected',this._drawing_onSetSelected,true
-      );
-      drawing.AddEvent(
-        'OnSelectedChanged',this._drawing_onSelectedChanged,true
-      );
-
-      return true;
-    }
+  if(!added){return false;}
+    
+  if(drawing instanceof bbbfly.MapDrawingItem){
+    drawing.AddEvent(
+      'OnSetSelected',this._drawing_onSetSelected,true
+    );
+    drawing.AddEvent(
+      'OnSelectedChanged',this._drawing_onSelectedChanged,true
+    );
   }
-  return false;
+
+  this._Drawings[drawing.ID] = drawing;
+  return true;
 };
 bbbfly.map.drawing.handler._removeDrawing = function(drawing){
   if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
@@ -613,12 +611,14 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
   if(drawing.RemoveFrom()){
     delete(this._Drawings[drawing.ID]);
 
-    drawing.RemoveEvent(
-      'OnSetSelected',this._drawing_onSetSelected
-    );
-    drawing.RemoveEvent(
-      'OnSelectedChanged',this._drawing_onSelectedChanged
-    );
+    if(drawing instanceof bbbfly.MapDrawingItem){
+      drawing.RemoveEvent(
+        'OnSetSelected',this._drawing_onSetSelected
+      );
+      drawing.RemoveEvent(
+        'OnSelectedChanged',this._drawing_onSelectedChanged
+      );
+    }
 
     return true;
   }
@@ -720,35 +720,38 @@ bbbfly.MapDrawing = function(options){
   this.OnDblClick = null;
   this.OnRightClick = null;
 };
-bbbfly.MapDrawingItem = function(options){
-  var drawing = new bbbfly.MapDrawing(options);
-  drawing._State = 0;
-  ng_OverrideMethod(drawing,'Update',
-    bbbfly.map.drawing.item._update
-  );
-  ng_OverrideMethod(drawing,'OnMouseEnter',
-    bbbfly.map.drawing.item._onMouseEnter
-  );
-  ng_OverrideMethod(drawing,'OnMouseLeave',
-    bbbfly.map.drawing.item._onMouseLeave
-  );
-  ng_OverrideMethod(drawing,'OnClick',
-    bbbfly.map.drawing.item._onClick
-  );
-  ng_OverrideMethod(drawing,'OnDblClick',
-    bbbfly.map.drawing.item._onDblClick
-  );
-  drawing.GetStyle = bbbfly.map.drawing.item._getStyle;
-  drawing.GetState = bbbfly.map.drawing.item._getState;
-  drawing.GetStateValue = bbbfly.map.drawing.item._getStateValue;
-  drawing.SetStateValue = bbbfly.map.drawing.item._setStateValue;
-  drawing.GetSelected = bbbfly.map.drawing.item._getSelected;
-  drawing.SetSelected = bbbfly.map.drawing.item._setSelected;
-  this.OnSetSelected = null;
-  this.OnSelectedChanged = null;
+bbbfly.MapDrawingItem = bbbfly.object.Extend(
+  bbbfly.MapDrawing,function(options){
 
-  return drawing;
-};
+    bbbfly.MapDrawing.call(this,options);
+    this._State = 0;
+    ng_OverrideMethod(this,'Update',
+      bbbfly.map.drawing.item._update
+    );
+    ng_OverrideMethod(this,'OnMouseEnter',
+      bbbfly.map.drawing.item._onMouseEnter
+    );
+    ng_OverrideMethod(this,'OnMouseLeave',
+      bbbfly.map.drawing.item._onMouseLeave
+    );
+    ng_OverrideMethod(this,'OnClick',
+      bbbfly.map.drawing.item._onClick
+    );
+    ng_OverrideMethod(this,'OnDblClick',
+      bbbfly.map.drawing.item._onDblClick
+    );
+    this.GetStyle = bbbfly.map.drawing.item._getStyle;
+    this.GetState = bbbfly.map.drawing.item._getState;
+    this.GetStateValue = bbbfly.map.drawing.item._getStateValue;
+    this.SetStateValue = bbbfly.map.drawing.item._setStateValue;
+    this.GetSelected = bbbfly.map.drawing.item._getSelected;
+    this.SetSelected = bbbfly.map.drawing.item._setSelected;
+    this.OnSetSelected = null;
+    this.OnSelectedChanged = null;
+
+    return this;
+  }
+);
 bbbfly.MapDrawingItem.state = {
   mouseover: 1,
   disabled: 2,
@@ -761,25 +764,28 @@ bbbfly.MapDrawingItem.selecttype = {
   dblclick: 2,
   both: 3
 };
-bbbfly.MapIcon = function(options){
-  var drawing = new bbbfly.MapDrawingItem(options);
-  drawing._IconProxy = null;
-  drawing._IconHtml = '';
-  ng_OverrideMethod(drawing,'Create',
-    bbbfly.map.drawing.icon._create
-  );
-  ng_OverrideMethod(drawing,'Update',
-    bbbfly.map.drawing.icon._update
-  );
-  ng_OverrideMethod(drawing,'OnMouseEnter',
-    bbbfly.map.drawing.icon._onMouseEnter
-  );
-  ng_OverrideMethod(drawing,'OnMouseLeave',
-    bbbfly.map.drawing.icon._onMouseLeave
-  );
+bbbfly.MapIcon = bbbfly.object.Extend(
+  bbbfly.MapDrawingItem,function(options){
 
-  return drawing;
-};
+    bbbfly.MapDrawingItem.call(this,options);
+    this._IconProxy = null;
+    this._IconHtml = '';
+    ng_OverrideMethod(this,'Create',
+      bbbfly.map.drawing.icon._create
+    );
+    ng_OverrideMethod(this,'Update',
+      bbbfly.map.drawing.icon._update
+    );
+    ng_OverrideMethod(this,'OnMouseEnter',
+      bbbfly.map.drawing.icon._onMouseEnter
+    );
+    ng_OverrideMethod(this,'OnMouseLeave',
+      bbbfly.map.drawing.icon._onMouseLeave
+    );
+
+    return this;
+  }
+);
 bbbfly.MapIcon.Style = function(images,className){
   if(!Array.isArray(images)){images = null;}
   if(!String.isString(className)){className = '';}
@@ -787,14 +793,17 @@ bbbfly.MapIcon.Style = function(images,className){
   this.images = images;
   this.className = className;
 };
-bbbfly.MapGeometry = function(options){
-  var drawing = new bbbfly.MapDrawingItem(options);
-  ng_OverrideMethod(drawing,'Create',
-    bbbfly.map.drawing.geometry._create
-  );
+bbbfly.MapGeometry = bbbfly.object.Extend(
+  bbbfly.MapDrawingItem,function(options){
 
-  return drawing;
-};
+    bbbfly.MapDrawingItem.call(this,options);
+    ng_OverrideMethod(this,'Create',
+      bbbfly.map.drawing.geometry._create
+    );
+
+    return this;
+  }
+);
 bbbfly.MapGeometry.Style = function(opts){
   this.stroke = false;
   this.fill = false;
@@ -819,31 +828,39 @@ bbbfly.MapGeometry.Style = function(opts){
   this.stroke = !!((this.weight > 0) && (this.opacity > 0));
   this.fill = !!(this.fillColor && (this.fillOpacity > 0));
 };
-bbbfly.MapIconCluster = function(options){
-  var drawing = new bbbfly.MapDrawing(options);
-  ng_OverrideMethod(drawing,'Create',
-    bbbfly.map.drawing.cluster._create
-  );
-  ng_OverrideMethod(drawing,'Update',
-    bbbfly.map.drawing.cluster._update
-  );
-  ng_OverrideMethod(drawing,'DoInitialize',
-    bbbfly.map.drawing.cluster._doInitialize
-  );
-  ng_OverrideMethod(drawing,'OnMouseEnter',
-    bbbfly.map.drawing.cluster._onMouseEnter
-  );
-  ng_OverrideMethod(drawing,'OnMouseLeave',
-    bbbfly.map.drawing.cluster._onMouseLeave
-  );
-  drawing.GetIconStyle = bbbfly.map.drawing.cluster._getIconStyle;
-  drawing.GetSpiderStyle = bbbfly.map.drawing.cluster._getSpiderStyle;
-  drawing.GetState = bbbfly.map.drawing.cluster._getState;
-  drawing.AddDrawing = bbbfly.map.drawing.cluster._addDrawing;
-  drawing.RemoveDrawing = bbbfly.map.drawing.cluster._removeDrawing;
+bbbfly.MapDrawingCombo = bbbfly.object.Extend(
+  bbbfly.MapDrawing,function(options){
 
-  return drawing;
-};
+    return this;
+  }
+);
+bbbfly.MapIconCluster = bbbfly.object.Extend(
+  bbbfly.MapDrawing,function(options){
+    bbbfly.MapDrawing.call(this,options);
+    ng_OverrideMethod(this,'Create',
+      bbbfly.map.drawing.cluster._create
+    );
+    ng_OverrideMethod(this,'Update',
+      bbbfly.map.drawing.cluster._update
+    );
+    ng_OverrideMethod(this,'DoInitialize',
+      bbbfly.map.drawing.cluster._doInitialize
+    );
+    ng_OverrideMethod(this,'OnMouseEnter',
+      bbbfly.map.drawing.cluster._onMouseEnter
+    );
+    ng_OverrideMethod(this,'OnMouseLeave',
+      bbbfly.map.drawing.cluster._onMouseLeave
+    );
+    this.GetIconStyle = bbbfly.map.drawing.cluster._getIconStyle;
+    this.GetSpiderStyle = bbbfly.map.drawing.cluster._getSpiderStyle;
+    this.GetState = bbbfly.map.drawing.cluster._getState;
+    this.AddDrawing = bbbfly.map.drawing.cluster._addDrawing;
+    this.RemoveDrawing = bbbfly.map.drawing.cluster._removeDrawing;
+
+    return this;
+  }
+);
 bbbfly.MapDrawingsHandler = function(feature,options){
   if(!(feature instanceof L.FeatureGroup)){return null;}
   if(!Object.isObject(options)){options = {};}

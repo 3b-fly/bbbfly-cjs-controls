@@ -317,6 +317,7 @@
         "bbbfly-cjs": {
           "Packages": [
             "crossbrowser",
+            "object",
             "renderer",
             "listener"
           ]
