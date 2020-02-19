@@ -52,41 +52,68 @@ bbbfly.map.drawing.utils.IsLatLng = function(latLng){
   return (Array.isArray(latLng) || (latLng instanceof L.LatLng));
 };
 bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
-  if(json && json.features){
-    var multiToSingle = function(feature,newType,features){
-      for(var i in feature.geometry.coordinates){
-        features.push({
-          type: 'Feature',
-          properties: feature.properties,
-          geometry: {
-            type: newType,
-            coordinates: feature.geometry.coordinates[i]
-          }
-        });
-      }
-    };
+  if(!Object.isObject(json)){return null;}
 
-    var newFeatures = [];
-
-    for(var j in json.features){
-      var feature = json.features[j];
-      if(feature.geometry){
-        switch(feature.geometry.type){
-          case 'MultiLineString':
-            multiToSingle(feature,'LineString',newFeatures);
-          break;
-          case 'MultiPolygon':
-            multiToSingle(feature,'Polygon',newFeatures);
-          break;
-          default:
-            newFeatures.push(feature);
-          break;
+  var multiToSingle = function(feature,newType,features){
+    for(var i in feature.geometry.coordinates){
+      features.push({
+        type: 'Feature',
+        properties: feature.properties,
+        geometry: {
+          type: newType,
+          coordinates: feature.geometry.coordinates[i]
         }
+      });
+    }
+  };
+
+  var featureToSingle = function(feature,features){
+    if(feature.geometry){
+      switch(feature.geometry.type){
+        case 'MultiLineString':
+          multiToSingle(feature,'LineString',features);
+        break;
+        case 'MultiPolygon':
+          multiToSingle(feature,'Polygon',features);
+        break;
+        default:
+          features.push(feature);
+        break;
       }
     }
-    json.features = newFeatures;
-  }
-  return json;
+  };
+
+  var normalizeCollection = function(json){
+    if(json.type === 'FeatureCollection'){
+      var normalized = {
+        type: json.type,
+        features: []
+      };
+
+      if(Array.isArray(json.features)){
+        for(var i in json.features){
+          var feature = json.features[i];
+
+          switch(feature.type){
+            case 'FeatureCollection':
+              normalized.features.push(
+                normalizeCollection(feature)
+              );
+            break;
+            case 'Feature':
+              featureToSingle(
+                feature,normalized.features
+              );
+            break;
+          }
+        }
+      }
+      return normalized;
+    }
+    return null;
+  };
+
+  return normalizeCollection(json);
 };
 bbbfly.map.drawing.utils.InitMouseEvents = function(layer,prefix,callback){
   if(!(layer instanceof L.Layer)){return;}
@@ -137,16 +164,7 @@ bbbfly.map.drawing.core._initialize = function(){
   if(this._Initialized){return true;}
 
   if(!Function.isFunction(this.Create)){return false;}
-  var layers = this.Create();
-
-  if(Object.isObject(layers)){
-    this.DoInitialize(layers);
-  }
-  else if(Array.isArray(layers)){
-    for(var i in layers){
-      this.DoInitialize(layers[i]);
-    }
-  }
+  if(!this.DoInitialize(this.Create())){return false;}
 
   this._Initialized = true;
   return true;
@@ -157,18 +175,16 @@ bbbfly.map.drawing.core._doInitialize = function(layer,prefix){
 
   bbbfly.map.drawing.utils.InitMouseEvents(layer,prefix);
 
-  layer.Owner = this;
   L.Util.stamp(layer);
-  this._Layers.push(layer);
+  layer.Owner = this;
+  this._Layer = layer;
 
   return true;
 };
 bbbfly.map.drawing.core._dispose = function(){
-  this.Scan(function(layer){
-    layer.remove();
-  });
+  if(this._Layer){this._Layer.remove();}
 
-  this._Layers = [];
+  this._Layer = null;
   this._ParentFeature = null;
   this._Initialized = false;
 };
@@ -177,14 +193,9 @@ bbbfly.map.drawing.core._addTo = function(feature){
 
   if(
     (feature instanceof L.FeatureGroup)
-    || (feature instanceof L.MarkerClusterGroup)
+    && this.Initialize()
   ){
-    this.Initialize();
-
-    this.Scan(function(layer){
-      layer.addTo(feature);
-    });
-
+    this._Layer.addTo(feature);
     this._ParentFeature = feature;
 
     if(Function.isFunction(this.Update)){
@@ -199,14 +210,18 @@ bbbfly.map.drawing.core._removeFrom = function(feature){
   if(!feature){feature = this._ParentFeature;}
 
   if(feature === this._ParentFeature){
-    this.Scan(function(layer){
-      layer.removeFrom(feature);
-    });
+
+    if(this._Layer){
+      this._Layer.removeFrom(feature);
+    }
 
     this._ParentFeature = null;
     return true;
   }
   return false;
+};
+bbbfly.map.drawing.core._getGeoJSON = function(){
+  return (this._Layer ? this._Layer.toGeoJSON() : null);
 };
 bbbfly.map.drawing.core._scan = function(callback,def){
   if(!Boolean.isBoolean(def)){def = false;}
@@ -322,33 +337,33 @@ bbbfly.map.drawing.icon._create = function(){
   return marker;
 };
 bbbfly.map.drawing.icon._update = function(){
-  var style = this.GetStyle(bbbfly.MapIcon.Style);
-  var state = this.GetState();
+  if(this._Layer){
+    var style = this.GetStyle(bbbfly.MapIcon.Style);
+    var state = this.GetState();
 
-  var over = state.mouseover;
-  state.mouseover = false;
+    var over = state.mouseover;
+    state.mouseover = false;
 
-  var proxy = bbbfly.Renderer.StackProxy(style.images,state,this.ID+'_I');
-  var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg');
+    var proxy = bbbfly.Renderer.StackProxy(style.images,state,this.ID+'_I');
+    var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg');
 
-  this._IconProxy = proxy;
-  state.mouseover = over;
+    this._IconProxy = proxy;
+    state.mouseover = over;
 
-  if(html !== this._IconHtml){
-    this._IconHtml = html;
+    if(html !== this._IconHtml){
+      this._IconHtml = html;
 
-    var icon = L.divIcon({
-      iconSize: [proxy.W,proxy.H],
-      iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
-      className: style.className,
-      html: html
-    });
+      var icon = L.divIcon({
+        iconSize: [proxy.W,proxy.H],
+        iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
+        className: style.className,
+        html: html
+      });
 
-    this.Scan(function(layer){
-      layer.setIcon(icon);
-    });
+      this._Layer.setIcon(icon);
 
-    if(over){bbbfly.Renderer.UpdateStackHTML(proxy,state);}
+      if(over){bbbfly.Renderer.UpdateStackHTML(proxy,state);}
+    }
   }
 
   this.Update.callParent();
@@ -373,25 +388,24 @@ bbbfly.map.drawing.geometry._create = function(){
   var style = this.GetStyle(bbbfly.MapGeometry.Style);
   var json = this.Options.GeoJSON;
 
-  if(!(json instanceof L.GeoJSON)){
-    json = bbbfly.map.drawing.utils.NormalizeGeoJSON(json);
-    json = new L.GeoJSON(json);
-  }
+  var options = {
+    onEachFeature: bbbfly.map.drawing.geometry._initPath,
+    Owner: this
+  };
 
-  var geometries = json.getLayers();
-  if(!Array.isArray(geometries)){return [];}
+  var layer = new L.GeoJSON(
+    bbbfly.map.drawing.utils.NormalizeGeoJSON(json),
+    options
+  );
 
-  for(var i in geometries){
-    var geometry = geometries[i];
-    geometry.setStyle(style);
-
-    ng_OverrideMethod(
-      geometry,'_project',
-      bbbfly.map.drawing.geometry._project
-    );
-  }
-
-  return geometries;
+  layer.setStyle(style);
+  return layer;
+};
+bbbfly.map.drawing.geometry._initPath = function(feature,layer){
+  ng_OverrideMethod(
+    layer,'_project',
+    bbbfly.map.drawing.geometry._project
+  );
 };
 bbbfly.map.drawing.geometry._project = function(){
   this._project.callParent();
@@ -399,18 +413,33 @@ bbbfly.map.drawing.geometry._project = function(){
   var node = this.getElement();
   if(!node){return;}
 
-  var minSize = this.Owner.Options.MinPartSize;
-  var display = 'block';
+  var drawing = this.options.Owner;
 
-  if(Number.isInteger(minSize)){
-    var size = this._pxBounds.getSize();
+  var minSize = drawing.Options.MinSize;
+  if(!Number.isInteger(minSize)){minSize = 25;}
 
-    if((size.x < minSize) || (size.y < minSize)){
-      display = 'none';
+  var jsonLayer = drawing._Layer;
+  var bounds = jsonLayer.getBounds();
+
+  if(bounds.isValid()){
+    bounds = [bounds.getNorthEast(),bounds.getSouthWest()];
+
+    var pxBounds = new L.Bounds();
+    this._projectLatlngs(bounds,[],pxBounds);
+
+    if(pxBounds.isValid()){
+      var size = pxBounds.getSize();
+
+      if((size.x < minSize) || (size.y < minSize)){
+        node.style.display = 'none';
+        console.info('NONE',size,drawing.ID); //TODO
+        return;
+      }
     }
   }
 
-  node.style.display = display;
+  node.style.display = 'block';
+  console.info('BLOCK',size,drawing.ID); //TODO
 };
 bbbfly.map.drawing.cluster._create = function(){
   var style = this.GetSpiderStyle();
@@ -435,9 +464,7 @@ bbbfly.map.drawing.cluster._create = function(){
   return group;
 };
 bbbfly.map.drawing.cluster._update = function(){
-  this.Scan(function(layer){
-    layer.refreshClusters();
-  });
+  if(this._Layer){this._Layer.refreshClusters();}
 };
 bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
   var type = bbbfly.MapIcon.Style;
@@ -507,7 +534,7 @@ bbbfly.map.drawing.cluster._getState = function(cluster,def){
   return state;
 };
 bbbfly.map.drawing.cluster._doInitialize = function(layer){
-  this.DoInitialize.callParent(layer,'cluster');
+  return this.DoInitialize.callParent(layer,'cluster');
 };
 bbbfly.map.drawing.cluster._onMouseEnter = function(cluster){
   var state = this.GetState(cluster,{mouseover:true});
@@ -521,17 +548,11 @@ bbbfly.map.drawing.cluster._onMouseLeave = function(cluster){
 };
 bbbfly.map.drawing.cluster._addDrawing = function(drawing){
   if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
-
-  return this.Scan(function(layer){
-    if(drawing.AddTo(layer)){return true;}
-  });
+   return drawing.AddTo(this._Layer);
 };
 bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
   if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
-
-  return this.Scan(function(layer){
-    if(drawing.RemoveFrom(layer)){return true;}
-  });
+  return drawing.RemoveFrom(this._Layer);
 };
 bbbfly.map.drawing.cluster._createIcon = function(cluster){
   var drawing = cluster._group.Owner;
@@ -591,7 +612,7 @@ bbbfly.map.drawing.handler._addDrawing = function(drawing){
     : drawing.AddTo(this._Feature);
 
   if(!added){return false;}
-    
+
   if(drawing instanceof bbbfly.MapDrawingItem){
     drawing.AddEvent(
       'OnSetSelected',this._drawing_onSetSelected,true
@@ -703,7 +724,7 @@ bbbfly.MapDrawing = function(options){
 
   this.ID = bbbfly.map.drawing.utils.DrawingId(options);
   this.Options = options;
-  this._Layers = [];
+  this._Layer = null;
   this._ParentFeature = null;
   this._Initialized = false;
   this.Initialize = bbbfly.map.drawing.core._initialize;
@@ -713,6 +734,7 @@ bbbfly.MapDrawing = function(options){
   this.Dispose = bbbfly.map.drawing.core._dispose;
   this.AddTo = bbbfly.map.drawing.core._addTo;
   this.RemoveFrom = bbbfly.map.drawing.core._removeFrom;
+  this.GetGeoJSON = bbbfly.map.drawing.core._getGeoJSON;
   this.Scan = bbbfly.map.drawing.core._scan;
   this.OnMouseEnter = null;
   this.OnMouseLeave = null;
