@@ -67,41 +67,68 @@ bbbfly.map.drawing.utils.IsLatLng = function(latLng){
 
 /** @ignore */
 bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
-  if(json && json.features){
-    var multiToSingle = function(feature,newType,features){
-      for(var i in feature.geometry.coordinates){
-        features.push({
-          type: 'Feature',
-          properties: feature.properties,
-          geometry: {
-            type: newType,
-            coordinates: feature.geometry.coordinates[i]
-          }
-        });
-      }
-    };
+  if(!Object.isObject(json)){return null;}
 
-    var newFeatures = [];
-
-    for(var j in json.features){
-      var feature = json.features[j];
-      if(feature.geometry){
-        switch(feature.geometry.type){
-          case 'MultiLineString':
-            multiToSingle(feature,'LineString',newFeatures);
-          break;
-          case 'MultiPolygon':
-            multiToSingle(feature,'Polygon',newFeatures);
-          break;
-          default:
-            newFeatures.push(feature);
-          break;
+  var multiToSingle = function(feature,newType,features){
+    for(var i in feature.geometry.coordinates){
+      features.push({
+        type: 'Feature',
+        properties: feature.properties,
+        geometry: {
+          type: newType,
+          coordinates: feature.geometry.coordinates[i]
         }
+      });
+    }
+  };
+
+  var featureToSingle = function(feature,features){
+    if(feature.geometry){
+      switch(feature.geometry.type){
+        case 'MultiLineString':
+          multiToSingle(feature,'LineString',features);
+        break;
+        case 'MultiPolygon':
+          multiToSingle(feature,'Polygon',features);
+        break;
+        default:
+          features.push(feature);
+        break;
       }
     }
-    json.features = newFeatures;
-  }
-  return json;
+  };
+
+  var normalizeCollection = function(json){
+    if(json.type === 'FeatureCollection'){
+      var normalized = {
+        type: json.type,
+        features: []
+      };
+
+      if(Array.isArray(json.features)){
+        for(var i in json.features){
+          var feature = json.features[i];
+
+          switch(feature.type){
+            case 'FeatureCollection':
+              normalized.features.push(
+                normalizeCollection(feature)
+              );
+            break;
+            case 'Feature':
+              featureToSingle(
+                feature,normalized.features
+              );
+            break;
+          }
+        }
+      }
+      return normalized;
+    }
+    return null;
+  };
+
+  return normalizeCollection(json);
 };
 
 /** @ignore */

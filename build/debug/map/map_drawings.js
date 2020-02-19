@@ -220,9 +220,6 @@ bbbfly.map.drawing.core._removeFrom = function(feature){
   }
   return false;
 };
-bbbfly.map.drawing.core._getGeoJSON = function(){
-  return (this._Layer ? this._Layer.toGeoJSON() : null);
-};
 bbbfly.map.drawing.core._scan = function(callback,def){
   if(!Boolean.isBoolean(def)){def = false;}
 
@@ -432,14 +429,12 @@ bbbfly.map.drawing.geometry._project = function(){
 
       if((size.x < minSize) || (size.y < minSize)){
         node.style.display = 'none';
-        console.info('NONE',size,drawing.ID); //TODO
         return;
       }
     }
   }
 
   node.style.display = 'block';
-  console.info('BLOCK',size,drawing.ID); //TODO
 };
 bbbfly.map.drawing.cluster._create = function(){
   var style = this.GetSpiderStyle();
@@ -734,7 +729,6 @@ bbbfly.MapDrawing = function(options){
   this.Dispose = bbbfly.map.drawing.core._dispose;
   this.AddTo = bbbfly.map.drawing.core._addTo;
   this.RemoveFrom = bbbfly.map.drawing.core._removeFrom;
-  this.GetGeoJSON = bbbfly.map.drawing.core._getGeoJSON;
   this.Scan = bbbfly.map.drawing.core._scan;
   this.OnMouseEnter = null;
   this.OnMouseLeave = null;
