@@ -251,6 +251,11 @@ bbbfly.map.drawing.core._removeFrom = function(feature){
 };
 
 /** @ignore */
+bbbfly.map.drawing.core._getGeoJSON = function(){
+  return (this._Layer ? this._Layer.toGeoJSON() : null);
+};
+
+/** @ignore */
 bbbfly.map.drawing.core._scan = function(callback,def){
   if(!Boolean.isBoolean(def)){def = false;}
 
@@ -913,6 +918,14 @@ bbbfly.MapDrawing = function(options){
    * @see {@link bbbfly.MapDrawing#AddTo|AddTo()}
    */
   this.RemoveFrom = bbbfly.map.drawing.core._removeFrom;
+  /**
+   * @function
+   * @name GetGeoJSON
+   * @memberof bbbfly.MapDrawing#
+   *
+   * @return {GeoJSON}
+   */
+  this.GetGeoJSON = bbbfly.map.drawing.core._getGeoJSON;
   /**
    * @function
    * @name Scan

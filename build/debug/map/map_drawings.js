@@ -220,6 +220,9 @@ bbbfly.map.drawing.core._removeFrom = function(feature){
   }
   return false;
 };
+bbbfly.map.drawing.core._getGeoJSON = function(){
+  return (this._Layer ? this._Layer.toGeoJSON() : null);
+};
 bbbfly.map.drawing.core._scan = function(callback,def){
   if(!Boolean.isBoolean(def)){def = false;}
 
@@ -729,6 +732,7 @@ bbbfly.MapDrawing = function(options){
   this.Dispose = bbbfly.map.drawing.core._dispose;
   this.AddTo = bbbfly.map.drawing.core._addTo;
   this.RemoveFrom = bbbfly.map.drawing.core._removeFrom;
+  this.GetGeoJSON = bbbfly.map.drawing.core._getGeoJSON;
   this.Scan = bbbfly.map.drawing.core._scan;
   this.OnMouseEnter = null;
   this.OnMouseLeave = null;
