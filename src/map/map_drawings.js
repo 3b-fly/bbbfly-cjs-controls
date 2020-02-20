@@ -1325,16 +1325,16 @@ bbbfly.MapGeometry = bbbfly.object.Extend(
  * @param {integer} [opts.weight=undefined]
  * @param {string} [opts.color=undefined]
  * @param {string} [opts.fillColor=undefined]
- * @param {double} [opts.opacity=undefined]
- * @param {double} [opts.fillOpacity=undefined]
+ * @param {number} [opts.opacity=undefined]
+ * @param {number} [opts.fillOpacity=undefined]
  *
  * @property {boolean} fill
  * @property {boolean} stroke
  * @property {integer} [weight=1]
  * @property {string} [color='#000000']
  * @property {string} [fillColor=undefined]
- * @property {double} [opacity=1]
- * @property {double} [fillOpacity=0.2]
+ * @property {number} [opacity=1]
+ * @property {number} [fillOpacity=0.2]
  */
 bbbfly.MapGeometry.Style = function(opts){
   this.stroke = false;
