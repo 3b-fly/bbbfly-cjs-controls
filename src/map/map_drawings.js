@@ -575,7 +575,8 @@ bbbfly.map.drawing.cluster._getCenter = function(){
     var bounds = this._Layer.getBounds();
 
     if(bounds.isValid()){
-      return bounds.getCenter();
+      var center = bounds.getCenter();
+      return [center.lat,center.lng];
     }
   }
   return null;
@@ -1309,7 +1310,7 @@ bbbfly.MapGeometry = bbbfly.object.Extend(
      * @name GetCenter
      * @memberof bbbfly.MapGeometry#
      *
-     * @return {mapPoint|null}
+     * @return {number[]|null}
      */
     this.GetCenter = bbbfly.map.drawing.cluster._getCenter;
 

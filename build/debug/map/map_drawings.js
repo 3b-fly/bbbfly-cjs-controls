@@ -491,7 +491,8 @@ bbbfly.map.drawing.cluster._getCenter = function(){
     var bounds = this._Layer.getBounds();
 
     if(bounds.isValid()){
-      return bounds.getCenter();
+      var center = bounds.getCenter();
+      return [center.lat,center.lng];
     }
   }
   return null;
