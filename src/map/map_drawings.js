@@ -21,6 +21,7 @@ bbbfly.map.drawing = {
   layer: {},
   core: {},
   item: {},
+  group: {},
   icon: {},
   geometry: {},
   cluster: {},
@@ -377,6 +378,60 @@ bbbfly.map.drawing.item._onDblClick = function(){
 };
 
 /** @ignore */
+bbbfly.map.drawing.group._getIconStyle = function(cnt){
+  var type = bbbfly.MapIcon.Style;
+  var style = this.Options.IconStyle;
+  if(style instanceof type){return style;}
+
+  if(Array.isArray(style) && Number.isInteger(cnt)){
+    for(var i in style){
+      var styleDef = style[i];
+      var from = Number.isInteger(styleDef.from) ? styleDef.from : null;
+      var to = Number.isInteger(styleDef.to) ? styleDef.to : null;
+
+      if(
+        ((from === null) || (cnt >= from))
+        && ((to === null) || (cnt <= to))
+      ){
+        style = styleDef.style;
+        break;
+      }
+    }
+  }
+
+  if(String.isString(style)){
+    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+  }
+
+  return (style instanceof type) ? style : new type();
+};
+
+/** @ignore */
+bbbfly.map.drawing.group._getGeometryStyle = function(){
+  var type = bbbfly.MapGeometry.Style;
+  var style = this.Options.GeometryStyle;
+  if(style instanceof type){return style;}
+
+  if(String.isString(style)){
+    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+  }
+
+  return (style instanceof type) ? style : new type();
+};
+
+/** @ignore */
+bbbfly.map.drawing.group._addDrawing = function(drawing){
+  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
+   return drawing.AddTo(this._Layer);
+};
+
+/** @ignore */
+bbbfly.map.drawing.group._removeDrawing = function(drawing){
+  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
+  return drawing.RemoveFrom(this._Layer);
+};
+
+/** @ignore */
 bbbfly.map.drawing.icon._create = function(){
   var coords = this.Options.Coordinates;
   var marker = null;
@@ -528,7 +583,7 @@ bbbfly.map.drawing.cluster._getCenter = function(){
 
 /** @ignore */
 bbbfly.map.drawing.cluster._create = function(){
-  var style = this.GetSpiderStyle();
+  var style = this.GetGeometryStyle();
 
   var radius = this.Options.Radius;
   if(!Number.isInteger(radius)){radius = 50;}
@@ -553,48 +608,6 @@ bbbfly.map.drawing.cluster._create = function(){
 /** @ignore */
 bbbfly.map.drawing.cluster._update = function(){
   if(this._Layer){this._Layer.refreshClusters();}
-};
-
-/** @ignore */
-bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
-  var type = bbbfly.MapIcon.Style;
-  var style = this.Options.IconStyle;
-  if(style instanceof type){return style;}
-
-  if(Array.isArray(style) && Number.isInteger(cnt)){
-    for(var i in style){
-      var styleDef = style[i];
-      var from = Number.isInteger(styleDef.from) ? styleDef.from : null;
-      var to = Number.isInteger(styleDef.to) ? styleDef.to : null;
-
-      if(
-        ((from === null) || (cnt >= from))
-        && ((to === null) || (cnt <= to))
-      ){
-        style = styleDef.style;
-        break;
-      }
-    }
-  }
-
-  if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
-  }
-
-  return (style instanceof type) ? style : new type();
-};
-
-/** @ignore */
-bbbfly.map.drawing.cluster._getSpiderStyle = function(){
-  var type = bbbfly.MapGeometry.Style;
-  var style = this.Options.SpiderStyle;
-  if(style instanceof type){return style;}
-
-  if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
-  }
-
-  return (style instanceof type) ? style : new type();
 };
 
 /** @ignore */
@@ -645,18 +658,6 @@ bbbfly.map.drawing.cluster._onMouseLeave = function(cluster){
   var state = this.GetState(cluster,{mouseover:false});
   var id = bbbfly.map.drawing.utils.LeafletId(cluster);
   bbbfly.Renderer.UpdateStackHTML(cluster._iconProxy,state,id);
-};
-
-/** @ignore */
-bbbfly.map.drawing.cluster._addDrawing = function(drawing){
-  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
-   return drawing.AddTo(this._Layer);
-};
-
-/** @ignore */
-bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
-  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
-  return drawing.RemoveFrom(this._Layer);
 };
 
 /** @ignore */
@@ -1177,6 +1178,60 @@ bbbfly.MapDrawingItem.selecttype = {
 
 /**
  * @class
+ * @extends bbbfly.MapDrawing
+ * @inpackage mapbox
+ *
+ * @param {bbbfly.MapDrawingGroup.options} options
+ *
+ * @property {bbbfly.MapDrawingGroup.options} Options
+ */
+bbbfly.MapDrawingGroup = bbbfly.object.Extend(
+  bbbfly.MapDrawing,function(options){
+    bbbfly.MapDrawing.call(this,options);
+
+    /**
+     * @function
+     * @name GetIconStyle
+     * @memberof bbbfly.MapDrawingGroup#
+     *
+     * @param {integer} cnt - Child markers count
+     * @return {bbbfly.MapIcon.Style}
+     */
+    this.GetIconStyle = bbbfly.map.drawing.group._getIconStyle;
+    /**
+     * @function
+     * @name GetGeometryStyle
+     * @memberof bbbfly.MapDrawingGroup#
+     *
+     * @return {bbbfly.MapGeometry.Style}
+     */
+    this.GetGeometryStyle = bbbfly.map.drawing.group._getGeometryStyle;
+
+    /**
+     * @function
+     * @name AddDrawing
+     * @memberof bbbfly.MapDrawingGroup#
+     *
+     * @param {bbbfly.MapDrawing} drawing
+     * @return {boolean} - If added
+     */
+    this.AddDrawing = bbbfly.map.drawing.group._addDrawing;
+    /**
+     * @function
+     * @name AddDrawing
+     * @memberof bbbfly.MapDrawingGroup#
+     *
+     * @param {bbbfly.MapDrawing} drawing
+     * @return {boolean} - If removed
+     */
+    this.RemoveDrawing = bbbfly.map.drawing.group._removeDrawing;
+
+    return this;
+  }
+);
+
+/**
+ * @class
  * @extends bbbfly.MapDrawingItem
  * @inpackage mapbox
  *
@@ -1331,7 +1386,7 @@ bbbfly.MapDrawingCombo = bbbfly.object.Extend(
 
 /**
  * @class
- * @extends bbbfly.MapDrawing
+ * @extends bbbfly.MapDrawingGroup
  * @inpackage mapbox
  *
  * @param {bbbfly.MapIconCluster.options} options
@@ -1339,8 +1394,8 @@ bbbfly.MapDrawingCombo = bbbfly.object.Extend(
  * @property {bbbfly.MapIconCluster.options} Options
  */
 bbbfly.MapIconCluster = bbbfly.object.Extend(
-  bbbfly.MapDrawing,function(options){
-    bbbfly.MapDrawing.call(this,options);
+  bbbfly.MapDrawingGroup,function(options){
+    bbbfly.MapDrawingGroup.call(this,options);
 
     /** @private */
     ng_OverrideMethod(this,'Create',
@@ -1366,24 +1421,6 @@ bbbfly.MapIconCluster = bbbfly.object.Extend(
 
     /**
      * @function
-     * @name GetStyle
-     * @memberof bbbfly.MapIconCluster#
-     *
-     * @param {integer} cnt - Child markers count
-     * @return {bbbfly.MapIcon.Style}
-     */
-    this.GetIconStyle = bbbfly.map.drawing.cluster._getIconStyle;
-      /**
-     * @function
-     * @name GetSpiderStyle
-     * @memberof bbbfly.MapIconCluster#
-     *
-     * @return {bbbfly.MapGeometry.Style}
-     */
-    this.GetSpiderStyle = bbbfly.map.drawing.cluster._getSpiderStyle;
-
-    /**
-     * @function
      * @name GetState
      * @memberof bbbfly.MapIconCluster#
      *
@@ -1392,25 +1429,6 @@ bbbfly.MapIconCluster = bbbfly.object.Extend(
      * @return {bbbfly.Renderer.state} Drawing state
      */
     this.GetState = bbbfly.map.drawing.cluster._getState;
-
-    /**
-     * @function
-     * @name AddDrawing
-     * @memberof bbbfly.MapIconCluster#
-     *
-     * @param {bbbfly.MapDrawing} drawing
-     * @return {boolean} - If added
-     */
-    this.AddDrawing = bbbfly.map.drawing.cluster._addDrawing;
-    /**
-     * @function
-     * @name AddDrawing
-     * @memberof bbbfly.MapIconCluster#
-     *
-     * @param {bbbfly.MapDrawing} drawing
-     * @return {boolean} - If removed
-     */
-    this.RemoveDrawing = bbbfly.map.drawing.cluster._removeDrawing;
 
     return this;
   }
@@ -1582,6 +1600,14 @@ bbbfly.MapDrawingsHandler.selecttype = {
  */
 
 /**
+ * @typedef {bbbfly.MapDrawing.options} options
+ * @memberOf bbbfly.MapDrawingGroup
+ *
+ * @property {bbbfly.MapIcon.Style|string|array} IconStyle
+ * @property {bbbfly.MapGeometry.Style|string} GeometryStyle
+ */
+
+/**
  * @typedef {bbbfly.MapDrawingItem.options} options
  * @memberOf bbbfly.MapGeometry
  *
@@ -1591,13 +1617,11 @@ bbbfly.MapDrawingsHandler.selecttype = {
  */
 
 /**
- * @typedef {bbbfly.MapDrawing.options} options
+ * @typedef {bbbfly.MapDrawingGroup.options} options
  * @memberOf bbbfly.MapIconCluster
  *
  * @property {integer} [Radius=50]
  * @property {boolean} [ShowNumber=true]
- * @property {bbbfly.MapIcon.Style|string|array} IconStyle
- * @property {bbbfly.MapGeometry.Style|string|array} SpiderStyle
  */
 
 /**

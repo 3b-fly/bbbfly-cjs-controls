@@ -18,6 +18,7 @@ bbbfly.map.drawing = {
   layer: {},
   core: {},
   item: {},
+  group: {},
   icon: {},
   geometry: {},
   cluster: {},
@@ -318,6 +319,52 @@ bbbfly.map.drawing.item._onDblClick = function(){
     this.SetSelected(!this.GetSelected(),true);
   }
 };
+bbbfly.map.drawing.group._getIconStyle = function(cnt){
+  var type = bbbfly.MapIcon.Style;
+  var style = this.Options.IconStyle;
+  if(style instanceof type){return style;}
+
+  if(Array.isArray(style) && Number.isInteger(cnt)){
+    for(var i in style){
+      var styleDef = style[i];
+      var from = Number.isInteger(styleDef.from) ? styleDef.from : null;
+      var to = Number.isInteger(styleDef.to) ? styleDef.to : null;
+
+      if(
+        ((from === null) || (cnt >= from))
+        && ((to === null) || (cnt <= to))
+      ){
+        style = styleDef.style;
+        break;
+      }
+    }
+  }
+
+  if(String.isString(style)){
+    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+  }
+
+  return (style instanceof type) ? style : new type();
+};
+bbbfly.map.drawing.group._getGeometryStyle = function(){
+  var type = bbbfly.MapGeometry.Style;
+  var style = this.Options.GeometryStyle;
+  if(style instanceof type){return style;}
+
+  if(String.isString(style)){
+    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+  }
+
+  return (style instanceof type) ? style : new type();
+};
+bbbfly.map.drawing.group._addDrawing = function(drawing){
+  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
+   return drawing.AddTo(this._Layer);
+};
+bbbfly.map.drawing.group._removeDrawing = function(drawing){
+  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
+  return drawing.RemoveFrom(this._Layer);
+};
 bbbfly.map.drawing.icon._create = function(){
   var coords = this.Options.Coordinates;
   var marker = null;
@@ -450,7 +497,7 @@ bbbfly.map.drawing.cluster._getCenter = function(){
   return null;
 };
 bbbfly.map.drawing.cluster._create = function(){
-  var style = this.GetSpiderStyle();
+  var style = this.GetGeometryStyle();
 
   var radius = this.Options.Radius;
   if(!Number.isInteger(radius)){radius = 50;}
@@ -473,44 +520,6 @@ bbbfly.map.drawing.cluster._create = function(){
 };
 bbbfly.map.drawing.cluster._update = function(){
   if(this._Layer){this._Layer.refreshClusters();}
-};
-bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
-  var type = bbbfly.MapIcon.Style;
-  var style = this.Options.IconStyle;
-  if(style instanceof type){return style;}
-
-  if(Array.isArray(style) && Number.isInteger(cnt)){
-    for(var i in style){
-      var styleDef = style[i];
-      var from = Number.isInteger(styleDef.from) ? styleDef.from : null;
-      var to = Number.isInteger(styleDef.to) ? styleDef.to : null;
-
-      if(
-        ((from === null) || (cnt >= from))
-        && ((to === null) || (cnt <= to))
-      ){
-        style = styleDef.style;
-        break;
-      }
-    }
-  }
-
-  if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
-  }
-
-  return (style instanceof type) ? style : new type();
-};
-bbbfly.map.drawing.cluster._getSpiderStyle = function(){
-  var type = bbbfly.MapGeometry.Style;
-  var style = this.Options.SpiderStyle;
-  if(style instanceof type){return style;}
-
-  if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
-  }
-
-  return (style instanceof type) ? style : new type();
 };
 bbbfly.map.drawing.cluster._getState = function(cluster,def){
   var state = {};
@@ -553,14 +562,6 @@ bbbfly.map.drawing.cluster._onMouseLeave = function(cluster){
   var state = this.GetState(cluster,{mouseover:false});
   var id = bbbfly.map.drawing.utils.LeafletId(cluster);
   bbbfly.Renderer.UpdateStackHTML(cluster._iconProxy,state,id);
-};
-bbbfly.map.drawing.cluster._addDrawing = function(drawing){
-  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
-   return drawing.AddTo(this._Layer);
-};
-bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
-  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
-  return drawing.RemoveFrom(this._Layer);
 };
 bbbfly.map.drawing.cluster._createIcon = function(cluster){
   var drawing = cluster._group.Owner;
@@ -794,6 +795,17 @@ bbbfly.MapDrawingItem.selecttype = {
   dblclick: 2,
   both: 3
 };
+bbbfly.MapDrawingGroup = bbbfly.object.Extend(
+  bbbfly.MapDrawing,function(options){
+    bbbfly.MapDrawing.call(this,options);
+    this.GetIconStyle = bbbfly.map.drawing.group._getIconStyle;
+    this.GetGeometryStyle = bbbfly.map.drawing.group._getGeometryStyle;
+    this.AddDrawing = bbbfly.map.drawing.group._addDrawing;
+    this.RemoveDrawing = bbbfly.map.drawing.group._removeDrawing;
+
+    return this;
+  }
+);
 bbbfly.MapIcon = bbbfly.object.Extend(
   bbbfly.MapDrawingItem,function(options){
 
@@ -866,8 +878,8 @@ bbbfly.MapDrawingCombo = bbbfly.object.Extend(
   }
 );
 bbbfly.MapIconCluster = bbbfly.object.Extend(
-  bbbfly.MapDrawing,function(options){
-    bbbfly.MapDrawing.call(this,options);
+  bbbfly.MapDrawingGroup,function(options){
+    bbbfly.MapDrawingGroup.call(this,options);
     ng_OverrideMethod(this,'Create',
       bbbfly.map.drawing.cluster._create
     );
@@ -883,11 +895,7 @@ bbbfly.MapIconCluster = bbbfly.object.Extend(
     ng_OverrideMethod(this,'OnMouseLeave',
       bbbfly.map.drawing.cluster._onMouseLeave
     );
-    this.GetIconStyle = bbbfly.map.drawing.cluster._getIconStyle;
-    this.GetSpiderStyle = bbbfly.map.drawing.cluster._getSpiderStyle;
     this.GetState = bbbfly.map.drawing.cluster._getState;
-    this.AddDrawing = bbbfly.map.drawing.cluster._addDrawing;
-    this.RemoveDrawing = bbbfly.map.drawing.cluster._removeDrawing;
 
     return this;
   }
