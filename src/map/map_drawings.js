@@ -515,6 +515,18 @@ bbbfly.map.drawing.geometry._project = function(){
 };
 
 /** @ignore */
+bbbfly.map.drawing.cluster._getCenter = function(){
+  if(this._Layer){
+    var bounds = this._Layer.getBounds();
+
+    if(bounds.isValid()){
+      return bounds.getCenter();
+    }
+  }
+  return null;
+};
+
+/** @ignore */
 bbbfly.map.drawing.cluster._create = function(){
   var style = this.GetSpiderStyle();
 
@@ -1236,6 +1248,15 @@ bbbfly.MapGeometry = bbbfly.object.Extend(
     ng_OverrideMethod(this,'Create',
       bbbfly.map.drawing.geometry._create
     );
+
+    /**
+     * @function
+     * @name GetCenter
+     * @memberof bbbfly.MapGeometry#
+     *
+     * @return {mapPoint|null}
+     */
+    this.GetCenter = bbbfly.map.drawing.cluster._getCenter;
 
     return this;
   }
