@@ -287,8 +287,25 @@ bbbfly.map.drawing.item._update = function(){
 };
 
 /** @ignore */
-bbbfly.map.drawing.item._getStyle = function(type){
-  var style = this.Options.Style;
+bbbfly.map.drawing.item._getIconStyle = function(){
+  var type = bbbfly.MapDrawingItem.IconStyle;
+
+  var style = this.Options.IconStyle;
+  if(style instanceof type){return style;}
+
+  if(String.isString(style)){
+    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+  }
+
+  return (style instanceof type) ? style : new type();
+};
+
+/** @ignore */
+bbbfly.map.drawing.item._getGeometryStyle = function(){
+  var type = bbbfly.MapDrawingItem.GeometryStyle;
+
+  var style = this.Options.GeometryStyle;
+  if(style instanceof type){return style;}
 
   if(String.isString(style)){
     style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
@@ -379,7 +396,8 @@ bbbfly.map.drawing.item._onDblClick = function(){
 
 /** @ignore */
 bbbfly.map.drawing.group._getIconStyle = function(cnt){
-  var type = bbbfly.MapIcon.Style;
+  var type = bbbfly.MapDrawingItem.IconStyle;
+
   var style = this.Options.IconStyle;
   if(style instanceof type){return style;}
 
@@ -408,7 +426,8 @@ bbbfly.map.drawing.group._getIconStyle = function(cnt){
 
 /** @ignore */
 bbbfly.map.drawing.group._getGeometryStyle = function(){
-  var type = bbbfly.MapGeometry.Style;
+  var type = bbbfly.MapDrawingItem.GeometryStyle;
+
   var style = this.Options.GeometryStyle;
   if(style instanceof type){return style;}
 
@@ -454,7 +473,7 @@ bbbfly.map.drawing.icon._create = function(){
 /** @ignore */
 bbbfly.map.drawing.icon._update = function(){
   if(this._Layer){
-    var style = this.GetStyle(bbbfly.MapIcon.Style);
+    var style = this.GetIconStyle();
     var state = this.GetState();
 
     var over = state.mouseover;
@@ -510,7 +529,7 @@ bbbfly.map.drawing.icon._updateZIndex = function(offset){
 
 /** @ignore */
 bbbfly.map.drawing.geometry._create = function(){
-  var style = this.GetStyle(bbbfly.MapGeometry.Style);
+  var style = this.GetGeometryStyle();
   var json = this.Options.GeoJSON;
 
   var options = {
@@ -570,7 +589,7 @@ bbbfly.map.drawing.geometry._project = function(){
 };
 
 /** @ignore */
-bbbfly.map.drawing.cluster._getCenter = function(){
+bbbfly.map.drawing.geometry._getCenter = function(){
   if(this._Layer){
     var bounds = this._Layer.getBounds();
 
@@ -1050,13 +1069,22 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
 
     /**
      * @function
-     * @name GetStyle
+     * @name GetIconStyle
      * @memberof bbbfly.MapDrawingItem#
      *
-     * @param {function} type - Accepted style type
-     * @return {object} Drawing style definition
+     * @return {bbbfly.MapDrawingItem.IconStyle}
      */
-    this.GetStyle = bbbfly.map.drawing.item._getStyle;
+    this.GetIconStyle = bbbfly.map.drawing.item._getIconStyle;
+    /**
+     * @function
+     * @name GetGeometryStyle
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @return {bbbfly.MapDrawingItem.GeometryStyle}
+     */
+    this.GetGeometryStyle = bbbfly.map.drawing.item._getGeometryStyle;
+
+
     /**
      * @function
      * @name GetState
@@ -1155,6 +1183,65 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
 );
 
 /**
+ * @class
+ * @inpackage mapbox
+ *
+ * @param {bbbfly.Renderer.image[]} [images=null] - Stack of icon images
+ * @param {string} [className=''] - Leaflet marker div class name
+ */
+bbbfly.MapDrawingItem.IconStyle = function(images,className){
+  if(!Array.isArray(images)){images = null;}
+  if(!String.isString(className)){className = '';}
+
+  this.images = images;
+  this.className = className;
+};
+
+/**
+ * @class
+ * @inpackage mapbox
+ *
+ * @param {object} opts
+ * @param {integer} [opts.weight=undefined]
+ * @param {string} [opts.color=undefined]
+ * @param {string} [opts.fillColor=undefined]
+ * @param {number} [opts.opacity=undefined]
+ * @param {number} [opts.fillOpacity=undefined]
+ *
+ * @property {boolean} fill
+ * @property {boolean} stroke
+ * @property {integer} [weight=1]
+ * @property {string} [color='#000000']
+ * @property {string} [fillColor=undefined]
+ * @property {number} [opacity=1]
+ * @property {number} [fillOpacity=0.2]
+ */
+bbbfly.MapDrawingItem.GeometryStyle = function(opts){
+  this.stroke = false;
+  this.fill = false;
+  this.weight = 1;
+
+  this.color = '#000000';
+  this.fillColor = undefined;
+
+  this.opacity = 1;
+  this.fillOpacity = 0.2;
+
+  if(!Object.isObject(opts)){return;}
+
+  if(Number.isInteger(opts.weight)){this.weight = opts.weight;}
+
+  if(String.isString(opts.color)){this.color = opts.color;}
+  if(String.isString(opts.fillColor)){this.fillColor = opts.fillColor;}
+
+  if(Number.isNumber(opts.opacity)){this.opacity = opts.opacity;}
+  if(Number.isNumber(opts.fillOpacity)){this.fillOpacity = opts.fillOpacity;}
+
+  this.stroke = !!((this.weight > 0) && (this.opacity > 0));
+  this.fill = !!(this.fillColor && (this.fillOpacity > 0));
+};
+
+/**
  * @enum {integer}
  * @description
  *   Supported {@link Supported bbbfly.Renderer.state|renderer states}
@@ -1196,7 +1283,7 @@ bbbfly.MapDrawingGroup = bbbfly.object.Extend(
      * @memberof bbbfly.MapDrawingGroup#
      *
      * @param {integer} cnt - Child markers count
-     * @return {bbbfly.MapIcon.Style}
+     * @return {bbbfly.MapDrawingItem.IconStyle}
      */
     this.GetIconStyle = bbbfly.map.drawing.group._getIconStyle;
     /**
@@ -1204,7 +1291,7 @@ bbbfly.MapDrawingGroup = bbbfly.object.Extend(
      * @name GetGeometryStyle
      * @memberof bbbfly.MapDrawingGroup#
      *
-     * @return {bbbfly.MapGeometry.Style}
+     * @return {bbbfly.MapDrawingItem.GeometryStyle}
      */
     this.GetGeometryStyle = bbbfly.map.drawing.group._getGeometryStyle;
 
@@ -1273,21 +1360,6 @@ bbbfly.MapIcon = bbbfly.object.Extend(
 
 /**
  * @class
- * @inpackage mapbox
- *
- * @param {bbbfly.Renderer.image[]} [images=null] - Stack of icon images
- * @param {string} [className=''] - Leaflet marker div class name
- */
-bbbfly.MapIcon.Style = function(images,className){
-  if(!Array.isArray(images)){images = null;}
-  if(!String.isString(className)){className = '';}
-
-  this.images = images;
-  this.className = className;
-};
-
-/**
- * @class
  * @extends bbbfly.MapDrawingItem
  * @inpackage mapbox
  *
@@ -1312,74 +1384,7 @@ bbbfly.MapGeometry = bbbfly.object.Extend(
      *
      * @return {number[]|null}
      */
-    this.GetCenter = bbbfly.map.drawing.cluster._getCenter;
-
-    return this;
-  }
-);
-
-/**
- * @class
- * @inpackage mapbox
- *
- * @param {object} opts
- * @param {integer} [opts.weight=undefined]
- * @param {string} [opts.color=undefined]
- * @param {string} [opts.fillColor=undefined]
- * @param {number} [opts.opacity=undefined]
- * @param {number} [opts.fillOpacity=undefined]
- *
- * @property {boolean} fill
- * @property {boolean} stroke
- * @property {integer} [weight=1]
- * @property {string} [color='#000000']
- * @property {string} [fillColor=undefined]
- * @property {number} [opacity=1]
- * @property {number} [fillOpacity=0.2]
- */
-bbbfly.MapGeometry.Style = function(opts){
-  this.stroke = false;
-  this.fill = false;
-  this.weight = 1;
-
-  this.color = '#000000';
-  this.fillColor = undefined;
-
-  this.opacity = 1;
-  this.fillOpacity = 0.2;
-
-  if(!Object.isObject(opts)){return;}
-
-  if(Number.isInteger(opts.weight)){this.weight = opts.weight;}
-
-  if(String.isString(opts.color)){this.color = opts.color;}
-  if(String.isString(opts.fillColor)){this.fillColor = opts.fillColor;}
-
-  if(Number.isNumber(opts.opacity)){this.opacity = opts.opacity;}
-  if(Number.isNumber(opts.fillOpacity)){this.fillOpacity = opts.fillOpacity;}
-
-  this.stroke = !!((this.weight > 0) && (this.opacity > 0));
-  this.fill = !!(this.fillColor && (this.fillOpacity > 0));
-};
-
-/**
- * @class
- * @extends bbbfly.MapDrawing
- * @inpackage mapbox
- *
- * @param {bbbfly.MapGeometry.options} options
- *
- * @property {bbbfly.MapGeometry.options} Options
- */
-bbbfly.MapDrawingCombo = bbbfly.object.Extend(
-  bbbfly.MapDrawing,function(options){
-
-//    bbbfly.MapDrawing.call(this,options);
-
-//    /** @private */
-//    ng_OverrideMethod(drawing,'Create',
-//      bbbfly.map.drawing.geometry._create
-//    );
+    this.GetCenter = bbbfly.map.drawing.geometry._getCenter;
 
     return this;
   }
@@ -1589,7 +1594,16 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @memberOf bbbfly.MapDrawingItem
  *
  * @property {bbbfly.MapDrawingItem.selecttype} [SelectType=none]
- * @property {object|string} Style - Drawing style or style ID
+ * @property {bbbfly.MapDrawingItem.IconStyle|string|array} Icon style or style ID
+ * @property {bbbfly.MapDrawingItem.GeometryStyle|string} Geometry style or style ID
+ */
+
+/**
+ * @typedef {bbbfly.MapDrawing.options} options
+ * @memberOf bbbfly.MapDrawingGroup
+ *
+ * @property {bbbfly.MapDrawingItem.IconStyle|string|array} IconStyle
+ * @property {bbbfly.MapDrawingItem.GeometryStyle|string} GeometryStyle
  */
 
 /**
@@ -1597,15 +1611,7 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @memberOf bbbfly.MapIcon
  *
  * @property {mapPoint} Coordinates
- * @property {bbbfly.MapIcon.Style|string} Style
- */
-
-/**
- * @typedef {bbbfly.MapDrawing.options} options
- * @memberOf bbbfly.MapDrawingGroup
- *
- * @property {bbbfly.MapIcon.Style|string|array} IconStyle
- * @property {bbbfly.MapGeometry.Style|string} GeometryStyle
+ * @property {bbbfly.MapDrawingItem.IconStyle|string} Style
  */
 
 /**
@@ -1614,7 +1620,7 @@ bbbfly.MapDrawingsHandler.selecttype = {
  *
  * @property {geoJSON|mapGeoJSON} GeoJSON
  * @property {px} [MinSize=25] - Hide if smaller
- * @property {bbbfly.MapGeometry.Style|string} Style
+ * @property {bbbfly.MapDrawingItem.GeometryStyle|string} Style
  */
 
 /**

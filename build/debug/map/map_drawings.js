@@ -248,8 +248,23 @@ bbbfly.map.drawing.item._update = function(){
     }
   }
 };
-bbbfly.map.drawing.item._getStyle = function(type){
-  var style = this.Options.Style;
+bbbfly.map.drawing.item._getIconStyle = function(){
+  var type = bbbfly.MapDrawingItem.IconStyle;
+
+  var style = this.Options.IconStyle;
+  if(style instanceof type){return style;}
+
+  if(String.isString(style)){
+    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+  }
+
+  return (style instanceof type) ? style : new type();
+};
+bbbfly.map.drawing.item._getGeometryStyle = function(){
+  var type = bbbfly.MapDrawingItem.GeometryStyle;
+
+  var style = this.Options.GeometryStyle;
+  if(style instanceof type){return style;}
 
   if(String.isString(style)){
     style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
@@ -320,7 +335,8 @@ bbbfly.map.drawing.item._onDblClick = function(){
   }
 };
 bbbfly.map.drawing.group._getIconStyle = function(cnt){
-  var type = bbbfly.MapIcon.Style;
+  var type = bbbfly.MapDrawingItem.IconStyle;
+
   var style = this.Options.IconStyle;
   if(style instanceof type){return style;}
 
@@ -347,7 +363,8 @@ bbbfly.map.drawing.group._getIconStyle = function(cnt){
   return (style instanceof type) ? style : new type();
 };
 bbbfly.map.drawing.group._getGeometryStyle = function(){
-  var type = bbbfly.MapGeometry.Style;
+  var type = bbbfly.MapDrawingItem.GeometryStyle;
+
   var style = this.Options.GeometryStyle;
   if(style instanceof type){return style;}
 
@@ -385,7 +402,7 @@ bbbfly.map.drawing.icon._create = function(){
 };
 bbbfly.map.drawing.icon._update = function(){
   if(this._Layer){
-    var style = this.GetStyle(bbbfly.MapIcon.Style);
+    var style = this.GetIconStyle();
     var state = this.GetState();
 
     var over = state.mouseover;
@@ -432,7 +449,7 @@ bbbfly.map.drawing.icon._updateZIndex = function(offset){
   this._updateZIndex.callParent(offset);
 };
 bbbfly.map.drawing.geometry._create = function(){
-  var style = this.GetStyle(bbbfly.MapGeometry.Style);
+  var style = this.GetGeometryStyle();
   var json = this.Options.GeoJSON;
 
   var options = {
@@ -486,7 +503,7 @@ bbbfly.map.drawing.geometry._project = function(){
 
   node.style.display = 'block';
 };
-bbbfly.map.drawing.cluster._getCenter = function(){
+bbbfly.map.drawing.geometry._getCenter = function(){
   if(this._Layer){
     var bounds = this._Layer.getBounds();
 
@@ -772,7 +789,8 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
     ng_OverrideMethod(this,'OnDblClick',
       bbbfly.map.drawing.item._onDblClick
     );
-    this.GetStyle = bbbfly.map.drawing.item._getStyle;
+    this.GetIconStyle = bbbfly.map.drawing.item._getIconStyle;
+    this.GetGeometryStyle = bbbfly.map.drawing.item._getGeometryStyle;
     this.GetState = bbbfly.map.drawing.item._getState;
     this.GetStateValue = bbbfly.map.drawing.item._getStateValue;
     this.SetStateValue = bbbfly.map.drawing.item._setStateValue;
@@ -784,6 +802,37 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
     return this;
   }
 );
+bbbfly.MapDrawingItem.IconStyle = function(images,className){
+  if(!Array.isArray(images)){images = null;}
+  if(!String.isString(className)){className = '';}
+
+  this.images = images;
+  this.className = className;
+};
+bbbfly.MapDrawingItem.GeometryStyle = function(opts){
+  this.stroke = false;
+  this.fill = false;
+  this.weight = 1;
+
+  this.color = '#000000';
+  this.fillColor = undefined;
+
+  this.opacity = 1;
+  this.fillOpacity = 0.2;
+
+  if(!Object.isObject(opts)){return;}
+
+  if(Number.isInteger(opts.weight)){this.weight = opts.weight;}
+
+  if(String.isString(opts.color)){this.color = opts.color;}
+  if(String.isString(opts.fillColor)){this.fillColor = opts.fillColor;}
+
+  if(Number.isNumber(opts.opacity)){this.opacity = opts.opacity;}
+  if(Number.isNumber(opts.fillOpacity)){this.fillOpacity = opts.fillOpacity;}
+
+  this.stroke = !!((this.weight > 0) && (this.opacity > 0));
+  this.fill = !!(this.fillColor && (this.fillOpacity > 0));
+};
 bbbfly.MapDrawingItem.state = {
   mouseover: 1,
   disabled: 2,
@@ -829,13 +878,6 @@ bbbfly.MapIcon = bbbfly.object.Extend(
     return this;
   }
 );
-bbbfly.MapIcon.Style = function(images,className){
-  if(!Array.isArray(images)){images = null;}
-  if(!String.isString(className)){className = '';}
-
-  this.images = images;
-  this.className = className;
-};
 bbbfly.MapGeometry = bbbfly.object.Extend(
   bbbfly.MapDrawingItem,function(options){
 
@@ -843,37 +885,7 @@ bbbfly.MapGeometry = bbbfly.object.Extend(
     ng_OverrideMethod(this,'Create',
       bbbfly.map.drawing.geometry._create
     );
-    this.GetCenter = bbbfly.map.drawing.cluster._getCenter;
-
-    return this;
-  }
-);
-bbbfly.MapGeometry.Style = function(opts){
-  this.stroke = false;
-  this.fill = false;
-  this.weight = 1;
-
-  this.color = '#000000';
-  this.fillColor = undefined;
-
-  this.opacity = 1;
-  this.fillOpacity = 0.2;
-
-  if(!Object.isObject(opts)){return;}
-
-  if(Number.isInteger(opts.weight)){this.weight = opts.weight;}
-
-  if(String.isString(opts.color)){this.color = opts.color;}
-  if(String.isString(opts.fillColor)){this.fillColor = opts.fillColor;}
-
-  if(Number.isNumber(opts.opacity)){this.opacity = opts.opacity;}
-  if(Number.isNumber(opts.fillOpacity)){this.fillOpacity = opts.fillOpacity;}
-
-  this.stroke = !!((this.weight > 0) && (this.opacity > 0));
-  this.fill = !!(this.fillColor && (this.fillOpacity > 0));
-};
-bbbfly.MapDrawingCombo = bbbfly.object.Extend(
-  bbbfly.MapDrawing,function(options){
+    this.GetCenter = bbbfly.map.drawing.geometry._getCenter;
 
     return this;
   }
