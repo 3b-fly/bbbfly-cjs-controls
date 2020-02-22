@@ -1379,11 +1379,11 @@ bbbfly.MapDrawingGroup = bbbfly.object.Extend(
  * @extends bbbfly.MapDrawingGroup
  * @inpackage mapbox
  *
- * @param {bbbfly.MapIconCluster.options} options
+ * @param {bbbfly.MapDrawingCluster.options} options
  *
- * @property {bbbfly.MapIconCluster.options} Options
+ * @property {bbbfly.MapDrawingCluster.options} Options
  */
-bbbfly.MapIconCluster = bbbfly.object.Extend(
+bbbfly.MapDrawingCluster = bbbfly.object.Extend(
   bbbfly.MapDrawingGroup,function(options){
     bbbfly.MapDrawingGroup.call(this,options);
 
@@ -1412,7 +1412,7 @@ bbbfly.MapIconCluster = bbbfly.object.Extend(
     /**
      * @function
      * @name GetState
-     * @memberof bbbfly.MapIconCluster#
+     * @memberof bbbfly.MapDrawingCluster#
      *
      * @param {mapCluster} cluster
      * @param {bbbfly.Renderer.state} def - State default values
@@ -1499,7 +1499,7 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @name BeginClustering
    * @memberof bbbfly.MapDrawingsHandler#
    *
-   * @param {bbbfly.MapIconCluster} cluster
+   * @param {bbbfly.MapDrawingCluster} cluster
    */
   this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;
   /**
@@ -1595,7 +1595,7 @@ bbbfly.MapDrawingsHandler.selecttype = {
 
 /**
  * @typedef {bbbfly.MapDrawingGroup.options} options
- * @memberOf bbbfly.MapIconCluster
+ * @memberOf bbbfly.MapDrawingCluster
  *
  * @property {integer} [Radius=50]
  * @property {boolean} [ShowNumber=true]

@@ -899,7 +899,7 @@ bbbfly.MapDrawingGroup = bbbfly.object.Extend(
     return this;
   }
 );
-bbbfly.MapIconCluster = bbbfly.object.Extend(
+bbbfly.MapDrawingCluster = bbbfly.object.Extend(
   bbbfly.MapDrawingGroup,function(options){
     bbbfly.MapDrawingGroup.call(this,options);
     ng_OverrideMethod(this,'Create',
