@@ -258,15 +258,40 @@ bbbfly.map.drawing.core._scan = function(callback,def){
   return def;
 };
 bbbfly.map.drawing.item._create = function(){
-  var coords = this.Options.Coords;
   var geom = this.Options.Geometry;
+  var coords = this.Options.Coords;
 
+  var hasGeom = Object.isObject(geom);
+  var hasCoords = bbbfly.map.drawing.utils.IsLatLng(coords);
+
+  var toCenter = this.Options.CoordsToGeoCenter;
+  if(!Boolean.isBoolean(toCenter)){toCenter = true;}
+
+  this._Geometry = null;
+  this._Marker = null;
   var layers = [];
-  var marker = null;
-  var geometry = null;
 
-  if(bbbfly.map.drawing.utils.IsLatLng(coords)){
-    marker = L.marker(coords,{
+  if(hasGeom){
+    var style = this.GetGeometryStyle();
+    geom = bbbfly.map.drawing.utils.NormalizeGeoJSON(geom);
+
+    var geometry = new L.GeoJSON(geom,{
+      Owner: this,
+      style: style,
+      onEachFeature: bbbfly.map.drawing.item._initGeometry
+    });
+
+    this._Geometry = geometry;
+    layers.push(geometry);
+  }
+
+  if(!hasCoords && toCenter){
+    coords = this.GetGeometryCenter();
+    if(coords){hasCoords = true;}
+  }
+
+  if(hasCoords){
+    var marker = L.marker(coords,{
       riseOnHover: true,
       riseOffset: 999999
     });
@@ -276,24 +301,9 @@ bbbfly.map.drawing.item._create = function(){
       bbbfly.map.drawing.item._updateIconZIndex
     );
 
+    this._Marker = marker;
     layers.push(marker);
   }
-
-  if(Object.isObject(geom)){
-    var style = this.GetGeometryStyle();
-    geom = bbbfly.map.drawing.utils.NormalizeGeoJSON(geom);
-
-    geometry = new L.GeoJSON(geom,{
-      Owner: this,
-      style: style,
-      onEachFeature: bbbfly.map.drawing.item._initGeometry
-    });
-
-    layers.push(geometry);
-  }
-
-  this._Marker = marker;
-  this._Geometry = geometry;
 
   return layers;
 };
