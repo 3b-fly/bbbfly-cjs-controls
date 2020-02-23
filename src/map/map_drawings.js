@@ -21,7 +21,6 @@ bbbfly.map.drawing = {
   layer: {},
   core: {},
   item: {},
-  group: {},
   cluster: {},
   handler: {}
 };
@@ -536,7 +535,7 @@ bbbfly.map.drawing.item._setSelected = function(selected,update){
   if(this.GetSelected() === selected){return true;}
 
   if(Function.isFunction(this.OnSetSelected)){
-    if(!this.OnSetSelected()){return false;}
+    if(!this.OnSetSelected(this)){return false;}
   }
 
   var state = bbbfly.MapDrawingItem.state.selected;
@@ -545,7 +544,7 @@ bbbfly.map.drawing.item._setSelected = function(selected,update){
   this.SetStateValue(state,selected,update);
 
   if(Function.isFunction(this.OnSelectedChanged)){
-    this.OnSelectedChanged();
+    this.OnSelectedChanged(this);
   }
 
   return true;
@@ -703,11 +702,6 @@ bbbfly.map.drawing.cluster._createIcon = function(cluster){
 };
 
 /** @ignore */
-bbbfly.map.drawing.cluster._onSpiderfyChanged = function(){
-  this.Owner.Update();
-};
-
-/** @ignore */
 bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
   var type = bbbfly.MapDrawingItem.IconStyle;
 
@@ -755,6 +749,13 @@ bbbfly.map.drawing.cluster._getSpiderStyle = function(){
 bbbfly.map.drawing.cluster._addDrawing = function(drawing){
   if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
 
+  if(this.DrawingListener){
+    drawing.AddListener(
+      this.DrawingListener.Listen,
+      this.DrawingListener
+    );
+  }
+
   return this.Scan(function(layer){
     if(drawing.AddTo(layer)){return true;}
   },false);
@@ -764,9 +765,25 @@ bbbfly.map.drawing.cluster._addDrawing = function(drawing){
 bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
   if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
 
+  if(this.DrawingListener){
+    drawing.RemoveListener(
+      this.DrawingListener.Listen,
+      this.DrawingListener
+    );
+  }
+
   return this.Scan(function(layer){
     if(drawing.RemoveFrom(layer)){return true;}
   },false);
+};
+
+/** @ignore */
+bbbfly.map.drawing.cluster._onSpiderfyChanged = function(){
+  this.Owner.Update();
+};
+
+bbbfly.map.drawing.cluster._onSelectedChanged = function(){
+  this.Owner.Update();
 };
 
 /** @ignore */
@@ -788,11 +805,9 @@ bbbfly.map.drawing.handler._addDrawing = function(drawing){
   if(!added){return false;}
 
   if(drawing instanceof bbbfly.MapDrawingItem){
-    drawing.AddEvent(
-      'OnSetSelected',this._drawing_onSetSelected,true
-    );
-    drawing.AddEvent(
-      'OnSelectedChanged',this._drawing_onSelectedChanged,true
+    drawing.AddListener(
+      this.DrawingListener.Listen,
+      this.DrawingListener
     );
   }
 
@@ -809,11 +824,9 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
     delete(this._Drawings[drawing.ID]);
 
     if(drawing instanceof bbbfly.MapDrawingItem){
-      drawing.RemoveEvent(
-        'OnSetSelected',this._drawing_onSetSelected
-      );
-      drawing.RemoveEvent(
-        'OnSelectedChanged',this._drawing_onSelectedChanged
+      drawing.RemoveListener(
+        this.DrawingListener.Listen,
+        this.DrawingListener
       );
     }
 
@@ -879,7 +892,9 @@ bbbfly.map.drawing.handler._clearSelected = function(){
 
 /** @ignore */
 bbbfly.map.drawing.handler._onSetSelected = function(){
-  switch(this.Options.SelectType){
+  var handler = this.Owner;
+
+  switch(handler.Options.SelectType){
     case bbbfly.MapDrawingsHandler.selecttype.single:
     case bbbfly.MapDrawingsHandler.selecttype.multi:
       return true;
@@ -889,20 +904,21 @@ bbbfly.map.drawing.handler._onSetSelected = function(){
 
 /** @ignore */
 bbbfly.map.drawing.handler._onSelectedChanged = function(drawing){
+  var handler = this.Owner;
 
   if(drawing.GetSelected()){
-    switch(this.Options.SelectType){
+    switch(handler.Options.SelectType){
       case bbbfly.MapDrawingsHandler.selecttype.single:
-        this.ClearSelected();
+        handler.ClearSelected();
 
       case bbbfly.MapDrawingsHandler.selecttype.multi:
-        this._Selected[drawing.ID] = drawing;
+        handler._Selected[drawing.ID] = drawing;
       break;
     }
   }
   else{
-    if(this._Selected[drawing.ID] === drawing){
-      delete(this._Selected[drawing.ID]);
+    if(handler._Selected[drawing.ID] === drawing){
+      delete(handler._Selected[drawing.ID]);
     }
   }
 };
@@ -921,6 +937,7 @@ bbbfly.MapDrawing = function(options){
 
   this.AddEvent = ngObjAddEvent;
   this.RemoveEvent = ngObjRemoveEvent;
+  bbbfly.listener.SetListenable(this,true);
 
   this.ID = bbbfly.map.drawing.utils.DrawingId(options);
   this.Options = options;
@@ -1230,6 +1247,8 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @name OnSetSelected
      * @memberof bbbfly.MapDrawingItem#
      *
+     * @param {bbbfly.MapDrawingItem} drawing
+     *
      * @see {@link bbbfly.MapDrawingItem#SetSelected|SetSelected()}
      * @see {@link bbbfly.MapDrawingItem#GetSelected|GetSelected()}
      * @see {@link bbbfly.MapDrawingItem#event:OnSelectedChanged|OnSelectedChanged}
@@ -1239,6 +1258,8 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @event
      * @name OnSelectedChanged
      * @memberof bbbfly.MapDrawingItem#
+     *
+     * @param {bbbfly.MapDrawingItem} drawing
      *
      * @see {@link bbbfly.MapDrawingItem#SetSelected|SetSelected()}
      * @see {@link bbbfly.MapDrawingItem#GetSelected|GetSelected()}
@@ -1345,6 +1366,12 @@ bbbfly.MapDrawingCluster = bbbfly.object.Extend(
   bbbfly.MapDrawing,function(options){
     bbbfly.MapDrawing.call(this,options);
 
+    this.DrawingListener = {
+      Owner: this,
+      Listen: ['OnSelectedChanged'],
+      OnSelectedChanged: bbbfly.map.drawing.cluster._onSelectedChanged
+    };
+
     /** @private */
     this._ClusterGroup = null;
 
@@ -1434,9 +1461,15 @@ bbbfly.MapDrawingCluster = bbbfly.object.Extend(
 bbbfly.MapDrawingsHandler = function(feature,options){
   if(!(feature instanceof L.FeatureGroup)){return null;}
   if(!Object.isObject(options)){options = {};}
-  var handler = this;
 
   this.Options = options;
+
+  this.DrawingListener = {
+    Owner: this,
+    Listen: ['OnSetSelected','OnSelectedChanged'],
+    OnSetSelected: bbbfly.map.drawing.handler._onSetSelected,
+    OnSelectedChanged: bbbfly.map.drawing.handler._onSelectedChanged
+  };
 
   /** @private */
   this._Feature = feature;
@@ -1446,16 +1479,6 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   this._Selected = {};
   /** @private */
   this._CurrentCluster = null;
-
-  /** @private */
-  this._drawing_onSetSelected = function(){
-    return handler.OnSetSelected(this);
-  };
-
-  /** @private */
-  this._drawing_onSelectedChanged = function(){
-    handler.OnSelectedChanged(this);
-  };
 
   /**
    * @function
@@ -1525,23 +1548,6 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @description Unselect all drawings
    */
   this.ClearSelected = bbbfly.map.drawing.handler._clearSelected;
-
-  /**
-   * @event
-   * @name OnSelectedChanged
-   * @memberof bbbfly.MapDrawingsHandler#
-   *
-   * @param {bbbfly.MapDrawing}
-   */
-  this.OnSetSelected = bbbfly.map.drawing.handler._onSetSelected;
-  /**
-   * @event
-   * @name OnSelectedChanged
-   * @memberof bbbfly.MapDrawingsHandler#
-   *
-   * @param {bbbfly.MapDrawing}
-   */
-  this.OnSelectedChanged = bbbfly.map.drawing.handler._onSelectedChanged;
 };
 
 /**
