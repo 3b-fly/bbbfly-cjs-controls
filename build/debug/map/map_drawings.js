@@ -494,62 +494,8 @@ bbbfly.map.drawing.item._onDblClick = function(){
     this.SetSelected(!this.GetSelected(),true);
   }
 };
-bbbfly.map.drawing.group._getIconStyle = function(cnt){
-  var type = bbbfly.MapDrawingItem.IconStyle;
-
-  var style = this.Options.IconStyle;
-  if(style instanceof type){return style;}
-
-  if(Array.isArray(style) && Number.isInteger(cnt)){
-    for(var i in style){
-      var styleDef = style[i];
-      var from = Number.isInteger(styleDef.from) ? styleDef.from : null;
-      var to = Number.isInteger(styleDef.to) ? styleDef.to : null;
-
-      if(
-        ((from === null) || (cnt >= from))
-        && ((to === null) || (cnt <= to))
-      ){
-        style = styleDef.style;
-        break;
-      }
-    }
-  }
-
-  if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
-  }
-
-  return (style instanceof type) ? style : new type();
-};
-bbbfly.map.drawing.group._getGeometryStyle = function(){
-  var type = bbbfly.MapDrawingItem.GeometryStyle;
-
-  var style = this.Options.GeometryStyle;
-  if(style instanceof type){return style;}
-
-  if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
-  }
-
-  return (style instanceof type) ? style : new type();
-};
-bbbfly.map.drawing.group._addDrawing = function(drawing){
-  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
-
-  return this.Scan(function(layer){
-    if(drawing.AddTo(layer)){return true;}
-  },false);
-};
-bbbfly.map.drawing.group._removeDrawing = function(drawing){
-  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
-
-  return this.Scan(function(layer){
-    if(drawing.RemoveFrom(layer)){return true;}
-  },false);
-};
 bbbfly.map.drawing.cluster._create = function(){
-  var style = this.GetGeometryStyle();
+  var style = this.GetSpiderStyle();
 
   var radius = this.Options.Radius;
   if(!Number.isInteger(radius)){radius = 50;}
@@ -568,10 +514,12 @@ bbbfly.map.drawing.cluster._create = function(){
   group.on('spiderfied',bbbfly.map.drawing.cluster._onSpiderfyChanged);
   group.on('unspiderfied',bbbfly.map.drawing.cluster._onSpiderfyChanged);
 
-  return group;
+  this._ClusterGroup = group;
+
+  return [group];
 };
 bbbfly.map.drawing.cluster._update = function(){
-  if(this._Layer){this._Layer.refreshClusters();}
+  if(this._ClusterGroup){this._ClusterGroup.refreshClusters();}
 };
 bbbfly.map.drawing.cluster._getState = function(cluster,def){
   var state = {};
@@ -658,6 +606,60 @@ bbbfly.map.drawing.cluster._createIcon = function(cluster){
 };
 bbbfly.map.drawing.cluster._onSpiderfyChanged = function(){
   this.Owner.Update();
+};
+bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
+  var type = bbbfly.MapDrawingItem.IconStyle;
+
+  var style = this.Options.IconStyle;
+  if(style instanceof type){return style;}
+
+  if(Array.isArray(style) && Number.isInteger(cnt)){
+    for(var i in style){
+      var styleDef = style[i];
+      var from = Number.isInteger(styleDef.from) ? styleDef.from : null;
+      var to = Number.isInteger(styleDef.to) ? styleDef.to : null;
+
+      if(
+        ((from === null) || (cnt >= from))
+        && ((to === null) || (cnt <= to))
+      ){
+        style = styleDef.style;
+        break;
+      }
+    }
+  }
+
+  if(String.isString(style)){
+    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+  }
+
+  return (style instanceof type) ? style : new type();
+};
+bbbfly.map.drawing.cluster._getSpiderStyle = function(){
+  var type = bbbfly.MapDrawingItem.GeometryStyle;
+
+  var style = this.Options.SpiderStyle;
+  if(style instanceof type){return style;}
+
+  if(String.isString(style)){
+    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+  }
+
+  return (style instanceof type) ? style : new type();
+};
+bbbfly.map.drawing.cluster._addDrawing = function(drawing){
+  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
+
+  return this.Scan(function(layer){
+    if(drawing.AddTo(layer)){return true;}
+  },false);
+};
+bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
+  if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
+
+  return this.Scan(function(layer){
+    if(drawing.RemoveFrom(layer)){return true;}
+  },false);
 };
 bbbfly.map.drawing.handler._getDrawing = function(id){
   var drawing = this._Drawings[id];
@@ -888,20 +890,10 @@ bbbfly.MapDrawingItem.selecttype = {
   dblclick: 2,
   both: 3
 };
-bbbfly.MapDrawingGroup = bbbfly.object.Extend(
+bbbfly.MapDrawingCluster = bbbfly.object.Extend(
   bbbfly.MapDrawing,function(options){
     bbbfly.MapDrawing.call(this,options);
-    this.GetIconStyle = bbbfly.map.drawing.group._getIconStyle;
-    this.GetGeometryStyle = bbbfly.map.drawing.group._getGeometryStyle;
-    this.AddDrawing = bbbfly.map.drawing.group._addDrawing;
-    this.RemoveDrawing = bbbfly.map.drawing.group._removeDrawing;
-
-    return this;
-  }
-);
-bbbfly.MapDrawingCluster = bbbfly.object.Extend(
-  bbbfly.MapDrawingGroup,function(options){
-    bbbfly.MapDrawingGroup.call(this,options);
+    this._ClusterGroup = null;
     ng_OverrideMethod(this,'Create',
       bbbfly.map.drawing.cluster._create
     );
@@ -918,6 +910,10 @@ bbbfly.MapDrawingCluster = bbbfly.object.Extend(
       bbbfly.map.drawing.cluster._onMouseLeave
     );
     this.GetState = bbbfly.map.drawing.cluster._getState;
+    this.GetIconStyle = bbbfly.map.drawing.cluster._getIconStyle;
+    this.GetSpiderStyle = bbbfly.map.drawing.cluster._getSpiderStyle;
+    this.AddDrawing = bbbfly.map.drawing.cluster._addDrawing;
+    this.RemoveDrawing = bbbfly.map.drawing.cluster._removeDrawing;
 
     return this;
   }
