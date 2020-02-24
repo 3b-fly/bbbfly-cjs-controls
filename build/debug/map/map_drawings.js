@@ -337,15 +337,19 @@ bbbfly.map.drawing.item._projectGeometry = function(){
   if(!node){return;}
 
   var drawing = this.options.Owner;
-
   var minSize = drawing.Options.MinGeometrySize;
-  if(!Number.isInteger(minSize)){minSize = 25;}
 
-  if(drawing.GetGeometrySize() < minSize){
-    node.style.display = 'none';
-    return;
+  if(!Number.isInteger(minSize)){
+    var handler = drawing._Handler;
+    minSize = handler.Options.MinGeometrySize;
   }
 
+  if(Number.isInteger(minSize)){
+    if(drawing.GetGeometrySize() < minSize){
+      node.style.display = 'none';
+      return;
+    }
+  }
   node.style.display = 'block';
 };
 bbbfly.map.drawing.item._update = function(){
@@ -515,19 +519,22 @@ bbbfly.map.drawing.item._onDblClick = function(){
 };
 bbbfly.map.drawing.cluster._create = function(){
   var style = this.GetSpiderStyle();
+  var drawing = this;
 
-  var radius = this.Options.Radius;
-  if(!Number.isInteger(radius)){radius = 50;}
+  var getMaxClusterRadius = function(){
+    return bbbfly.map.drawing.cluster._maxClusterRadius(drawing);
+  };
 
   var group = new L.MarkerClusterGroup({
     iconCreateFunction: bbbfly.map.drawing.cluster._createIcon,
+    maxClusterRadius: getMaxClusterRadius,
+
+    spiderLegPolylineOptions: style,
+    spiderfyOnMaxZoom: !!style,
+
     removeOutsideVisibleBounds: false,
     showCoverageOnHover: false,
-    zoomToBoundsOnClick: true,
-    maxClusterRadius: radius,
-
-    spiderfyOnMaxZoom: !!style,
-    spiderLegPolylineOptions: style
+    zoomToBoundsOnClick: true
   });
 
   group.on('spiderfied',bbbfly.map.drawing.cluster._onSpiderfyChanged);
@@ -623,6 +630,23 @@ bbbfly.map.drawing.cluster._createIcon = function(cluster){
       html: html
     });
 };
+bbbfly.map.drawing.cluster._maxClusterRadius = function(drawing){
+  var radius = drawing.Options.MaxClusterRadius;
+
+  if(!Number.isInteger(radius)){
+    var handler = drawing._Handler;
+    radius = handler.Options.MaxClusterRadius;
+  }
+  if(!Number.isInteger(radius)){radius = null;}
+  return radius;
+};
+bbbfly.map.drawing.cluster._onSpiderfyChanged = function(){
+  this.Owner.Update();
+};
+
+bbbfly.map.drawing.cluster._onSelectedChanged = function(){
+  this.Owner.Update();
+};
 bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
   var type = bbbfly.MapDrawingItem.IconStyle;
 
@@ -690,13 +714,6 @@ bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
   return this.Scan(function(layer){
     if(drawing.RemoveFrom(layer)){return true;}
   },false);
-};
-bbbfly.map.drawing.cluster._onSpiderfyChanged = function(){
-  this.Owner.Update();
-};
-
-bbbfly.map.drawing.cluster._onSelectedChanged = function(){
-  this.Owner.Update();
 };
 bbbfly.map.drawing.handler._getDrawing = function(id){
   var drawing = this._Drawings[id];
@@ -1000,4 +1017,6 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @memberOf bbbfly.MapDrawingsHandler
  *
  * @property {bbbfly.MapDrawingsHandler.selecttype} [SelectType=none]
+ * @property {integer} [MaxClusterRadius=undefined]
+ * @property {px} [MinGeometrySize=undefined]
  */

@@ -380,15 +380,19 @@ bbbfly.map.drawing.item._projectGeometry = function(){
   if(!node){return;}
 
   var drawing = this.options.Owner;
-
   var minSize = drawing.Options.MinGeometrySize;
-  if(!Number.isInteger(minSize)){minSize = 25;}
 
-  if(drawing.GetGeometrySize() < minSize){
-    node.style.display = 'none';
-    return;
+  if(!Number.isInteger(minSize)){
+    var handler = drawing._Handler;
+    minSize = handler.Options.MinGeometrySize;
   }
 
+  if(Number.isInteger(minSize)){
+    if(drawing.GetGeometrySize() < minSize){
+      node.style.display = 'none';
+      return;
+    }
+  }
   node.style.display = 'block';
 };
 
@@ -591,19 +595,22 @@ bbbfly.map.drawing.item._onDblClick = function(){
 /** @ignore */
 bbbfly.map.drawing.cluster._create = function(){
   var style = this.GetSpiderStyle();
+  var drawing = this;
 
-  var radius = this.Options.Radius;
-  if(!Number.isInteger(radius)){radius = 50;}
+  var getMaxClusterRadius = function(){
+    return bbbfly.map.drawing.cluster._maxClusterRadius(drawing);
+  };
 
   var group = new L.MarkerClusterGroup({
     iconCreateFunction: bbbfly.map.drawing.cluster._createIcon,
+    maxClusterRadius: getMaxClusterRadius,
+
+    spiderLegPolylineOptions: style,
+    spiderfyOnMaxZoom: !!style,
+
     removeOutsideVisibleBounds: false,
     showCoverageOnHover: false,
-    zoomToBoundsOnClick: true,
-    maxClusterRadius: radius,
-
-    spiderfyOnMaxZoom: !!style,
-    spiderLegPolylineOptions: style
+    zoomToBoundsOnClick: true
   });
 
   group.on('spiderfied',bbbfly.map.drawing.cluster._onSpiderfyChanged);
@@ -714,6 +721,27 @@ bbbfly.map.drawing.cluster._createIcon = function(cluster){
 };
 
 /** @ignore */
+bbbfly.map.drawing.cluster._maxClusterRadius = function(drawing){
+  var radius = drawing.Options.MaxClusterRadius;
+
+  if(!Number.isInteger(radius)){
+    var handler = drawing._Handler;
+    radius = handler.Options.MaxClusterRadius;
+  }
+  if(!Number.isInteger(radius)){radius = null;}
+  return radius;
+};
+
+/** @ignore */
+bbbfly.map.drawing.cluster._onSpiderfyChanged = function(){
+  this.Owner.Update();
+};
+
+bbbfly.map.drawing.cluster._onSelectedChanged = function(){
+  this.Owner.Update();
+};
+
+/** @ignore */
 bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
   var type = bbbfly.MapDrawingItem.IconStyle;
 
@@ -787,15 +815,6 @@ bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
   return this.Scan(function(layer){
     if(drawing.RemoveFrom(layer)){return true;}
   },false);
-};
-
-/** @ignore */
-bbbfly.map.drawing.cluster._onSpiderfyChanged = function(){
-  this.Owner.Update();
-};
-
-bbbfly.map.drawing.cluster._onSelectedChanged = function(){
-  this.Owner.Update();
 };
 
 /** @ignore */
@@ -1608,7 +1627,8 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @property {mapPoint} [Coords=undefined]
  * @property {geoJSON} [Geometry=undefined]
  * @property {boolean} [CoordsToGeoCenter=true]
- * @property {px} [MinGeometrySize=25] - Hide if smaller
+ * @property {px} [MinGeometrySize=undefined]
+ *
  * @property {bbbfly.MapDrawingItem.selecttype} [SelectType=none]
  * @property {bbbfly.MapDrawingItem.IconStyle|string} IconStyle
  * @property {bbbfly.MapDrawingItem.GeometryStyle|string} GeometryStyle
@@ -1618,7 +1638,7 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @typedef {bbbfly.MapDrawing.options} options
  * @memberOf bbbfly.MapDrawingCluster
  *
- * @property {integer} [Radius=50]
+ * @property {integer} [MaxClusterRadius=undefined]
  * @property {boolean} [ShowNumber=true]
  * @property {bbbfly.MapDrawingItem.IconStyle|string|array} IconStyle
  * @property {bbbfly.MapDrawingItem.GeometryStyle|string} SpiderStyle
@@ -1629,4 +1649,5 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @memberOf bbbfly.MapDrawingsHandler
  *
  * @property {bbbfly.MapDrawingsHandler.selecttype} [SelectType=none]
+ * @property {px} [MinGeometrySize=undefined]
  */
