@@ -227,6 +227,18 @@ bbbfly.map.drawing.core._dispose = function(){
 };
 
 /** @ignore */
+bbbfly.map.drawing.core._setHandler = function(handler){
+  if(!(handler instanceof bbbfly.MapDrawingsHandler)){return false;}
+
+  if(this._Handler && (this._Handler !== handler)){
+    if(!this._Handler.RemoveDrawing(this)){return false;}
+  }
+
+  this._Handler = handler;
+  return true;
+};
+
+/** @ignore */
 bbbfly.map.drawing.core._addTo = function(feature){
   if(this._ParentFeature){return false;}
 
@@ -797,6 +809,7 @@ bbbfly.map.drawing.handler._addDrawing = function(drawing){
   if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
   if(!String.isString(drawing.ID)){return false;}
   if(this._Drawings[drawing.ID]){return false;}
+  if(!drawing.SetHandler(this)){return false;}
 
   var added = (this._CurrentCluster)
     ? this._CurrentCluster.AddDrawing(drawing)
@@ -945,6 +958,8 @@ bbbfly.MapDrawing = function(options){
   /** @private */
   this._Layers = [];
   /** @private */
+  this._Handler = null;
+  /** @private */
   this._ParentFeature = null;
   /** @private */
   this._Initialized = false;
@@ -985,6 +1000,15 @@ bbbfly.MapDrawing = function(options){
    * @see {@link bbbfly.MapDrawing#Update|Update()}
    */
   this.Dispose = bbbfly.map.drawing.core._dispose;
+  /**
+   * @function
+   * @name AddTo
+   * @memberof bbbfly.MapDrawing#
+   *
+   * @param {bbbfly.MapDrawingsHandler} handler
+   * @return {boolean} If was set
+   */
+  this.SetHandler = bbbfly.map.drawing.core._setHandler;
 
   /**
    * @function
