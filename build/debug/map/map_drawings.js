@@ -1011,12 +1011,3 @@ bbbfly.MapDrawingsHandler.selecttype = {
   single: 1,
   multi: 2
 };
-
-/**
- * @typedef {object} options
- * @memberOf bbbfly.MapDrawingsHandler
- *
- * @property {bbbfly.MapDrawingsHandler.selecttype} [SelectType=none]
- * @property {integer} [MaxClusterRadius=undefined]
- * @property {px} [MinGeometrySize=undefined]
- */

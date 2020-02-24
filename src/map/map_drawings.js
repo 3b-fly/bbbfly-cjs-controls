@@ -1376,7 +1376,7 @@ bbbfly.MapDrawingItem.GeometryStyle = function(opts){
 /**
  * @enum {integer}
  * @description
- *   Supported {@link Supported bbbfly.Renderer.state|renderer states}
+ *   Supported {@link bbbfly.Renderer.state|renderer states}
  *
  */
 bbbfly.MapDrawingItem.state = {
@@ -1543,7 +1543,7 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   this.AddDrawing = bbbfly.map.drawing.handler._addDrawing;
   /**
    * @function
-   * @name AddDrawing
+   * @name RemoveDrawing
    * @memberof bbbfly.MapDrawingsHandler#
    *
    * @param {bbbfly.MapDrawing} drawing
@@ -1638,8 +1638,8 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @typedef {bbbfly.MapDrawing.options} options
  * @memberOf bbbfly.MapDrawingCluster
  *
- * @property {integer} [MaxClusterRadius=undefined]
  * @property {boolean} [ShowNumber=true]
+ * @property {integer} [MaxClusterRadius=undefined]
  * @property {bbbfly.MapDrawingItem.IconStyle|string|array} IconStyle
  * @property {bbbfly.MapDrawingItem.GeometryStyle|string} SpiderStyle
  */
@@ -1649,5 +1649,6 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @memberOf bbbfly.MapDrawingsHandler
  *
  * @property {bbbfly.MapDrawingsHandler.selecttype} [SelectType=none]
+ * @property {integer} [MaxClusterRadius=50]
  * @property {px} [MinGeometrySize=undefined]
  */
