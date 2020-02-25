@@ -276,7 +276,7 @@ bbbfly.button._doUpdateHolder = function(){
       break;
     }
 
-    if(!this.Multiline){
+    if(!this.MultiLine){
       style.push('white-space: nowrap');
     }
 
@@ -508,7 +508,7 @@ bbbfly.button._ngGetState = function(){
  * @property {bbbfly.Button.autosize} [AutoSize=none]
  * @property {bbbfly.Button.selecttype} [SelectType=none]
  *
- * @property {boolean} [Multiline=false]
+ * @property {boolean} [MultiLine=false]
  * @property {boolean} [HTMLEncode=true]
  */
 bbbfly.Button = function(def,ref,parent){
@@ -531,7 +531,7 @@ bbbfly.Button = function(def,ref,parent){
       AutoSize: bbbfly.Button.autosize.none,
       SelectType: bbbfly.Button.selecttype.none,
 
-      Multiline: false,
+      MultiLine: false,
       HTMLEncode: true,
 
       /** @private */

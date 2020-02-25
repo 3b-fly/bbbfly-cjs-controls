@@ -256,7 +256,7 @@ bbbfly.button._doUpdateHolder = function(){
       break;
     }
 
-    if(!this.Multiline){
+    if(!this.MultiLine){
       style.push('white-space: nowrap');
     }
 
@@ -439,7 +439,7 @@ bbbfly.Button = function(def,ref,parent){
       AutoSize: bbbfly.Button.autosize.none,
       SelectType: bbbfly.Button.selecttype.none,
 
-      Multiline: false,
+      MultiLine: false,
       HTMLEncode: true,
       _IconProxy: null,
       _HolderHtml: ''

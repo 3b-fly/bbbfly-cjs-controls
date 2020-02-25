@@ -95,7 +95,7 @@ bbbfly.text._doUpdateText = function(){
 
   if(hasText){
     if(this.HTMLEncode){text = ng_htmlEncode(text,true);}
-    if(!this.Multiline){whiteSpace = 'nowrap';}
+    if(!this.MultiLine){whiteSpace = 'nowrap';}
 
     switch(this.TextAlign){
       case bbbfly.Text.textalign.right:
@@ -181,7 +181,7 @@ bbbfly.Text = function(def,ref,parent){
 
       AutoSize: bbbfly.Text.autosize.none,
 
-      Multiline: false,
+      MultiLine: false,
       HTMLEncode: true,
       Selectable: true
     },
