@@ -426,9 +426,25 @@ bbbfly.map.map._onMapLayersChanged = function(event){
     bbbfly.map.map._layersChanged(event.target.Owner);
   }
 };
+bbbfly.map.map._getMapLayerName = function(mapLayer){
+  if(!(mapLayer instanceof L.Layer)){return null;}
+
+  var layers = this.GetLayers();
+  for(var id in layers){
+    var layer = layers[id];
+
+    if(Object.isObject(layer) && (layer.Layer === mapLayer)){
+      return this.DoGetLayerName(layer);
+    }
+  }
+  return null;
+};
 bbbfly.map.map._getLayerName = function(id){
   var layer = this.GetLayer(id);
-  if(!layer){return null;}
+  return this.DoGetLayerName(layer);
+};
+bbbfly.map.map._doGetLayerName = function(layer){
+  if(!Object.isObject(layer)){return null;}
 
   if(String.isString(layer.Name)){
     return layer.Name;
@@ -445,15 +461,19 @@ bbbfly.map.map._getLayerName = function(id){
 };
 bbbfly.map.map._getAttributions = function(){
   var map = this.GetMap();
-  var attributions = [];
+
+  var data = {
+    MapCtrl: this,
+    Attributions: []
+  };
 
   if(map){
-    var callback = bbbfly.map.map._getLayerAttributions;
-    map.eachLayer(callback,attributions);
+    var callback = bbbfly.map.map._getLayerAttribution;
+    map.eachLayer(callback,data);
   }
-  return attributions;
+  return data.Attributions;
 };
-bbbfly.map.map._getLayerAttributions = function(layer){
+bbbfly.map.map._getLayerAttribution = function(layer){
   if(layer && Function.isFunction(layer.getAttribution)){
     var attributions = [];
 
@@ -470,7 +490,10 @@ bbbfly.map.map._getLayerAttributions = function(layer){
     }
 
     if(attributions.length > 0){
-      this.push(attributions);
+      this.Attributions.push({
+        Name: this.MapCtrl.GetMapLayerName(layer),
+        Attributions: attributions
+      });
     }
   }
 };
@@ -565,7 +588,9 @@ bbbfly.Map = function(def,ref,parent){
       RemoveLayers: bbbfly.map.map._removeLayers,
       RemoveLayer: bbbfly.map.map._removeLayer,
       SetLayerVisible: bbbfly.map.map._setLayerVisible,
+      GetMapLayerName: bbbfly.map.map._getMapLayerName,
       GetLayerName: bbbfly.map.map._getLayerName,
+      DoGetLayerName: bbbfly.map.map._doGetLayerName,
       GetAttributions: bbbfly.map.map._getAttributions
     }
   });
