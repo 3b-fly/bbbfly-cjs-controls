@@ -284,7 +284,7 @@ bbbfly.map.map._createLayer = function(def){
   var mapLayer = null;
   switch(iface.type){
     case 'L.ImageOverlay':
-      mapLayer = L.tileLayer.wms(opts.url,opts.bounds,opts);
+      mapLayer = L.imageOverlay(opts.url,opts.bounds,opts);
     break;
     case 'L.TileLayer':
       mapLayer = L.tileLayer(opts.url,opts);
