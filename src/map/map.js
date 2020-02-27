@@ -1284,28 +1284,20 @@ ngUserControls['bbbfly_map'] = {
  * @property {string} [NameRes=undefined] - Layer name resource ID
  * @property {string|object} [Name=undefined] - Layer name by language
  *
- * @property {url} Url - Url used for tile requests
  * @property {number} [ZIndex=undefined] - Layer z-index
  * @property {number} [Opacity=undefined] - Layer opacity
  * @property {string} [ClassName=undefined] - Layer element CSS class name
- * @property {string|string[]} [Attribution=undefined] - Layer copyright attribution
- * @property {boolean|string} [CrossOrigin=undefined] - Will be added to tile requests
  */
-
 bbbfly.Map.Layer = {
   options_map: {
-    Url: 'url',
     ZIndex: 'zIndex',
     Opacity: 'opacity',
-    ClassName: 'className',
-    Attribution: 'attribution',
-    CrossOrigin: 'crossOrigin'
+    ClassName: 'className'
   },
   options: {
     zIndex: 1,
     opacity: 1,
-    className: '',
-    crossOrigin: false
+    className: ''
   }
 };
 
@@ -1346,6 +1338,30 @@ bbbfly.Map.Layer.display = {
  * @memberOf bbbfly.Map
  *
  * @description
+ *   Ancestor for all Leaflet external layer definitions.
+ *
+ * @property {url} Url - Url used for tile requests
+ * @property {string|string[]} [Attribution=undefined] - Layer copyright attribution
+ * @property {boolean|string} [CrossOrigin=false] - Will be added to tile requests
+ */
+bbbfly.Map.ExternalLayer = {
+  extends: 'Layer',
+  options_map: {
+    Url: 'url',
+    Attribution: 'attribution',
+    CrossOrigin: 'crossOrigin'
+  },
+  options: {
+    crossOrigin: false
+  }
+};
+
+/**
+ * @interface ImageLayer
+ * @memberOf bbbfly.Map
+ * @extends bbbfly.Map.ExternalLayer
+ *
+ * @description
  *   {@link https://leafletjs.com/reference-1.4.0.html#imageoverlay|L.ImageOverlay}
  *   instance will be added to map.
  *
@@ -1362,9 +1378,9 @@ bbbfly.Map.Layer.display = {
  * @see {@link bbbfly.Map.MapboxStyleLayer|MapboxStyleLayer}
  */
 bbbfly.Map.ImageLayer = {
-  extends: 'Layer',
+  extends: 'ExternalLayer',
   type: 'L.ImageOverlay',
-  map: {
+  options_map: {
     ErrorUrl: 'errorOverlayUrl',
     Bounds: 'bounds'
   }
@@ -1404,7 +1420,7 @@ bbbfly.Map.ImageLayer = {
  * ...
  */
 bbbfly.Map.TileLayer = {
-  extends: 'Layer',
+  extends: 'ExternalLayer',
   type: 'L.TileLayer',
   options_map: {
     ErrorUrl: 'errorTileUrl',

@@ -607,21 +607,16 @@ ngUserControls['bbbfly_map'] = {
     ngRegisterControlType('bbbfly.Map',bbbfly.Map);
   }
 };
-
 bbbfly.Map.Layer = {
   options_map: {
-    Url: 'url',
     ZIndex: 'zIndex',
     Opacity: 'opacity',
-    ClassName: 'className',
-    Attribution: 'attribution',
-    CrossOrigin: 'crossOrigin'
+    ClassName: 'className'
   },
   options: {
     zIndex: 1,
     opacity: 1,
-    className: '',
-    crossOrigin: false
+    className: ''
   }
 };
 bbbfly.Map.Layer.type = {
@@ -641,16 +636,27 @@ bbbfly.Map.Layer.display = {
   visible: 'visible',
   hidden: 'hidden'
 };
-bbbfly.Map.ImageLayer = {
+bbbfly.Map.ExternalLayer = {
   extends: 'Layer',
+  options_map: {
+    Url: 'url',
+    Attribution: 'attribution',
+    CrossOrigin: 'crossOrigin'
+  },
+  options: {
+    crossOrigin: false
+  }
+};
+bbbfly.Map.ImageLayer = {
+  extends: 'ExternalLayer',
   type: 'L.ImageOverlay',
-  map: {
+  options_map: {
     ErrorUrl: 'errorOverlayUrl',
     Bounds: 'bounds'
   }
 };
 bbbfly.Map.TileLayer = {
-  extends: 'Layer',
+  extends: 'ExternalLayer',
   type: 'L.TileLayer',
   options_map: {
     ErrorUrl: 'errorTileUrl',
