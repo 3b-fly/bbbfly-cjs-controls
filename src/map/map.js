@@ -1373,8 +1373,8 @@ bbbfly.Map.ImageLayer = {
 
 /**
  * @interface TileLayer
- * @extends bbbfly.Map.Layer
  * @memberOf bbbfly.Map
+ * @extends bbbfly.Map.ExternalLayer
  *
  * @description
  *   {@link https://leafletjs.com/reference-1.4.0.html#tilelayer|L.TileLayer}
@@ -1424,8 +1424,8 @@ bbbfly.Map.TileLayer = {
 
 /**
  * @interface WMSLayer
- * @extends bbbfly.Map.TileLayer
  * @memberOf bbbfly.Map
+ * @extends bbbfly.Map.TileLayer
  *
  * @description
  *   {@link https://leafletjs.com/reference-1.4.0.html#tilelayer-wms|L.TileLayer.wms}
@@ -1477,8 +1477,8 @@ bbbfly.Map.WMSLayer = {
 
 /**
  * @interface ArcGISOnlineLayer
- * @extends bbbfly.Map.TileLayer
  * @memberOf bbbfly.Map
+ * @extends bbbfly.Map.TileLayer
  *
  * @description
  *   {@link https://esri.github.io/esri-leaflet/api-reference/layers/tiled-map-layer.html|L.esri.TiledMapLayer}
@@ -1510,8 +1510,8 @@ bbbfly.Map.ArcGISOnlineLayer = {
 
 /**
  * @interface ArcGISServerLayer
- * @extends bbbfly.Map.TileLayer
  * @memberOf bbbfly.Map
+ * @extends bbbfly.Map.TileLayer
  *
  * @description
  *   {@link https://esri.github.io/esri-leaflet/api-reference/layers/tiled-map-layer.html|L.esri.TiledMapLayer}
@@ -1543,8 +1543,8 @@ bbbfly.Map.ArcGISServerLayer = {
 
 /**
  * @interface ArcGISEnterpriseLayer
- * @extends bbbfly.Map.ImageLayer
  * @memberOf bbbfly.Map
+ * @extends bbbfly.Map.ImageLayer
  *
  * @description
  *   {@link https://esri.github.io/esri-leaflet/api-reference/layers/dynamic-map-layer.html|L.esri.DynamicMapLayer}
@@ -1588,8 +1588,8 @@ bbbfly.Map.ArcGISEnterpriseLayer = {
 
 /**
  * @interface MapboxTileLayer
- * @extends bbbfly.Map.TileLayer
  * @memberOf bbbfly.Map
+ * @extends bbbfly.Map.TileLayer
  *
  * @property {bbbfly.Map.Layer.type} Type=mapbox_tile
  * @property {string} MapId - {@link https://docs.mapbox.com/help/glossary/map-id/|Mapbox map ID}
@@ -1630,8 +1630,8 @@ bbbfly.Map.MapboxTileLayer = {
 
 /**
  * @interface MapboxStyleLayer
- * @extends bbbfly.Map.TileLayer
  * @memberOf bbbfly.Map
+ * @extends bbbfly.Map.TileLayer
  *
  * @property {bbbfly.Map.Layer.type} Type=mapbox_style
  * @property {string} StyleUrl - {@link https://docs.mapbox.com/help/glossary/style-url/|Mapbox style URL}
