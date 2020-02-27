@@ -404,7 +404,6 @@ bbbfly.map.map._addLayers = function(defs){
   for(var i in defs){
     if(!this.AddLayer(defs[i])){
       result = false;
-      break;
     }
   }
 
