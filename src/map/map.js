@@ -349,6 +349,9 @@ bbbfly.map.map._createLayer = function(def){
 
   var mapLayer = null;
   switch(iface.type){
+    case 'L.bbbfly.ColorLayer':
+      mapLayer = new L.bbbfly.ColorLayer(opts);
+    break;
     case 'L.ImageOverlay':
       mapLayer = new L.ImageOverlay(opts.url,opts.bounds,opts);
     break;
@@ -1308,6 +1311,8 @@ bbbfly.Map.Layer = {
  *   Supported map layer types.
  */
 bbbfly.Map.Layer.type = {
+  color: 'ColorLayer',
+
   image: 'ImageLayer',
   tile: 'TileLayer',
   wms: 'WMSLayer',
@@ -1333,9 +1338,29 @@ bbbfly.Map.Layer.display = {
 };
 
 /**
- * @interface ImageLayer
- * @extends bbbfly.Map.Layer
+ * @interface ColorLayer
  * @memberOf bbbfly.Map
+ * @extends bbbfly.Map.Layer
+ *
+ * @property {bbbfly.Map.Layer.type} Type=color
+ * @property {color=''} Color - Layer color
+ */
+bbbfly.Map.ColorLayer = {
+  extends: 'Layer',
+  type: 'L.bbbfly.ColorLayer',
+  options_map: {
+    Color: 'color'
+  },
+  options: {
+    color: ''
+  }
+};
+
+
+/**
+ * @interface ExternalLayer
+ * @memberOf bbbfly.Map
+ * @extends bbbfly.Map.Layer
  *
  * @description
  *   Ancestor for all Leaflet external layer definitions.

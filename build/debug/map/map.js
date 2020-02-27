@@ -283,6 +283,9 @@ bbbfly.map.map._createLayer = function(def){
 
   var mapLayer = null;
   switch(iface.type){
+    case 'L.bbbfly.ColorLayer':
+      mapLayer = new L.bbbfly.ColorLayer(opts);
+    break;
     case 'L.ImageOverlay':
       mapLayer = new L.ImageOverlay(opts.url,opts.bounds,opts);
     break;
@@ -620,6 +623,8 @@ bbbfly.Map.Layer = {
   }
 };
 bbbfly.Map.Layer.type = {
+  color: 'ColorLayer',
+
   image: 'ImageLayer',
   tile: 'TileLayer',
   wms: 'WMSLayer',
@@ -635,6 +640,16 @@ bbbfly.Map.Layer.display = {
   fixed: 'fixed',
   visible: 'visible',
   hidden: 'hidden'
+};
+bbbfly.Map.ColorLayer = {
+  extends: 'Layer',
+  type: 'L.bbbfly.ColorLayer',
+  options_map: {
+    Color: 'color'
+  },
+  options: {
+    color: ''
+  }
 };
 bbbfly.Map.ExternalLayer = {
   extends: 'Layer',
