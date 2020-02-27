@@ -284,19 +284,19 @@ bbbfly.map.map._createLayer = function(def){
   var mapLayer = null;
   switch(iface.type){
     case 'L.ImageOverlay':
-      mapLayer = L.imageOverlay(opts.url,opts.bounds,opts);
+      mapLayer = new L.ImageOverlay(opts.url,opts.bounds,opts);
     break;
     case 'L.TileLayer':
-      mapLayer = L.tileLayer(opts.url,opts);
+      mapLayer = new L.TileLayer(opts.url,opts);
     break;
     case 'L.TileLayer.wms':
-      mapLayer = L.tileLayer.wms(opts.url,opts);
+      mapLayer = new L.TileLayer.WMS(opts.url,opts);
     break;
     case 'L.esri.TiledMapLayer':
-      mapLayer = L.esri.tiledMapLayer(opts);
+      mapLayer = new L.esri.TiledMapLayer(opts);
     break;
     case 'L.esri.DynamicMapLayer':
-      mapLayer = L.esri.dynamicMapLayer(opts);
+      mapLayer = new L.esri.DynamicMapLayer(opts);
     break;
   }
 
