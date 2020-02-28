@@ -27,7 +27,7 @@ bbbfly.map.drawing = {
 
 /** @ignore */
 bbbfly.map.drawing.utils.LeafletId = function(obj){
-  var id = Object.isObject(obj) ? obj._leaflet_id : null;
+  var id = Object.isObject(obj) ? L.stamp(obj) : null;
   return Number.isInteger(id) ? bbbfly.map.drawing._leafletPrefix+id : id;
 };
 
@@ -38,7 +38,7 @@ bbbfly.map.drawing.utils.DrawingId = function(options){
 };
 
 /** @ignore */
-bbbfly.map.drawing.utils.GetDrawingStyle = function(style){
+bbbfly.map.drawing.utils.GetStyle = function(style){
   if(String.isString(style)){
     style = bbbfly.map.drawing._styles[style];
     if(Object.isObject(style)){return style;}
@@ -47,7 +47,7 @@ bbbfly.map.drawing.utils.GetDrawingStyle = function(style){
 };
 
 /** @ignore */
-bbbfly.map.drawing.utils.DefineDrawingStyle = function(id,style){
+bbbfly.map.drawing.utils.DefineStyle = function(id,style){
   if(!Object.isObject(style)){return false;}
   if(!String.isString(id)){return false;}
 
@@ -341,6 +341,20 @@ bbbfly.map.drawing.item._create = function(){
       riseOnHover: true,
       riseOffset: 999999
     });
+//TODO
+//  marker._tooltipOptions = {
+//    type: null,
+//    text: null,
+//    anchor: null,
+//    persistSelected: true
+//  };
+//
+//  if(markerOptions.tooltip){
+//    ng_MergeVarReplace(
+//      marker._tooltipOptions,
+//      markerOptions.tooltip
+//    );
+//  }
 
     ng_OverrideMethod(
       marker,'_updateZIndex',
@@ -443,7 +457,7 @@ bbbfly.map.drawing.item._getIconStyle = function(){
   if(style instanceof type){return style;}
 
   if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+    style = bbbfly.map.drawing.utils.GetStyle(style);
   }
 
   return (style instanceof type) ? style : new type();
@@ -457,7 +471,7 @@ bbbfly.map.drawing.item._getGeometryStyle = function(){
   if(style instanceof type){return style;}
 
   if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+    style = bbbfly.map.drawing.utils.GetStyle(style);
   }
 
   return (style instanceof type) ? style : new type();
@@ -591,6 +605,92 @@ bbbfly.map.drawing.item._onDblClick = function(){
     this.SetSelected(!this.GetSelected(),true);
   }
 };
+//TODO
+/** @ignore */
+/*bbbfly.mapbox.drawing._getTooltipType = function(){ //TODO
+  var type = this._tooltipOptions ? this._tooltipOptions.type : null;
+  var typeObj = this.Map.GetTooltipType(type);
+  typeObj = typeObj ? ng_CopyVar(typeObj) : {};
+
+  if(this.Map.DefaultTooltip){
+    ng_MergeVar(typeObj,this.Map.DefaultTooltip);
+  }
+
+  typeObj._id = ngCreateControlId((type ? type : '')+'Tooltip');
+  return typeObj;
+};*/
+//TODO
+/** @ignore */
+/*bbbfly.mapbox.drawing._showTooltip = function(){ //TODO
+  var tooltip = this.getTooltip();
+
+  if(!tooltip){
+    var mapTooltip = this.GetTooltipType();
+
+    if(mapTooltip){
+      var text = null;
+
+      if(Function.isFunction(mapTooltip.GetText)){
+        text = mapTooltip.GetText(this);
+      }
+      else if(this._tooltipOptions){
+        text = this._tooltipOptions.text;
+      }
+
+      if(String.isString(text)){
+        var options = { permanent: false };
+
+        if(mapTooltip.TooltipOptions){
+          ng_MergeVar(options,mapTooltip.TooltipOptions);
+        }
+
+        if(Function.isFunction(mapTooltip.GetHTML)){
+          var text = mapTooltip.GetHTML(text);
+        }
+
+        this.bindTooltip(text,options);
+
+        tooltip = this.getTooltip();
+        if(tooltip){
+          tooltip._mapTooltip = mapTooltip;
+          ng_OverrideMethod(
+            tooltip,'_setPosition',bbbfly.mapbox.tooltip._setPosition
+          );
+        }
+      }
+    }
+  }
+
+  if(tooltip && !this.isTooltipOpen()){this.openTooltip();}
+};*/
+//TODO
+/** @ignore */
+/*bbbfly.mapbox.drawing._hideTooltip = function(){ //TODO
+  this.closeTooltip();
+};*/
+//TODO
+/** @ignore */
+/*bbbfly.mapbox.marker._openTooltip = function(latlng){ //TODO
+  if(!this.openTooltip || !this.openTooltip.hasParent()){return;}
+
+  if(this.IsInState(bbbfly.mapbox.drawing.state.enabled)){
+    this.openTooltip.callParent(latlng);
+  }
+};*/
+//TODO
+/** @ignore */
+/*bbbfly.mapbox.marker._closeTooltip = function(){ //TODO
+  if(!this.closeTooltip || !this.closeTooltip.hasParent()){return;}
+
+  if(
+    !this._tooltipOptions
+    || !this._tooltipOptions.persistSelected
+    || !this.IsInState(bbbfly.mapbox.drawing.state.selected)
+    || !this.IsInState(bbbfly.mapbox.drawing.state.enabled)
+  ){
+    this.closeTooltip.callParent();
+  }
+};*/
 
 /** @ignore */
 bbbfly.map.drawing.cluster._create = function(){
@@ -765,7 +865,7 @@ bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
   }
 
   if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+    style = bbbfly.map.drawing.utils.GetStyle(style);
   }
 
   return (style instanceof type) ? style : new type();
@@ -779,7 +879,7 @@ bbbfly.map.drawing.cluster._getSpiderStyle = function(){
   if(style instanceof type){return style;}
 
   if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+    style = bbbfly.map.drawing.utils.GetStyle(style);
   }
 
   return (style instanceof type) ? style : new type();
@@ -1309,6 +1409,10 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @see {@link bbbfly.MapDrawingItem#event:OnSetSelected|OnSetSelected}
      */
     this.OnSelectedChanged = null;
+//TODO
+//  drawing.GetTooltipType = bbbfly.mapbox.drawing._getTooltipType;
+//  drawing.ShowTooltip = bbbfly.mapbox.drawing._showTooltip;
+//  drawing.HideTooltip = bbbfly.mapbox.drawing._hideTooltip;
 
     return this;
   }
@@ -1501,6 +1605,10 @@ bbbfly.MapDrawingCluster = bbbfly.object.Extend(
  *
  * @property {bbbfly.MapDrawingsHandler.options} Options
  */
+//TODO: SelectDrawing
+//TODO: UnselectAllDrawings
+//TODO: GetSelectedDrawings
+//TODO: OnDrawingSelectedChanged
 bbbfly.MapDrawingsHandler = function(feature,options){
   if(!(feature instanceof L.FeatureGroup)){return null;}
   if(!Object.isObject(options)){options = {};}

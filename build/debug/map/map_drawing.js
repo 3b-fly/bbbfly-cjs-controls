@@ -22,21 +22,21 @@ bbbfly.map.drawing = {
   handler: {}
 };
 bbbfly.map.drawing.utils.LeafletId = function(obj){
-  var id = Object.isObject(obj) ? obj._leaflet_id : null;
+  var id = Object.isObject(obj) ? L.stamp(obj) : null;
   return Number.isInteger(id) ? bbbfly.map.drawing._leafletPrefix+id : id;
 };
 bbbfly.map.drawing.utils.DrawingId = function(options){
   var id = (options) ? options.ID : null;
   return String.isString(id) ? id : '_'+(++bbbfly.map.drawing._lastId);
 };
-bbbfly.map.drawing.utils.GetDrawingStyle = function(style){
+bbbfly.map.drawing.utils.GetStyle = function(style){
   if(String.isString(style)){
     style = bbbfly.map.drawing._styles[style];
     if(Object.isObject(style)){return style;}
   }
   return null;
 };
-bbbfly.map.drawing.utils.DefineDrawingStyle = function(id,style){
+bbbfly.map.drawing.utils.DefineStyle = function(id,style){
   if(!Object.isObject(style)){return false;}
   if(!String.isString(id)){return false;}
 
@@ -393,7 +393,7 @@ bbbfly.map.drawing.item._getIconStyle = function(){
   if(style instanceof type){return style;}
 
   if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+    style = bbbfly.map.drawing.utils.GetStyle(style);
   }
 
   return (style instanceof type) ? style : new type();
@@ -405,7 +405,7 @@ bbbfly.map.drawing.item._getGeometryStyle = function(){
   if(style instanceof type){return style;}
 
   if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+    style = bbbfly.map.drawing.utils.GetStyle(style);
   }
 
   return (style instanceof type) ? style : new type();
@@ -670,7 +670,7 @@ bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
   }
 
   if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+    style = bbbfly.map.drawing.utils.GetStyle(style);
   }
 
   return (style instanceof type) ? style : new type();
@@ -682,7 +682,7 @@ bbbfly.map.drawing.cluster._getSpiderStyle = function(){
   if(style instanceof type){return style;}
 
   if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetDrawingStyle(style);
+    style = bbbfly.map.drawing.utils.GetStyle(style);
   }
 
   return (style instanceof type) ? style : new type();
