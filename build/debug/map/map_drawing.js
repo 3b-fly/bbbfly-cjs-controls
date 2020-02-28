@@ -911,7 +911,7 @@ bbbfly.MapDrawingItem.IconStyle = function(images,className){
   this.images = images;
   this.className = className;
 };
-bbbfly.MapDrawingItem.GeometryStyle = function(opts){
+bbbfly.MapDrawingItem.GeometryStyle = function(options){
   this.stroke = false;
   this.fill = false;
   this.weight = 1;
@@ -922,15 +922,15 @@ bbbfly.MapDrawingItem.GeometryStyle = function(opts){
   this.opacity = 1;
   this.fillOpacity = 0.2;
 
-  if(!Object.isObject(opts)){return;}
+  if(!Object.isObject(options)){return;}
 
-  if(Number.isInteger(opts.weight)){this.weight = opts.weight;}
+  if(Number.isInteger(options.weight)){this.weight = options.weight;}
 
-  if(String.isString(opts.color)){this.color = opts.color;}
-  if(String.isString(opts.fillColor)){this.fillColor = opts.fillColor;}
+  if(String.isString(options.color)){this.color = options.color;}
+  if(String.isString(options.fillColor)){this.fillColor = options.fillColor;}
 
-  if(Number.isNumber(opts.opacity)){this.opacity = opts.opacity;}
-  if(Number.isNumber(opts.fillOpacity)){this.fillOpacity = opts.fillOpacity;}
+  if(Number.isNumber(options.opacity)){this.opacity = options.opacity;}
+  if(Number.isNumber(options.fillOpacity)){this.fillOpacity = options.fillOpacity;}
 
   this.stroke = !!((this.weight > 0) && (this.opacity > 0));
   this.fill = !!(this.fillColor && (this.fillOpacity > 0));
