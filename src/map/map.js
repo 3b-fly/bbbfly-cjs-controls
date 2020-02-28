@@ -1231,7 +1231,7 @@ bbbfly.Map.crs = {
 
 /**
  * @typedef {object} attribution
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  *
  * @description
  *   Layer attribution.
@@ -1242,7 +1242,7 @@ bbbfly.Map.crs = {
 
 /**
  * @typedef {object} layer
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  *
  * @description
  *   Leaflet layer wrapper.
@@ -1257,7 +1257,7 @@ bbbfly.Map.crs = {
 
 /**
  * @typedef {object} listener
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  *
  * @description
  *   Map Events listener.
@@ -1276,7 +1276,7 @@ ngUserControls['bbbfly_map'] = {
 
 /**
  * @interface Layer
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  *
  * @description
  *   Ancestor for all Leaflet layer definitions.
@@ -1339,11 +1339,11 @@ bbbfly.Map.Layer.display = {
 
 /**
  * @interface ColorLayer
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  * @extends bbbfly.Map.Layer
  *
- * @property {bbbfly.Map.Layer.type} Type=color
- * @property {color=''} Color - Layer color
+ * @property {bbbfly.Map.Layer.type} [Type=color]
+ * @property {color} [Color=''] - Layer color
  */
 bbbfly.Map.ColorLayer = {
   extends: 'Layer',
@@ -1356,10 +1356,9 @@ bbbfly.Map.ColorLayer = {
   }
 };
 
-
 /**
  * @interface ExternalLayer
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  * @extends bbbfly.Map.Layer
  *
  * @description
@@ -1383,7 +1382,7 @@ bbbfly.Map.ExternalLayer = {
 
 /**
  * @interface ImageLayer
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  * @extends bbbfly.Map.ExternalLayer
  *
  * @description
@@ -1413,7 +1412,7 @@ bbbfly.Map.ImageLayer = {
 
 /**
  * @interface TileLayer
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  * @extends bbbfly.Map.ExternalLayer
  *
  * @description
@@ -1464,7 +1463,7 @@ bbbfly.Map.TileLayer = {
 
 /**
  * @interface WMSLayer
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  * @extends bbbfly.Map.TileLayer
  *
  * @description
@@ -1517,7 +1516,7 @@ bbbfly.Map.WMSLayer = {
 
 /**
  * @interface ArcGISOnlineLayer
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  * @extends bbbfly.Map.TileLayer
  *
  * @description
@@ -1550,7 +1549,7 @@ bbbfly.Map.ArcGISOnlineLayer = {
 
 /**
  * @interface ArcGISServerLayer
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  * @extends bbbfly.Map.TileLayer
  *
  * @description
@@ -1583,7 +1582,7 @@ bbbfly.Map.ArcGISServerLayer = {
 
 /**
  * @interface ArcGISEnterpriseLayer
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  * @extends bbbfly.Map.ImageLayer
  *
  * @description
@@ -1628,7 +1627,7 @@ bbbfly.Map.ArcGISEnterpriseLayer = {
 
 /**
  * @interface MapboxTileLayer
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  * @extends bbbfly.Map.TileLayer
  *
  * @property {bbbfly.Map.Layer.type} Type=mapbox_tile
@@ -1670,7 +1669,7 @@ bbbfly.Map.MapboxTileLayer = {
 
 /**
  * @interface MapboxStyleLayer
- * @memberOf bbbfly.Map
+ * @memberof bbbfly.Map
  * @extends bbbfly.Map.TileLayer
  *
  * @property {bbbfly.Map.Layer.type} Type=mapbox_style
