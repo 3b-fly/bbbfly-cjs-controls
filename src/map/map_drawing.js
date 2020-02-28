@@ -38,27 +38,6 @@ bbbfly.map.drawing.utils.DrawingId = function(options){
 };
 
 /** @ignore */
-bbbfly.map.drawing.utils.GetStyle = function(id){
-  if(String.isString(id)){
-    var style = bbbfly.map.drawing._styles[id];
-    if(style instanceof bbbfly.MapDrawingItem.Style){return style;}
-  }
-  return null;
-};
-
-/** @ignore */
-bbbfly.map.drawing.utils.DefineStyle = function(id,style){
-  if(!(style instanceof bbbfly.MapDrawingItem.Style)){return false;}
-  if(!String.isString(id)){return false;}
-
-  var stack = bbbfly.map.drawing._styles;
-  if((typeof stack[id] !== 'undefined')){return false;}
-
-  stack[id] = style;
-  return true;
-};
-
-/** @ignore */
 bbbfly.map.drawing.utils.IsLatLng = function(latLng){
   return (Array.isArray(latLng) || (latLng instanceof L.LatLng));
 };
@@ -443,7 +422,7 @@ bbbfly.map.drawing.item._getIconStyle = function(){
   if(iStyle instanceof type){return iStyle;}
 
   if(String.isString(iStyle)){
-    iStyle = bbbfly.map.drawing.utils.GetStyle(iStyle);
+    iStyle = bbbfly.MapDrawingItem.Style.Get(iStyle);
   }
 
   return (iStyle instanceof type) ? iStyle : new type();
@@ -457,7 +436,7 @@ bbbfly.map.drawing.item._getGeometryStyle = function(){
   if(gStyle instanceof type){return gStyle;}
 
   if(String.isString(gStyle)){
-    gStyle = bbbfly.map.drawing.utils.GetStyle(gStyle);
+    gStyle = bbbfly.MapDrawingItem.Style.Get(gStyle);
   }
 
   return (gStyle instanceof type) ? gStyle : new type();
@@ -765,7 +744,7 @@ bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
   }
 
   if(String.isString(iStyle)){
-    iStyle = bbbfly.map.drawing.utils.GetStyle(iStyle);
+    iStyle = bbbfly.MapDrawingItem.Style.Get(iStyle);
   }
 
   return (iStyle instanceof type) ? iStyle : new type();
@@ -779,7 +758,7 @@ bbbfly.map.drawing.cluster._getSpiderStyle = function(){
   if(sStyle instanceof type){return sStyle;}
 
   if(String.isString(sStyle)){
-    sStyle = bbbfly.map.drawing.utils.GetStyle(sStyle);
+    sStyle = bbbfly.MapDrawingItem.Style.Get(sStyle);
   }
 
   return (sStyle instanceof type) ? sStyle : new type();
@@ -1316,14 +1295,60 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
 );
 
 /**
- * @interface Style
+ * @class Style
  * @memberof bbbfly.MapDrawingItem
+ *
+ * @inpackage mapbox
  */
 bbbfly.MapDrawingItem.Style = function(){};
 
 /**
+ * @function
+ * @name Get
+ * @memberof bbbfly.MapDrawingItem.Style
+ *
+ * @param {string} id
+ * @return {bbbfly.MapDrawingItem.Style|null}
+ *
+ * @see {@link bbbfly.MapDrawingItem.Style.Define|Define()}
+ */
+bbbfly.MapDrawingItem.Style.Get = function(id){
+  if(String.isString(id)){
+    var style = bbbfly.map.drawing._styles[id];
+    if(style instanceof bbbfly.MapDrawingItem.Style){
+      return style;
+    }
+  }
+  return null;
+};
+
+/**
+ * @function
+ * @name Define
+ * @memberof bbbfly.MapDrawingItem.Style
+ *
+ * @param {string} id
+ * @param {bbbfly.MapDrawingItem.Style} style
+ * @return {boolean} - If defined
+ *
+ * @see {@link bbbfly.MapDrawingItem.Style.Get|Get()}
+ */
+bbbfly.MapDrawingItem.Style.Define = function(id,style){
+  if(!(style instanceof bbbfly.MapDrawingItem.Style)){return false;}
+  if(!String.isString(id)){return false;}
+
+  var stack = bbbfly.map.drawing._styles;
+  if((typeof stack[id] !== 'undefined')){
+    return false;
+  }
+
+  stack[id] = style;
+  return true;
+};
+
+/**
  * @class
- * @implements bbbfly.MapDrawingItem.Style
+ * @extends bbbfly.MapDrawingItem.Style
  *
  * @inpackage mapbox
  *
@@ -1343,7 +1368,7 @@ bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
 
 /**
  * @class
- * @implements bbbfly.MapDrawingItem.Style
+ * @extends bbbfly.MapDrawingItem.Style
  *
  * @inpackage mapbox
  *
