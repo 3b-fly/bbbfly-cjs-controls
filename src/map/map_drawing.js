@@ -38,17 +38,17 @@ bbbfly.map.drawing.utils.DrawingId = function(options){
 };
 
 /** @ignore */
-bbbfly.map.drawing.utils.GetStyle = function(style){
-  if(String.isString(style)){
-    style = bbbfly.map.drawing._styles[style];
-    if(Object.isObject(style)){return style;}
+bbbfly.map.drawing.utils.GetStyle = function(id){
+  if(String.isString(id)){
+    var style = bbbfly.map.drawing._styles[id];
+    if(style instanceof bbbfly.MapDrawingItem.Style){return style;}
   }
   return null;
 };
 
 /** @ignore */
 bbbfly.map.drawing.utils.DefineStyle = function(id,style){
-  if(!Object.isObject(style)){return false;}
+  if(!(style instanceof bbbfly.MapDrawingItem.Style)){return false;}
   if(!String.isString(id)){return false;}
 
   var stack = bbbfly.map.drawing._styles;
@@ -318,12 +318,12 @@ bbbfly.map.drawing.item._create = function(){
   var layers = [];
 
   if(hasGeom){
-    var style = this.GetGeometryStyle();
+    var gStyle = this.GetGeometryStyle();
     geom = bbbfly.map.drawing.utils.NormalizeGeoJSON(geom);
 
     var geometry = new L.GeoJSON(geom,{
       Owner: this,
-      style: style,
+      style: gStyle,
       onEachFeature: bbbfly.map.drawing.item._initGeometry
     });
 
@@ -401,12 +401,12 @@ bbbfly.map.drawing.item._update = function(){
   var state = this.GetState();
 
   if(this._Marker){
-    var style = this.GetIconStyle();
+    var iStyle = this.GetIconStyle();
 
     var over = state.mouseover;
     state.mouseover = false;
 
-    var proxy = bbbfly.Renderer.StackProxy(style.images,state,this.ID+'_I');
+    var proxy = bbbfly.Renderer.StackProxy(iStyle.images,state,this.ID+'_I');
     var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg');
 
     this._IconProxy = proxy;
@@ -418,7 +418,7 @@ bbbfly.map.drawing.item._update = function(){
       var icon = L.divIcon({
         iconSize: [proxy.W,proxy.H],
         iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
-        className: style.className,
+        className: iStyle.className,
 //        tooltipAnchor: ttAnchor, //TODO
         html: html
       });
@@ -439,28 +439,28 @@ bbbfly.map.drawing.item._update = function(){
 bbbfly.map.drawing.item._getIconStyle = function(){
   var type = bbbfly.MapDrawingItem.IconStyle;
 
-  var style = this.Options.IconStyle;
-  if(style instanceof type){return style;}
+  var iStyle = this.Options.IconStyle;
+  if(iStyle instanceof type){return iStyle;}
 
-  if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetStyle(style);
+  if(String.isString(iStyle)){
+    iStyle = bbbfly.map.drawing.utils.GetStyle(iStyle);
   }
 
-  return (style instanceof type) ? style : new type();
+  return (iStyle instanceof type) ? iStyle : new type();
 };
 
 /** @ignore */
 bbbfly.map.drawing.item._getGeometryStyle = function(){
   var type = bbbfly.MapDrawingItem.GeometryStyle;
 
-  var style = this.Options.GeometryStyle;
-  if(style instanceof type){return style;}
+  var gStyle = this.Options.GeometryStyle;
+  if(gStyle instanceof type){return gStyle;}
 
-  if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetStyle(style);
+  if(String.isString(gStyle)){
+    gStyle = bbbfly.map.drawing.utils.GetStyle(gStyle);
   }
 
-  return (style instanceof type) ? style : new type();
+  return (gStyle instanceof type) ? gStyle : new type();
 };
 
 /** @ignore */
@@ -594,7 +594,7 @@ bbbfly.map.drawing.item._onDblClick = function(){
 
 /** @ignore */
 bbbfly.map.drawing.cluster._create = function(){
-  var style = this.GetSpiderStyle();
+  var sStyle = this.GetSpiderStyle();
   var drawing = this;
 
   var getMaxClusterRadius = function(){
@@ -605,8 +605,8 @@ bbbfly.map.drawing.cluster._create = function(){
     iconCreateFunction: bbbfly.map.drawing.cluster._createIcon,
     maxClusterRadius: getMaxClusterRadius,
 
-    spiderLegPolylineOptions: style,
-    spiderfyOnMaxZoom: !!style,
+    spiderLegPolylineOptions: sStyle,
+    spiderfyOnMaxZoom: !!sStyle,
 
     removeOutsideVisibleBounds: false,
     showCoverageOnHover: false,
@@ -681,11 +681,11 @@ bbbfly.map.drawing.cluster._createIcon = function(cluster){
   var drawing = cluster._group.Owner;
   var childCnt = cluster.getChildCount();
 
-  var style = drawing.GetIconStyle(childCnt);
+  var iStyle = drawing.GetIconStyle(childCnt);
   var state = drawing.GetState(cluster);
 
   var id = bbbfly.map.drawing.utils.LeafletId(cluster);
-  var proxy = bbbfly.Renderer.StackProxy(style.images,state);
+  var proxy = bbbfly.Renderer.StackProxy(iStyle.images,state);
   var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg',id);
 
   var showNumber = drawing.Options.ShowNumber;
@@ -714,7 +714,7 @@ bbbfly.map.drawing.cluster._createIcon = function(cluster){
   return L.divIcon({
       iconSize: [proxy.W,proxy.H],
       iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
-      className: style.className,
+      className: iStyle.className,
 //    tooltipAnchor: ttAnchor, //TODO
       html: html
     });
@@ -745,12 +745,12 @@ bbbfly.map.drawing.cluster._onSelectedChanged = function(){
 bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
   var type = bbbfly.MapDrawingItem.IconStyle;
 
-  var style = this.Options.IconStyle;
-  if(style instanceof type){return style;}
+  var iStyle = this.Options.IconStyle;
+  if(iStyle instanceof type){return iStyle;}
 
-  if(Array.isArray(style) && Number.isInteger(cnt)){
-    for(var i in style){
-      var styleDef = style[i];
+  if(Array.isArray(iStyle) && Number.isInteger(cnt)){
+    for(var i in iStyle){
+      var styleDef = iStyle[i];
       var from = Number.isInteger(styleDef.from) ? styleDef.from : null;
       var to = Number.isInteger(styleDef.to) ? styleDef.to : null;
 
@@ -758,31 +758,31 @@ bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
         ((from === null) || (cnt >= from))
         && ((to === null) || (cnt <= to))
       ){
-        style = styleDef.style;
+        iStyle = styleDef.style;
         break;
       }
     }
   }
 
-  if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetStyle(style);
+  if(String.isString(iStyle)){
+    iStyle = bbbfly.map.drawing.utils.GetStyle(iStyle);
   }
 
-  return (style instanceof type) ? style : new type();
+  return (iStyle instanceof type) ? iStyle : new type();
 };
 
 /** @ignore */
 bbbfly.map.drawing.cluster._getSpiderStyle = function(){
   var type = bbbfly.MapDrawingItem.GeometryStyle;
 
-  var style = this.Options.SpiderStyle;
-  if(style instanceof type){return style;}
+  var sStyle = this.Options.SpiderStyle;
+  if(sStyle instanceof type){return sStyle;}
 
-  if(String.isString(style)){
-    style = bbbfly.map.drawing.utils.GetStyle(style);
+  if(String.isString(sStyle)){
+    sStyle = bbbfly.map.drawing.utils.GetStyle(sStyle);
   }
 
-  return (style instanceof type) ? style : new type();
+  return (sStyle instanceof type) ? sStyle : new type();
 };
 
 /** @ignore */
@@ -1131,6 +1131,7 @@ bbbfly.MapDrawing = function(options){
 /**
  * @class
  * @extends bbbfly.MapDrawing
+ *
  * @inpackage mapbox
  *
  * @param {bbbfly.MapDrawingItem.options} options
@@ -1315,22 +1316,35 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
 );
 
 /**
+ * @interface Style
+ * @memberof bbbfly.MapDrawingItem
+ */
+bbbfly.MapDrawingItem.Style = function(){};
+
+/**
  * @class
+ * @implements bbbfly.MapDrawingItem.Style
+ *
  * @inpackage mapbox
  *
  * @param {bbbfly.Renderer.image[]} [images=null] - Stack of icon images
  * @param {string} [className=''] - Leaflet marker div class name
  */
-bbbfly.MapDrawingItem.IconStyle = function(images,className){
-  if(!Array.isArray(images)){images = null;}
-  if(!String.isString(className)){className = '';}
+bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
+  bbbfly.MapDrawingItem.Style,function(images,className){
 
-  this.images = images;
-  this.className = className;
-};
+    if(!Array.isArray(images)){images = null;}
+    if(!String.isString(className)){className = '';}
+
+    this.images = images;
+    this.className = className;
+  }
+);
 
 /**
  * @class
+ * @implements bbbfly.MapDrawingItem.Style
+ *
  * @inpackage mapbox
  *
  * @param {object} options
@@ -1348,30 +1362,33 @@ bbbfly.MapDrawingItem.IconStyle = function(images,className){
  * @property {number} [opacity=1]
  * @property {number} [fillOpacity=0.2]
  */
-bbbfly.MapDrawingItem.GeometryStyle = function(options){
-  this.stroke = false;
-  this.fill = false;
-  this.weight = 1;
+bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
+  bbbfly.MapDrawingItem.Style,function(options){
 
-  this.color = '#000000';
-  this.fillColor = undefined;
+    this.stroke = false;
+    this.fill = false;
+    this.weight = 1;
 
-  this.opacity = 1;
-  this.fillOpacity = 0.2;
+    this.color = '#000000';
+    this.fillColor = undefined;
 
-  if(!Object.isObject(options)){return;}
+    this.opacity = 1;
+    this.fillOpacity = 0.2;
 
-  if(Number.isInteger(options.weight)){this.weight = options.weight;}
+    if(!Object.isObject(options)){return;}
 
-  if(String.isString(options.color)){this.color = options.color;}
-  if(String.isString(options.fillColor)){this.fillColor = options.fillColor;}
+    if(Number.isInteger(options.weight)){this.weight = options.weight;}
 
-  if(Number.isNumber(options.opacity)){this.opacity = options.opacity;}
-  if(Number.isNumber(options.fillOpacity)){this.fillOpacity = options.fillOpacity;}
+    if(String.isString(options.color)){this.color = options.color;}
+    if(String.isString(options.fillColor)){this.fillColor = options.fillColor;}
 
-  this.stroke = !!((this.weight > 0) && (this.opacity > 0));
-  this.fill = !!(this.fillColor && (this.fillOpacity > 0));
-};
+    if(Number.isNumber(options.opacity)){this.opacity = options.opacity;}
+    if(Number.isNumber(options.fillOpacity)){this.fillOpacity = options.fillOpacity;}
+
+    this.stroke = !!((this.weight > 0) && (this.opacity > 0));
+    this.fill = !!(this.fillColor && (this.fillOpacity > 0));
+  }
+);
 
 /**
  * @enum {integer}
@@ -1399,6 +1416,7 @@ bbbfly.MapDrawingItem.selecttype = {
 /**
  * @class
  * @extends bbbfly.MapDrawing
+ *
  * @inpackage mapbox
  *
  * @param {bbbfly.MapDrawingCluster.options} options
