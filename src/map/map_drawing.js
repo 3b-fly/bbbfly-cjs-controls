@@ -321,21 +321,6 @@ bbbfly.map.drawing.item._create = function(){
       riseOffset: 999999
     });
 
-//TODO
-//  marker._tooltipOptions = {
-//    type: null,
-//    text: null,
-//    anchor: null,
-//    persistSelected: true
-//  };
-//
-//  if(markerOptions.tooltip){
-//    ng_MergeVarReplace(
-//      marker._tooltipOptions,
-//      markerOptions.tooltip
-//    );
-//  }
-
     ng_OverrideMethod(
       marker,'_updateZIndex',
       bbbfly.map.drawing.item._updateIconZIndex
@@ -472,34 +457,19 @@ bbbfly.map.drawing.item._getGeometryCenter = function(){
 
 /** @ignore */
 bbbfly.map.drawing.item._getGeometrySize = function(){
+  var map = this._ParentFeature._map;
   var geometry = this._Geometry;
-  if(!geometry){return 0;}
 
-  var hasBounds = false;
-  var bounds = new L.Bounds();
-  bounds.min = new L.Point(Number.MAX_VALUE,Number.MAX_VALUE);
-  bounds.max = new L.Point(-Number.MAX_VALUE,-Number.MAX_VALUE);
+  if(!map || !geometry){return 0;}
+  var bounds = geometry.getBounds();
 
-  geometry.eachLayer(function(layer){
-    var map = layer._map;
-    if(!map){return;}
+  var pxBounds = new L.Bounds(
+    map.latLngToLayerPoint(bounds.getSouthWest()),
+    map.latLngToLayerPoint(bounds.getNorthEast())
+  );
 
-    var bnds = layer.getBounds();
-    var sw = map.latLngToLayerPoint(bnds.getSouthWest());
-    var ne = map.latLngToLayerPoint(bnds.getNorthEast());
-    var px = new L.Bounds(sw,ne);
-
-    if(px && px.isValid()){
-      if(px.min.x < bounds.min.x){bounds.min.x = px.min.x;}
-      if(px.min.y < bounds.min.y){bounds.min.y = px.min.y;}
-      if(px.max.x > bounds.max.x){bounds.max.x = px.max.x;}
-      if(px.max.y > bounds.max.y){bounds.max.y = px.max.y;}
-      hasBounds = true;
-    }
-  });
-
-  if(hasBounds && bounds.isValid()){
-    var boundsSize = bounds.getSize();
+  if(pxBounds && pxBounds.isValid()){
+    var boundsSize = pxBounds.getSize();
 
     var size = 0;
     if(boundsSize.x){size += Math.pow(boundsSize.x,2);}
@@ -591,93 +561,6 @@ bbbfly.map.drawing.item._onDblClick = function(){
     this.SetSelected(!this.GetSelected(),true);
   }
 };
-
-//TODO
-/** @ignore */
-/*bbbfly.mapbox.drawing._getTooltipType = function(){ //TODO
-  var type = this._tooltipOptions ? this._tooltipOptions.type : null;
-  var typeObj = this.Map.GetTooltipType(type);
-  typeObj = typeObj ? ng_CopyVar(typeObj) : {};
-
-  if(this.Map.DefaultTooltip){
-    ng_MergeVar(typeObj,this.Map.DefaultTooltip);
-  }
-
-  typeObj._id = ngCreateControlId((type ? type : '')+'Tooltip');
-  return typeObj;
-};*/
-//TODO
-/** @ignore */
-/*bbbfly.mapbox.drawing._showTooltip = function(){ //TODO
-  var tooltip = this.getTooltip();
-
-  if(!tooltip){
-    var mapTooltip = this.GetTooltipType();
-
-    if(mapTooltip){
-      var text = null;
-
-      if(Function.isFunction(mapTooltip.GetText)){
-        text = mapTooltip.GetText(this);
-      }
-      else if(this._tooltipOptions){
-        text = this._tooltipOptions.text;
-      }
-
-      if(String.isString(text)){
-        var options = { permanent: false };
-
-        if(mapTooltip.TooltipOptions){
-          ng_MergeVar(options,mapTooltip.TooltipOptions);
-        }
-
-        if(Function.isFunction(mapTooltip.GetHTML)){
-          var text = mapTooltip.GetHTML(text);
-        }
-
-        this.bindTooltip(text,options);
-
-        tooltip = this.getTooltip();
-        if(tooltip){
-          tooltip._mapTooltip = mapTooltip;
-          ng_OverrideMethod(
-            tooltip,'_setPosition',bbbfly.mapbox.tooltip._setPosition
-          );
-        }
-      }
-    }
-  }
-
-  if(tooltip && !this.isTooltipOpen()){this.openTooltip();}
-};*/
-//TODO
-/** @ignore */
-/*bbbfly.mapbox.drawing._hideTooltip = function(){ //TODO
-  this.closeTooltip();
-};*/
-//TODO
-/** @ignore */
-/*bbbfly.mapbox.marker._openTooltip = function(latlng){ //TODO
-  if(!this.openTooltip || !this.openTooltip.hasParent()){return;}
-
-  if(this.IsInState(bbbfly.mapbox.drawing.state.enabled)){
-    this.openTooltip.callParent(latlng);
-  }
-};*/
-//TODO
-/** @ignore */
-/*bbbfly.mapbox.marker._closeTooltip = function(){ //TODO
-  if(!this.closeTooltip || !this.closeTooltip.hasParent()){return;}
-
-  if(
-    !this._tooltipOptions
-    || !this._tooltipOptions.persistSelected
-    || !this.IsInState(bbbfly.mapbox.drawing.state.selected)
-    || !this.IsInState(bbbfly.mapbox.drawing.state.enabled)
-  ){
-    this.closeTooltip.callParent();
-  }
-};*/
 
 /** @ignore */
 bbbfly.map.drawing.cluster._create = function(){
@@ -1398,11 +1281,6 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      */
     this.OnSelectedChanged = null;
 
-//TODO
-//  drawing.GetTooltipType = bbbfly.mapbox.drawing._getTooltipType;
-//  drawing.ShowTooltip = bbbfly.mapbox.drawing._showTooltip;
-//  drawing.HideTooltip = bbbfly.mapbox.drawing._hideTooltip;
-
     return this;
   }
 );
@@ -1657,10 +1535,6 @@ bbbfly.MapDrawingCluster = bbbfly.object.Extend(
  *
  * @property {bbbfly.MapDrawingsHandler.options} Options
  */
-//TODO: SelectDrawing
-//TODO: UnselectAllDrawings
-//TODO: GetSelectedDrawings
-//TODO: OnDrawingSelectedChanged
 bbbfly.MapDrawingsHandler = function(feature,options){
   if(!(feature instanceof L.FeatureGroup)){return null;}
   if(!Object.isObject(options)){options = {};}

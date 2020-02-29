@@ -405,34 +405,19 @@ bbbfly.map.drawing.item._getGeometryCenter = function(){
   return null;
 };
 bbbfly.map.drawing.item._getGeometrySize = function(){
+  var map = this._ParentFeature._map;
   var geometry = this._Geometry;
-  if(!geometry){return 0;}
 
-  var hasBounds = false;
-  var bounds = new L.Bounds();
-  bounds.min = new L.Point(Number.MAX_VALUE,Number.MAX_VALUE);
-  bounds.max = new L.Point(-Number.MAX_VALUE,-Number.MAX_VALUE);
+  if(!map || !geometry){return 0;}
+  var bounds = geometry.getBounds();
 
-  geometry.eachLayer(function(layer){
-    var map = layer._map;
-    if(!map){return;}
+  var pxBounds = new L.Bounds(
+    map.latLngToLayerPoint(bounds.getSouthWest()),
+    map.latLngToLayerPoint(bounds.getNorthEast())
+  );
 
-    var bnds = layer.getBounds();
-    var sw = map.latLngToLayerPoint(bnds.getSouthWest());
-    var ne = map.latLngToLayerPoint(bnds.getNorthEast());
-    var px = new L.Bounds(sw,ne);
-
-    if(px && px.isValid()){
-      if(px.min.x < bounds.min.x){bounds.min.x = px.min.x;}
-      if(px.min.y < bounds.min.y){bounds.min.y = px.min.y;}
-      if(px.max.x > bounds.max.x){bounds.max.x = px.max.x;}
-      if(px.max.y > bounds.max.y){bounds.max.y = px.max.y;}
-      hasBounds = true;
-    }
-  });
-
-  if(hasBounds && bounds.isValid()){
-    var boundsSize = bounds.getSize();
+  if(pxBounds && pxBounds.isValid()){
+    var boundsSize = pxBounds.getSize();
 
     var size = 0;
     if(boundsSize.x){size += Math.pow(boundsSize.x,2);}
