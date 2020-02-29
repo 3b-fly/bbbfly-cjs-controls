@@ -405,35 +405,41 @@ bbbfly.map.drawing.item._getGeometryCenter = function(){
   return null;
 };
 bbbfly.map.drawing.item._getGeometrySize = function(){
-  if(this._Geometry){
-    var bounds = new L.Bounds(
-      new L.Point(Number.MIN_VALUE,Number.MIN_VALUE),
-      new L.Point(Number.MAX_VALUE,Number.MAX_VALUE)
-    );
+  var geometry = this._Geometry;
+  if(!geometry){return 0;}
 
-    var hasBounds = false;
+  var hasBounds = false;
+  var bounds = new L.Bounds();
+  bounds.min = new L.Point(Number.MAX_VALUE,Number.MAX_VALUE);
+  bounds.max = new L.Point(-Number.MAX_VALUE,-Number.MAX_VALUE);
 
-    this._Geometry.eachLayer(function(layer){
-      var px = layer._pxBounds;
+  geometry.eachLayer(function(layer){
+    var map = layer._map;
+    if(!map){return;}
 
-      if(px && px.isValid()){
-        if(px.min.x < bounds.max.x){bounds.max.x = px.min.x;}
-        if(px.min.y < bounds.max.y){bounds.max.y = px.min.y;}
-        if(px.max.x > bounds.min.x){bounds.min.x = px.max.x;}
-        if(px.max.y > bounds.min.y){bounds.min.y = px.max.y;}
-        hasBounds = true;
-      }
-    });
+    var bnds = layer.getBounds();
+    var sw = map.latLngToLayerPoint(bnds.getSouthWest());
+    var ne = map.latLngToLayerPoint(bnds.getNorthEast());
+    var px = new L.Bounds(sw,ne);
 
-    if(hasBounds && bounds.isValid()){
-      var boundsSize = bounds.getSize();
-
-      var size = 0;
-      if(boundsSize.x){size += Math.pow(boundsSize.x,2);}
-      if(boundsSize.y){size += Math.pow(boundsSize.y,2);}
-      return Math.ceil(Math.sqrt(size));
+    if(px && px.isValid()){
+      if(px.min.x < bounds.min.x){bounds.min.x = px.min.x;}
+      if(px.min.y < bounds.min.y){bounds.min.y = px.min.y;}
+      if(px.max.x > bounds.max.x){bounds.max.x = px.max.x;}
+      if(px.max.y > bounds.max.y){bounds.max.y = px.max.y;}
+      hasBounds = true;
     }
+  });
+
+  if(hasBounds && bounds.isValid()){
+    var boundsSize = bounds.getSize();
+
+    var size = 0;
+    if(boundsSize.x){size += Math.pow(boundsSize.x,2);}
+    if(boundsSize.y){size += Math.pow(boundsSize.y,2);}
+    return Math.ceil(Math.sqrt(size));
   }
+
   return 0;
 };
 bbbfly.map.drawing.item._getState = function(){
