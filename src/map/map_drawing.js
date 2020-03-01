@@ -289,8 +289,11 @@ bbbfly.map.drawing.item._create = function(){
   var hasGeom = Object.isObject(geom);
   var hasCoords = bbbfly.map.drawing.utils.IsLatLng(coords);
 
-  var toCenter = this.Options.CoordsToGeoCenter;
-  if(!Boolean.isBoolean(toCenter)){toCenter = true;}
+  var coordsToCenter = this.Options.CoordsToGeoCenter;
+  if(!Boolean.isBoolean(coordsToCenter)){coordsToCenter = true;}
+
+  var showGeom = this.Options.ShowGeometry;
+  if(!Boolean.isBoolean(showGeom)){showGeom = true;}
 
   this._Geometry = null;
   this._Marker = null;
@@ -307,10 +310,10 @@ bbbfly.map.drawing.item._create = function(){
     });
 
     this._Geometry = geometry;
-    layers.push(geometry);
+    if(showGeom){layers.push(geometry);}
   }
 
-  if(!hasCoords && toCenter){
+  if(!hasCoords && coordsToCenter){
     coords = this.GetGeometryCenter();
     if(coords){hasCoords = true;}
   }
@@ -364,14 +367,15 @@ bbbfly.map.drawing.item._projectGeometry = function(){
   if(!Number.isInteger(minSize)){
     var handler = drawing._Handler;
     minSize = handler.Options.MinGeometrySize;
+    if(!Number.isInteger(minSize)){minSize = 0;}
   }
 
-  if(Number.isInteger(minSize)){
-    if(drawing.GetGeometrySize() < minSize){
-      node.style.display = 'none';
-      return;
-    }
+  var geomSize = drawing.GetGeometrySize();
+  if((geomSize <= 0) || (geomSize < minSize)){
+    node.style.display = 'none';
+    return;
   }
+
   node.style.display = 'block';
 };
 
@@ -457,6 +461,8 @@ bbbfly.map.drawing.item._getGeometryCenter = function(){
 
 /** @ignore */
 bbbfly.map.drawing.item._getGeometrySize = function(){
+  if(!this._ParentFeature){return 0;}
+
   var map = this._ParentFeature._map;
   var geometry = this._Geometry;
 
@@ -1660,12 +1666,16 @@ bbbfly.MapDrawingsHandler.selecttype = {
  *
  * @property {mapPoint} [Coords=undefined]
  * @property {geoJSON} [Geometry=undefined]
- * @property {boolean} [CoordsToGeoCenter=true]
- * @property {px} [MinGeometrySize=undefined]
  *
- * @property {bbbfly.MapDrawingItem.selecttype} [SelectType=none]
  * @property {bbbfly.MapDrawingItem.IconStyle|string} IconStyle
  * @property {bbbfly.MapDrawingItem.GeometryStyle|string} GeometryStyle
+ *
+ * @property {boolean} [CoordsToGeoCenter=true]
+ * @property {px} [MinGeometrySize=undefined]
+ * @property {boolean} [ShowGeometry=true]
+ *
+ * @property {bbbfly.MapDrawingItem.selecttype} [SelectType=none]
+
  */
 
 /**
