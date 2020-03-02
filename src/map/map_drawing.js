@@ -1292,7 +1292,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
 );
 
 /**
- * @class Style
+ * @class
  * @memberof bbbfly.MapDrawingItem
  *
  * @inpackage mapbox
@@ -1345,12 +1345,16 @@ bbbfly.MapDrawingItem.Style.Define = function(id,style){
 
 /**
  * @class
+ * @memberof bbbfly.MapDrawingItem
  * @extends bbbfly.MapDrawingItem.Style
  *
  * @inpackage mapbox
  *
- * @param {bbbfly.Renderer.image[]} [images=null] - Stack of icon images
+ * @param {bbbfly.Renderer.image[]} [images=undefined] - Stack of icon images
  * @param {string} [className=''] - Leaflet marker div class name
+ *
+ * @property {bbbfly.Renderer.image[]} [images=null]
+ * @property {string} [className='']
  */
 bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(images,className){
@@ -1365,6 +1369,7 @@ bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
 
 /**
  * @class
+ * @memberof bbbfly.MapDrawingItem
  * @extends bbbfly.MapDrawingItem.Style
  *
  * @inpackage mapbox
@@ -1380,7 +1385,7 @@ bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
  * @property {boolean} stroke
  * @property {integer} [weight=1]
  * @property {string} [color='#000000']
- * @property {string} [fillColor=undefined]
+ * @property {string} [fillColor=null]
  * @property {number} [opacity=1]
  * @property {number} [fillOpacity=0.2]
  */
@@ -1392,7 +1397,7 @@ bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
     this.weight = 1;
 
     this.color = '#000000';
-    this.fillColor = undefined;
+    this.fillColor = null;
 
     this.opacity = 1;
     this.fillOpacity = 0.2;
@@ -1675,7 +1680,6 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @property {boolean} [ShowGeometry=true]
  *
  * @property {bbbfly.MapDrawingItem.selecttype} [SelectType=none]
-
  */
 
 /**

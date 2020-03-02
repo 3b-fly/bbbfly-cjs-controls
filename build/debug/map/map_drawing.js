@@ -924,7 +924,7 @@ bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
     this.weight = 1;
 
     this.color = '#000000';
-    this.fillColor = undefined;
+    this.fillColor = null;
 
     this.opacity = 1;
     this.fillOpacity = 0.2;
