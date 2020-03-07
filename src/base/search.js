@@ -467,7 +467,7 @@ bbbfly.listsearchbox._hideListItem = function(list){
  *
  * @property {object} HintMessages
  * @property {resource} [HintMessages.noresults='bbbfly_searchedit_noresults']
- * @property {image} [SearchImg=null] - Search button image
+ * @property {bbbfly.Renderer.image} [SearchImg=null] - Search button image
  */
 bbbfly.SearchEdit = function(def,ref,parent){
   def = def || {};
@@ -672,8 +672,8 @@ bbbfly.SearchBox = function(def,ref,parent){
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
  * @property {string} [ListID=null] - {@link bbbfly.List|bbbfly.List} to search in ID
- * @property {image} [DownImg=null] - Down button image
- * @property {image} [UpImg=null] - Up button image
+ * @property {bbbfly.Renderer.image} [DownImg=null] - Down button image
+ * @property {bbbfly.Renderer.image} [UpImg=null] - Up button image
  */
 bbbfly.ListSearchBox = function(def,ref,parent){
   def = def || {};

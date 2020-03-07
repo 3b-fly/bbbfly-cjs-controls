@@ -631,7 +631,7 @@ bbbfly.DropDownList = function(def,ref,parent){
        * @name GetIconImg
        * @memberof bbbfly.DropDownList#
        *
-       * @return {image} Image to display in edit
+       * @return {bbbfly.Renderer.image} Image to display in edit
        *
        * @see {@link bbbfly.DropDownList|DefaultIconImg}
        * @see {@link bbbfly.DropDownList.ListItem|EditIconImg}
