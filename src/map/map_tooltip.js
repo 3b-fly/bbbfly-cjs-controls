@@ -517,9 +517,6 @@ bbbfly.MapTooltip.Style.Define = function(id,style){
  * @property {string} [Text=null] - Text string
  * @property {string} [TextRes=null] - Text resource ID
  * @property {boolean} [HTMLEncode=true]
- *
-//TODO
-// * @property {px[]} [anchor] - [x,y]
  */
 
 /**
