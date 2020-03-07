@@ -25,7 +25,8 @@
       "../src/map/map_box.js",
       "../src/map/map_control.js",
       "../src/map/map_registry.js",
-      "../src/map/map_drawings.js",
+      "../src/map/map_drawing.js",
+      "../src/map/map_tooltip.js",
 
       "../src/special/file.js",
       "../src/special/lang/file_cs.js",

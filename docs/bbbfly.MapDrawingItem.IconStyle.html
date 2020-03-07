@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: ListSearchBox</title>
+    <title>Class: IconStyle</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -3141,14 +3141,11 @@
 <section class="kind-class">
 <header>
     <h1 class="name">
-          <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
-        ListSearchBox
+          <span class="ancestors"><a href="bbbfly.html">bbbfly</a><a href="bbbfly.MapDrawingItem.html">.MapDrawingItem</a>.</span>
+        IconStyle
   <span class="types">
       <span class="type-signature class">
         class
-      </span>
-      <span class="type-signature control">
-        control
       </span>
   </span>
     </h1>
@@ -3157,13 +3154,13 @@
     <div class="container-overview">
 <dt>
     <div class="nameContainer">
-        <h2 id="ListSearchBox">
+        <h2 id="IconStyle">
           new 
-          bbbfly.ListSearchBox
-          <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
+          bbbfly.MapDrawingItem.IconStyle
+          <span class="signature">(<span class="optional">images</span>, <span class="optional">className</span>)</span>
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/search.js#L678">base/search.js, line 678</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1422">map/map_drawing.js, line 1422</a>
         </div>
     </div>
 </dt>
@@ -3174,46 +3171,38 @@
 	<tr>
 		<th>Name</th>
 		<th>Type</th>
+		<th>Default</th>
 		<th class="last">Description</th>
 	</tr>
 	</thead>
 	<tbody>
         <tr>
                 <td class="name">
-                  <span class="param-name">def</span>
+                  <span class="param-name">images</span>
                 </td>
             <td class="type">
-<span class="param-type">ngControl.Definition</span>
+<span class="param-type">Array.&lt;bbbfly.Renderer.image></span>
             </td>
+                <td class="default">
+                </td>
             <td class="description last">
                         <span class="optional">optional</span>
-                Descendant definition
+                Stack of icon images
             </td>
         </tr>
         <tr>
                 <td class="name">
-                  <span class="param-name">ref</span>
+                  <span class="param-name">className</span>
                 </td>
             <td class="type">
-<span class="param-type">object</span>
-            </td>
-            <td class="description last">
-                        <span class="optional">optional</span>
-                Reference owner
-            </td>
-        </tr>
-        <tr>
-                <td class="name">
-                  <span class="param-name">parent</span>
-                </td>
-            <td class="type">
-<span class="param-type">object</span>
-|
 <span class="param-type">string</span>
             </td>
+                <td class="default">
+                    ''
+                </td>
             <td class="description last">
                         <span class="optional">optional</span>
-                Parent DIV element or it's ID
+                Leaflet marker div class name
             </td>
         </tr>
 	</tbody>
@@ -3230,46 +3219,30 @@
         </tr>
         </thead>
         <tbody>
-            <tr id="property:ListID">
+            <tr id="property:images">
                     <td class="name">
-                      <span class="param-name">ListID</span>
+                      <span class="param-name">images</span>
+                    </td>
+                <td class="type">
+<span class="param-type">Array.&lt;bbbfly.Renderer.image></span>
+                </td>
+                    <td class="default">
+                        null
+                    </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:className">
+                    <td class="name">
+                      <span class="param-name">className</span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
-                        null
+                        ''
                     </td>
                 <td class="description last">
-                  <a href="bbbfly.List.html">bbbfly.List</a> to search in ID
-                </td>
-            </tr>
-            <tr id="property:DownImg">
-                    <td class="name">
-                      <span class="param-name">DownImg</span>
-                    </td>
-                <td class="type">
-<span class="param-type">bbbfly.Renderer.image</span>
-                </td>
-                    <td class="default">
-                        null
-                    </td>
-                <td class="description last">
-                  Down button image
-                </td>
-            </tr>
-            <tr id="property:UpImg">
-                    <td class="name">
-                      <span class="param-name">UpImg</span>
-                    </td>
-                <td class="type">
-<span class="param-type">bbbfly.Renderer.image</span>
-                </td>
-                    <td class="default">
-                        null
-                    </td>
-                <td class="description last">
-                  Up button image
                 </td>
             </tr>
         </tbody>
@@ -3281,669 +3254,12 @@
     </div>
         <h3>Extends</h3>
         <ul>
-            <li><a href="bbbfly.SearchEdit.html">bbbfly.SearchEdit</a></li>
+            <li><a href="bbbfly.MapDrawingItem.Style.html">bbbfly.MapDrawingItem.Style</a></li>
         </ul>
         <h3>In Packages</h3>
         <ul>
-              <li><a href="packages.html#package:search">search</a></li>
+              <li><a href="packages.html#package:mapbox">mapbox</a></li>
         </ul>
-        <h3>Methods</h3>
-        <dl>
-<dt>
-    <div class="nameContainer overrides">
-        <h4 id="ClearSearch">
-  <span class="attribs">
-      <span class="type-signature overrides">
-        <a href="bbbfly.SearchEdit.html#ClearSearch">overrides</a>
-      </span>
-  </span>
-          ClearSearch
-          <span class="signature">()</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/search.js#L711">base/search.js, line 711</a>
-        </div>
-    </div>
-</dt>
-<dd>
-<dl class="details">
-</dl>
-</dd>
-<dt>
-    <div class="nameContainer">
-        <h4 id="CompareItem">
-          CompareItem
-          <span class="signature">(list, item, text)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/search.js#L725">base/search.js, line 725</a>
-        </div>
-    </div>
-</dt>
-<dd>
-        <h5>Parameters:</h5>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
-        <tr>
-                <td class="name">
-                  <span class="param-name">list</span>
-                </td>
-            <td class="type">
-<span class="param-type"><a href="bbbfly.List.html">bbbfly.List</a></span>
-            </td>
-            <td class="description last">
-                Searched list
-            </td>
-        </tr>
-        <tr>
-                <td class="name">
-                  <span class="param-name">item</span>
-                </td>
-            <td class="type">
-<span class="param-type">ngListItem</span>
-            </td>
-            <td class="description last">
-                Searched list item
-            </td>
-        </tr>
-        <tr>
-                <td class="name">
-                  <span class="param-name">text</span>
-                </td>
-            <td class="type">
-<span class="param-type">string</span>
-            </td>
-            <td class="description last">
-                Searched text
-            </td>
-        </tr>
-	</tbody>
-</table>
-<dl class="details">
-</dl>
-    <h5>Returns:</h5>
-<table class="params">
-    <thead>
-    <tr>
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="type">
-                        boolean
-            </td>
-            <td class="description last">If item matches searched text</td>
-        </tr>
-    </tbody>
-</table>
-</dd>
-<dt>
-    <div class="nameContainer overrides">
-        <h4 id="DoSearch">
-  <span class="attribs">
-      <span class="type-signature overrides">
-        <a href="bbbfly.SearchEdit.html#DoSearch">overrides</a>
-      </span>
-  </span>
-          DoSearch
-          <span class="signature">()</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/search.js#L718">base/search.js, line 718</a>
-        </div>
-    </div>
-</dt>
-<dd>
-<dl class="details">
-</dl>
-</dd>
-<dt>
-    <div class="nameContainer inherited">
-        <h4 id="GetButton">
-  <span class="attribs">
-      <span class="type-signature inherited">
-        <a href="bbbfly.Edit.html#GetButton">inherited</a>
-      </span>
-  </span>
-          GetButton
-          <span class="signature">(buttonId)</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="bbbfly.Edit.Button.html">bbbfly.Edit.Button</a>|null}</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L161">base/edit.js, line 161</a>
-        </div>
-    </div>
-</dt>
-<dd>
-        <h5>Parameters:</h5>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
-        <tr>
-                <td class="name">
-                  <span class="param-name">buttonId</span>
-                </td>
-            <td class="type">
-<span class="param-type">string</span>
-            </td>
-            <td class="description last">
-                Required button's ButtonId
-            </td>
-        </tr>
-	</tbody>
-</table>
-<dl class="details">
-</dl>
-    <h5>Returns:</h5>
-<table class="params">
-    <thead>
-    <tr>
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="type">
-                        <a href="bbbfly.Edit.Button.html">bbbfly.Edit.Button</a>
-                         | 
-                        null
-            </td>
-            <td class="description last">- Button with passes ButtonId</td>
-        </tr>
-    </tbody>
-</table>
-</dd>
-<dt>
-    <div class="nameContainer">
-        <h4 id="GetItemText">
-  <span class="attribs">
-      <span class="type-signature abstract">
-        abstract
-      </span>
-  </span>
-          GetItemText
-          <span class="signature">(item)</span><span class="arrow-right"></span><span class="type-signature returnType">{string}</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/search.js#L736">base/search.js, line 736</a>
-        </div>
-    </div>
-</dt>
-<dd>
-      <div class="description">Return text which should be searched in.</div>
-        <h5>Parameters:</h5>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
-        <tr>
-                <td class="name">
-                  <span class="param-name">item</span>
-                </td>
-            <td class="type">
-<span class="param-type">ngListItem</span>
-            </td>
-            <td class="description last">
-            </td>
-        </tr>
-	</tbody>
-</table>
-<dl class="details">
-</dl>
-    <h5>Returns:</h5>
-<table class="params">
-    <thead>
-    <tr>
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="type">
-                        string
-            </td>
-            <td class="description last">Searchable item text</td>
-        </tr>
-    </tbody>
-</table>
-</dd>
-<dt>
-    <div class="nameContainer inherited">
-        <h4 id="Search">
-  <span class="attribs">
-      <span class="type-signature inherited">
-        <a href="bbbfly.SearchEdit.html#Search">inherited</a>
-      </span>
-  </span>
-          Search
-          <span class="signature">(<span class="optional">text</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/search.js#L528">base/search.js, line 528</a>
-        </div>
-    </div>
-</dt>
-<dd>
-      <div class="description">Search for passed text or text filled in edit.</div>
-        <h5>Parameters:</h5>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
-        <tr>
-                <td class="name">
-                  <span class="param-name">text</span>
-                </td>
-            <td class="type">
-<span class="param-type">string</span>
-            </td>
-            <td class="description last">
-                        <span class="optional">optional</span>
-                Edit text will be used if undefined
-            </td>
-        </tr>
-	</tbody>
-</table>
-<dl class="details">
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-      <ul class="dummy">
-          <li><a href="bbbfly.SearchEdit.html#DoSearch">DoSearch()</a></li>
-          <li><a href="bbbfly.SearchEdit.html#ClearSearch">ClearSearch()</a></li>
-          <li><a href="bbbfly.SearchEdit.html#event:OnSearch">OnSearch</a></li>
-          <li><a href="bbbfly.SearchEdit.html#event:OnSearchResults">OnSearchResults</a></li>
-          <li><a href="bbbfly.SearchEdit.html#event:OnNoSearchResults">OnNoSearchResults</a></li>
-      </ul>
-    </dd>
-</dl>
-    <h5>Returns:</h5>
-<table class="params">
-    <thead>
-    <tr>
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="type">
-                        boolean
-            </td>
-            <td class="description last">If text was valid</td>
-        </tr>
-    </tbody>
-</table>
-</dd>
-<dt>
-    <div class="nameContainer inherited">
-        <h4 id="SetFocusAfter">
-  <span class="attribs">
-      <span class="type-signature inherited">
-        <a href="bbbfly.Edit.html#SetFocusAfter">inherited</a>
-      </span>
-  </span>
-          SetFocusAfter
-          <span class="signature">()</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L182">base/edit.js, line 182</a>
-        </div>
-    </div>
-</dt>
-<dd>
-      <div class="description">Focus edit with caret at the text end.</div>
-<dl class="details">
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-      <ul class="dummy">
-          <li><a href="bbbfly.Edit.html#SetFocusBefore">SetFocusBefore()</a></li>
-      </ul>
-    </dd>
-</dl>
-</dd>
-<dt>
-    <div class="nameContainer inherited">
-        <h4 id="SetFocusBefore">
-  <span class="attribs">
-      <span class="type-signature inherited">
-        <a href="bbbfly.Edit.html#SetFocusBefore">inherited</a>
-      </span>
-  </span>
-          SetFocusBefore
-          <span class="signature">()</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L171">base/edit.js, line 171</a>
-        </div>
-    </div>
-</dt>
-<dd>
-      <div class="description">Focus edit with caret at the text begining.</div>
-<dl class="details">
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-      <ul class="dummy">
-          <li><a href="bbbfly.Edit.html#SetFocusAfter">SetFocusAfter()</a></li>
-      </ul>
-    </dd>
-</dl>
-</dd>
-<dt>
-    <div class="nameContainer">
-        <h4 id="SetSearchList">
-          SetSearchList
-          <span class="signature">(list)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/search.js#L702">base/search.js, line 702</a>
-        </div>
-    </div>
-</dt>
-<dd>
-        <h5>Parameters:</h5>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
-        <tr>
-                <td class="name">
-                  <span class="param-name">list</span>
-                </td>
-            <td class="type">
-<span class="param-type"><a href="bbbfly.List.html">bbbfly.List</a></span>
-            </td>
-            <td class="description last">
-            </td>
-        </tr>
-	</tbody>
-</table>
-<dl class="details">
-</dl>
-    <h5>Returns:</h5>
-<table class="params">
-    <thead>
-    <tr>
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="type">
-                        boolean
-            </td>
-            <td class="description last">If list was valid</td>
-        </tr>
-    </tbody>
-</table>
-</dd>
-<dt>
-    <div class="nameContainer inherited">
-        <h4 id="SetSearchResults">
-  <span class="attribs">
-      <span class="type-signature inherited">
-        <a href="bbbfly.SearchEdit.html#SetSearchResults">inherited</a>
-      </span>
-  </span>
-          SetSearchResults
-          <span class="signature">(results)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/search.js#L553">base/search.js, line 553</a>
-        </div>
-    </div>
-</dt>
-<dd>
-        <h5>Parameters:</h5>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
-        <tr>
-                <td class="name">
-                  <span class="param-name">results</span>
-                </td>
-            <td class="type">
-<span class="param-type"><a href="bbbfly.SearchEdit.html#.searchResults">bbbfly.SearchEdit.searchResults</a></span>
-            </td>
-            <td class="description last">
-            </td>
-        </tr>
-	</tbody>
-</table>
-<dl class="details">
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-      <ul class="dummy">
-          <li><a href="bbbfly.SearchEdit.html#event:OnSearchResults">OnSearchResults</a></li>
-          <li><a href="bbbfly.SearchEdit.html#event:OnNoSearchResults">OnNoSearchResults</a></li>
-      </ul>
-    </dd>
-</dl>
-    <h5>Returns:</h5>
-<table class="params">
-    <thead>
-    <tr>
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="type">
-                        boolean
-            </td>
-            <td class="description last">If results were valid</td>
-        </tr>
-    </tbody>
-</table>
-</dd>
-        </dl>
-        <h3>Events</h3>
-        <dl>
-<dt>
-    <div class="nameContainer inherited">
-        <h4 id="event:OnInvalidChanged">
-  <span class="attribs">
-      <span class="type-signature inherited">
-        <a href="bbbfly.Edit.html#event:OnInvalidChanged">inherited</a>
-      </span>
-  </span>
-          OnInvalidChanged
-          <span class="signature">()</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L151">base/edit.js, line 151</a>
-        </div>
-    </div>
-</dt>
-<dd>
-<dl class="details">
-</dl>
-</dd>
-<dt>
-    <div class="nameContainer inherited">
-        <h4 id="event:OnNoSearchResults">
-  <span class="attribs">
-      <span class="type-signature inherited">
-        <a href="bbbfly.SearchEdit.html#event:OnNoSearchResults">inherited</a>
-      </span>
-  </span>
-          OnNoSearchResults
-          <span class="signature">()</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/search.js#L515">base/search.js, line 515</a>
-        </div>
-    </div>
-</dt>
-<dd>
-      <div class="description">Called when nothing was found.</div>
-<dl class="details">
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-      <ul class="dummy">
-          <li><a href="bbbfly.SearchEdit.html#Search">Search()</a></li>
-          <li><a href="bbbfly.SearchEdit.html#DoSearch">DoSearch()</a></li>
-          <li><a href="bbbfly.SearchEdit.html#SetSearchResults">SetSearchResults()</a></li>
-      </ul>
-    </dd>
-</dl>
-</dd>
-<dt>
-    <div class="nameContainer inherited">
-        <h4 id="event:OnSearch">
-  <span class="attribs">
-      <span class="type-signature inherited">
-        <a href="bbbfly.SearchEdit.html#event:OnSearch">inherited</a>
-      </span>
-  </span>
-          OnSearch
-          <span class="signature">(text)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/search.js#L490">base/search.js, line 490</a>
-        </div>
-    </div>
-</dt>
-<dd>
-        <h5>Parameters:</h5>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
-        <tr>
-                <td class="name">
-                  <span class="param-name">text</span>
-                </td>
-            <td class="type">
-<span class="param-type">string</span>
-            </td>
-            <td class="description last">
-            </td>
-        </tr>
-	</tbody>
-</table>
-<dl class="details">
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-      <ul class="dummy">
-          <li><a href="bbbfly.SearchEdit.html#Search">Search()</a></li>
-          <li><a href="bbbfly.SearchEdit.html#DoSearch">DoSearch()</a></li>
-      </ul>
-    </dd>
-</dl>
-    <h5>Returns:</h5>
-<table class="params">
-    <thead>
-    <tr>
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="type">
-                        boolean
-            </td>
-            <td class="description last">If continue to search</td>
-        </tr>
-    </tbody>
-</table>
-</dd>
-<dt>
-    <div class="nameContainer inherited">
-        <h4 id="event:OnSearchResults">
-  <span class="attribs">
-      <span class="type-signature inherited">
-        <a href="bbbfly.SearchEdit.html#event:OnSearchResults">inherited</a>
-      </span>
-  </span>
-          OnSearchResults
-          <span class="signature">(results)</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/search.js#L502">base/search.js, line 502</a>
-        </div>
-    </div>
-</dt>
-<dd>
-      <div class="description">Called when any anything was found.</div>
-        <h5>Parameters:</h5>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
-        <tr>
-                <td class="name">
-                  <span class="param-name">results</span>
-                </td>
-            <td class="type">
-<span class="param-type"><a href="bbbfly.SearchEdit.html#.searchResults">bbbfly.SearchEdit.searchResults</a></span>
-            </td>
-            <td class="description last">
-            </td>
-        </tr>
-	</tbody>
-</table>
-<dl class="details">
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-      <ul class="dummy">
-          <li><a href="bbbfly.SearchEdit.html#Search">Search()</a></li>
-          <li><a href="bbbfly.SearchEdit.html#DoSearch">DoSearch()</a></li>
-          <li><a href="bbbfly.SearchEdit.html#SetSearchResults">SetSearchResults()</a></li>
-      </ul>
-    </dd>
-</dl>
-</dd>
-        </dl>
 </article>
 </section>
         <footer>

@@ -2083,6 +2083,9 @@
         <li data-name="bbbfly.MapDrawingItem#GetStateValue">
           <a href="bbbfly.MapDrawingItem.html#GetStateValue">GetStateValue</a>
         </li>
+        <li data-name="bbbfly.MapDrawingItem#HideTooltip">
+          <a href="bbbfly.MapDrawingItem.html#HideTooltip">HideTooltip</a>
+        </li>
         <li data-name="bbbfly.MapDrawingItem#RemoveFrom">
           <a href="bbbfly.MapDrawingItem.html#RemoveFrom">RemoveFrom</a>
         </li>
@@ -2095,8 +2098,14 @@
         <li data-name="bbbfly.MapDrawingItem#SetStateValue">
           <a href="bbbfly.MapDrawingItem.html#SetStateValue">SetStateValue</a>
         </li>
+        <li data-name="bbbfly.MapDrawingItem#ShowTooltip">
+          <a href="bbbfly.MapDrawingItem.html#ShowTooltip">ShowTooltip</a>
+        </li>
         <li data-name="bbbfly.MapDrawingItem#Update">
           <a href="bbbfly.MapDrawingItem.html#Update">Update</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingItem#UpdateTooltip">
+          <a href="bbbfly.MapDrawingItem.html#UpdateTooltip">UpdateTooltip</a>
         </li>
     </ul>
     <ul class="events itemMembers">
@@ -2163,6 +2172,15 @@
         </span>
     <a href="bbbfly.MapDrawingItem.IconStyle.html">bbbfly.MapDrawingItem.IconStyle</a>
   </span>
+    <ul class="members itemMembers">
+      <span class="subtitle">Properties</span>
+        <li data-name="images">
+          <a href="bbbfly.MapDrawingItem.IconStyle.html#property:images">images</a>
+        </li>
+        <li data-name="className">
+          <a href="bbbfly.MapDrawingItem.IconStyle.html#property:className">className</a>
+        </li>
+    </ul>
 </li>
 <li class="item" data-name="bbbfly.MapDrawingItem.Style">
   <span class="title">
@@ -2266,6 +2284,90 @@
         <li data-name="bbbfly.MapRegistry#UnregisterMap">
           <a href="bbbfly.MapRegistry.html#UnregisterMap">UnregisterMap</a>
         </li>
+    </ul>
+</li>
+<li class="item" data-name="bbbfly.MapTooltip">
+  <span class="title">
+        <span class="type-signature class">
+          class
+        </span>
+    <a href="bbbfly.MapTooltip.html">bbbfly.MapTooltip</a>
+  </span>
+    <ul class="members itemMembers">
+      <span class="subtitle">Properties</span>
+        <li data-name="ID">
+          <a href="bbbfly.MapTooltip.html#property:ID">ID</a>
+        </li>
+        <li data-name="Options">
+          <a href="bbbfly.MapTooltip.html#property:Options">Options</a>
+        </li>
+    </ul>
+    <ul class="typedefs itemMembers">
+      <span class="subtitle">Typedefs</span>
+        <li data-name="bbbfly.MapTooltip.anchor">
+          <a href="bbbfly.MapTooltip.html#.anchor">anchor</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip.anchors">
+          <a href="bbbfly.MapTooltip.html#.anchors">anchors</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip.options">
+          <a href="bbbfly.MapTooltip.html#.options">options</a>
+        </li>
+    </ul>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.MapTooltip#Create">
+          <a href="bbbfly.MapTooltip.html#Create">Create</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#Dispose">
+          <a href="bbbfly.MapTooltip.html#Dispose">Dispose</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#GetStyle">
+          <a href="bbbfly.MapTooltip.html#GetStyle">GetStyle</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#GetText">
+          <a href="bbbfly.MapTooltip.html#GetText">GetText</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#Hide">
+          <a href="bbbfly.MapTooltip.html#Hide">Hide</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#Show">
+          <a href="bbbfly.MapTooltip.html#Show">Show</a>
+        </li>
+    </ul>
+    <ul class="sublist">
+<li class="item" data-name="bbbfly.MapTooltip.Style">
+  <span class="title">
+        <span class="type-signature class">
+          class
+        </span>
+    <a href="bbbfly.MapTooltip.Style.html">bbbfly.MapTooltip.Style</a>
+  </span>
+    <ul class="members itemMembers">
+      <span class="subtitle">Properties</span>
+        <li data-name="frame">
+          <a href="bbbfly.MapTooltip.Style.html#property:frame">frame</a>
+        </li>
+        <li data-name="anchors">
+          <a href="bbbfly.MapTooltip.Style.html#property:anchors">anchors</a>
+        </li>
+        <li data-name="opacity">
+          <a href="bbbfly.MapTooltip.Style.html#property:opacity">opacity</a>
+        </li>
+        <li data-name="className">
+          <a href="bbbfly.MapTooltip.Style.html#property:className">className</a>
+        </li>
+    </ul>
+    <ul class="methods itemMembers">
+      <span class="subtitle">Methods</span>
+        <li data-name="bbbfly.MapTooltip.Style.Define">
+          <a href="bbbfly.MapTooltip.Style.html#.Define">Define</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip.Style.Get">
+          <a href="bbbfly.MapTooltip.Style.html#.Get">Get</a>
+        </li>
+    </ul>
+</li>
     </ul>
 </li>
 <li class="item" data-name="bbbfly.Memo">
@@ -3058,7 +3160,7 @@
           <span class="signature">()</span>
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1297">map/map_drawing.js, line 1297</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1363">map/map_drawing.js, line 1363</a>
         </div>
     </div>
 </dt>
@@ -3085,7 +3187,7 @@
           <span class="signature">(id, style)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1325">map/map_drawing.js, line 1325</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1385">map/map_drawing.js, line 1385</a>
         </div>
     </div>
 </dt>
@@ -3160,7 +3262,7 @@
           <span class="signature">(id)</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="bbbfly.MapDrawingItem.Style.html">bbbfly.MapDrawingItem.Style</a>|null}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1305">map/map_drawing.js, line 1305</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1365">map/map_drawing.js, line 1365</a>
         </div>
     </div>
 </dt>
