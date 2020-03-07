@@ -20,45 +20,6 @@
  */
 
 /**
- * @typedef {object} image
- * @property {px} L
- * @property {px} T
- * @property {px} W
- * @property {px} H
- * @property {url} Src
- */
-
-/**
- * @typedef {image} image-icon
- * @property {object} Anchor
- * @property {px} Anchor.L
- * @property {px} Anchor.T
- */
-
-/**
- * @typedef {object} frame
- * @property {image} LeftTop
- * @property {image} RightTop
- * @property {image} LeftBottom
- * @property {image} RightBottom
- * @property {image} Left
- * @property {image} Top
- * @property {image} Right
- * @property {image} Bottom
- */
-
-/**
- * @typedef {object} anchor
- * @property {px} [L=undefined]
- * @property {px} [T=undefined]
- * @property {px} [R=undefined]
- * @property {px} [B=undefined]
- * @property {px} HX
- * @property {px} HY
- * @property {image} Img
- */
-
-/**
  * @typedef {object} geoJSON
  * @description {@link https://tools.ietf.org/html/rfc7946|GeoJSON definition}
  */
@@ -96,6 +57,11 @@
 /**
  * @typedef {L.Path} mapGeometry
  * @description {@link http://leafletjs.com/reference-1.4.0.html#path|Leaflet geometry}
+ */
+
+/**
+ * @typedef {L.Tooltip} mapTooltip
+ * @description {@link https://leafletjs.com/reference-1.4.0.html#tooltip|Leaflet tooltip}
  */
 
 /**

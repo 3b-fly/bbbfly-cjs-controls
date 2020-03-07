@@ -234,13 +234,15 @@
         "map/map_box.js",
         "map/map_control.js",
         "map/map_registry.js",
-        "map/map_drawing.js"
+        "map/map_drawing.js",
+        "map/map_tooltip.js"
       ],
       "ReleaseFiles": [
         "map/map_box.js",
         "map/map_control.js",
         "map/map_registry.js",
-        "map/map_drawing.js"
+        "map/map_drawing.js",
+        "map/map_tooltip.js"
       ],
       "Libraries": {
         "controls.js": {

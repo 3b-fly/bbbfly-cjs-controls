@@ -302,13 +302,15 @@
         "debug/map/map_box.js",
         "debug/map/map_control.js",
         "debug/map/map_registry.js",
-        "debug/map/map_drawing.js"
+        "debug/map/map_drawing.js",
+        "debug/map/map_tooltip.js"
       ],
       "ReleaseFiles": [
         "release/map/map_box.js",
         "release/map/map_control.js",
         "release/map/map_registry.js",
-        "release/map/map_drawing.js"
+        "release/map/map_drawing.js",
+        "release/map/map_tooltip.js"
       ],
       "Libraries": {
         "controls.js": {
