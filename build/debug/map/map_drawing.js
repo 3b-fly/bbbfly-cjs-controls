@@ -9,7 +9,8 @@
 var bbbfly = bbbfly || {};
 bbbfly.map = bbbfly.map || {};
 bbbfly.map.drawing = {
-  _leafletPrefix: 'lf-',
+  _leafletPrefix: 'bbbfly_map_drawing_lf-',
+  _packagePrefix: 'bbbfly_map_drawing-',
 
   _lastId: 0,
   _styles: {},
@@ -27,7 +28,10 @@ bbbfly.map.drawing.utils.LeafletId = function(obj){
 };
 bbbfly.map.drawing.utils.DrawingId = function(options){
   var id = (options) ? options.ID : null;
-  return String.isString(id) ? id : '_'+(++bbbfly.map.drawing._lastId);
+  if(String.isString(id)){return id;}
+
+  id = bbbfly.map.drawing._packagePrefix;
+  return id+(++bbbfly.map.drawing._lastId);
 };
 bbbfly.map.drawing.utils.IsLatLng = function(latLng){
   return (Array.isArray(latLng) || (latLng instanceof L.LatLng));
@@ -370,8 +374,11 @@ bbbfly.map.drawing.item._update = function(){
     }
   }
 
-  if(!state.disabled && (state.mouseover || state.selected)){
-  }
+  this.UpdateTooltip();
+};
+bbbfly.map.drawing.item._dispose = function(){
+  if(this._Tooltip){this._Tooltip.Dispose();}
+  this.Dispose.callParent();
 };
 bbbfly.map.drawing.item._getIconStyle = function(){
   var type = bbbfly.MapDrawingItem.IconStyle;
@@ -441,7 +448,10 @@ bbbfly.map.drawing.item._getState = function(){
     grayed: this.GetStateValue(bbbfly.MapDrawingItem.state.grayed)
   };
 
-  if(state.disabled){state.mouseover = false;}
+  if(state.disabled){
+    state.mouseover = false;
+    state.selected = false;
+  }
   return state;
 };
 bbbfly.map.drawing.item._getStateValue = function(state){
@@ -479,13 +489,34 @@ bbbfly.map.drawing.item._setSelected = function(selected,update){
 
   return true;
 };
+bbbfly.map.drawing.item._updateTooltip = function(){
+  var state = this.GetState();
+
+  if(state.selected || state.mouseover){this.ShowTooltip();}
+  else{this.HideTooltip();}
+};
+bbbfly.map.drawing.item._showTooltip = function(){
+  if(!this._Tooltip){
+    this._Tooltip = new bbbfly.MapTooltip(
+      this.Options.TooltipOptions
+    );
+  }
+
+  var layer = this._Marker || this._Geometry;
+  this._Tooltip.Show(layer);
+};
+bbbfly.map.drawing.item._hideTooltip = function(){
+  if(this._Tooltip){this._Tooltip.Hide();}
+};
 bbbfly.map.drawing.item._onMouseEnter = function(){
   this.SetStateValue(bbbfly.MapDrawingItem.state.mouseover,true);
   bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
+  this.UpdateTooltip();
 };
 bbbfly.map.drawing.item._onMouseLeave = function(){
   this.SetStateValue(bbbfly.MapDrawingItem.state.mouseover,false);
   bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
+  this.UpdateTooltip();
 };
 bbbfly.map.drawing.item._onClick = function(){
   if((this.Options.SelectType & bbbfly.MapDrawingItem.selecttype.click)){
@@ -851,12 +882,18 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
     this._IconProxy = null;
     this._IconHtml = '';
     this._Geometry = null;
+    this._Tooltip = null;
+
     ng_OverrideMethod(this,'Create',
       bbbfly.map.drawing.item._create
     );
     ng_OverrideMethod(this,'Update',
       bbbfly.map.drawing.item._update
     );
+    ng_OverrideMethod(this,'Dispose',
+      bbbfly.map.drawing.item._dispose
+    );
+
     ng_OverrideMethod(this,'OnMouseEnter',
       bbbfly.map.drawing.item._onMouseEnter
     );
@@ -878,6 +915,9 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
     this.SetStateValue = bbbfly.map.drawing.item._setStateValue;
     this.GetSelected = bbbfly.map.drawing.item._getSelected;
     this.SetSelected = bbbfly.map.drawing.item._setSelected;
+    this.UpdateTooltip = bbbfly.map.drawing.item._updateTooltip;
+    this.ShowTooltip = bbbfly.map.drawing.item._showTooltip;
+    this.HideTooltip = bbbfly.map.drawing.item._hideTooltip;
     this.OnSetSelected = null;
     this.OnSelectedChanged = null;
 
@@ -965,6 +1005,7 @@ bbbfly.MapDrawingCluster = bbbfly.object.Extend(
       OnSelectedChanged: bbbfly.map.drawing.cluster._onSelectedChanged
     };
     this._ClusterGroup = null;
+
     ng_OverrideMethod(this,'Create',
       bbbfly.map.drawing.cluster._create
     );
@@ -974,6 +1015,7 @@ bbbfly.MapDrawingCluster = bbbfly.object.Extend(
     ng_OverrideMethod(this,'DoInitialize',
       bbbfly.map.drawing.cluster._doInitialize
     );
+
     ng_OverrideMethod(this,'OnMouseEnter',
       bbbfly.map.drawing.cluster._onMouseEnter
     );

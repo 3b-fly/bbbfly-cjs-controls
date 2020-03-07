@@ -12,7 +12,8 @@ var bbbfly = bbbfly || {};
 bbbfly.map = bbbfly.map || {};
 /** @ignore */
 bbbfly.map.drawing = {
-  _leafletPrefix: 'lf-',
+  _leafletPrefix: 'bbbfly_map_drawing_lf-',
+  _packagePrefix: 'bbbfly_map_drawing-',
 
   _lastId: 0,
   _styles: {},
@@ -34,7 +35,10 @@ bbbfly.map.drawing.utils.LeafletId = function(obj){
 /** @ignore */
 bbbfly.map.drawing.utils.DrawingId = function(options){
   var id = (options) ? options.ID : null;
-  return String.isString(id) ? id : '_'+(++bbbfly.map.drawing._lastId);
+  if(String.isString(id)){return id;}
+
+  id = bbbfly.map.drawing._packagePrefix;
+  return id+(++bbbfly.map.drawing._lastId);
 };
 
 /** @ignore */
@@ -402,7 +406,6 @@ bbbfly.map.drawing.item._update = function(){
         iconSize: [proxy.W,proxy.H],
         iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
         className: iStyle.className,
-//        tooltipAnchor: ttAnchor, //TODO
         html: html
       });
 
@@ -412,10 +415,13 @@ bbbfly.map.drawing.item._update = function(){
     }
   }
 
-  if(!state.disabled && (state.mouseover || state.selected)){
-//    this.ShowTooltip(); //TODO
-  }
-//  this.HideTooltip(); //TODO
+  this.UpdateTooltip();
+};
+
+/** @ignore */
+bbbfly.map.drawing.item._dispose = function(){
+  if(this._Tooltip){this._Tooltip.Dispose();}
+  this.Dispose.callParent();
 };
 
 /** @ignore */
@@ -495,7 +501,10 @@ bbbfly.map.drawing.item._getState = function(){
     grayed: this.GetStateValue(bbbfly.MapDrawingItem.state.grayed)
   };
 
-  if(state.disabled){state.mouseover = false;}
+  if(state.disabled){
+    state.mouseover = false;
+    state.selected = false;
+  }
   return state;
 };
 
@@ -543,15 +552,42 @@ bbbfly.map.drawing.item._setSelected = function(selected,update){
 };
 
 /** @ignore */
+bbbfly.map.drawing.item._updateTooltip = function(){
+  var state = this.GetState();
+
+  if(state.selected || state.mouseover){this.ShowTooltip();}
+  else{this.HideTooltip();}
+};
+
+/** @ignore */
+bbbfly.map.drawing.item._showTooltip = function(){
+  if(!this._Tooltip){
+    this._Tooltip = new bbbfly.MapTooltip(
+      this.Options.TooltipOptions
+    );
+  }
+
+  var layer = this._Marker || this._Geometry;
+  this._Tooltip.Show(layer);
+};
+
+/** @ignore */
+bbbfly.map.drawing.item._hideTooltip = function(){
+  if(this._Tooltip){this._Tooltip.Hide();}
+};
+
+/** @ignore */
 bbbfly.map.drawing.item._onMouseEnter = function(){
   this.SetStateValue(bbbfly.MapDrawingItem.state.mouseover,true);
   bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
+  this.UpdateTooltip();
 };
 
 /** @ignore */
 bbbfly.map.drawing.item._onMouseLeave = function(){
   this.SetStateValue(bbbfly.MapDrawingItem.state.mouseover,false);
   bbbfly.Renderer.UpdateStackHTML(this._IconProxy,this.GetState());
+  this.UpdateTooltip();
 };
 
 /** @ignore */
@@ -691,7 +727,6 @@ bbbfly.map.drawing.cluster._createIcon = function(cluster){
       iconSize: [proxy.W,proxy.H],
       iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
       className: iStyle.className,
-//    tooltipAnchor: ttAnchor, //TODO
       html: html
     });
 };
@@ -1130,28 +1165,28 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
     this._IconHtml = '';
     /** @private */
     this._Geometry = null;
-
     /** @private */
+    this._Tooltip = null;
+
     ng_OverrideMethod(this,'Create',
       bbbfly.map.drawing.item._create
     );
-    /** @private */
     ng_OverrideMethod(this,'Update',
       bbbfly.map.drawing.item._update
     );
-    /** @private */
+    ng_OverrideMethod(this,'Dispose',
+      bbbfly.map.drawing.item._dispose
+    );
+
     ng_OverrideMethod(this,'OnMouseEnter',
       bbbfly.map.drawing.item._onMouseEnter
     );
-    /** @private */
     ng_OverrideMethod(this,'OnMouseLeave',
       bbbfly.map.drawing.item._onMouseLeave
     );
-    /** @private */
     ng_OverrideMethod(this,'OnClick',
       bbbfly.map.drawing.item._onClick
     );
-    /** @private */
     ng_OverrideMethod(this,'OnDblClick',
       bbbfly.map.drawing.item._onDblClick
     );
@@ -1261,6 +1296,34 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @see {@link bbbfly.MapDrawingItem#event:OnSelectedChanged|OnSelectedChanged}
      */
     this.SetSelected = bbbfly.map.drawing.item._setSelected;
+
+    /**
+     * @function
+     * @name UpdateTooltip
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @see {@link bbbfly.MapDrawingItem#ShowTooltip|ShowTooltip()}
+     * @see {@link bbbfly.MapDrawingItem#HideTooltip|HideTooltip()}
+     */
+    this.UpdateTooltip = bbbfly.map.drawing.item._updateTooltip;
+    /**
+     * @function
+     * @name ShowTooltip
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @see {@link bbbfly.MapDrawingItem#UpdateTooltip|UpdateTooltip()}
+     * @see {@link bbbfly.MapDrawingItem#HideTooltip|HideTooltip()}
+     */
+    this.ShowTooltip = bbbfly.map.drawing.item._showTooltip;
+    /**
+     * @function
+     * @name HideTooltip
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @see {@link bbbfly.MapDrawingItem#UpdateTooltip|UpdateTooltip()}
+     * @see {@link bbbfly.MapDrawingItem#ShowTooltip|ShowTooltip()}
+     */
+    this.HideTooltip = bbbfly.map.drawing.item._hideTooltip;
 
     /**
      * @event
@@ -1463,24 +1526,19 @@ bbbfly.MapDrawingCluster = bbbfly.object.Extend(
     /** @private */
     this._ClusterGroup = null;
 
-    /** @private */
     ng_OverrideMethod(this,'Create',
       bbbfly.map.drawing.cluster._create
     );
-    /** @private */
     ng_OverrideMethod(this,'Update',
       bbbfly.map.drawing.cluster._update
     );
-
-    /** @private */
     ng_OverrideMethod(this,'DoInitialize',
       bbbfly.map.drawing.cluster._doInitialize
     );
-    /** @private */
+
     ng_OverrideMethod(this,'OnMouseEnter',
       bbbfly.map.drawing.cluster._onMouseEnter
     );
-    /** @private */
     ng_OverrideMethod(this,'OnMouseLeave',
       bbbfly.map.drawing.cluster._onMouseLeave
     );
@@ -1674,6 +1732,7 @@ bbbfly.MapDrawingsHandler.selecttype = {
  *
  * @property {bbbfly.MapDrawingItem.IconStyle|string} IconStyle
  * @property {bbbfly.MapDrawingItem.GeometryStyle|string} GeometryStyle
+ * @property {bbbfly.MapTooltip.options} TooltipOptions
  *
  * @property {boolean} [CoordsToGeoCenter=true]
  * @property {px} [MinGeometrySize=undefined]
