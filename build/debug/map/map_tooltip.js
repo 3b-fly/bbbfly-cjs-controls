@@ -201,7 +201,6 @@ bbbfly.map.tooltip._create = function(){
       bbbfly.map.tooltip._setPosition
     );
 
-    this._ParentLayer.bindTooltip(tooltip);
     this._Tooltip = tooltip;
   }
 
@@ -253,13 +252,15 @@ bbbfly.map.tooltip._show = function(layer){
     this._Html = html;
   }
 
-  if(!layer.isTooltipOpen()){
-    layer.openTooltip();
-  }
+  layer.bindTooltip(tooltip);
+  layer.openTooltip();
 };
 bbbfly.map.tooltip._hide = function(){
-  if(this._ParentLayer && this._Tooltip){
+  if(!this._ParentLayer || !this._Tooltip){return;}
+
+  if(this._ParentLayer.getTooltip() === this._Tooltip){
     this._ParentLayer.closeTooltip();
+    this._ParentLayer.unbindTooltip();
   }
 };
 bbbfly.map.tooltip._setPosition = function(position){

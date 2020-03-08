@@ -465,6 +465,7 @@ bbbfly.map.drawing.item._setStateValue = function(state,value,update){
   else{this._State = (this._State ^ state);}
 
   if(update){this.Update();}
+  else{this.UpdateTooltip();}
   return true;
 };
 bbbfly.map.drawing.item._getSelected = function(){
