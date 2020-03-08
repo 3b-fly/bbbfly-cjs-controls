@@ -701,10 +701,10 @@ bbbfly.map.drawing.cluster._getSpiderStyle = function(){
 bbbfly.map.drawing.cluster._addDrawing = function(drawing){
   if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
 
-  if(this.DrawingListener){
+  if(this._DrawingListener){
     drawing.AddListener(
-      this.DrawingListener.Listen,
-      this.DrawingListener
+      this._DrawingListener.Listen,
+      this._DrawingListener
     );
   }
 
@@ -715,10 +715,10 @@ bbbfly.map.drawing.cluster._addDrawing = function(drawing){
 bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
   if(!(drawing instanceof bbbfly.MapDrawing)){return false;}
 
-  if(this.DrawingListener){
+  if(this._DrawingListener){
     drawing.RemoveListener(
-      this.DrawingListener.Listen,
-      this.DrawingListener
+      this._DrawingListener.Listen,
+      this._DrawingListener
     );
   }
 
@@ -744,8 +744,8 @@ bbbfly.map.drawing.handler._addDrawing = function(drawing){
 
   if(drawing instanceof bbbfly.MapDrawingItem){
     drawing.AddListener(
-      this.DrawingListener.Listen,
-      this.DrawingListener
+      this._DrawingListener.Listen,
+      this._DrawingListener
     );
   }
 
@@ -761,8 +761,8 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
 
     if(drawing instanceof bbbfly.MapDrawingItem){
       drawing.RemoveListener(
-        this.DrawingListener.Listen,
-        this.DrawingListener
+        this._DrawingListener.Listen,
+        this._DrawingListener
       );
     }
 
@@ -793,18 +793,21 @@ bbbfly.map.drawing.handler._endClustering = function(){
 
   return this.AddDrawing(cluster);
 };
-bbbfly.map.drawing.handler._getSelectedDrawings = function(selected){
+bbbfly.map.drawing.handler._getSelected = function(selected){
+  if(!Boolean.isBoolean(selected)){selected = true;}
   var drawings = [];
 
   for(var id in this._Drawings){
     var drawing = this._Drawings[id];
 
-    if(Boolean.isBoolean(selected)){
-      if(drawing.GetSelected() !== selected){continue;}
+    if(
+      (drawing instanceof bbbfly.MapDrawingItem)
+      && (drawing.GetSelected() === selected)
+    ){
+      drawings.push(drawing);
     }
-
-    drawings.push(drawing);
   }
+  return drawings;
 };
 bbbfly.map.drawing.handler._clearSelected = function(){
   for(var id in this._Selected){
@@ -826,12 +829,15 @@ bbbfly.map.drawing.handler._onSetSelected = function(){
   return false;
 };
 bbbfly.map.drawing.handler._onSelectedChanged = function(drawing){
+
   var handler = this.Owner;
 
   if(drawing.GetSelected()){
     switch(handler.Options.SelectType){
       case bbbfly.MapDrawingsHandler.selecttype.single:
+        this._ignoreSelectChange = true;
         handler.ClearSelected();
+        this._ignoreSelectChange = false;
 
       case bbbfly.MapDrawingsHandler.selecttype.multi:
         handler._Selected[drawing.ID] = drawing;
@@ -842,6 +848,11 @@ bbbfly.map.drawing.handler._onSelectedChanged = function(drawing){
     if(handler._Selected[drawing.ID] === drawing){
       delete(handler._Selected[drawing.ID]);
     }
+  }
+
+  if(this._ignoreSelectChange){return;}
+  if(Function.isFunction(handler.OnSelectedChanged)){
+    handler.OnSelectedChanged();
   }
 };
 bbbfly.MapDrawing = function(options){
@@ -998,13 +1009,12 @@ bbbfly.MapDrawingItem.selecttype = {
 bbbfly.MapDrawingCluster = bbbfly.object.Extend(
   bbbfly.MapDrawing,function(options){
     bbbfly.MapDrawing.call(this,options);
-
-    this.DrawingListener = {
+    this._ClusterGroup = null;
+    this._DrawingListener = {
       Owner: this,
       Listen: ['OnSelectedChanged'],
       OnSelectedChanged: bbbfly.map.drawing.cluster._onSelectedChanged
     };
-    this._ClusterGroup = null;
 
     ng_OverrideMethod(this,'Create',
       bbbfly.map.drawing.cluster._create
@@ -1035,26 +1045,30 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   if(!(feature instanceof L.FeatureGroup)){return null;}
   if(!Object.isObject(options)){options = {};}
 
-  this.Options = options;
+  this.AddEvent = ngObjAddEvent;
+  this.RemoveEvent = ngObjRemoveEvent;
+  bbbfly.listener.SetListenable(this,true);
 
-  this.DrawingListener = {
+  this.Options = options;
+  this._Feature = feature;
+  this._Drawings = {};
+  this._Selected = {};
+  this._CurrentCluster = null;
+  this._DrawingListener = {
     Owner: this,
     Listen: ['OnSetSelected','OnSelectedChanged'],
     OnSetSelected: bbbfly.map.drawing.handler._onSetSelected,
     OnSelectedChanged: bbbfly.map.drawing.handler._onSelectedChanged
   };
-  this._Feature = feature;
-  this._Drawings = {};
-  this._Selected = {};
-  this._CurrentCluster = null;
   this.GetDrawing = bbbfly.map.drawing.handler._getDrawing;
   this.AddDrawing = bbbfly.map.drawing.handler._addDrawing;
   this.RemoveDrawing = bbbfly.map.drawing.handler._removeDrawing;
   this.ClearDrawings = bbbfly.map.drawing.handler._clearDrawings;
   this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;
   this.EndClustering = bbbfly.map.drawing.handler._endClustering;
-  this.GetSelectedDrawings = bbbfly.map.drawing.handler._getSelectedDrawings;
+  this.GetSelected = bbbfly.map.drawing.handler._getSelected;
   this.ClearSelected = bbbfly.map.drawing.handler._clearSelected;
+  this.OnSelectedChanged = null;
 };
 bbbfly.MapDrawingsHandler.selecttype = {
   none: 0,
