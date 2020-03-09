@@ -261,7 +261,7 @@ bbbfly.map.drawing.item._create = function(){
   var hasCoords = bbbfly.map.drawing.utils.IsLatLng(coords);
 
   var coordsToCenter = this.Options.CoordsToGeoCenter;
-  if(!Boolean.isBoolean(coordsToCenter)){coordsToCenter = true;}
+  if(!Boolean.isBoolean(coordsToCenter)){coordsToCenter = false;}
 
   var showGeom = this.Options.ShowGeometry;
   if(!Boolean.isBoolean(showGeom)){showGeom = true;}

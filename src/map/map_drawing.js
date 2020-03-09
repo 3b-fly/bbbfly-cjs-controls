@@ -294,7 +294,7 @@ bbbfly.map.drawing.item._create = function(){
   var hasCoords = bbbfly.map.drawing.utils.IsLatLng(coords);
 
   var coordsToCenter = this.Options.CoordsToGeoCenter;
-  if(!Boolean.isBoolean(coordsToCenter)){coordsToCenter = true;}
+  if(!Boolean.isBoolean(coordsToCenter)){coordsToCenter = false;}
 
   var showGeom = this.Options.ShowGeometry;
   if(!Boolean.isBoolean(showGeom)){showGeom = true;}
@@ -1768,7 +1768,7 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @property {bbbfly.MapDrawingItem.GeometryStyle|string} GeometryStyle
  * @property {bbbfly.MapTooltip.options} TooltipOptions
  *
- * @property {boolean} [CoordsToGeoCenter=true]
+ * @property {boolean} [CoordsToGeoCenter=false]
  * @property {px} [MinGeometrySize=undefined]
  * @property {boolean} [ShowGeometry=true]
  *
