@@ -562,14 +562,16 @@ bbbfly.map.drawing.item._updateTooltip = function(){
 
 /** @ignore */
 bbbfly.map.drawing.item._showTooltip = function(){
-  if(!this._Tooltip){
+  if(!this._Tooltip && this.Options.TooltipOptions){
     this._Tooltip = new bbbfly.MapTooltip(
       this.Options.TooltipOptions
     );
   }
 
-  var layer = this._Marker || this._Geometry;
-  this._Tooltip.Show(layer);
+  if(this._Tooltip){
+    var layer = this._Marker || this._Geometry;
+    this._Tooltip.Show(layer);
+  }
 };
 
 /** @ignore */
@@ -1766,7 +1768,7 @@ bbbfly.MapDrawingsHandler.selecttype = {
  *
  * @property {bbbfly.MapDrawingItem.IconStyle|string} IconStyle
  * @property {bbbfly.MapDrawingItem.GeometryStyle|string} GeometryStyle
- * @property {bbbfly.MapTooltip.options} TooltipOptions
+ * @property {bbbfly.MapTooltip.options} [TooltipOptions=undefined]
  *
  * @property {boolean} [CoordsToGeoCenter=false]
  * @property {px} [MinGeometrySize=undefined]

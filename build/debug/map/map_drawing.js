@@ -497,14 +497,16 @@ bbbfly.map.drawing.item._updateTooltip = function(){
   else{this.HideTooltip();}
 };
 bbbfly.map.drawing.item._showTooltip = function(){
-  if(!this._Tooltip){
+  if(!this._Tooltip && this.Options.TooltipOptions){
     this._Tooltip = new bbbfly.MapTooltip(
       this.Options.TooltipOptions
     );
   }
 
-  var layer = this._Marker || this._Geometry;
-  this._Tooltip.Show(layer);
+  if(this._Tooltip){
+    var layer = this._Marker || this._Geometry;
+    this._Tooltip.Show(layer);
+  }
 };
 bbbfly.map.drawing.item._hideTooltip = function(){
   if(this._Tooltip){this._Tooltip.Hide();}
