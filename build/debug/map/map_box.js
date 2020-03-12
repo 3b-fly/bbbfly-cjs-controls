@@ -23,16 +23,15 @@ bbbfly.map.box._onUpdate = function(){
 bbbfly.map.box._doCreateMap = function(options){
   var map = this.DoCreateMap.callParent(options);
 
-  if(this.Drawings !== false){
-    var feature = new L.FeatureGroup();
-    var handler = new bbbfly.MapDrawingsHandler(feature,this.Drawings);
+  this._DrawingsFeature = new L.FeatureGroup();
+  this._DrawingsFeature.addTo(map);
 
-    if(handler){
-      feature.addTo(map);
-      this.Drawings = handler;
-      this._DrawingsFeature = feature;
-    }
+  if(this.Drawings !== false){
+    this.Drawings = new bbbfly.MapDrawingsHandler(
+      this._DrawingsFeature,this.Drawings
+    );
   }
+
   return map;
 };
 bbbfly.map.box._registerControls = function(){
