@@ -48,68 +48,59 @@ bbbfly.map.drawing.utils.IsLatLng = function(latLng){
 
 /** @ignore */
 bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
-  if(!Object.isObject(json)){return null;}
+  var features = [];
 
-  var multiToSingle = function(feature,newType,features){
-    for(var i in feature.geometry.coordinates){
-      features.push({
-        type: 'Feature',
-        properties: feature.properties,
-        geometry: {
-          type: newType,
-          coordinates: feature.geometry.coordinates[i]
-        }
-      });
-    }
-  };
-
-  var featureToSingle = function(feature,features){
-    if(feature.geometry){
-      switch(feature.geometry.type){
-        case 'MultiLineString':
-          multiToSingle(feature,'LineString',features);
-        break;
-        case 'MultiPolygon':
-          multiToSingle(feature,'Polygon',features);
-        break;
-        default:
-          features.push(feature);
-        break;
+  var multiToSingle = function(feature,newType){
+    if(Array.isArray(feature.geometry.coordinates)){
+      for(var i in feature.geometry.coordinates){
+        features.push({
+          type: 'Feature',
+          properties: feature.properties,
+          geometry: {
+            type: newType,
+            coordinates: feature.geometry.coordinates[i]
+          }
+        });
       }
     }
   };
 
   var normalizeCollection = function(json){
-    if(json.type === 'FeatureCollection'){
-      var normalized = {
-        type: json.type,
-        features: []
-      };
+    if(!Object.isObject(json)){return;}
 
-      if(Array.isArray(json.features)){
-        for(var i in json.features){
-          var feature = json.features[i];
-
-          switch(feature.type){
-            case 'FeatureCollection':
-              normalized.features.push(
-                normalizeCollection(feature)
-              );
+    switch(json.type){
+      case 'FeatureCollection':
+        if(Array.isArray(json.features)){
+          for(var i in json.features){
+            var feature = json.features[i];
+            normalizeCollection(feature);
+          }
+        }
+      break;
+      case 'Feature':
+        if(Object.isObject(json.geometry)){
+          switch(json.geometry.type){
+            case 'MultiLineString':
+              multiToSingle(json,'LineString');
             break;
-            case 'Feature':
-              featureToSingle(
-                feature,normalized.features
-              );
+            case 'MultiPolygon':
+              multiToSingle(json,'Polygon');
+            break;
+            default:
+              features.push(json);
             break;
           }
         }
-      }
-      return normalized;
+      break;
     }
-    return null;
   };
 
-  return normalizeCollection(json);
+  normalizeCollection(json);
+
+  return {
+    type: 'FeatureCollection',
+    features: features
+  };;
 };
 
 /** @ignore */
