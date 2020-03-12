@@ -435,13 +435,13 @@ bbbfly.map.drawing.item._getState = function(){
   var state = {
     mouseover: this.GetStateValue(bbbfly.MapDrawingItem.state.mouseover),
     disabled: this.GetStateValue(bbbfly.MapDrawingItem.state.disabled),
+    readonly: this.GetStateValue(bbbfly.MapDrawingItem.state.readonly),
     selected: this.GetStateValue(bbbfly.MapDrawingItem.state.selected),
     grayed: this.GetStateValue(bbbfly.MapDrawingItem.state.grayed)
   };
 
-  if(state.disabled){
+  if(state.disabled || state.readonly){
     state.mouseover = false;
-    state.selected = false;
   }
   return state;
 };
@@ -991,8 +991,9 @@ bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
 bbbfly.MapDrawingItem.state = {
   mouseover: 1,
   disabled: 2,
-  selected: 4,
-  grayed: 8
+  readonly: 4,
+  selected: 8,
+  grayed: 16
 };
 bbbfly.MapDrawingItem.selecttype = {
   none: 0,
