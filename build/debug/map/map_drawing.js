@@ -262,17 +262,29 @@ bbbfly.map.drawing.item._create = function(){
   var layers = [];
 
   if(hasGeom){
-    var gStyle = this.GetGeometryStyle();
     geom = bbbfly.map.drawing.utils.NormalizeGeoJSON(geom);
+    var geometry = new L.GeoJSON(geom);
 
-    var geometry = new L.GeoJSON(geom,{
-      Owner: this,
-      style: gStyle,
-      onEachFeature: bbbfly.map.drawing.item._initGeometry
-    });
+    var gLayers = geometry.getLayers();
+    var gStyle = this.GetGeometryStyle();
+
+    for(var i in gLayers){
+      var layer = gLayers[i];
+
+      if(gStyle && (layer instanceof L.Path)){
+        layer.options.Owner = this;
+        layer.setStyle(gStyle);
+
+        ng_OverrideMethod(
+          layer,'_project',
+          bbbfly.map.drawing.item._projectGeometry
+        );
+      }
+
+      if(showGeom){layers.push(layer);}
+    }
 
     this._Geometry = geometry;
-    if(showGeom){layers.push(geometry);}
   }
 
   if(!hasCoords && coordsToCenter){
@@ -304,12 +316,6 @@ bbbfly.map.drawing.item._updateIconZIndex = function(offset){
   }
 
   this._updateZIndex.callParent(offset);
-};
-bbbfly.map.drawing.item._initGeometry = function(feature,layer){
-  ng_OverrideMethod(
-    layer,'_project',
-    bbbfly.map.drawing.item._projectGeometry
-  );
 };
 bbbfly.map.drawing.item._projectGeometry = function(){
   this._project.callParent();
