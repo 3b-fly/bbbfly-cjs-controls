@@ -358,7 +358,7 @@ bbbfly.map.drawing.item._update = function(){
     if(html !== this._IconHtml){
       this._IconHtml = html;
 
-      var icon = L.divIcon({
+      var icon = new L.DivIcon({
         iconSize: [proxy.W,proxy.H],
         iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
         className: iStyle.className,
@@ -376,6 +376,20 @@ bbbfly.map.drawing.item._update = function(){
 bbbfly.map.drawing.item._dispose = function(){
   if(this._Tooltip){this._Tooltip.Dispose();}
   this.Dispose.callParent();
+};
+bbbfly.map.drawing.item._newIcon = function(state,id){
+    if(!String.isString(id)){id = bbbfly.map.drawing.utils.DrawingId();}
+    
+    var iStyle = this.GetIconStyle();
+    var proxy = bbbfly.Renderer.StackProxy(iStyle.images,state,id+'_I');
+    var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg');
+
+    return new L.DivIcon({
+      iconSize: [proxy.W,proxy.H],
+      iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
+      className: iStyle.className,
+      html: html
+    });
 };
 bbbfly.map.drawing.item._getIconStyle = function(){
   var type = bbbfly.MapDrawingItem.IconStyle;
@@ -917,6 +931,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
     ng_OverrideMethod(this,'OnDblClick',
       bbbfly.map.drawing.item._onDblClick
     );
+    this.NewIcon = bbbfly.map.drawing.item._newIcon;
     this.GetIconStyle = bbbfly.map.drawing.item._getIconStyle;
     this.GetGeometryStyle = bbbfly.map.drawing.item._getGeometryStyle;
     this.GetGeometryCenter = bbbfly.map.drawing.item._getGeometryCenter;
