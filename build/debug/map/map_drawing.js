@@ -379,7 +379,7 @@ bbbfly.map.drawing.item._dispose = function(){
 };
 bbbfly.map.drawing.item._newIcon = function(state,id){
     if(!String.isString(id)){id = bbbfly.map.drawing.utils.DrawingId();}
-    
+
     var iStyle = this.GetIconStyle();
     var proxy = bbbfly.Renderer.StackProxy(iStyle.images,state,id+'_I');
     var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg');
@@ -450,6 +450,21 @@ bbbfly.map.drawing.item._getGeometrySize = function(){
   }
 
   return 0;
+};
+bbbfly.map.drawing.item._setState = function(state,update){
+  if(!Object.isObject(state)){return;}
+
+  for(var stateName in state){
+    var stateConst = bbbfly.MapDrawingItem.state[stateName];
+    var stateValue = state[stateName];
+
+    if(!Number.isInteger(stateConst)){continue;}
+    if(!Boolean.isBoolean(stateValue)){continue;}
+
+    this.SetStateValue(stateConst,stateValue,false);
+  }
+
+  if(update){this.Update();}
 };
 bbbfly.map.drawing.item._getState = function(){
   var state = {
@@ -936,6 +951,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
     this.GetGeometryStyle = bbbfly.map.drawing.item._getGeometryStyle;
     this.GetGeometryCenter = bbbfly.map.drawing.item._getGeometryCenter;
     this.GetGeometrySize = bbbfly.map.drawing.item._getGeometrySize;
+    this.SetState = bbbfly.map.drawing.item._setState;
     this.GetState = bbbfly.map.drawing.item._getState;
     this.GetStateValue = bbbfly.map.drawing.item._getStateValue;
     this.SetStateValue = bbbfly.map.drawing.item._setStateValue;

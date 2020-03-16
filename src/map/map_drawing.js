@@ -422,7 +422,7 @@ bbbfly.map.drawing.item._dispose = function(){
 /** @ignore */
 bbbfly.map.drawing.item._newIcon = function(state,id){
     if(!String.isString(id)){id = bbbfly.map.drawing.utils.DrawingId();}
-    
+
     var iStyle = this.GetIconStyle();
     var proxy = bbbfly.Renderer.StackProxy(iStyle.images,state,id+'_I');
     var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg');
@@ -501,6 +501,23 @@ bbbfly.map.drawing.item._getGeometrySize = function(){
   }
 
   return 0;
+};
+
+/** @ignore */
+bbbfly.map.drawing.item._setState = function(state,update){
+  if(!Object.isObject(state)){return;}
+
+  for(var stateName in state){
+    var stateConst = bbbfly.MapDrawingItem.state[stateName];
+    var stateValue = state[stateName];
+
+    if(!Number.isInteger(stateConst)){continue;}
+    if(!Boolean.isBoolean(stateValue)){continue;}
+
+    this.SetStateValue(stateConst,stateValue,false);
+  }
+
+  if(update){this.Update();}
 };
 
 /** @ignore */
@@ -1261,14 +1278,31 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
 
     /**
      * @function
+     * @name SetState
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @description
+     *   Set drawing renderer state
+     *
+     * @param {bbbfly.Renderer.state} state
+     * @param {boolean} [update=true]
+     *
+     * @see {@link bbbfly.MapDrawingItem#GetState|GetState()}
+     * @see {@link bbbfly.MapDrawingItem#GetStateValue|GetStateValue()}
+     * @see {@link bbbfly.MapDrawingItem#SetStateValue|SetStateValue()}
+     */
+    this.SetState = bbbfly.map.drawing.item._setState;
+    /**
+     * @function
      * @name GetState
      * @memberof bbbfly.MapDrawingItem#
      *
      * @description
      *   Get computed renderer state
      *
-     * @return {bbbfly.Renderer.state} Drawing state
+     * @return {bbbfly.Renderer.state}
      *
+     * @see {@link bbbfly.MapDrawingItem#SetState|SetState()}
      * @see {@link bbbfly.MapDrawingItem#GetStateValue|GetStateValue()}
      * @see {@link bbbfly.MapDrawingItem#SetStateValue|SetStateValue()}
      */
