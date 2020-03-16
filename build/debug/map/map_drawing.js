@@ -33,9 +33,6 @@ bbbfly.map.drawing.utils.DrawingId = function(options){
   id = bbbfly.map.drawing._packagePrefix;
   return id+(++bbbfly.map.drawing._lastId);
 };
-bbbfly.map.drawing.utils.IsLatLng = function(latLng){
-  return (Array.isArray(latLng) || (latLng instanceof L.LatLng));
-};
 bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
   var features = [];
 
@@ -249,7 +246,7 @@ bbbfly.map.drawing.item._create = function(){
   var coords = this.Options.Coords;
 
   var hasGeom = Object.isObject(geom);
-  var hasCoords = bbbfly.map.drawing.utils.IsLatLng(coords);
+  var hasCoords = (coords instanceof L.LatLng);
 
   var coordsToCenter = this.Options.CoordsToGeoCenter;
   if(!Boolean.isBoolean(coordsToCenter)){coordsToCenter = false;}
@@ -271,17 +268,17 @@ bbbfly.map.drawing.item._create = function(){
     for(var i in gLayers){
       var layer = gLayers[i];
 
-      if(gStyle && (layer instanceof L.Path)){
+      if(layer instanceof L.Path){
         layer.options.Owner = this;
-        layer.setStyle(gStyle);
 
         ng_OverrideMethod(
           layer,'_project',
           bbbfly.map.drawing.item._projectGeometry
         );
-      }
 
-      if(showGeom){layers.push(layer);}
+        if(gStyle){layer.setStyle(gStyle);}
+        if(showGeom){layers.push(layer);}
+      }
     }
 
     this._Geometry = geometry;
@@ -421,7 +418,7 @@ bbbfly.map.drawing.item._getGeometryCenter = function(){
 
     if(bounds.isValid()){
       var center = bounds.getCenter();
-      return [center.lat,center.lng];
+      return new L.LatLng(center.lat,center.lng);
     }
   }
   return null;
@@ -491,7 +488,6 @@ bbbfly.map.drawing.item._setStateValue = function(state,value,update){
   else{this._State = (this._State ^ state);}
 
   if(update){this.Update();}
-  else{this.UpdateTooltip();}
   return true;
 };
 bbbfly.map.drawing.item._getSelected = function(){
