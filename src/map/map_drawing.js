@@ -1418,6 +1418,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      */
     this.OnSelectedChanged = null;
 
+    this.SetState(this.Options.State);
     return this;
   }
 );
@@ -1830,6 +1831,7 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @property {boolean} [ShowGeometry=true]
  *
  * @property {bbbfly.MapDrawingItem.selecttype} [SelectType=none]
+ * @property {bbbfly.Renderer.state} [State=undefined]
  */
 
 /**

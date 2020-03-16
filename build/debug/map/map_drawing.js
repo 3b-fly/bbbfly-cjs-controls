@@ -963,6 +963,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
     this.OnSetSelected = null;
     this.OnSelectedChanged = null;
 
+    this.SetState(this.Options.State);
     return this;
   }
 );
