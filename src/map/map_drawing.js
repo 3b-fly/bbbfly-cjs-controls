@@ -186,9 +186,13 @@ bbbfly.map.drawing.core._doInitialize = function(layer,prefix){
 
 /** @ignore */
 bbbfly.map.drawing.core._dispose = function(){
-  this.Scan(function(layer){
-    layer.remove();
-  });
+  var feature = this._ParentFeature;
+
+  if(feature){
+    this.Scan(function(layer){
+      layer.removeFrom(feature);
+    });
+  }
 
   this._Layers = [];
   this._ParentFeature = null;
