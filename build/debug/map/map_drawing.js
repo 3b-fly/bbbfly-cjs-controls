@@ -471,6 +471,16 @@ bbbfly.map.drawing.item._getGeometrySize = function(){
 
   return 0;
 };
+bbbfly.map.drawing.item._clearIcon = function(){
+  var contains = this.RemoveLayer(this._Marker);
+  this._Marker = null;
+  return contains;
+};
+bbbfly.map.drawing.item._clearGeometry = function(){
+  var contains = this.RemoveLayer(this._Geometry);
+  this._Geometry = null;
+  return contains;
+};
 bbbfly.map.drawing.item._setState = function(state,update){
   if(!Object.isObject(state)){return;}
 
@@ -972,6 +982,8 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
     this.GetGeometryStyle = bbbfly.map.drawing.item._getGeometryStyle;
     this.GetGeometryCenter = bbbfly.map.drawing.item._getGeometryCenter;
     this.GetGeometrySize = bbbfly.map.drawing.item._getGeometrySize;
+    this.ClearIcon = bbbfly.map.drawing.item._clearIcon;
+    this.ClearGeometry = bbbfly.map.drawing.item._clearGeometry;
     this.SetState = bbbfly.map.drawing.item._setState;
     this.GetState = bbbfly.map.drawing.item._getState;
     this.GetStateValue = bbbfly.map.drawing.item._getStateValue;

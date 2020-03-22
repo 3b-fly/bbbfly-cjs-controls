@@ -524,6 +524,20 @@ bbbfly.map.drawing.item._getGeometrySize = function(){
 };
 
 /** @ignore */
+bbbfly.map.drawing.item._clearIcon = function(){
+  var contains = this.RemoveLayer(this._Marker);
+  this._Marker = null;
+  return contains;
+};
+
+/** @ignore */
+bbbfly.map.drawing.item._clearGeometry = function(){
+  var contains = this.RemoveLayer(this._Geometry);
+  this._Geometry = null;
+  return contains;
+};
+
+/** @ignore */
 bbbfly.map.drawing.item._setState = function(state,update){
   if(!Object.isObject(state)){return;}
 
@@ -1304,6 +1318,31 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @return {px}
      */
     this.GetGeometrySize = bbbfly.map.drawing.item._getGeometrySize;
+
+    /**
+     * @function
+     * @name ClearIcon
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @description Remove drawing icon
+     *
+     * @return {boolean} If contains any layer
+     *
+     * @see {@link bbbfly.MapDrawingItem#ClearGeometry|ClearGeometry()}
+     */
+    this.ClearIcon = bbbfly.map.drawing.item._clearIcon;
+    /**
+     * @function
+     * @name ClearGeometry
+     * @memberof bbbfly.MapDrawingItem#
+     *
+     * @description Remove drawing geometry
+     *
+     * @return {boolean} If contains any layer
+     *
+     * @see {@link bbbfly.MapDrawingItem#ClearIcon|ClearIcon()}
+     */
+    this.ClearGeometry = bbbfly.map.drawing.item._clearGeometry;
 
     /**
      * @function
