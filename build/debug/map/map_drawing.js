@@ -824,6 +824,7 @@ bbbfly.map.drawing.handler._clearDrawings = function(){
 
     if(drawing.RemoveFrom()){
       delete(this._Drawings[id]);
+      drawing.Dispose();
     }
   }
 };
