@@ -196,11 +196,11 @@ bbbfly.map.drawing.core._addTo = function(feature){
     (feature instanceof L.FeatureGroup)
     && this.Initialize()
   ){
+    this._ParentFeature = feature;
+
     this.Scan(function(layer){
       layer.addTo(feature);
     });
-
-    this._ParentFeature = feature;
 
     if(Function.isFunction(this.Update)){
       this.Update();
@@ -838,6 +838,26 @@ bbbfly.map.drawing.handler._clearDrawings = function(){
     }
   }
 };
+bbbfly.map.drawing.handler._clearIcons = function(){
+  for(var id in this._Drawings){
+    var drawing = this._Drawings[id];
+
+    if(!drawing.ClearIcon()){
+      delete(this._Drawings[id]);
+      drawing.Dispose();
+    }
+  }
+};
+bbbfly.map.drawing.handler._clearGeometries = function(){
+  for(var id in this._Drawings){
+    var drawing = this._Drawings[id];
+
+    if(!drawing.ClearGeometry()){
+      delete(this._Drawings[id]);
+      drawing.Dispose();
+    }
+  }
+};
 bbbfly.map.drawing.handler._beginClustering = function(cluster){
   if(!cluster){return;}
 
@@ -1130,6 +1150,8 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   this.AddDrawing = bbbfly.map.drawing.handler._addDrawing;
   this.RemoveDrawing = bbbfly.map.drawing.handler._removeDrawing;
   this.ClearDrawings = bbbfly.map.drawing.handler._clearDrawings;
+  this.ClearIcons = bbbfly.map.drawing.handler._clearIcons;
+  this.ClearGeometries = bbbfly.map.drawing.handler._clearGeometries;
   this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;
   this.EndClustering = bbbfly.map.drawing.handler._endClustering;
   this.GetSelected = bbbfly.map.drawing.handler._getSelected;

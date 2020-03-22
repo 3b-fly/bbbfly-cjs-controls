@@ -219,11 +219,11 @@ bbbfly.map.drawing.core._addTo = function(feature){
     (feature instanceof L.FeatureGroup)
     && this.Initialize()
   ){
+    this._ParentFeature = feature;
+
     this.Scan(function(layer){
       layer.addTo(feature);
     });
-
-    this._ParentFeature = feature;
 
     if(Function.isFunction(this.Update)){
       this.Update();
@@ -948,6 +948,30 @@ bbbfly.map.drawing.handler._clearDrawings = function(){
     var drawing = this._Drawings[id];
 
     if(drawing.RemoveFrom()){
+      delete(this._Drawings[id]);
+      drawing.Dispose();
+    }
+  }
+};
+
+/** @ignore */
+bbbfly.map.drawing.handler._clearIcons = function(){
+  for(var id in this._Drawings){
+    var drawing = this._Drawings[id];
+
+    if(!drawing.ClearIcon()){
+      delete(this._Drawings[id]);
+      drawing.Dispose();
+    }
+  }
+};
+
+/** @ignore */
+bbbfly.map.drawing.handler._clearGeometries = function(){
+  for(var id in this._Drawings){
+    var drawing = this._Drawings[id];
+
+    if(!drawing.ClearGeometry()){
       delete(this._Drawings[id]);
       drawing.Dispose();
     }
@@ -1803,6 +1827,28 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @see {@link bbbfly.MapDrawingsHandler#ClearGeometries|ClearGeometries()}
    */
   this.ClearDrawings = bbbfly.map.drawing.handler._clearDrawings;
+  /**
+   * @function
+   * @name ClearIcons
+   * @memberof bbbfly.MapDrawingsHandler#
+   *
+   * @description Remove all drawing icons
+   *
+   * @see {@link bbbfly.MapDrawingsHandler#ClearDrawings|ClearDrawings()}
+   * @see {@link bbbfly.MapDrawingsHandler#ClearGeometries|ClearGeometries()}
+   */
+  this.ClearIcons = bbbfly.map.drawing.handler._clearIcons;
+  /**
+   * @function
+   * @name ClearGeometries
+   * @memberof bbbfly.MapDrawingsHandler#
+   *
+   * @description Remove all drawing geometries
+   *
+   * @see {@link bbbfly.MapDrawingsHandler#ClearDrawings|ClearDrawings()}
+   * @see {@link bbbfly.MapDrawingsHandler#ClearIcons|ClearIcons()}
+   */
+  this.ClearGeometries = bbbfly.map.drawing.handler._clearGeometries;
 
   /**
    * @function
