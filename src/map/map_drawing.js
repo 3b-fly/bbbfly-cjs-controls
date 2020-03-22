@@ -1275,8 +1275,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @name SetState
      * @memberof bbbfly.MapDrawingItem#
      *
-     * @description
-     *   Set drawing renderer state
+     * @description Set drawing renderer state
      *
      * @param {bbbfly.Renderer.state} state
      * @param {boolean} [update=true]
@@ -1291,8 +1290,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @name GetState
      * @memberof bbbfly.MapDrawingItem#
      *
-     * @description
-     *   Get computed renderer state
+     * @description Get computed renderer state
      *
      * @return {bbbfly.Renderer.state}
      *
@@ -1306,8 +1304,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @name GetStateValue
      * @memberof bbbfly.MapDrawingItem#
      *
-     * @description
-     *   Get drawing state value
+     * @description Get drawing state value
      *
      * @param {bbbfly.MapDrawingItem.state} state
      * @return {boolean} Value
@@ -1321,8 +1318,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @name SetStateValue
      * @memberof bbbfly.MapDrawingItem#
      *
-     * @description
-     *   Set drawing state value
+     * @description Set drawing state value
      *
      * @param {bbbfly.MapDrawingItem.state} state
      * @param {boolean} [value=false] Value
@@ -1545,9 +1541,8 @@ bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
 
 /**
  * @enum {integer}
- * @description
- *   Supported {@link bbbfly.Renderer.state|renderer states}
  *
+ * @description Supported {@link bbbfly.Renderer.state|renderer states}
  */
 bbbfly.MapDrawingItem.state = {
   mouseover: 1,
@@ -1727,7 +1722,11 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @function
    * @name ClearDrawings
    * @memberof bbbfly.MapDrawingsHandler#
+   *
    * @description Remove all drawings
+   *
+   * @see {@link bbbfly.MapDrawingsHandler#ClearIcons|ClearIcons()}
+   * @see {@link bbbfly.MapDrawingsHandler#ClearGeometries|ClearGeometries()}
    */
   this.ClearDrawings = bbbfly.map.drawing.handler._clearDrawings;
 
@@ -1737,6 +1736,8 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @memberof bbbfly.MapDrawingsHandler#
    *
    * @param {bbbfly.MapDrawingCluster} cluster
+   *
+   * @see {@link bbbfly.MapDrawingsHandler#EndClustering|EndClustering()}
    */
   this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;
   /**
@@ -1745,6 +1746,8 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @memberof bbbfly.MapDrawingsHandler#
    *
    * @return {boolean} - If cluster was added
+   *
+   * @see {@link bbbfly.MapDrawingsHandler#BeginClustering|BeginClustering()}
    */
   this.EndClustering = bbbfly.map.drawing.handler._endClustering;
 
@@ -1752,6 +1755,7 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @function
    * @name GetSelected
    * @memberof bbbfly.MapDrawingsHandler#
+   *
    * @description Get all drawings
    *
    * @param {boolean} [selected=true]
@@ -1764,6 +1768,7 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @function
    * @name ClearSelected
    * @memberof bbbfly.MapDrawingsHandler#
+   *
    * @description Unselect all drawings
    *
    * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
