@@ -223,7 +223,7 @@ bbbfly.map.tooltip._dispose = function(){
   }
 };
 bbbfly.map.tooltip._show = function(layer){
-  if(!layer instanceof L.Layer){return false;}
+  if(!(layer instanceof L.Layer)){return false;}
 
   if(this._ParentLayer && (this._ParentLayer !== layer)){
     this.Dispose();
