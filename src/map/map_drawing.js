@@ -248,6 +248,25 @@ bbbfly.map.drawing.core._removeFrom = function(feature){
 };
 
 /** @ignore */
+bbbfly.map.drawing.core._removeLayer = function(layer){
+  if(layer instanceof L.Layer){
+    var feature = this._ParentFeature;
+    var cnt = this._Layers.length;
+
+    for(var i=cnt-1;i>=0;i--){
+      var childLayer = this._Layers[i];
+      if(childLayer !== layer){continue;}
+
+      if(feature){childLayer.removeFrom(feature);}
+      this._Layers.splice(i,1);
+      break;
+    }
+  }
+
+  return (this._Layers.length > 0);
+};
+
+/** @ignore */
 bbbfly.map.drawing.core._getGeoJSON = function(){
   var json = [];
 
@@ -1104,6 +1123,15 @@ bbbfly.MapDrawing = function(options){
    * @see {@link bbbfly.MapDrawing#AddTo|AddTo()}
    */
   this.RemoveFrom = bbbfly.map.drawing.core._removeFrom;
+  /**
+   * @function
+   * @name RemoveLayer
+   * @memberof bbbfly.MapDrawing#
+   *
+   * @param {mapLayer} layer - Layer to remove from drawing
+   * @return {boolean} If contains any layer
+   */
+  this.RemoveLayer = bbbfly.map.drawing.core._removeLayer;
   /**
    * @function
    * @name GetGeoJSON

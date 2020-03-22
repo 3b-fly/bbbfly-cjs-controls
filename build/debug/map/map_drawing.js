@@ -221,6 +221,23 @@ bbbfly.map.drawing.core._removeFrom = function(feature){
   this._ParentFeature = null;
   return true;
 };
+bbbfly.map.drawing.core._removeLayer = function(layer){
+  if(layer instanceof L.Layer){
+    var feature = this._ParentFeature;
+    var cnt = this._Layers.length;
+
+    for(var i=cnt-1;i>=0;i--){
+      var childLayer = this._Layers[i];
+      if(childLayer !== layer){continue;}
+
+      if(feature){childLayer.removeFrom(feature);}
+      this._Layers.splice(i,1);
+      break;
+    }
+  }
+
+  return (this._Layers.length > 0);
+};
 bbbfly.map.drawing.core._getGeoJSON = function(){
   var json = [];
 
@@ -907,6 +924,7 @@ bbbfly.MapDrawing = function(options){
   this.SetHandler = bbbfly.map.drawing.core._setHandler;
   this.AddTo = bbbfly.map.drawing.core._addTo;
   this.RemoveFrom = bbbfly.map.drawing.core._removeFrom;
+  this.RemoveLayer = bbbfly.map.drawing.core._removeLayer;
   this.GetGeoJSON = bbbfly.map.drawing.core._getGeoJSON;
   this.Scan = bbbfly.map.drawing.core._scan;
   this.OnMouseEnter = null;
