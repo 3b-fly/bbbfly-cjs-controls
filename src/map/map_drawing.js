@@ -263,9 +263,11 @@ bbbfly.map.drawing.core._scan = function(callback,def){
   if(!Boolean.isBoolean(def)){def = false;}
 
   if(Function.isFunction(callback)){
-    for(var i in this._Layers){
+    var cnt = this._Layers.length;
+
+    for(var i=cnt-1;i>=0;i--){
       var layer = this._Layers[i];
-      var val = callback(layer);
+      var val = callback(layer,i,this._Layers);
 
       if(Boolean.isBoolean(val)){
         return val;
@@ -1807,6 +1809,9 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @description Scans drawing Leaflet layers.
  *
  * @param {L.Layer} layer
+ * @param {integer} index
+ * @param {array} layers
+ *
  * @return {boolean|undefind}
  *   Return boolean to stop scan and return that value
  */
