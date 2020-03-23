@@ -488,10 +488,27 @@ bbbfly.map.drawing.item._removeIcon = function(marker){
   this.CheckEmpty();
   return true;
 };
-bbbfly.map.drawing.item._removeGeometry = function(){
-  if(!this.RemoveLayer(this._GeoJSON)){return false;}
+bbbfly.map.drawing.item._removeGeometry = function(layer){
+  if(layer && !(layer instanceof L.Path)){return false;}
+  if(!this._GeoJSON){return false;}
 
-  this._GeoJSON = null;
+  if(layer){
+    if(!this._GeoJSON.hasLayer(layer)){return false;}
+    if(!this.RemoveLayer(layer)){return false;}
+
+    this._GeoJSON.removeLayer(layer);
+  }
+  else{
+    var layers = this._GeoJSON.getLayers();
+
+    for(var i in layers){
+      layer = layers[i];
+
+      if(!this.RemoveLayer(layer)){return false;}
+      this._GeoJSON.removeLayer(layer);
+    };
+  }
+
   this.CheckEmpty();
   return true;
 };

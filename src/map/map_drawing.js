@@ -543,10 +543,27 @@ bbbfly.map.drawing.item._removeIcon = function(marker){
 };
 
 /** @ignore */
-bbbfly.map.drawing.item._removeGeometry = function(){
-  if(!this.RemoveLayer(this._GeoJSON)){return false;}
+bbbfly.map.drawing.item._removeGeometry = function(layer){
+  if(layer && !(layer instanceof L.Path)){return false;}
+  if(!this._GeoJSON){return false;}
 
-  this._GeoJSON = null;
+  if(layer){
+    if(!this._GeoJSON.hasLayer(layer)){return false;}
+    if(!this.RemoveLayer(layer)){return false;}
+
+    this._GeoJSON.removeLayer(layer);
+  }
+  else{
+    var layers = this._GeoJSON.getLayers();
+
+    for(var i in layers){
+      layer = layers[i];
+
+      if(!this.RemoveLayer(layer)){return false;}
+      this._GeoJSON.removeLayer(layer);
+    };
+  }
+
   this.CheckEmpty();
   return true;
 };
@@ -1382,6 +1399,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @name RemoveGeometry
      * @memberof bbbfly.MapDrawingItem#
      *
+     * @param {mapGeometry} [layer=undefined] - Do not pass to remove all
      * @return {boolean} If removed
      */
     this.RemoveGeometry = bbbfly.map.drawing.item._removeGeometry;
