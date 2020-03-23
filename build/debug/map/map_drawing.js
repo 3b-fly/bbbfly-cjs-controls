@@ -480,7 +480,8 @@ bbbfly.map.drawing.item._getGeometrySize = function(){
 
   return 0;
 };
-bbbfly.map.drawing.item._removeIcon = function(){
+bbbfly.map.drawing.item._removeIcon = function(marker){
+  if(marker && (marker !== this._Marker)){return false;}
   if(!this.RemoveLayer(this._Marker)){return false;}
 
   this._Marker = null;

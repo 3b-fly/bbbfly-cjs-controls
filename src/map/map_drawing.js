@@ -533,7 +533,8 @@ bbbfly.map.drawing.item._getGeometrySize = function(){
 };
 
 /** @ignore */
-bbbfly.map.drawing.item._removeIcon = function(){
+bbbfly.map.drawing.item._removeIcon = function(marker){
+  if(marker && (marker !== this._Marker)){return false;}
   if(!this.RemoveLayer(this._Marker)){return false;}
 
   this._Marker = null;
@@ -1372,6 +1373,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @name RemoveIcon
      * @memberof bbbfly.MapDrawingItem#
      *
+     * @param {mapMarker} [marker=undefined]
      * @return {boolean} If removed
      */
     this.RemoveIcon = bbbfly.map.drawing.item._removeIcon;
