@@ -533,7 +533,7 @@ bbbfly.map.drawing.item._getGeometrySize = function(){
 };
 
 /** @ignore */
-bbbfly.map.drawing.item._clearIcon = function(){
+bbbfly.map.drawing.item._removeIcon = function(){
   if(!this.RemoveLayer(this._Marker)){return false;}
 
   this._Marker = null;
@@ -542,7 +542,7 @@ bbbfly.map.drawing.item._clearIcon = function(){
 };
 
 /** @ignore */
-bbbfly.map.drawing.item._clearGeometry = function(){
+bbbfly.map.drawing.item._removeGeometry = function(){
   if(!this.RemoveLayer(this._GeoJSON)){return false;}
 
   this._GeoJSON = null;
@@ -971,7 +971,7 @@ bbbfly.map.drawing.handler._clearDrawings = function(){
 bbbfly.map.drawing.handler._clearIcons = function(){
   for(var id in this._Drawings){
     var drawing = this._Drawings[id];
-    drawing.ClearIcon();
+    drawing.RemoveIcon();
   }
 };
 
@@ -979,7 +979,7 @@ bbbfly.map.drawing.handler._clearIcons = function(){
 bbbfly.map.drawing.handler._clearGeometries = function(){
   for(var id in this._Drawings){
     var drawing = this._Drawings[id];
-    drawing.ClearGeometry();
+    drawing.RemoveGeometry();
   }
 };
 
@@ -1369,20 +1369,20 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
 
     /**
      * @function
-     * @name ClearIcon
+     * @name RemoveIcon
      * @memberof bbbfly.MapDrawingItem#
      *
      * @return {boolean} If removed
      */
-    this.ClearIcon = bbbfly.map.drawing.item._clearIcon;
+    this.RemoveIcon = bbbfly.map.drawing.item._removeIcon;
     /**
      * @function
-     * @name ClearGeometry
+     * @name RemoveGeometry
      * @memberof bbbfly.MapDrawingItem#
      *
      * @return {boolean} If removed
      */
-    this.ClearGeometry = bbbfly.map.drawing.item._clearGeometry;
+    this.RemoveGeometry = bbbfly.map.drawing.item._removeGeometry;
 
     /**
      * @function

@@ -480,14 +480,14 @@ bbbfly.map.drawing.item._getGeometrySize = function(){
 
   return 0;
 };
-bbbfly.map.drawing.item._clearIcon = function(){
+bbbfly.map.drawing.item._removeIcon = function(){
   if(!this.RemoveLayer(this._Marker)){return false;}
 
   this._Marker = null;
   this.CheckEmpty();
   return true;
 };
-bbbfly.map.drawing.item._clearGeometry = function(){
+bbbfly.map.drawing.item._removeGeometry = function(){
   if(!this.RemoveLayer(this._GeoJSON)){return false;}
 
   this._GeoJSON = null;
@@ -854,13 +854,13 @@ bbbfly.map.drawing.handler._clearDrawings = function(){
 bbbfly.map.drawing.handler._clearIcons = function(){
   for(var id in this._Drawings){
     var drawing = this._Drawings[id];
-    drawing.ClearIcon();
+    drawing.RemoveIcon();
   }
 };
 bbbfly.map.drawing.handler._clearGeometries = function(){
   for(var id in this._Drawings){
     var drawing = this._Drawings[id];
-    drawing.ClearGeometry();
+    drawing.RemoveGeometry();
   }
 };
 bbbfly.map.drawing.handler._beginClustering = function(cluster){
@@ -1018,8 +1018,8 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
     this.GetGeometryStyle = bbbfly.map.drawing.item._getGeometryStyle;
     this.GetGeometryCenter = bbbfly.map.drawing.item._getGeometryCenter;
     this.GetGeometrySize = bbbfly.map.drawing.item._getGeometrySize;
-    this.ClearIcon = bbbfly.map.drawing.item._clearIcon;
-    this.ClearGeometry = bbbfly.map.drawing.item._clearGeometry;
+    this.RemoveIcon = bbbfly.map.drawing.item._removeIcon;
+    this.RemoveGeometry = bbbfly.map.drawing.item._removeGeometry;
     this.SetState = bbbfly.map.drawing.item._setState;
     this.GetState = bbbfly.map.drawing.item._getState;
     this.GetStateValue = bbbfly.map.drawing.item._getStateValue;
