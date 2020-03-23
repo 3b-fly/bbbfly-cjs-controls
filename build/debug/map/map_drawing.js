@@ -286,7 +286,7 @@ bbbfly.map.drawing.item._create = function(){
   var showGeom = this.Options.ShowGeometry;
   if(!Boolean.isBoolean(showGeom)){showGeom = true;}
 
-  this._Geometry = null;
+  this._GeoJSON = null;
   this._Marker = null;
   var layers = [];
 
@@ -313,7 +313,7 @@ bbbfly.map.drawing.item._create = function(){
       }
     }
 
-    this._Geometry = geometry;
+    this._GeoJSON = geometry;
   }
 
   if(!hasCoords && coordsToCenter){
@@ -445,8 +445,8 @@ bbbfly.map.drawing.item._getGeometryStyle = function(){
   return (gStyle instanceof type) ? gStyle : new type();
 };
 bbbfly.map.drawing.item._getGeometryCenter = function(){
-  if(this._Geometry){
-    var bounds = this._Geometry.getBounds();
+  if(this._GeoJSON){
+    var bounds = this._GeoJSON.getBounds();
 
     if(bounds.isValid()){
       var center = bounds.getCenter();
@@ -459,7 +459,7 @@ bbbfly.map.drawing.item._getGeometrySize = function(){
   if(!this._ParentFeature){return 0;}
 
   var map = this._ParentFeature._map;
-  var geometry = this._Geometry;
+  var geometry = this._GeoJSON;
 
   if(!map || !geometry){return 0;}
   var bounds = geometry.getBounds();
@@ -568,7 +568,7 @@ bbbfly.map.drawing.item._showTooltip = function(){
   }
 
   if(this._Tooltip){
-    var layer = this._Marker || this._Geometry;
+    var layer = this._Marker || this._GeoJSON;
     this._Tooltip.Show(layer);
   }
 };
@@ -983,7 +983,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
     this._Marker = null;
     this._IconProxy = null;
     this._IconHtml = '';
-    this._Geometry = null;
+    this._GeoJSON = null;
     this._Tooltip = null;
 
     ng_OverrideMethod(this,'Create',
