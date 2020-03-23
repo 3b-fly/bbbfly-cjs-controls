@@ -907,6 +907,15 @@ bbbfly.map.drawing.handler._clearSelected = function(){
   }
 };
 bbbfly.map.drawing.handler.listener._onEmpty = function(){
+  var drawing = this.EventSource;
+  var handler = this.Owner;
+
+  if(drawing && handler){
+    delete(handler._Drawings[drawing.ID]);
+    drawing.Dispose();
+  }
+};
+bbbfly.map.drawing.handler.listener._onSetSelected = function(){
   var handler = this.Owner;
 
   switch(handler.Options.SelectType){
@@ -1153,7 +1162,8 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   this._CurrentCluster = null;
   this._DrawingListener = {
     Owner: this,
-    Listen: ['OnSetSelected','OnSelectedChanged'],
+    Listen: ['OnEmpty','OnSetSelected','OnSelectedChanged'],
+    OnEmpty: bbbfly.map.drawing.handler.listener._onEmpty,
     OnSetSelected: bbbfly.map.drawing.handler.listener._onSetSelected,
     OnSelectedChanged: bbbfly.map.drawing.handler.listener._onSelectedChanged
   };
