@@ -1914,6 +1914,9 @@
         <li data-name="bbbfly.MapDrawing#RemoveFrom">
           <a href="bbbfly.MapDrawing.html#RemoveFrom">RemoveFrom</a>
         </li>
+        <li data-name="bbbfly.MapDrawing#RemoveLayer">
+          <a href="bbbfly.MapDrawing.html#RemoveLayer">RemoveLayer</a>
+        </li>
         <li data-name="bbbfly.MapDrawing#Scan">
           <a href="bbbfly.MapDrawing.html#Scan">Scan</a>
         </li>
@@ -1928,6 +1931,9 @@
         </li>
         <li data-name="OnDblClick">
           <a href="bbbfly.MapDrawing.html#event:OnDblClick">OnDblClick</a>
+        </li>
+        <li data-name="OnEmpty">
+          <a href="bbbfly.MapDrawing.html#event:OnEmpty">OnEmpty</a>
         </li>
         <li data-name="OnMouseEnter">
           <a href="bbbfly.MapDrawing.html#event:OnMouseEnter">OnMouseEnter</a>
@@ -1991,6 +1997,9 @@
         <li data-name="bbbfly.MapDrawingCluster#RemoveFrom">
           <a href="bbbfly.MapDrawingCluster.html#RemoveFrom">RemoveFrom</a>
         </li>
+        <li data-name="bbbfly.MapDrawingCluster#RemoveLayer">
+          <a href="bbbfly.MapDrawingCluster.html#RemoveLayer">RemoveLayer</a>
+        </li>
         <li data-name="bbbfly.MapDrawingCluster#Scan">
           <a href="bbbfly.MapDrawingCluster.html#Scan">Scan</a>
         </li>
@@ -2005,6 +2014,9 @@
         </li>
         <li data-name="OnDblClick">
           <a href="bbbfly.MapDrawingCluster.html#event:OnDblClick">OnDblClick</a>
+        </li>
+        <li data-name="OnEmpty">
+          <a href="bbbfly.MapDrawingCluster.html#event:OnEmpty">OnEmpty</a>
         </li>
         <li data-name="OnMouseEnter">
           <a href="bbbfly.MapDrawingCluster.html#event:OnMouseEnter">OnMouseEnter</a>
@@ -2092,11 +2104,23 @@
         <li data-name="bbbfly.MapDrawingItem#RemoveFrom">
           <a href="bbbfly.MapDrawingItem.html#RemoveFrom">RemoveFrom</a>
         </li>
+        <li data-name="bbbfly.MapDrawingItem#RemoveGeometry">
+          <a href="bbbfly.MapDrawingItem.html#RemoveGeometry">RemoveGeometry</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingItem#RemoveIcon">
+          <a href="bbbfly.MapDrawingItem.html#RemoveIcon">RemoveIcon</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingItem#RemoveLayer">
+          <a href="bbbfly.MapDrawingItem.html#RemoveLayer">RemoveLayer</a>
+        </li>
         <li data-name="bbbfly.MapDrawingItem#Scan">
           <a href="bbbfly.MapDrawingItem.html#Scan">Scan</a>
         </li>
         <li data-name="bbbfly.MapDrawingItem#SetSelected">
           <a href="bbbfly.MapDrawingItem.html#SetSelected">SetSelected</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingItem#SetState">
+          <a href="bbbfly.MapDrawingItem.html#SetState">SetState</a>
         </li>
         <li data-name="bbbfly.MapDrawingItem#SetStateValue">
           <a href="bbbfly.MapDrawingItem.html#SetStateValue">SetStateValue</a>
@@ -2118,6 +2142,9 @@
         </li>
         <li data-name="OnDblClick">
           <a href="bbbfly.MapDrawingItem.html#event:OnDblClick">OnDblClick</a>
+        </li>
+        <li data-name="OnEmpty">
+          <a href="bbbfly.MapDrawingItem.html#event:OnEmpty">OnEmpty</a>
         </li>
         <li data-name="OnMouseEnter">
           <a href="bbbfly.MapDrawingItem.html#event:OnMouseEnter">OnMouseEnter</a>
@@ -2239,6 +2266,12 @@
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#ClearDrawings">
           <a href="bbbfly.MapDrawingsHandler.html#ClearDrawings">ClearDrawings</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#ClearGeometries">
+          <a href="bbbfly.MapDrawingsHandler.html#ClearGeometries">ClearGeometries</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#ClearIcons">
+          <a href="bbbfly.MapDrawingsHandler.html#ClearIcons">ClearIcons</a>
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#ClearSelected">
           <a href="bbbfly.MapDrawingsHandler.html#ClearSelected">ClearSelected</a>
@@ -3296,10 +3329,10 @@
     <div class="nameContainer">
         <h4 id="RegisterMap">
           RegisterMap
-          <span class="signature">(ctrl)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+          <span class="signature">(map)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_registry.js#L168">map/map_registry.js, line 168</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_registry.js#L159">map/map_registry.js, line 159</a>
         </div>
     </div>
 </dt>
@@ -3316,10 +3349,10 @@
 	<tbody>
         <tr>
                 <td class="name">
-                  <span class="param-name">ctrl</span>
+                  <span class="param-name">map</span>
                 </td>
             <td class="type">
-<span class="param-type"><a href="bbbfly.MapControl.html">bbbfly.MapControl</a></span>
+<span class="param-type"><a href="bbbfly.MapBox.html">bbbfly.MapBox</a></span>
             </td>
             <td class="description last">
             </td>
@@ -3350,10 +3383,10 @@
     <div class="nameContainer">
         <h4 id="RegisterMap">
           RegisterMap
-          <span class="signature">(map)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+          <span class="signature">(ctrl)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_registry.js#L159">map/map_registry.js, line 159</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_registry.js#L168">map/map_registry.js, line 168</a>
         </div>
     </div>
 </dt>
@@ -3370,10 +3403,10 @@
 	<tbody>
         <tr>
                 <td class="name">
-                  <span class="param-name">map</span>
+                  <span class="param-name">ctrl</span>
                 </td>
             <td class="type">
-<span class="param-type"><a href="bbbfly.MapBox.html">bbbfly.MapBox</a></span>
+<span class="param-type"><a href="bbbfly.MapControl.html">bbbfly.MapControl</a></span>
             </td>
             <td class="description last">
             </td>
