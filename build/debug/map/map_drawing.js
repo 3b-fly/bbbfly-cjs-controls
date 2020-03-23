@@ -241,11 +241,11 @@ bbbfly.map.drawing.core._removeLayer = function(layer){
 
       if(feature){childLayer.removeFrom(feature);}
       this._Layers.splice(i,1);
-      break;
+      return true;
     }
   }
 
-  return (this._Layers.length > 0);
+  return false;
 };
 bbbfly.map.drawing.core._getGeoJSON = function(){
   var json = [];
@@ -481,14 +481,18 @@ bbbfly.map.drawing.item._getGeometrySize = function(){
   return 0;
 };
 bbbfly.map.drawing.item._clearIcon = function(){
-  var contains = this.RemoveLayer(this._Marker);
+  if(!this.RemoveLayer(this._Marker)){return false;}
+
   this._Marker = null;
-  return contains;
+  this.CheckEmpty();
+  return true;
 };
 bbbfly.map.drawing.item._clearGeometry = function(){
-  var contains = this.RemoveLayer(this._Geometry);
-  this._Geometry = null;
-  return contains;
+  if(!this.RemoveLayer(this._GeoJSON)){return false;}
+
+  this._GeoJSON = null;
+  this.CheckEmpty();
+  return true;
 };
 bbbfly.map.drawing.item._setState = function(state,update){
   if(!Object.isObject(state)){return;}
@@ -850,21 +854,13 @@ bbbfly.map.drawing.handler._clearDrawings = function(){
 bbbfly.map.drawing.handler._clearIcons = function(){
   for(var id in this._Drawings){
     var drawing = this._Drawings[id];
-
-    if(!drawing.ClearIcon()){
-      delete(this._Drawings[id]);
-      drawing.Dispose();
-    }
+    drawing.ClearIcon();
   }
 };
 bbbfly.map.drawing.handler._clearGeometries = function(){
   for(var id in this._Drawings){
     var drawing = this._Drawings[id];
-
-    if(!drawing.ClearGeometry()){
-      delete(this._Drawings[id]);
-      drawing.Dispose();
-    }
+    drawing.ClearGeometry();
   }
 };
 bbbfly.map.drawing.handler._beginClustering = function(cluster){
