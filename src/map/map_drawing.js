@@ -184,6 +184,15 @@ bbbfly.map.drawing.core._doInitialize = function(layer,prefix){
   return true;
 };
 
+bbbfly.map.drawing.core._checkEmpty = function(){
+  if(this._Layers.length > 0){return false;}
+
+  if(Function.isFunction(this.OnEmpty)){
+    this.OnEmpty();
+  }
+  return true;
+};
+
 /** @ignore */
 bbbfly.map.drawing.core._dispose = function(){
   var feature = this._ParentFeature;
@@ -1098,6 +1107,8 @@ bbbfly.MapDrawing = function(options){
   this.Initialize = bbbfly.map.drawing.core._initialize;
   /** @private */
   this.DoInitialize = bbbfly.map.drawing.core._doInitialize;
+  /** @private */
+  this.CheckEmpty = bbbfly.map.drawing.core._checkEmpty;
 
   /**
    * @function
@@ -1190,6 +1201,12 @@ bbbfly.MapDrawing = function(options){
    */
   this.Scan = bbbfly.map.drawing.core._scan;
 
+  /**
+   * @event
+   * @name OnEmpty
+   * @memberof bbbfly.MapDrawing#
+   */
+  this.OnEmpty = null;
   /**
    * @event
    * @name OnMouseEnter

@@ -166,6 +166,15 @@ bbbfly.map.drawing.core._doInitialize = function(layer,prefix){
 
   return true;
 };
+
+bbbfly.map.drawing.core._checkEmpty = function(){
+  if(this._Layers.length > 0){return false;}
+
+  if(Function.isFunction(this.OnEmpty)){
+    this.OnEmpty();
+  }
+  return true;
+};
 bbbfly.map.drawing.core._dispose = function(){
   var feature = this._ParentFeature;
 
@@ -949,6 +958,7 @@ bbbfly.MapDrawing = function(options){
   this._Initialized = false;
   this.Initialize = bbbfly.map.drawing.core._initialize;
   this.DoInitialize = bbbfly.map.drawing.core._doInitialize;
+  this.CheckEmpty = bbbfly.map.drawing.core._checkEmpty;
   this.Create = null;
   this.Update = null;
   this.Dispose = bbbfly.map.drawing.core._dispose;
@@ -958,6 +968,7 @@ bbbfly.MapDrawing = function(options){
   this.RemoveLayer = bbbfly.map.drawing.core._removeLayer;
   this.GetGeoJSON = bbbfly.map.drawing.core._getGeoJSON;
   this.Scan = bbbfly.map.drawing.core._scan;
+  this.OnEmpty = null;
   this.OnMouseEnter = null;
   this.OnMouseLeave = null;
   this.OnClick = null;
