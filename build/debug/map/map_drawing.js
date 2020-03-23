@@ -19,8 +19,8 @@ bbbfly.map.drawing = {
   layer: {},
   core: {},
   item: {},
-  cluster: {},
-  handler: {}
+  cluster: { listener : {} },
+  handler: { listener : {} }
 };
 bbbfly.map.drawing.utils.LeafletId = function(obj){
   var id = Object.isObject(obj) ? L.stamp(obj) : null;
@@ -713,7 +713,7 @@ bbbfly.map.drawing.cluster._onSpiderfyChanged = function(){
   this.Owner.Update();
 };
 
-bbbfly.map.drawing.cluster._onSelectedChanged = function(){
+bbbfly.map.drawing.cluster.listener._onSelectedChanged = function(){
   this.Owner.Update();
 };
 bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
@@ -897,7 +897,7 @@ bbbfly.map.drawing.handler._clearSelected = function(){
     }
   }
 };
-bbbfly.map.drawing.handler._onSetSelected = function(){
+bbbfly.map.drawing.handler.listener._onEmpty = function(){
   var handler = this.Owner;
 
   switch(handler.Options.SelectType){
@@ -907,7 +907,7 @@ bbbfly.map.drawing.handler._onSetSelected = function(){
   }
   return false;
 };
-bbbfly.map.drawing.handler._onSelectedChanged = function(drawing){
+bbbfly.map.drawing.handler.listener._onSelectedChanged = function(drawing){
 
   var handler = this.Owner;
 
@@ -1099,7 +1099,7 @@ bbbfly.MapDrawingCluster = bbbfly.object.Extend(
     this._DrawingListener = {
       Owner: this,
       Listen: ['OnSelectedChanged'],
-      OnSelectedChanged: bbbfly.map.drawing.cluster._onSelectedChanged
+      OnSelectedChanged: bbbfly.map.drawing.cluster.listener._onSelectedChanged
     };
 
     ng_OverrideMethod(this,'Create',
@@ -1143,8 +1143,8 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   this._DrawingListener = {
     Owner: this,
     Listen: ['OnSetSelected','OnSelectedChanged'],
-    OnSetSelected: bbbfly.map.drawing.handler._onSetSelected,
-    OnSelectedChanged: bbbfly.map.drawing.handler._onSelectedChanged
+    OnSetSelected: bbbfly.map.drawing.handler.listener._onSetSelected,
+    OnSelectedChanged: bbbfly.map.drawing.handler.listener._onSelectedChanged
   };
   this.GetDrawing = bbbfly.map.drawing.handler._getDrawing;
   this.AddDrawing = bbbfly.map.drawing.handler._addDrawing;
