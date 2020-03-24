@@ -235,14 +235,20 @@
         "map/map_control.js",
         "map/map_registry.js",
         "map/map_drawing.js",
-        "map/map_tooltip.js"
+        "map/map_tooltip.js",
+
+        "map/libs/leaflet-draw_0.4.14/leaflet.draw.js",
+        "map/libs/leaflet-draw_0.4.14/leaflet.draw.css"
       ],
       "ReleaseFiles": [
         "map/map_box.js",
         "map/map_control.js",
         "map/map_registry.js",
         "map/map_drawing.js",
-        "map/map_tooltip.js"
+        "map/map_tooltip.js",
+
+        "map/libs/leaflet-draw_0.4.14/leaflet.draw.js",
+        "map/libs/leaflet-draw_0.4.14/leaflet.draw.css"
       ],
       "Libraries": {
         "controls.js": {

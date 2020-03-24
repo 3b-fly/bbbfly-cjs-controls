@@ -303,14 +303,18 @@
         "debug/map/map_control.js",
         "debug/map/map_registry.js",
         "debug/map/map_drawing.js",
-        "debug/map/map_tooltip.js"
+        "debug/map/map_tooltip.js",
+        "debug/map/libs/leaflet-draw_0.4.14/leaflet.draw.js",
+        "debug/map/libs/leaflet-draw_0.4.14/leaflet.draw.css"
       ],
       "ReleaseFiles": [
         "release/map/map_box.js",
         "release/map/map_control.js",
         "release/map/map_registry.js",
         "release/map/map_drawing.js",
-        "release/map/map_tooltip.js"
+        "release/map/map_tooltip.js",
+        "release/map/libs/leaflet-draw_0.4.14/leaflet.draw.js",
+        "release/map/libs/leaflet-draw_0.4.14/leaflet.draw.css"
       ],
       "Libraries": {
         "controls.js": {
