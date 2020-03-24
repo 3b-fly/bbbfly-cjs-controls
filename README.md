@@ -14,40 +14,59 @@
 
 - **hint** - Provides simple control hints definition.<br/><br/>
 - **bar**
-  - `bbbfly.ToolBar`
+  - `bbbfly.ToolBar` (control)
 - **button**
-  - `bbbfly.Button`
-  - `bbbfly.CheckBox`
-  - `bbbfly.RadioButton`
+  - `bbbfly.Button` (control)
 - **calendar**
-  - `bbbfly.EditDate`
-  - `bbbfly.EditTime`
+  - `bbbfly.EditDate` (control)
+  - `bbbfly.EditTime` (control)
 - **edit**
-  - `bbbfly.Edit`
-  - `bbbfly.Memo`
+  - `bbbfly.Edit` (control)
+  - `bbbfly.Memo` (control)
 - **file**
-  - `bbbfly.FileUploader`
+  - `bbbfly.FileUploader` (control)
 - **grid**
-  - `bbbfly.Grid`
+  - `bbbfly.Grid` (control)
+- **hint**
+  - `bbbfly.TextHint` (control)
 - **image**
-  - `bbbfly.ImagePreview`
+  - `bbbfly.Image` (control)
+  - `bbbfly.ImagePreview` (control)
 - **list**
-  - `bbbfly.List`
-  - `bbbfly.DropDownList`
+  - `bbbfly.List` (control)
+  - `bbbfly.DropDownList` (control)
 - **map**
-  - `bbbfly.Map`
+  - `bbbfly.Map` (control)
+- **mapbox**
+  - `bbbfly.MapBox` (control)
+  - `bbbfly.MapControl` (control)
+  - `bbbfly.MapRegistry` (class)
+  - `bbbfly.MapDrawing` (class)
+  - `bbbfly.MapDrawingItem` (class)
+  - `bbbfly.MapDrawingItem.Style` (class)
+  - `bbbfly.MapDrawingItem.IconStyle` (class)
+  - `bbbfly.MapDrawingItem.GeometryStyle` (class)
+  - `bbbfly.MapDrawingCluster` (class)
+  - `bbbfly.MapDrawingsHandler` (class)
+  - `bbbfly.MapTooltip` (class)
+  - `bbbfly.MapTooltip.Style` (class)
 - **menu**
-  - `bbbfly.Menu`
+  - `bbbfly.Menu` (control)
 - **panel**
-  - `bbbfly.Panel`
-  - `bbbfly.Frame`
-  - `bbbfly.Line`
+  - `bbbfly.Panel` (control)
+  - `bbbfly.Frame` (control)
+  - `bbbfly.Line` (control)
+- **progress**
+  - `bbbfly.ProgressRing` (control)
+  - `bbbfly.ProgressBar` (control)
 - **search**
-  - `bbbfly.SearchEdit`
-  - `bbbfly.SearchBox`
-  - `bbbfly.ListSearchBox`
+  - `bbbfly.SearchEdit` (control)
+  - `bbbfly.SearchBox` (control)
+  - `bbbfly.ListSearchBox` (control)
+- **text**
+  - `bbbfly.Text` (control)
 - **wrapper**
-  - `bbbfly.Wrapper`
+  - `bbbfly.Wrapper` (control)
 
 ### Usage
 
@@ -86,7 +105,9 @@
 > Some packages contain third party code which falls under its own license.<br/>
 > Verify that you satisfy that third party license conditions before using listed packages.<br/>
 >
->| package | library                                              | version | license            |
->| ------- | ---------------------------------------------------- | ------- | ------------------ |
->| map     | [Leaflet](https://github.com/Leaflet/Leaflet)        | 1.4.0   | custom             |
->| map     | [Esri Leaflet](https://github.com/Esri/esri-leaflet) | 2.2.3   | Apache License 2.0 |
+>| package | library                                                                   | version | license            |
+>| ------- | ------------------------------------------------------------------------- | ------- | ------------------ |
+>| map     | [Leaflet](https://github.com/Leaflet/Leaflet)                             | 1.4.0   | custom             |
+>| map     | [Esri Leaflet](https://github.com/Esri/esri-leaflet)                      | 2.2.3   | Apache License 2.0 |
+>| mapbox  | [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw)                   | 0.4.14  | MIT                |
+>| mapbox  | [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster) | 1.4.1   | MIT                |
