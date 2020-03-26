@@ -276,17 +276,6 @@ bbbfly.map.drawing.core._removeLayer = function(layer){
 };
 
 /** @ignore */
-bbbfly.map.drawing.core._getGeoJSON = function(){
-  var json = [];
-
-  for(var i in this._Layers){
-    var layer = this._Layers[i];
-    json.push(layer.toGeoJSON());
-  }
-  return json;
-};
-
-/** @ignore */
 bbbfly.map.drawing.core._scan = function(callback,def){
   if(!Boolean.isBoolean(def)){def = false;}
 
@@ -1207,14 +1196,6 @@ bbbfly.MapDrawing = function(options){
    * @return {boolean} If removed
    */
   this.RemoveLayer = bbbfly.map.drawing.core._removeLayer;
-  /**
-   * @function
-   * @name GetGeoJSON
-   * @memberof bbbfly.MapDrawing#
-   *
-   * @return {GeoJSON}
-   */
-  this.GetGeoJSON = bbbfly.map.drawing.core._getGeoJSON;
   /**
    * @function
    * @name Scan
