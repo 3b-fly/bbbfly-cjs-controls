@@ -856,6 +856,9 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
   }
   return false;
 };
+bbbfly.map.drawing.handler._getDrawings = function(){
+  return this._Drawings;
+};
 bbbfly.map.drawing.handler._clearDrawings = function(){
   for(var id in this._Drawings){
     var drawing = this._Drawings[id];
@@ -1182,6 +1185,7 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   this.GetDrawing = bbbfly.map.drawing.handler._getDrawing;
   this.AddDrawing = bbbfly.map.drawing.handler._addDrawing;
   this.RemoveDrawing = bbbfly.map.drawing.handler._removeDrawing;
+  this.GetDrawings = bbbfly.map.drawing.handler._getDrawings;
   this.ClearDrawings = bbbfly.map.drawing.handler._clearDrawings;
   this.ClearIcons = bbbfly.map.drawing.handler._clearIcons;
   this.ClearGeometries = bbbfly.map.drawing.handler._clearGeometries;

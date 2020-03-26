@@ -973,6 +973,12 @@ bbbfly.map.drawing.handler._removeDrawing = function(drawing){
 };
 
 /** @ignore */
+bbbfly.map.drawing.handler._getDrawings = function(){
+  return this._Drawings;
+};
+
+
+/** @ignore */
 bbbfly.map.drawing.handler._clearDrawings = function(){
   for(var id in this._Drawings){
     var drawing = this._Drawings[id];
@@ -1861,6 +1867,15 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @return {boolean} - If removed
    */
   this.RemoveDrawing = bbbfly.map.drawing.handler._removeDrawing;
+    /**
+   * @function
+   * @name GetDrawings
+   * @memberof bbbfly.MapDrawingsHandler#
+   *
+   * @param {string} id
+   * @return {bbbfly.MapDrawing[]}
+   */
+  this.GetDrawings = bbbfly.map.drawing.handler._getDrawings;
   /**
    * @function
    * @name ClearDrawings
@@ -1872,6 +1887,7 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @see {@link bbbfly.MapDrawingsHandler#ClearGeometries|ClearGeometries()}
    */
   this.ClearDrawings = bbbfly.map.drawing.handler._clearDrawings;
+
   /**
    * @function
    * @name ClearIcons
