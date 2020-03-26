@@ -86,7 +86,7 @@ bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
   return {
     type: 'FeatureCollection',
     features: features
-  };;
+  };
 };
 bbbfly.map.drawing.utils.InitMouseEvents = function(layer,prefix,callback){
   if(!(layer instanceof L.Layer)){return;}
@@ -869,6 +869,44 @@ bbbfly.map.drawing.handler._clearDrawings = function(){
     }
   }
 };
+bbbfly.map.drawing.handler._getPoints = function(){
+  var points = [];
+
+  for(var id in this._Drawings){
+    var drawing = this._Drawings[id];
+
+    if(drawing instanceof bbbfly.MapDrawingItem){
+      var point = drawing.GetPoint();
+
+      if(point instanceof L.LatLng){
+        points.push(point);
+      }
+    }
+  }
+  return points;
+};
+bbbfly.map.drawing.handler._getGeometry = function(){
+  var features = [];
+
+  for(var id in this._Drawings){
+    var drawing = this._Drawings[id];
+
+    if(drawing instanceof bbbfly.MapDrawingItem){
+
+      var geom = drawing.GetGeometry();
+      geom = bbbfly.map.drawing.utils.NormalizeGeoJSON(geom);
+
+      for(var i in geom.features){
+        features.push(geom.features[i]);
+      }
+    }
+  }
+
+  return {
+    type: 'FeatureCollection',
+    features: features
+  };
+};
 bbbfly.map.drawing.handler._clearIcons = function(){
   for(var id in this._Drawings){
     var drawing = this._Drawings[id];
@@ -1187,6 +1225,8 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   this.RemoveDrawing = bbbfly.map.drawing.handler._removeDrawing;
   this.GetDrawings = bbbfly.map.drawing.handler._getDrawings;
   this.ClearDrawings = bbbfly.map.drawing.handler._clearDrawings;
+  this.GetPoints = bbbfly.map.drawing.handler._getPoints;
+  this.GetGeometry = bbbfly.map.drawing.handler._getGeometry;
   this.ClearIcons = bbbfly.map.drawing.handler._clearIcons;
   this.ClearGeometries = bbbfly.map.drawing.handler._clearGeometries;
   this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;

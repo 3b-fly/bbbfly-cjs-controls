@@ -95,7 +95,7 @@ bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
   return {
     type: 'FeatureCollection',
     features: features
-  };;
+  };
 };
 
 /** @ignore */
@@ -991,6 +991,48 @@ bbbfly.map.drawing.handler._clearDrawings = function(){
 };
 
 /** @ignore */
+bbbfly.map.drawing.handler._getPoints = function(){
+  var points = [];
+
+  for(var id in this._Drawings){
+    var drawing = this._Drawings[id];
+
+    if(drawing instanceof bbbfly.MapDrawingItem){
+      var point = drawing.GetPoint();
+
+      if(point instanceof L.LatLng){
+        points.push(point);
+      }
+    }
+  }
+  return points;
+};
+
+/** @ignore */
+bbbfly.map.drawing.handler._getGeometry = function(){
+  var features = [];
+
+  for(var id in this._Drawings){
+    var drawing = this._Drawings[id];
+
+    if(drawing instanceof bbbfly.MapDrawingItem){
+
+      var geom = drawing.GetGeometry();
+      geom = bbbfly.map.drawing.utils.NormalizeGeoJSON(geom);
+
+      for(var i in geom.features){
+        features.push(geom.features[i]);
+      }
+    }
+  }
+
+  return {
+    type: 'FeatureCollection',
+    features: features
+  };
+};
+
+/** @ignore */
 bbbfly.map.drawing.handler._clearIcons = function(){
   for(var id in this._Drawings){
     var drawing = this._Drawings[id];
@@ -1365,6 +1407,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @return {mapIcon}
      */
     this.NewIcon = bbbfly.map.drawing.item._newIcon;
+
     /**
      * @function
      * @name GetIconStyle
@@ -1888,6 +1931,22 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    */
   this.ClearDrawings = bbbfly.map.drawing.handler._clearDrawings;
 
+  /**
+   * @function
+   * @name GetPoints
+   * @memberof bbbfly.MapDrawingsHandler#
+   *
+   * @return {mapPoint[]}
+   */
+  this.GetPoints = bbbfly.map.drawing.handler._getPoints;
+    /**
+   * @function
+   * @name GetGeometry
+   * @memberof bbbfly.MapDrawingsHandler#
+   *
+   * @return {GeoJSON}
+   */
+  this.GetGeometry = bbbfly.map.drawing.handler._getGeometry;
   /**
    * @function
    * @name ClearIcons
