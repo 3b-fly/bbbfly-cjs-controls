@@ -308,13 +308,13 @@ bbbfly.map.drawing.core._scan = function(callback,def){
 /** @ignore */
 bbbfly.map.drawing.item._create = function(){
   var geom = this.Options.Geometry;
-  var coords = this.Options.Coords;
+  var point = this.Options.Point;
 
   var hasGeom = Object.isObject(geom);
-  var hasCoords = (coords instanceof L.LatLng);
+  var hasPoint = (point instanceof L.LatLng);
 
-  var coordsToCenter = this.Options.CoordsToGeoCenter;
-  if(!Boolean.isBoolean(coordsToCenter)){coordsToCenter = false;}
+  var pointToCenter = this.Options.PointToGeoCenter;
+  if(!Boolean.isBoolean(pointToCenter)){pointToCenter = false;}
 
   var showGeom = this.Options.ShowGeometry;
   if(!Boolean.isBoolean(showGeom)){showGeom = true;}
@@ -349,13 +349,13 @@ bbbfly.map.drawing.item._create = function(){
     this._GeoJSON = geometry;
   }
 
-  if(!hasCoords && coordsToCenter){
-    coords = this.GetGeometryCenter();
-    if(coords){hasCoords = true;}
+  if(!hasPoint && pointToCenter){
+    point = this.GetGeometryCenter();
+    if(point){hasPoint = true;}
   }
 
-  if(hasCoords){
-    var marker = L.marker(coords,{
+  if(hasPoint){
+    var marker = L.marker(point,{
       riseOnHover: true,
       riseOffset: 999999
     });
@@ -1978,14 +1978,14 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @typedef {bbbfly.MapDrawing.options} options
  * @memberOf bbbfly.MapDrawingItem
  *
- * @property {mapPoint} [Coords=undefined]
+ * @property {mapPoint} [Point=undefined]
  * @property {geoJSON} [Geometry=undefined]
  *
  * @property {bbbfly.MapDrawingItem.IconStyle|string} IconStyle
  * @property {bbbfly.MapDrawingItem.GeometryStyle|string} GeometryStyle
  * @property {bbbfly.MapTooltip.options} [TooltipOptions=undefined]
  *
- * @property {boolean} [CoordsToGeoCenter=false]
+ * @property {boolean} [PointToGeoCenter=false]
  * @property {px} [MinGeometrySize=undefined]
  * @property {boolean} [ShowGeometry=true]
  *
