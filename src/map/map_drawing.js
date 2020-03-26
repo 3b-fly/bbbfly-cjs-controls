@@ -1026,10 +1026,13 @@ bbbfly.map.drawing.handler._getGeometry = function(){
     }
   }
 
-  return {
-    type: 'FeatureCollection',
-    features: features
-  };
+  if(features.length > 0){
+    return {
+      type: 'FeatureCollection',
+      features: features
+    };
+  }
+  return null;
 };
 
 /** @ignore */
@@ -1394,7 +1397,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @name GetGeometry
      * @memberof bbbfly.MapDrawing#
      *
-     * @return {GeoJSON}
+     * @return {GeoJSON|null}
      */
     this.GetGeometry = bbbfly.map.drawing.item._getGeometry;
 
@@ -1944,7 +1947,7 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @name GetGeometry
    * @memberof bbbfly.MapDrawingsHandler#
    *
-   * @return {GeoJSON}
+   * @return {GeoJSON|null}
    */
   this.GetGeometry = bbbfly.map.drawing.handler._getGeometry;
   /**

@@ -902,10 +902,13 @@ bbbfly.map.drawing.handler._getGeometry = function(){
     }
   }
 
-  return {
-    type: 'FeatureCollection',
-    features: features
-  };
+  if(features.length > 0){
+    return {
+      type: 'FeatureCollection',
+      features: features
+    };
+  }
+  return null;
 };
 bbbfly.map.drawing.handler._clearIcons = function(){
   for(var id in this._Drawings){
