@@ -397,6 +397,12 @@ bbbfly.map.drawing.item._dispose = function(){
   if(this._Tooltip){this._Tooltip.Dispose();}
   this.Dispose.callParent();
 };
+bbbfly.map.drawing.item._getPoint = function(){
+  return this._Marker ? this._Marker.getLatLng() : null;
+};
+bbbfly.map.drawing.item._getGeometry = function(){
+  return this._GeoJSON ? this._GeoJSON.toGeoJSON() : null;
+};
 bbbfly.map.drawing.item._newIcon = function(state,id){
     if(!String.isString(id)){id = bbbfly.map.drawing.utils.DrawingId();}
 
@@ -1021,6 +1027,8 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
     ng_OverrideMethod(this,'OnDblClick',
       bbbfly.map.drawing.item._onDblClick
     );
+    this.GetPoint = bbbfly.map.drawing.item._getPoint;
+    this.GetGeometry = bbbfly.map.drawing.item._getGeometry;
     this.NewIcon = bbbfly.map.drawing.item._newIcon;
     this.GetIconStyle = bbbfly.map.drawing.item._getIconStyle;
     this.GetGeometryStyle = bbbfly.map.drawing.item._getGeometryStyle;
