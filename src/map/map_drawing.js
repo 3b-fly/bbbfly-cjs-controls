@@ -46,6 +46,8 @@ bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
   var features = [];
 
   var multiToSingle = function(feature,newType){
+    if(!feature || !feature.geometry){return;}
+
     if(Array.isArray(feature.geometry.coordinates)){
       for(var i in feature.geometry.coordinates){
         features.push({
@@ -94,6 +96,111 @@ bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
   };
 
   normalizeCollection(json);
+
+  return {
+    type: 'FeatureCollection',
+    features: features
+  };
+};
+
+/** @ignore */
+bbbfly.map.drawing.utils.DenormalizeGeoJSON = function(json){
+  var features = [];
+
+  var lines = [];
+  var polygons = [];
+  var points = [];
+
+  var multiToStack = function(geometry,stack){
+    if(Array.isArray(geometry.coordinates)){
+      for(var i in geometry.coordinates){
+        stack.push(geometry.coordinates[i]);
+      }
+    }
+  };
+
+  var singleToStack = function(geometry,stack){
+    if(Array.isArray(geometry.coordinates)){
+      stack.push(geometry.coordinates);
+    }
+  };
+
+  var normalizeCollection = function(json){
+    if(!Object.isObject(json)){return;}
+
+    switch(json.type){
+      case 'FeatureCollection':
+        if(Array.isArray(json.features)){
+          for(var i in json.features){
+            var feature = json.features[i];
+            normalizeCollection(feature);
+          }
+        }
+      break;
+      case 'Feature':
+        if(Object.isObject(json.geometry)){
+          switch(json.geometry.type){
+            case 'MultiLineString':
+              multiToStack(json.geometry,lines);
+            break;
+            case 'MultiPolygon':
+              multiToStack(json.geometry,polygons);
+            break;
+            case 'MultiPoint':
+              multiToStack(json.geometry,points);
+            break;
+            case 'LineString':
+              singleToStack(json.geometry,lines);
+            break;
+            case 'Polygon':
+              singleToStack(json.geometry,polygons);
+            break;
+            case 'Point':
+              singleToStack(json.geometry,points);
+            break;
+            default:
+              features.push(json);
+            break;
+          }
+        }
+      break;
+    }
+  };
+
+  normalizeCollection(json);
+
+  if(lines.length > 0){
+    features.push({
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'MultiLineString',
+        coordinates: lines
+      }
+    });
+  }
+
+  if(polygons.length > 0){
+    features.push({
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'MultiPolygon',
+        coordinates: polygons
+      }
+    });
+  }
+
+  if(points.length > 0){
+    features.push({
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'MultiPoint',
+        coordinates: points
+      }
+    });
+  }
 
   return {
     type: 'FeatureCollection',
@@ -1019,21 +1126,21 @@ bbbfly.map.drawing.handler._getGeometry = function(){
     var drawing = this._Drawings[id];
 
     if(drawing instanceof bbbfly.MapDrawingItem){
-
       var geom = drawing.GetGeometry();
-      geom = bbbfly.map.drawing.utils.NormalizeGeoJSON(geom);
 
-      for(var i in geom.features){
-        features.push(geom.features[i]);
+      if(geom && Array.isArray(geom.features)){
+        for(var i in geom.features){
+          features.push(geom.features[i]);
+        }
       }
     }
   }
 
   if(features.length > 0){
-    return {
+    return bbbfly.map.drawing.utils.DenormalizeGeoJSON({
       type: 'FeatureCollection',
       features: features
-    };
+    });
   }
   return null;
 };
