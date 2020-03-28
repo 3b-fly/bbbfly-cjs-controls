@@ -133,10 +133,17 @@ bbbfly.fileuploader._onUpdated = function(){
 bbbfly.fileuploader._reset = function(){
   var list = this.Controls.FilesList;
   if(list){list.Clear();}
+
+  var hadFiles = (this._Files.length > 0);
   this._Files = [];
 
   this.Update();
   this.HideProgress();
+  if(!hadFiles){return;}
+
+  if(Function.isFunction(this.OnFilesChanged)){
+    this.OnFilesChanged();
+  }
 };
 
 bbbfly.fileuploader._isValid = function(){
