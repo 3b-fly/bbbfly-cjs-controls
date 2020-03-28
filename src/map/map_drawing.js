@@ -81,6 +81,9 @@ bbbfly.map.drawing.utils.NormalizeGeoJSON = function(json){
             case 'MultiPolygon':
               multiToSingle(json,'Polygon');
             break;
+            case 'MultiPoint':
+              multiToSingle(json,'Point');
+            break;
             default:
               features.push(json);
             break;
