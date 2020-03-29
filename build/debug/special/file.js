@@ -340,41 +340,49 @@ bbbfly.fileuploader._validateFiles = function(files){
 
   if((errors.length < 1)){
     var batchSize = 0;
+
     if(checkFileSize || checkBatchSize || checkExtensions){
       for(var i in files){
         var file = files[i];
-        var fileName = file.toLowerCase();
 
-        if(checkExtensions){
-          var idx = fileName.lastIndexOf('.');
-          var ext = (idx >= 0) ? fileName.substr(idx+1) : null;
+        if(Object.isObject(file)){
+          var fileName = file.name;
 
-          if(!this.AllowedExtensions.includes(ext)){
-            errors.push({
-              Name: fileName,
-              Error: {
-                Type: bbbfly.FileUploader.errortype.extension,
-                Data: this.AllowedExtensions.join(', ')
+          if(String.isString(fileName)){
+            fileName = fileName.toLowerCase();
+
+            if(checkExtensions){
+              var idx = fileName.lastIndexOf('.');
+              var ext = (idx >= 0) ? fileName.substr(idx+1) : null;
+
+              if(!this.AllowedExtensions.includes(ext)){
+                errors.push({
+                  Name: fileName,
+                  Error: {
+                    Type: bbbfly.FileUploader.errortype.extension,
+                    Data: this.AllowedExtensions.join(', ')
+                  }
+                });
+                continue;
               }
-            });
-            continue;
+            }
           }
-        }
 
-        if(checkFileSize || checkBatchSize){
-          if(typeof file.size !== 'undefined'){
-            var size = parseInt(file.size,10);
-            if(checkBatchSize){batchSize += size;}
+          if(checkFileSize || checkBatchSize){
+            if(typeof file.size !== 'undefined'){
+              var size = parseInt(file.size,10);
+              if(checkBatchSize){batchSize += size;}
 
-            if(checkFileSize && (size > this.MaxFileSize)){
-              errors.push({
-                Name: fileName,
-                Error: {
-                  Type: bbbfly.FileUploader.errortype.size,
-                  Data: this.MaxFileSize
-                }
-              });
-              continue;
+              if(checkFileSize && (size > this.MaxFileSize)){
+                errors.push({
+                  Name: fileName,
+                  Error: {
+                    Type: bbbfly.FileUploader.errortype.size,
+                    Data: this.MaxFileSize
+                  }
+                });
+                continue;
+              }
             }
           }
         }
