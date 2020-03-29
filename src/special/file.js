@@ -148,6 +148,7 @@ bbbfly.fileuploader._onCreated = function(ctrl){
 
 /** @ignore */
 bbbfly.fileuploader._onUpdated = function(){
+  this.SetDragAndDrop(this.DragAndDrop);
   this.UpdateForm();
 };
 
@@ -513,6 +514,102 @@ bbbfly.fileuploader._addUploadedFiles = function(data){
 };
 
 /** @ignore */
+bbbfly.fileuploader._setDragAndDrop = function(on){
+  var cPanel = this.Controls.ContentPanel;
+  if(!cPanel){return;}
+
+  var node = cPanel.Elm();
+  if(node && Boolean.isBoolean(node.draggable)){
+
+    var fnc = on
+      ? bbbfly.fileuploader._addEvent
+      : bbbfly.fileuploader._removeEvent;
+
+    fnc(node,'drop',bbbfly.fileuploader._onDrop);
+    fnc(node,'dragover',bbbfly.fileuploader._onDragOver);
+    fnc(node,'dragleave',bbbfly.fileuploader._onDragLeave);
+  }
+};
+
+/** @ignore */
+bbbfly.fileuploader._addEvent = function(node,name,fnc){
+  if(node.addEventListener){node.addEventListener(name,fnc,false);}
+  else if(node.attachEvent){node.attachEvent(name,fnc);}
+};
+
+/** @ignore */
+bbbfly.fileuploader._removeEvent = function(node,name,fnc){
+  if(node.removeEventListener){node.removeEventListener(name,fnc,false);}
+  else if(node.detachEvent){node.detachEvent(name,fnc);}
+};
+
+/** @ignore */
+bbbfly.fileuploader._stopEvent = function(event){
+  if(!event){event = window.event;}
+
+  if(event instanceof window.Event){
+    if(event.stopPropagation){event.stopPropagation();}
+    else{event.cancelBubble = true;}
+
+    if(event.preventDefault){event.preventDefault();}
+    else{event.returnValue = false;}
+  }
+};
+
+/** @ignore */
+bbbfly.fileuploader._onDrop = function(event){
+  bbbfly.fileuploader._stopEvent(event);
+
+  var content = ngGetControlByElement(this);
+  var files = event.target.files || event.dataTransfer.files;
+
+  if(Function.isFunction(content.OnFilesDrop)){
+    content.OnFilesDrop(files);
+  }
+  return false;
+};
+
+/** @ignore */
+bbbfly.fileuploader._onDragOver = function(event){
+  bbbfly.fileuploader._stopEvent(event);
+
+  var content = ngGetControlByElement(this);
+  if(Function.isFunction(content.OnFilesDragOver)){
+    content.OnFilesDragOver();
+  }
+  return false;
+};
+
+/** @ignore */
+bbbfly.fileuploader._onDragLeave = function(event){
+  bbbfly.fileuploader._stopEvent(event);
+
+  var content = ngGetControlByElement(this);
+  if(Function.isFunction(content.OnFilesDragLeave)){
+    content.OnFilesDragOver();
+  }
+  return false;
+};
+
+/** @ignore */
+bbbfly.fileuploader._onFilesDrop = function(files){
+  if(!this.Enabled){return;}
+
+  var uploader = this.ParentControl;
+  if(!uploader.ValidateFiles(files)){return;}
+  if(files.length < 1){return;}
+
+  var form = uploader.GetForm();
+  if(!form){return;}
+
+  var input = form['files[]'];
+  input.files = files;
+
+  uploader.UploadFiles(form);
+  form.reset();
+};
+
+/** @ignore */
 bbbfly.fileuploader._showError = function(errors){
   if(!Function.isFunction(this.DoShowError)){return;}
   var message = '';
@@ -838,6 +935,7 @@ bbbfly.fileuploader._getProgressText = function(){
  *
  * @property {url} [UploadURL]
  * @property {url} [FileUploadID] - Upload configuration ID
+ * @property {boolean} [DragAndDrop=true] - If drag&drop is enabled
  * @property {integer} [MaxFileSize=undefined] - Each file maximal size
  * @property {integer} [MaxBatchSize=undefined] - Maximal size of files batch
  * @property {integer} [MinFilesCount=undefined] - Minimal count of all files
@@ -856,6 +954,7 @@ bbbfly.FileUploader = function(def,ref,parent){
     Data: {
       UploadURL: null,
       FileUploadID: null,
+      DragAndDrop: true,
 
       MaxFileSize: undefined,
       MaxBatchSize: undefined,
@@ -923,6 +1022,11 @@ bbbfly.FileUploader = function(def,ref,parent){
               OnGetText: bbbfly.fileuploader._onGetFilesListText
             }
           }
+        },
+        Events: {
+          OnFilesDrop: bbbfly.fileuploader._onFilesDrop,
+          OnFilesDragOver: null,
+          OnFilesDragLeave: null
         }
       },
       ProgressPanel: {
@@ -982,6 +1086,8 @@ bbbfly.FileUploader = function(def,ref,parent){
       ValidateFiles: bbbfly.fileuploader._validateFiles,
       /** @private */
       AddUploadedFiles: bbbfly.fileuploader._addUploadedFiles,
+      /** @private */
+      SetDragAndDrop: bbbfly.fileuploader._setDragAndDrop,
 
       /**
        * @function
