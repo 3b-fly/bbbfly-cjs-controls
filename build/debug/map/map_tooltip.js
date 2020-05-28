@@ -135,6 +135,8 @@ bbbfly.map.tooltip.utils.AnchorsProps = function(id,anchors,state){
   return props;
 };
 bbbfly.map.tooltip.utils.AnchorHTML = function(props,state){
+  if(!props){return '';}
+
   return bbbfly.Renderer.ImageHTML(
     props.ImgProxy,props.L,props.T,props.R,props.B,
     state,null,props.Style
@@ -282,6 +284,8 @@ bbbfly.map.tooltip._setPosition = function(position){
 
   for(var type in anchorProps){
     var aProps = anchorProps[type];
+    if(!aProps){continue;}
+
     var iProxy = aProps.ImgProxy;
     if(!iProxy){continue;}
 
