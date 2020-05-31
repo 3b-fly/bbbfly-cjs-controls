@@ -1180,6 +1180,17 @@ bbbfly.map.drawing.handler._endClustering = function(){
 };
 
 /** @ignore */
+bbbfly.map.drawing.handler._select = function(id){
+  var drawing = this.GetDrawing(id);
+  if(!drawing){return false;}
+
+  if(Function.isFunction(drawing.SetSelected)){
+    return drawing.SetSelected(true,true);
+  }
+  return true;
+};
+
+/** @ignore */
 bbbfly.map.drawing.handler._getSelected = function(selected){
   if(!Boolean.isBoolean(selected)){selected = true;}
   var drawings = [];
@@ -2106,6 +2117,20 @@ bbbfly.MapDrawingsHandler = function(feature,options){
 
   /**
    * @function
+   * @name Selected
+   * @memberof bbbfly.MapDrawingsHandler#
+   *
+   * @description Select drawing and locate it
+   *
+   * @param {string} id
+   *
+   * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#ClearSelected|ClearSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#event:OnSelectedChanged|OnSelectedChanged}
+   */
+  this.Select = bbbfly.map.drawing.handler._select;
+  /**
+   * @function
    * @name GetSelected
    * @memberof bbbfly.MapDrawingsHandler#
    *
@@ -2113,6 +2138,7 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    *
    * @param {boolean} [selected=true]
    *
+   * @see {@link bbbfly.MapDrawingsHandler#Select|Select()}
    * @see {@link bbbfly.MapDrawingsHandler#ClearSelected|ClearSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#event:OnSelectedChanged|OnSelectedChanged}
    */
@@ -2124,6 +2150,7 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    *
    * @description Unselect all drawings
    *
+   * @see {@link bbbfly.MapDrawingsHandler#Select|Select()}
    * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#event:OnSelectedChanged|OnSelectedChanged}
    */
@@ -2134,6 +2161,7 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @name OnSelectedChanged
    * @memberof bbbfly.MapDrawingsHandler#
    *
+   * @see {@link bbbfly.MapDrawingsHandler#Select|Select()}
    * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#ClearSelected|ClearSelected()}
    */

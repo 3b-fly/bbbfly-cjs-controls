@@ -1044,6 +1044,15 @@ bbbfly.map.drawing.handler._endClustering = function(){
 
   return this.AddDrawing(cluster);
 };
+bbbfly.map.drawing.handler._select = function(id){
+  var drawing = this.GetDrawing(id);
+  if(!drawing){return false;}
+
+  if(Function.isFunction(drawing.SetSelected)){
+    return drawing.SetSelected(true,true);
+  }
+  return true;
+};
 bbbfly.map.drawing.handler._getSelected = function(selected){
   if(!Boolean.isBoolean(selected)){selected = true;}
   var drawings = [];
@@ -1342,6 +1351,7 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   this.ClearGeometries = bbbfly.map.drawing.handler._clearGeometries;
   this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;
   this.EndClustering = bbbfly.map.drawing.handler._endClustering;
+  this.Select = bbbfly.map.drawing.handler._select;
   this.GetSelected = bbbfly.map.drawing.handler._getSelected;
   this.ClearSelected = bbbfly.map.drawing.handler._clearSelected;
   this.OnSelectedChanged = null;
