@@ -121,13 +121,30 @@ bbbfly.map.map._fitBounds = function(bounds,padding){
     if(!Number.isInteger(padding)){padding = 0;}
 
     map.fitBounds(bounds,{
-      padding: [padding,padding],
+      padding: L.point(padding,padding),
       animate: !!this.Animate
     });
 
     return true;
   }
+  return false;
+};
+bbbfly.map.map._fitCoords = function(coords,padding){
+  var map = this.GetMap();
+  if(!map){return false;}
 
+  if(!padding && this.BoundsPadding){padding = this.BoundsPadding;}
+
+  if(coords && (coords instanceof L.LatLng)){
+    if(!Number.isInteger(padding)){padding = 0;}
+
+    map.panInside(coords,{
+      padding: L.point(padding,padding),
+      animate: !!this.Animate
+    });
+
+    return true;
+  }
   return false;
 };
 bbbfly.map.map._setMinZoom = function(zoom){
@@ -163,17 +180,17 @@ bbbfly.map.map._enableAnimation = function(enable){
   this.Animate = !!enable;
   return true;
 };
-bbbfly.map.map._setView = function(coordinates,zoom){
+bbbfly.map.map._setView = function(coords,zoom){
   var map = this.GetMap();
   if(map){
-    if((typeof coordinates === 'undefined') || (coordinates === null)){
-      coordinates = map.getCenter();
+    if((typeof coords === 'undefined') || (coords === null)){
+      coords = map.getCenter();
     }
     if((typeof zoom === 'undefined') || (zoom === null)){
       zoom = map.getZoom();
     }
 
-    map.setView(coordinates,zoom,{animate: !!this.Animate});
+    map.setView(coords,zoom,{animate: !!this.Animate});
     return true;
   }
   return false;
@@ -212,8 +229,8 @@ bbbfly.map.map._onMapZoomEnd = function(event){
     }
   }
 };
-bbbfly.map.map._setCenter = function(coordinates){
-  return this.SetView(coordinates,null);
+bbbfly.map.map._setCenter = function(coords){
+  return this.SetView(coords,null);
 };
 bbbfly.map.map._getCenter = function(){
   var map = this.GetMap();
@@ -570,6 +587,7 @@ bbbfly.Map = function(def,ref,parent){
       SetMaxBounds: bbbfly.map.map._setMaxBounds,
       SetBoundsPadding: bbbfly.map.map._setBoundsPadding,
       FitBounds: bbbfly.map.map._fitBounds,
+      FitCoords: bbbfly.map.map._fitCoords,
       SetMinZoom: bbbfly.map.map._setMinZoom,
       GetMinZoom: bbbfly.map.map._getMinZoom,
       SetMaxZoom: bbbfly.map.map._setMaxZoom,

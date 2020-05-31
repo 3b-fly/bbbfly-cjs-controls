@@ -151,13 +151,32 @@ bbbfly.map.map._fitBounds = function(bounds,padding){
     if(!Number.isInteger(padding)){padding = 0;}
 
     map.fitBounds(bounds,{
-      padding: [padding,padding],
+      padding: L.point(padding,padding),
       animate: !!this.Animate
     });
 
     return true;
   }
+  return false;
+};
 
+/** @ignore */
+bbbfly.map.map._fitCoords = function(coords,padding){
+  var map = this.GetMap();
+  if(!map){return false;}
+
+  if(!padding && this.BoundsPadding){padding = this.BoundsPadding;}
+
+  if(coords && (coords instanceof L.LatLng)){
+    if(!Number.isInteger(padding)){padding = 0;}
+
+    map.panInside(coords,{
+      padding: L.point(padding,padding),
+      animate: !!this.Animate
+    });
+
+    return true;
+  }
   return false;
 };
 
@@ -205,17 +224,17 @@ bbbfly.map.map._enableAnimation = function(enable){
 };
 
 /** @ignore */
-bbbfly.map.map._setView = function(coordinates,zoom){
+bbbfly.map.map._setView = function(coords,zoom){
   var map = this.GetMap();
   if(map){
-    if((typeof coordinates === 'undefined') || (coordinates === null)){
-      coordinates = map.getCenter();
+    if((typeof coords === 'undefined') || (coords === null)){
+      coords = map.getCenter();
     }
     if((typeof zoom === 'undefined') || (zoom === null)){
       zoom = map.getZoom();
     }
 
-    map.setView(coordinates,zoom,{animate: !!this.Animate});
+    map.setView(coords,zoom,{animate: !!this.Animate});
     return true;
   }
   return false;
@@ -266,8 +285,8 @@ bbbfly.map.map._onMapZoomEnd = function(event){
 };
 
 /** @ignore */
-bbbfly.map.map._setCenter = function(coordinates){
-  return this.SetView(coordinates,null);
+bbbfly.map.map._setCenter = function(coords){
+  return this.SetView(coords,null);
 };
 
 /** @ignore */
@@ -840,8 +859,26 @@ bbbfly.Map = function(def,ref,parent){
        * @return {boolean} If fit was successful
        *
        * @see {@link bbbfly.Map#SetMaxBounds|SetMaxBounds()}
+       * @see {@link bbbfly.Map#FitCoords|FitCoords()}
        */
       FitBounds: bbbfly.map.map._fitBounds,
+      /**
+       * @function
+       * @name FitCoords
+       * @memberof bbbfly.Map#
+       *
+       * @description
+       *   Pan and zoom map
+       *   to fit certain {@link bbbfly.Map#MaxBounds|bounds}
+       *   with {@link bbbfly.Map#BoundsPadding|padding}.
+       *
+       * @param {mapPoint} coords - Coordinates to fit
+       * @param {integer} padding - Padding in all directions
+       * @return {boolean} If fit was successful
+       *
+       * @see {@link bbbfly.Map#FitBounds|FitBounds()}
+       */
+      FitCoords: bbbfly.map.map._fitCoords,
       /**
        * @function
        * @name SetMinZoom
@@ -921,7 +958,7 @@ bbbfly.Map = function(def,ref,parent){
        *
        * @description Set map position and zoom level.
        *
-       * @param {mapPoint} coordinates - Center point
+       * @param {mapPoint} coords - Center point
        * @param {number} zoom - Zoom level
        * @return {boolean} If view was set
        *
@@ -1007,7 +1044,7 @@ bbbfly.Map = function(def,ref,parent){
        *
        * @description Set map position.
        *
-       * @param {mapPoint} coordinates - Center point
+       * @param {mapPoint} coords - Center point
        * @return {boolean} If center was set
        *
        * @see {@link bbbfly.Map#SetView|SetView()}
