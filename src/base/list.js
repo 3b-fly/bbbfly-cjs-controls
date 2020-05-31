@@ -141,6 +141,7 @@ bbbfly.list._scrollToItem = function(item){
   var itemId = this.ItemId(item);
   if(itemId){
     var backNode = document.getElementById(this.ID+'_CB');
+    if(!backNode){return false;}
 
     ng_BeginMeasureElement(backNode);
     var listHeight = ng_ClientHeight(backNode);
