@@ -120,6 +120,20 @@ bbbfly.map.box._setMapControlsVisible = function(type,visible){
     }
   }
 };
+bbbfly.map.box._fitDrawing = function(id){
+  var drawings = this.Drawings;
+  if(drawings instanceof bbbfly.MapDrawingsHandler){
+    var drawing = drawings.GetDrawing(id);
+
+    if(drawing){
+      var point = drawing.GetPoint();
+      if(!point){point = drawing.GetGeometryCenter();}
+      
+      return this.FitCoords(point);
+    }
+  }
+  return false;
+};
 bbbfly.map.box._fitDrawings = function(){
   if(this._DrawingsFeature){
     var bounds = this._DrawingsFeature.getBounds();
@@ -150,6 +164,7 @@ bbbfly.MapBox = function(def,ref,parent){
       UnlinkMapControl: bbbfly.map.box._unlinkMapControl,
       GetMapControls: bbbfly.map.box._getMapControls,
       SetMapControlsVisible: bbbfly.map.box._setMapControlsVisible,
+      FitDrawing: bbbfly.map.box._fitDrawing,
       FitDrawings: bbbfly.map.box._fitDrawings
     }
   });

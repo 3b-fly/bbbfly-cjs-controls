@@ -140,6 +140,22 @@ bbbfly.map.box._setMapControlsVisible = function(type,visible){
 };
 
 /** @ignore */
+bbbfly.map.box._fitDrawing = function(id){
+  var drawings = this.Drawings;
+  if(drawings instanceof bbbfly.MapDrawingsHandler){
+    var drawing = drawings.GetDrawing(id);
+
+    if(drawing){
+      var point = drawing.GetPoint();
+      if(!point){point = drawing.GetGeometryCenter();}
+      
+      return this.FitCoords(point);
+    }
+  }
+  return false;
+};
+
+/** @ignore */
 bbbfly.map.box._fitDrawings = function(){
   if(this._DrawingsFeature){
     var bounds = this._DrawingsFeature.getBounds();
@@ -234,6 +250,17 @@ bbbfly.MapBox = function(def,ref,parent){
        */
       SetMapControlsVisible: bbbfly.map.box._setMapControlsVisible,
 
+      /**
+      * @function
+      * @name FitDrawing
+      * @memberof bbbfly.MapBox#
+      * @description Pan to see drawing
+      *
+      * @param {string} id
+      *
+      * @return {boolean} If fit was successful
+      */
+      FitDrawing: bbbfly.map.box._fitDrawing,
       /**
       * @function
       * @name FitDrawings
