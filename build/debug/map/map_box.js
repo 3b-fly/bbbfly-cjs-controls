@@ -9,6 +9,7 @@ var bbbfly = bbbfly || {};
 bbbfly.map = bbbfly.map || {};
 bbbfly.map.box = {};
 bbbfly.map.box._onCreated = function(map){
+  bbbfly.listener.SetListenable(map,true);
   bbbfly.MapRegistry.RegisterMap(map);
   return true;
 };
@@ -128,7 +129,7 @@ bbbfly.map.box._fitDrawing = function(id){
     if(drawing){
       var point = drawing.GetPoint();
       if(!point){point = drawing.GetGeometryCenter();}
-      
+
       return this.FitCoords(point);
     }
   }
@@ -146,8 +147,6 @@ bbbfly.MapBox = function(def,ref,parent){
 
   ng_MergeDef(def,{
     Data: {
-      AllowListeners: true,
-
       Drawings: null,
       _DrawingsFeature: null,
       _MapControls: {},
