@@ -32,7 +32,7 @@ bbbfly.map.registry._registerMap = function(map){
 
     for(var id in this._UnlinkedControls){
       var ctrl = this._UnlinkedControls[id];
-      if(ctrl.mapID !== map.ID){continue;}
+      if(ctrl.MapID !== map.ID){continue;}
 
       if(
         Function.isFunction(ctrl.LinkToMap)
@@ -89,7 +89,7 @@ bbbfly.map.registry._unregisterMap = function(map){
 
   for(var id in this._MapControls){
     var ctrl = this._MapControls[id];
-    if(ctrl.mapID !== map.ID){continue;}
+    if(ctrl.MapID !== map.ID){continue;}
 
     if(
       Function.isFunction(ctrl.UnlinkFromMap)
