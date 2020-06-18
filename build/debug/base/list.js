@@ -121,18 +121,19 @@ bbbfly.list._scrollToItem = function(item){
 
   var itemId = this.ItemId(item);
   if(itemId){
-    var backNode = document.getElementById(this.ID+'_CB');
-    if(!backNode){return false;}
+    var listNode = document.getElementById(this.ID+'_CB');
+    if(!listNode){listNode = this.Elm();}
+    if(!listNode){return false;}
 
-    ng_BeginMeasureElement(backNode);
-    var listHeight = ng_ClientHeight(backNode);
-    ng_EndMeasureElement(backNode);
+    ng_BeginMeasureElement(listNode);
+    var listHeight = ng_ClientHeight(listNode);
+    ng_EndMeasureElement(listNode);
 
     var itemNode = document.getElementById(this.ID+'_'+itemId);
-    var position = ng_ParentPosition(itemNode,backNode);
-    var newTop = position.y + backNode.scrollTop;
+    var position = ng_ParentPosition(itemNode,listNode);
+    var newTop = position.y + listNode.scrollTop;
 
-    backNode.scrollTop = newTop - Math.round(listHeight/2);
+    listNode.scrollTop = newTop - Math.round(listHeight/2);
     return true;
   }
   return false;
