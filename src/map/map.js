@@ -116,27 +116,48 @@ bbbfly.map.map._destroyMap = function(){
 
 /** @ignore */
 bbbfly.map.map._setMaxBounds = function(bounds){
-  if(Array.isArray(bounds)){
-    bounds = new L.latLngBounds(bounds);
-  }
+  if(Array.isArray(bounds)){bounds = new L.LatLngBounds(bounds);}
 
-  if(bounds && bounds.isValid && bounds.isValid()){
-    this.MaxBounds = bounds;
+  if(!(bounds instanceof L.LatLngBounds)){return false;}
+  if(!bounds.isValid()){return false;}
 
-    var map = this.GetMap();
-    if(map){map.setMaxBounds(bounds);}
-    return true;
-  }
-  return false;
+  this.MaxBounds = bounds;
+
+  var map = this.GetMap();
+  if(map){map.setMaxBounds(bounds);}
+  return true;
 };
 
 /** @ignore */
 bbbfly.map.map._setBoundsPadding = function(padding){
-  if(Number.isInteger(padding)){
-    this.BoundsPadding = padding;
-    return true;
+  if(padding === null){
+    this.BoundsPadding = null;
   }
-  return false;
+  else if(Object.isObject(padding)){
+    this.BoundsPadding = padding;
+  }
+  else if(Number.isInteger(padding)){
+    this.BoundsPadding = {
+      T:padding,R:padding,B:padding,L:padding
+    };
+  }
+  else{
+    return false;
+  }
+  return true;
+};
+
+/** @ignore */
+bbbfly.map.map._getBoundsPadding = function(padding){
+  if(!Object.isObject(padding)){padding = this.BoundsPadding;}
+  if(!Object.isObject(padding)){return { T:0,R:0,B:0,L:0 };}
+
+  return {
+    T: (Number.isInteger(padding.T)) ? padding.T : 0,
+    R: (Number.isInteger(padding.R)) ? padding.R : 0,
+    B: (Number.isInteger(padding.B)) ? padding.B : 0,
+    L: (Number.isInteger(padding.L)) ? padding.L : 0
+  };
 };
 
 /** @ignore */
@@ -145,19 +166,18 @@ bbbfly.map.map._fitBounds = function(bounds,padding){
   if(!map){return false;}
 
   if(!bounds && this.MaxBounds){bounds = this.MaxBounds;}
-  if(!padding && this.BoundsPadding){padding = this.BoundsPadding;}
+  if(!(bounds instanceof L.LatLngBounds)){return false;}
+  if(!bounds.isValid()){return false;}
 
-  if(bounds && bounds.isValid && bounds.isValid()){
-    if(!Number.isInteger(padding)){padding = 0;}
+  padding = this.GetBoundsPadding(padding);
 
-    map.fitBounds(bounds,{
-      padding: L.point(padding,padding),
-      animate: !!this.Animate
-    });
+  map.fitBounds(bounds,{
+    paddingTopLeft: new L.Point(padding.L,padding.T),
+    paddingBottomRight: new L.Point(padding.R,padding.B),
+    animate: !!this.Animate
+  });
 
-    return true;
-  }
-  return false;
+  return true;
 };
 
 /** @ignore */
@@ -165,19 +185,17 @@ bbbfly.map.map._fitCoords = function(coords,padding){
   var map = this.GetMap();
   if(!map){return false;}
 
-  if(!padding && this.BoundsPadding){padding = this.BoundsPadding;}
+  if(!(coords instanceof L.LatLng)){return false;}
 
-  if(coords && (coords instanceof L.LatLng)){
-    if(!Number.isInteger(padding)){padding = 0;}
+  padding = this.GetBoundsPadding(padding);
 
-    map.panInside(coords,{
-      padding: L.point(padding,padding),
-      animate: !!this.Animate
-    });
+  map.panInside(coords,{
+    paddingTopLeft: new L.Point(padding.L,padding.T),
+    paddingBottomRight: new L.Point(padding.R,padding.B),
+    animate: !!this.Animate
+  });
 
-    return true;
-  }
-  return false;
+  return true;
 };
 
 /** @ignore */
@@ -657,7 +675,7 @@ bbbfly.map.layer.mapbox_style._oncreateOptions = function(options){
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *
  * @property {bbbfly.Map.crs} [Crs=PseudoMercator] - Default map coordinate reference system
- * @property {integer} [BoundsPadding=1] - Use this padding to fit bounds
+ * @property {padding|px} [BoundsPadding=null] - Use this padding to fit bounds or coords
  *
  * @property {mapBounds} [MaxBounds=null] - Keep map within these bounds
  * @property {number} [MinZoom=null] - Map minimal zoom level
@@ -693,7 +711,7 @@ bbbfly.Map = function(def,ref,parent){
     ParentReferences: false,
     Data: {
       Crs: bbbfly.Map.crs.PseudoMercator,
-      BoundsPadding: 1,
+      BoundsPadding: null,
 
       MaxBounds: null,
       MinZoom: null,
@@ -825,7 +843,7 @@ bbbfly.Map = function(def,ref,parent){
        *
        * @description Set {@link bbbfly.Map#MaxBounds|maximal map bounds}.
        *
-       * @param {mapBounds} bounds - Maximal bounds
+       * @param {mapBounds|array} bounds - Maximal bounds
        * @return {boolean} If bounds were set
        *
        * @see {@link bbbfly.Map#FitBounds|FitBounds()}
@@ -838,12 +856,27 @@ bbbfly.Map = function(def,ref,parent){
        *
        * @description Set {@link bbbfly.Map#BoundsPadding|map bounds padding}.
        *
-       * @param {integer} padding - Bounds padding
+       * @param {padding|px} padding - Bounds padding
        * @return {boolean} If padding was set
        *
+       * @see {@link bbbfly.Map#GetBoundsPadding|GetBoundsPadding()}
        * @see {@link bbbfly.Map#FitBounds|FitBounds()}
        */
       SetBoundsPadding: bbbfly.map.map._setBoundsPadding,
+      /**
+       * @function
+       * @name SetBoundsPadding
+       * @memberof bbbfly.Map#
+       *
+       * @description Get {@link bbbfly.Map#BoundsPadding|map bounds padding}.
+       *
+       * @param {padding} [padding=undefined] - Bounds padding
+       * @return {padding} Bounds padding
+       *
+       * @see {@link bbbfly.Map#SetBoundsPadding|SetBoundsPadding()}
+       * @see {@link bbbfly.Map#FitBounds|FitBounds()}
+       */
+      GetBoundsPadding: bbbfly.map.map._getBoundsPadding,
       /**
        * @function
        * @name FitBounds
@@ -855,7 +888,7 @@ bbbfly.Map = function(def,ref,parent){
        *   with {@link bbbfly.Map#BoundsPadding|padding}.
        *
        * @param {mapBounds} bounds - Bounds to fit
-       * @param {integer} padding - Padding in all directions
+       * @param {padding} padding - Padding between map edge and bounds
        * @return {boolean} If fit was successful
        *
        * @see {@link bbbfly.Map#SetMaxBounds|SetMaxBounds()}
@@ -873,7 +906,7 @@ bbbfly.Map = function(def,ref,parent){
        *   with {@link bbbfly.Map#BoundsPadding|padding}.
        *
        * @param {mapPoint} coords - Coordinates to fit
-       * @param {integer} padding - Padding in all directions
+       * @param {padding} padding - Padding between map edge and coords
        * @return {boolean} If fit was successful
        *
        * @see {@link bbbfly.Map#FitBounds|FitBounds()}
@@ -1428,7 +1461,7 @@ bbbfly.Map.ExternalLayer = {
  *
  * @property {bbbfly.Map.Layer.type} Type=image
  * @property {url} [ErrorUrl=undefined] - Url used when tile request has failed
- * @property {mapBounds} Bounds - Place image within bounds
+ * @property {mapBounds|array} Bounds - Place image within bounds
  *
  * @see {@link bbbfly.Map.TileLayer|TileLayer}
  * @see {@link bbbfly.Map.WMSLayer|WMSLayer}
@@ -1458,7 +1491,7 @@ bbbfly.Map.ImageLayer = {
  *
  * @property {bbbfly.Map.Layer.type} Type=tile
  * @property {url} [ErrorUrl=undefined] - Url used when tile request has failed
- * @property {mapBounds} [Bounds=undefined] - Display layer only in bounds
+ * @property {mapBounds|array} [Bounds=undefined] - Display layer only in bounds
  * @property {number} [MinZoom=1] - Display layer from zoom level
  * @property {number} [MaxZoom=18] - Display layer to zoom level
  * @property {px} [TileSize=256] - Tile width and height

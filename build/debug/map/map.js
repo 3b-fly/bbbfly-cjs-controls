@@ -90,62 +90,78 @@ bbbfly.map.map._destroyMap = function(){
   return true;
 };
 bbbfly.map.map._setMaxBounds = function(bounds){
-  if(Array.isArray(bounds)){
-    bounds = new L.latLngBounds(bounds);
-  }
+  if(Array.isArray(bounds)){bounds = new L.LatLngBounds(bounds);}
 
-  if(bounds && bounds.isValid && bounds.isValid()){
-    this.MaxBounds = bounds;
+  if(!(bounds instanceof L.LatLngBounds)){return false;}
+  if(!bounds.isValid()){return false;}
 
-    var map = this.GetMap();
-    if(map){map.setMaxBounds(bounds);}
-    return true;
-  }
-  return false;
+  this.MaxBounds = bounds;
+
+  var map = this.GetMap();
+  if(map){map.setMaxBounds(bounds);}
+  return true;
 };
 bbbfly.map.map._setBoundsPadding = function(padding){
-  if(Number.isInteger(padding)){
-    this.BoundsPadding = padding;
-    return true;
+  if(padding === null){
+    this.BoundsPadding = null;
   }
-  return false;
+  else if(Object.isObject(padding)){
+    this.BoundsPadding = padding;
+  }
+  else if(Number.isInteger(padding)){
+    this.BoundsPadding = {
+      T:padding,R:padding,B:padding,L:padding
+    };
+  }
+  else{
+    return false;
+  }
+  return true;
+};
+bbbfly.map.map._getBoundsPadding = function(padding){
+  if(!Object.isObject(padding)){padding = this.BoundsPadding;}
+  if(!Object.isObject(padding)){return { T:0,R:0,B:0,L:0 };}
+
+  return {
+    T: (Number.isInteger(padding.T)) ? padding.T : 0,
+    R: (Number.isInteger(padding.R)) ? padding.R : 0,
+    B: (Number.isInteger(padding.B)) ? padding.B : 0,
+    L: (Number.isInteger(padding.L)) ? padding.L : 0
+  };
 };
 bbbfly.map.map._fitBounds = function(bounds,padding){
   var map = this.GetMap();
   if(!map){return false;}
 
   if(!bounds && this.MaxBounds){bounds = this.MaxBounds;}
-  if(!padding && this.BoundsPadding){padding = this.BoundsPadding;}
+  if(!(bounds instanceof L.LatLngBounds)){return false;}
+  if(!bounds.isValid()){return false;}
 
-  if(bounds && bounds.isValid && bounds.isValid()){
-    if(!Number.isInteger(padding)){padding = 0;}
+  padding = this.GetBoundsPadding(padding);
 
-    map.fitBounds(bounds,{
-      padding: L.point(padding,padding),
-      animate: !!this.Animate
-    });
+  map.fitBounds(bounds,{
+    paddingTopLeft: new L.Point(padding.L,padding.T),
+    paddingBottomRight: new L.Point(padding.R,padding.B),
+    animate: !!this.Animate
+  });
 
-    return true;
-  }
-  return false;
+  return true;
 };
 bbbfly.map.map._fitCoords = function(coords,padding){
   var map = this.GetMap();
   if(!map){return false;}
 
-  if(!padding && this.BoundsPadding){padding = this.BoundsPadding;}
+  if(!(coords instanceof L.LatLng)){return false;}
 
-  if(coords && (coords instanceof L.LatLng)){
-    if(!Number.isInteger(padding)){padding = 0;}
+  padding = this.GetBoundsPadding(padding);
 
-    map.panInside(coords,{
-      padding: L.point(padding,padding),
-      animate: !!this.Animate
-    });
+  map.panInside(coords,{
+    paddingTopLeft: new L.Point(padding.L,padding.T),
+    paddingBottomRight: new L.Point(padding.R,padding.B),
+    animate: !!this.Animate
+  });
 
-    return true;
-  }
-  return false;
+  return true;
 };
 bbbfly.map.map._setMinZoom = function(zoom){
   if(Number.isInteger(zoom)){
@@ -550,7 +566,7 @@ bbbfly.Map = function(def,ref,parent){
     ParentReferences: false,
     Data: {
       Crs: bbbfly.Map.crs.PseudoMercator,
-      BoundsPadding: 1,
+      BoundsPadding: null,
 
       MaxBounds: null,
       MinZoom: null,
@@ -586,6 +602,7 @@ bbbfly.Map = function(def,ref,parent){
       DestroyMap: bbbfly.map.map._destroyMap,
       SetMaxBounds: bbbfly.map.map._setMaxBounds,
       SetBoundsPadding: bbbfly.map.map._setBoundsPadding,
+      GetBoundsPadding: bbbfly.map.map._getBoundsPadding,
       FitBounds: bbbfly.map.map._fitBounds,
       FitCoords: bbbfly.map.map._fitCoords,
       SetMinZoom: bbbfly.map.map._setMinZoom,

@@ -20,6 +20,14 @@
  */
 
 /**
+ * @typedef {object} padding
+ * @property {px|null} [T=undefined]
+ * @property {px|null} [R=undefined]
+ * @property {px|null} [B=undefined]
+ * @property {px|null} [L=undefined]
+ */
+
+/**
  * @typedef {object} geoJSON
  * @description {@link https://tools.ietf.org/html/rfc7946|GeoJSON definition}
  */
@@ -66,11 +74,11 @@
 
 /**
  * @typedef {L.LatLng} mapPoint
- * @description {@link http://leafletjs.com/reference-1.4.0.html#latlng|Leaflet point}
+ * @description {@link http://leafletjs.com/reference-1.4.0.html#latlng|Leaflet coords point}
  */
 
 /**
- * @typedef {L.LatLngBounds|array} mapBounds
- * @description {@link http://leafletjs.com/reference-1.4.0.html#latlngbounds|Leaflet bounds}
+ * @typedef {L.LatLngBounds} mapBounds
+ * @description {@link http://leafletjs.com/reference-1.4.0.html#latlngbounds|Leaflet coords bounds}
  */
 
