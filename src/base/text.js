@@ -295,7 +295,7 @@ bbbfly.Text.textalign = {
 };
 
 /**
- * @enum {integer}
+ * @enum {bitmask}
  * @description
  *   Possible values for {@link bbbfly.Text|bbbfly.Text.AutoSize}
  */

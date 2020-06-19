@@ -3,6 +3,7 @@
  * @private
  */
 
+/** @typedef {integer} bitmask */
 /** @typedef {integer} px */
 /** @typedef {string} percentage */
 /** @typedef {string} color */

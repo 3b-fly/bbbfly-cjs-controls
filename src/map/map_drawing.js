@@ -1855,7 +1855,7 @@ bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
 );
 
 /**
- * @enum {integer}
+ * @enum {bitmask}
  *
  * @description Supported {@link bbbfly.Renderer.state|renderer states}
  */
@@ -1868,7 +1868,7 @@ bbbfly.MapDrawingItem.state = {
 };
 
 /**
- * @enum {integer}
+ * @enum {bitmask}
  */
 bbbfly.MapDrawingItem.selecttype = {
   none: 0,

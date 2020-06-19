@@ -710,7 +710,7 @@ bbbfly.Button.iconalign = {
 };
 
 /**
- * @enum {integer}
+ * @enum {bitmask}
  * @description
  *   Possible values for {@link bbbfly.Button|bbbfly.Button.AutoSize}
  */
@@ -722,7 +722,7 @@ bbbfly.Button.autosize = {
 };
 
 /**
- * @enum {integer}
+ * @enum {bitmask}
  * @description
  *   Possible values for {@link bbbfly.Button|bbbfly.Button.SelectType}
  */
