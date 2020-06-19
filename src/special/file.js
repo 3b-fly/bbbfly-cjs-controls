@@ -1210,7 +1210,7 @@ bbbfly.FileUploader.errortype = {
 bbbfly.FileUploader.errorlevel = {
   minimal: 1,
   grouped: 2,
-  fulllog: 4
+  fulllog: 3
 };
 
 /** @ignore */
