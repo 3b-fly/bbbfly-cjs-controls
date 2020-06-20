@@ -282,9 +282,11 @@ bbbfly.button._doUpdateHolder = function(){
 
     style = style.join(';');
 
-    html += '<div id="'+this.ID+'_T" class="Text"'
-      +(style ? ' style="'+style+'"' : '')
-      +' unselectable="on">'+text+'</div>';
+    html += '<div id="'+this.ID+'_TH">'
+      +'<div id="'+this.ID+'_T" class="Text"'
+        +(style ? ' style="'+style+'"' : '')
+        +' unselectable="on">'+text+'</div>'
+      +'</div>';
   }
 
   switch(this.AutoSize){
@@ -329,6 +331,16 @@ bbbfly.button._doUpdateHolder = function(){
     if(hNode){hNode.innerHTML = html;}
     if(over){bbbfly.Renderer.UpdateImageHTML(iProxy,state);}
   }
+  else{
+    var thNode = document.getElementById(this.ID+'_TH');
+
+    if(thNode){
+      thNode.style.marginLeft = bbbfly.Renderer.StyleDim(0);
+      thNode.style.marginTop = bbbfly.Renderer.StyleDim(0);
+      thNode.style.marginRight = bbbfly.Renderer.StyleDim(0);
+      thNode.style.marginBottom = bbbfly.Renderer.StyleDim(0);
+    }
+  }
 };
 
 /** @ignore */
@@ -345,20 +357,39 @@ bbbfly.button._doUpdateImages = function(){
 /** @ignore */
 bbbfly.button._doAutoSize = function(){
   var hNode = document.getElementById(this.ID+'_H');
+  if(!hNode){return;}
 
-  if(this.AutoSize && hNode){
+  ng_BeginMeasureElement(hNode);
+  var hoWidth = ng_OuterWidth(hNode);
+  var hoHeight = ng_OuterHeight(hNode);
+  var hcHeight = ng_ClientHeight(hNode);
+  ng_EndMeasureElement(hNode);
+
+  var valign = true;
+
+  if(this.AutoSize){
     var bounds = {};
-    ng_BeginMeasureElement(hNode);
 
     if(this.AutoSize & bbbfly.Button.autosize.horizontal){
-      bounds.W = ng_OuterWidth(hNode);
+      bounds.W = hoWidth;
     }
     if(this.AutoSize & bbbfly.Button.autosize.vertical){
-      bounds.H = ng_OuterHeight(hNode);
+      bounds.H = hoHeight;
+      valign = false;
     }
 
-    ng_EndMeasureElement(hNode);
     this.SetBounds(bounds);
+  }
+
+  if(valign){
+    var thNode = document.getElementById(this.ID+'_TH');
+    if(!thNode){return;}
+
+    var thcHeight = ng_ClientHeight(thNode);
+
+    thNode.style.marginTop = bbbfly.Renderer.StyleDim(
+      (thcHeight < hcHeight) ? Math.floor((hcHeight-thcHeight)/2) : 0
+    );
   }
 };
 
