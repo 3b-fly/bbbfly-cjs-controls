@@ -357,13 +357,14 @@ bbbfly.button._doAutoSize = function(){
   }
 
   if(valign){
+    var tNode = document.getElementById(this.ID+'_T');
     var thNode = document.getElementById(this.ID+'_TH');
-    if(!thNode){return;}
+    if(!tNode || !thNode){return;}
 
-    var thcHeight = ng_ClientHeight(thNode);
+    var tcHeight = ng_OuterHeight(tNode);
 
     thNode.style.marginTop = bbbfly.Renderer.StyleDim(
-      (thcHeight < hcHeight) ? Math.floor((hcHeight-thcHeight)/2) : 0
+      (tcHeight < hcHeight) ? Math.floor((hcHeight-tcHeight)/2) : 0
     );
   }
 };
