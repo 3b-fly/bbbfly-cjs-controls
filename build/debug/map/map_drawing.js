@@ -756,14 +756,12 @@ bbbfly.map.drawing.cluster._getState = function(cluster,def){
   var state = {};
 
   if(cluster instanceof L.MarkerCluster){
-    var spiderfied = (cluster._group._spiderfied === cluster);
+    var markers = cluster.getAllChildMarkers();
 
-    if(!spiderfied){
-      var markers = cluster.getAllChildMarkers();
+    for(var i in markers){
+      var marker = markers[i];
 
-      for(var i in markers){
-        var marker = markers[i];
-
+      if(marker.Owner instanceof bbbfly.MapDrawingItem){
         var selected = marker.Owner.GetStateValue(
           bbbfly.MapDrawingItem.state.selected
         );
@@ -845,7 +843,8 @@ bbbfly.map.drawing.cluster._maxClusterRadius = function(drawing){
   if(!Number.isInteger(radius)){radius = null;}
   return radius;
 };
-bbbfly.map.drawing.cluster._onSpiderfyChanged = function(){
+bbbfly.map.drawing.cluster._onSpiderfyChanged = function(event){
+  this.Owner.UpdateTooltip(event.cluster);
   this.Owner.Update();
 };
 
@@ -919,6 +918,58 @@ bbbfly.map.drawing.cluster._removeDrawing = function(drawing){
   return this.Scan(function(layer){
     if(drawing.RemoveFrom(layer)){return true;}
   },false);
+};
+bbbfly.map.drawing.cluster._getTooltipOptions = function(cluster){
+
+  if(cluster instanceof L.MarkerCluster){
+    var markers = cluster.getAllChildMarkers();
+
+    for(var i in markers){
+      var marker = markers[i];
+
+      if(marker.Owner instanceof bbbfly.MapDrawingItem){
+        var selected = marker.Owner.GetStateValue(
+          bbbfly.MapDrawingItem.state.selected
+        );
+
+        if(selected){
+          var opts = this.Options.TooltipOptions;
+          opts = opts ? ng_CopyVar(opts) : {};
+
+          if(marker.Owner.Options.TooltipOptions){
+            ng_MergeVar(opts,marker.Owner.Options.TooltipOptions);
+          }
+          return opts;
+        }
+      }
+    }
+  }
+  return null;
+};
+bbbfly.map.drawing.cluster._updateTooltip = function(cluster){
+  if(!(cluster instanceof L.MarkerCluster)){return;}
+
+  var spiderfied = (cluster._group._spiderfied === cluster);
+  if(spiderfied){this.HideTooltip(cluster);}
+  else{this.ShowTooltip(cluster);}
+};
+bbbfly.map.drawing.cluster._showTooltip = function(cluster){
+  if(!(cluster instanceof L.MarkerCluster)){return;}
+  var opts = this.GetTooltipOptions(cluster);
+
+  if(Object.isObject(opts)){
+    var tooltip = new bbbfly.MapTooltip(opts);
+    if(tooltip){tooltip.Show(cluster);}
+  }
+  else{
+    this.HideTooltip(cluster);
+  }
+};
+bbbfly.map.drawing.cluster._hideTooltip = function(cluster){
+  if(!(cluster instanceof L.MarkerCluster)){return;}
+
+  cluster.closeTooltip();
+  cluster.unbindTooltip();
 };
 bbbfly.map.drawing.handler._getDrawing = function(id){
   var drawing = this._Drawings[id];
@@ -1316,6 +1367,10 @@ bbbfly.MapDrawingCluster = bbbfly.object.Extend(
     this.GetSpiderStyle = bbbfly.map.drawing.cluster._getSpiderStyle;
     this.AddDrawing = bbbfly.map.drawing.cluster._addDrawing;
     this.RemoveDrawing = bbbfly.map.drawing.cluster._removeDrawing;
+    this.GetTooltipOptions = bbbfly.map.drawing.cluster._getTooltipOptions;
+    this.UpdateTooltip = bbbfly.map.drawing.cluster._updateTooltip;
+    this.ShowTooltip = bbbfly.map.drawing.cluster._showTooltip;
+    this.HideTooltip = bbbfly.map.drawing.cluster._hideTooltip;
 
     return this;
   }
