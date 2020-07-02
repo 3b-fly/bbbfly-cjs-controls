@@ -314,10 +314,10 @@ bbbfly.button._doUpdateHolder = function(){
     var thNode = document.getElementById(this.ID+'_TH');
 
     if(thNode){
-      thNode.style.marginLeft = bbbfly.Renderer.StyleDim(0);
-      thNode.style.marginTop = bbbfly.Renderer.StyleDim(0);
-      thNode.style.marginRight = bbbfly.Renderer.StyleDim(0);
-      thNode.style.marginBottom = bbbfly.Renderer.StyleDim(0);
+      thNode.style.paddingLeft = bbbfly.Renderer.StyleDim(0);
+      thNode.style.paddingTop = bbbfly.Renderer.StyleDim(0);
+      thNode.style.paddingRight = bbbfly.Renderer.StyleDim(0);
+      thNode.style.paddingBottom = bbbfly.Renderer.StyleDim(0);
     }
   }
 };
@@ -363,7 +363,7 @@ bbbfly.button._doAutoSize = function(){
 
     var tcHeight = ng_OuterHeight(tNode);
 
-    thNode.style.marginTop = bbbfly.Renderer.StyleDim(
+    thNode.style.paddingTop = bbbfly.Renderer.StyleDim(
       (tcHeight < hcHeight) ? Math.floor((hcHeight-tcHeight)/2) : 0
     );
   }
