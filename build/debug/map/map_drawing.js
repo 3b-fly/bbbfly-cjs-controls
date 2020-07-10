@@ -745,6 +745,13 @@ bbbfly.map.drawing.cluster._create = function(){
   group.on('spiderfied',bbbfly.map.drawing.cluster._onSpiderfyChanged);
   group.on('unspiderfied',bbbfly.map.drawing.cluster._onSpiderfyChanged);
 
+  var fgroup = group._featureGroup;
+  if(fgroup instanceof L.FeatureGroup){
+
+    fgroup.on('layeradd',bbbfly.map.drawing.cluster._onClusterLayerAdd);
+    fgroup.on('layerremove',bbbfly.map.drawing.cluster._onClusterLayerRemove);
+  }
+
   this._ClusterGroup = group;
 
   return [group];
@@ -847,9 +854,27 @@ bbbfly.map.drawing.cluster._onSpiderfyChanged = function(event){
   this.Owner.UpdateTooltip(event.cluster);
   this.Owner.Update();
 };
+bbbfly.map.drawing.cluster.listener._onSelectedChanged = function(drawing){
+  var group = this.Owner._ClusterGroup;
+  var marker = drawing._Marker;
 
-bbbfly.map.drawing.cluster.listener._onSelectedChanged = function(){
+  if(group && marker){
+    var cluster = group.getVisibleParent(marker);
+    this.Owner.UpdateTooltip(cluster);
+  }
   this.Owner.Update();
+};
+bbbfly.map.drawing.cluster._onClusterLayerAdd = function(event){
+  if(!(event.layer instanceof L.MarkerCluster)){return;}
+
+  var drawing = event.layer._group.Owner;
+  drawing.UpdateTooltip(event.layer);
+};
+bbbfly.map.drawing.cluster._onClusterLayerRemove = function(event){
+  if(!(event.layer instanceof L.MarkerCluster)){return;}
+
+  var drawing = event.layer._group.Owner;
+  drawing.HideTooltip(event.layer);
 };
 bbbfly.map.drawing.cluster._getIconStyle = function(cnt){
   var type = bbbfly.MapDrawingItem.IconStyle;
