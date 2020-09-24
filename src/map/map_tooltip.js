@@ -242,14 +242,10 @@ bbbfly.map.tooltip._create = function(){
 
 /** @ignore */
 bbbfly.map.tooltip._dispose = function(){
-  if(!this._ParentLayer || !this._Tooltip){return;}
+  this.Hide();
 
-  if(this._ParentLayer.getTooltip() === this._Tooltip){
-    this._ParentLayer.unbindTooltip();
-
-    this._Tooltip = null;
-    this._AnchorProps = null;
-  }
+  this._Tooltip = null;
+  this._AnchorProps = null;
 };
 
 /** @ignore */
@@ -283,18 +279,30 @@ bbbfly.map.tooltip._show = function(layer){
     this._Html = html;
   }
 
-  layer.bindTooltip(tooltip);
+  if(this._ParentLayer.getTooltip() !== tooltip){
+    layer.bindTooltip(tooltip);
+  }
+
   layer.openTooltip();
+  return true;
 };
 
 /** @ignore */
 bbbfly.map.tooltip._hide = function(){
-  if(!this._ParentLayer || !this._Tooltip){return;}
+  if(!this._ParentLayer || !this._Tooltip){return false;}
 
   if(this._ParentLayer.getTooltip() === this._Tooltip){
     this._ParentLayer.closeTooltip();
     this._ParentLayer.unbindTooltip();
   }
+  return true;
+};
+
+/** @ignore */
+bbbfly.map.tooltip._isShown = function(){
+  if(!this._ParentLayer || !this._Tooltip){return false;}
+
+  return (this._ParentLayer.getTooltip() === this._Tooltip);
 };
 
 /** @ignore */
@@ -434,6 +442,14 @@ bbbfly.MapTooltip = function(options){
    * @return {boolean}
    */
   this.Hide = bbbfly.map.tooltip._hide;
+  /**
+   * @function
+   * @name IsShown
+   * @memberof bbbfly.MapTooltip#
+   *
+   * @return {boolean}
+   */
+  this.IsShown = bbbfly.map.tooltip._isShown;
 };
 
 /**
