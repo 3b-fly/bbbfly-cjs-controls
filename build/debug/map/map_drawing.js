@@ -1126,13 +1126,13 @@ bbbfly.map.drawing.handler._endClustering = function(){
 
   return this.AddDrawing(cluster);
 };
-bbbfly.map.drawing.handler._select = function(id){
-  var drawing = this.GetDrawing(id);
-  if(!drawing){return false;}
+bbbfly.map.drawing.handler._select = function(drawing,selected){
+  if(String.isString(drawing)){drawing = this.GetDrawing(drawing);}
+  if(!(drawing instanceof bbbfly.MapDrawingItem)){return false;}
 
-  if(Function.isFunction(drawing.SetSelected)){
-    return drawing.SetSelected(true,true);
-  }
+  if(!Boolean.isBoolean(selected)){selected = true;}
+  drawing.SetSelected(selected,true);
+
   return true;
 };
 bbbfly.map.drawing.handler._setSelected = function(drawings){
@@ -1184,15 +1184,6 @@ bbbfly.map.drawing.handler._getSelected = function(selected){
     }
   }
   return drawings;
-};
-bbbfly.map.drawing.handler._clearSelected = function(){
-  for(var id in this._Selected){
-    var drawing = this._Selected[id];
-
-    if(Function.isFunction(drawing.SetSelected)){
-      drawing.SetSelected(false,true);
-    }
-  }
 };
 bbbfly.map.drawing.handler.listener._onEmpty = function(){
   var drawing = this.EventSource;
