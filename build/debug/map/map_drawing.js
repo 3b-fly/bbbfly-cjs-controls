@@ -618,7 +618,8 @@ bbbfly.map.drawing.item._removeGeometry = function(layer){
   return true;
 };
 bbbfly.map.drawing.item._setState = function(state,update){
-  if(!Object.isObject(state)){return;}
+  if(!Object.isObject(state)){return false;}
+  var changed = false;
 
   for(var stateName in state){
     var stateConst = bbbfly.MapDrawingItem.state[stateName];
@@ -627,10 +628,13 @@ bbbfly.map.drawing.item._setState = function(state,update){
     if(!Number.isInteger(stateConst)){continue;}
     if(!Boolean.isBoolean(stateValue)){continue;}
 
-    this.SetStateValue(stateConst,stateValue,false);
+    if(this.SetStateValue(stateConst,stateValue,false)){
+      changed = true;
+    }
   }
 
-  if(update){this.Update();}
+  if(changed && update){this.Update();}
+  return changed;
 };
 bbbfly.map.drawing.item._getState = function(){
   var state = {
@@ -664,7 +668,7 @@ bbbfly.map.drawing.item._getSelected = function(){
 };
 bbbfly.map.drawing.item._setSelected = function(selected,update){
   if(!Boolean.isBoolean(selected)){selected = true;}
-  if(this.GetSelected() === selected){return true;}
+  if(this.GetSelected() === selected){return false;}
 
   if(Function.isFunction(this.OnSetSelected)){
     if(!this.OnSetSelected(this)){return false;}
@@ -673,7 +677,9 @@ bbbfly.map.drawing.item._setSelected = function(selected,update){
   var state = bbbfly.MapDrawingItem.state.selected;
   if(!Boolean.isBoolean(update)){update = true;}
 
-  this.SetStateValue(state,selected,update);
+  if(!this.SetStateValue(state,selected,update)){
+    return false;
+  }
 
   if(Function.isFunction(this.OnSelectedChanged)){
     this.OnSelectedChanged(this);

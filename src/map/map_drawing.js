@@ -679,7 +679,8 @@ bbbfly.map.drawing.item._removeGeometry = function(layer){
 
 /** @ignore */
 bbbfly.map.drawing.item._setState = function(state,update){
-  if(!Object.isObject(state)){return;}
+  if(!Object.isObject(state)){return false;}
+  var changed = false;
 
   for(var stateName in state){
     var stateConst = bbbfly.MapDrawingItem.state[stateName];
@@ -688,10 +689,13 @@ bbbfly.map.drawing.item._setState = function(state,update){
     if(!Number.isInteger(stateConst)){continue;}
     if(!Boolean.isBoolean(stateValue)){continue;}
 
-    this.SetStateValue(stateConst,stateValue,false);
+    if(this.SetStateValue(stateConst,stateValue,false)){
+      changed = true;
+    }
   }
 
-  if(update){this.Update();}
+  if(changed && update){this.Update();}
+  return changed;
 };
 
 /** @ignore */
@@ -735,7 +739,7 @@ bbbfly.map.drawing.item._getSelected = function(){
 /** @ignore */
 bbbfly.map.drawing.item._setSelected = function(selected,update){
   if(!Boolean.isBoolean(selected)){selected = true;}
-  if(this.GetSelected() === selected){return true;}
+  if(this.GetSelected() === selected){return false;}
 
   if(Function.isFunction(this.OnSetSelected)){
     if(!this.OnSetSelected(this)){return false;}
@@ -744,7 +748,9 @@ bbbfly.map.drawing.item._setSelected = function(selected,update){
   var state = bbbfly.MapDrawingItem.state.selected;
   if(!Boolean.isBoolean(update)){update = true;}
 
-  this.SetStateValue(state,selected,update);
+  if(!this.SetStateValue(state,selected,update)){
+    return false;
+  }
 
   if(Function.isFunction(this.OnSelectedChanged)){
     this.OnSelectedChanged(this);
@@ -1683,7 +1689,8 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @description Set drawing renderer state
      *
      * @param {bbbfly.Renderer.state} state
-     * @param {boolean} [update=true]
+     * @param {boolean} [update=true] - If update control
+     * @return {boolean} If value has changed
      *
      * @see {@link bbbfly.MapDrawingItem#GetState|GetState()}
      * @see {@link bbbfly.MapDrawingItem#GetStateValue|GetStateValue()}
@@ -1726,8 +1733,8 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      * @description Set drawing state value
      *
      * @param {bbbfly.MapDrawingItem.state} state
-     * @param {boolean} [value=false] Value
-     * @param {boolean} [update=true]
+     * @param {boolean} [value=false] - Value to set
+     * @param {boolean} [update=true] - If update control
      * @return {boolean} If value has changed
      *
      * @see {@link bbbfly.MapDrawingItem#GetState|GetState()}
@@ -1753,6 +1760,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
      *
      * @param {boolean} [selected=true] - Value to set
      * @param {boolean} [update=true] - If update control
+     * @return {boolean} If state has changed
      *
      * @see {@link bbbfly.MapDrawingItem#GetSelected|GetSelected()}
      * @see {@link bbbfly.MapDrawingItem#event:OnSetSelected|OnSetSelected}
@@ -2253,7 +2261,7 @@ bbbfly.MapDrawingsHandler = function(feature,options){
 
   /**
    * @function
-   * @name Selected
+   * @name Select
    * @memberof bbbfly.MapDrawingsHandler#
    *
    * @description Select drawing and locate it
