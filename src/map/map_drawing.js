@@ -1287,6 +1287,44 @@ bbbfly.map.drawing.handler._select = function(id){
 };
 
 /** @ignore */
+bbbfly.map.drawing.handler._setSelected = function(drawings){
+  if(!Array.isArray(drawings)){return false;}
+
+  var setIds = {};
+
+  for(var i in drawings){
+    var drawing = drawings[i];
+
+    if(String.isString(drawing)){drawing = this.GetDrawing(drawing);}
+    if(!(drawing instanceof bbbfly.MapDrawingItem)){continue;}
+
+    drawing.SetSelected(true,true);
+    setIds[drawing.ID] = true;
+  }
+
+  for(var id in this._Selected){
+    var drawing = this._Selected[id];
+    if(setIds[id]){continue;}
+
+    if(drawing instanceof bbbfly.MapDrawingItem){
+      drawing.SetSelected(false,true);
+    }
+  }
+  return true;
+};
+
+/** @ignore */
+bbbfly.map.drawing.handler._clearSelected = function(){
+  for(var id in this._Selected){
+    var drawing = this._Selected[id];
+
+    if(drawing instanceof bbbfly.MapDrawingItem){
+      drawing.SetSelected(false,true);
+    }
+  }
+};
+
+/** @ignore */
 bbbfly.map.drawing.handler._getSelected = function(selected){
   if(!Boolean.isBoolean(selected)){selected = true;}
   var drawings = [];
@@ -2268,25 +2306,27 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    *
    * @param {string} id
    *
-   * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#SetSelected|SetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#ClearSelected|ClearSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#event:OnSelectedChanged|OnSelectedChanged}
    */
   this.Select = bbbfly.map.drawing.handler._select;
   /**
    * @function
-   * @name GetSelected
+   * @name SetSelected
    * @memberof bbbfly.MapDrawingsHandler#
    *
-   * @description Get all drawings
+   * @description Set selected drawings
    *
-   * @param {boolean} [selected=true]
+   * @param {string[]|bbbfly.MapDrawingItem[]} drawings - Drawing ids or references
    *
    * @see {@link bbbfly.MapDrawingsHandler#Select|Select()}
    * @see {@link bbbfly.MapDrawingsHandler#ClearSelected|ClearSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#event:OnSelectedChanged|OnSelectedChanged}
    */
-  this.GetSelected = bbbfly.map.drawing.handler._getSelected;
+  this.SetSelected = bbbfly.map.drawing.handler._setSelected;
   /**
    * @function
    * @name ClearSelected
@@ -2295,10 +2335,27 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @description Unselect all drawings
    *
    * @see {@link bbbfly.MapDrawingsHandler#Select|Select()}
+   * @see {@link bbbfly.MapDrawingsHandler#SetSelected|SetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#event:OnSelectedChanged|OnSelectedChanged}
    */
   this.ClearSelected = bbbfly.map.drawing.handler._clearSelected;
+  /**
+   * @function
+   * @name GetSelected
+   * @memberof bbbfly.MapDrawingsHandler#
+   *
+   * @description Get selected drawings
+   *
+   * @param {boolean} [selected=true] - If get selected or unselected
+   * @return {bbbfly.MapDrawingItem[]} - Selected drawings
+   *
+   * @see {@link bbbfly.MapDrawingsHandler#Select|Select()}
+   * @see {@link bbbfly.MapDrawingsHandler#SetSelected|SetSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#ClearSelected|ClearSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#event:OnSelectedChanged|OnSelectedChanged}
+   */
+  this.GetSelected = bbbfly.map.drawing.handler._getSelected;
 
   /**
    * @event
@@ -2306,6 +2363,7 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @memberof bbbfly.MapDrawingsHandler#
    *
    * @see {@link bbbfly.MapDrawingsHandler#Select|Select()}
+   * @see {@link bbbfly.MapDrawingsHandler#SetSelected|SetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#ClearSelected|ClearSelected()}
    */

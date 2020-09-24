@@ -1135,6 +1135,40 @@ bbbfly.map.drawing.handler._select = function(id){
   }
   return true;
 };
+bbbfly.map.drawing.handler._setSelected = function(drawings){
+  if(!Array.isArray(drawings)){return false;}
+
+  var setIds = {};
+
+  for(var i in drawings){
+    var drawing = drawings[i];
+
+    if(String.isString(drawing)){drawing = this.GetDrawing(drawing);}
+    if(!(drawing instanceof bbbfly.MapDrawingItem)){continue;}
+
+    drawing.SetSelected(true,true);
+    setIds[drawing.ID] = true;
+  }
+
+  for(var id in this._Selected){
+    var drawing = this._Selected[id];
+    if(setIds[id]){continue;}
+
+    if(drawing instanceof bbbfly.MapDrawingItem){
+      drawing.SetSelected(false,true);
+    }
+  }
+  return true;
+};
+bbbfly.map.drawing.handler._clearSelected = function(){
+  for(var id in this._Selected){
+    var drawing = this._Selected[id];
+
+    if(drawing instanceof bbbfly.MapDrawingItem){
+      drawing.SetSelected(false,true);
+    }
+  }
+};
 bbbfly.map.drawing.handler._getSelected = function(selected){
   if(!Boolean.isBoolean(selected)){selected = true;}
   var drawings = [];
@@ -1438,8 +1472,9 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   this.BeginClustering = bbbfly.map.drawing.handler._beginClustering;
   this.EndClustering = bbbfly.map.drawing.handler._endClustering;
   this.Select = bbbfly.map.drawing.handler._select;
-  this.GetSelected = bbbfly.map.drawing.handler._getSelected;
+  this.SetSelected = bbbfly.map.drawing.handler._setSelected;
   this.ClearSelected = bbbfly.map.drawing.handler._clearSelected;
+  this.GetSelected = bbbfly.map.drawing.handler._getSelected;
   this.OnSelectedChanged = null;
 };
 bbbfly.MapDrawingsHandler.selecttype = {
