@@ -1109,14 +1109,13 @@ bbbfly.map.drawing.cluster._updateTooltip = function(cluster){
 /** @ignore */
 bbbfly.map.drawing.cluster._showTooltip = function(cluster){
   if(!(cluster instanceof L.MarkerCluster)){return;}
+
+  this.HideTooltip(cluster);
   var opts = this.GetTooltipOptions(cluster);
 
   if(Object.isObject(opts)){
     var tooltip = new bbbfly.MapTooltip(opts);
     if(tooltip){tooltip.Show(cluster);}
-  }
-  else{
-    this.HideTooltip(cluster);
   }
 };
 
