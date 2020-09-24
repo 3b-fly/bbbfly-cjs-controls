@@ -1129,14 +1129,18 @@ bbbfly.map.drawing.handler._select = function(drawing,selected){
   if(String.isString(drawing)){drawing = this.GetDrawing(drawing);}
   if(!(drawing instanceof bbbfly.MapDrawingItem)){return false;}
 
+  this.BeginSelecting();
+
   if(!Boolean.isBoolean(selected)){selected = true;}
   drawing.SetSelected(selected,true);
 
+  this.EndSelecting();
   return true;
 };
 bbbfly.map.drawing.handler._setSelected = function(drawings){
   if(!Array.isArray(drawings)){return false;}
 
+  this.BeginSelecting();
   var setIds = {};
 
   for(var i in drawings){
@@ -1157,9 +1161,13 @@ bbbfly.map.drawing.handler._setSelected = function(drawings){
       drawing.SetSelected(false,true);
     }
   }
+
+  this.EndSelecting();
   return true;
 };
 bbbfly.map.drawing.handler._clearSelected = function(){
+  this.BeginSelecting();
+
   for(var id in this._Selected){
     var drawing = this._Selected[id];
 
@@ -1167,6 +1175,8 @@ bbbfly.map.drawing.handler._clearSelected = function(){
       drawing.SetSelected(false,true);
     }
   }
+
+  this.EndSelecting();
 };
 bbbfly.map.drawing.handler._getSelected = function(selected){
   if(!Boolean.isBoolean(selected)){selected = true;}
@@ -1183,6 +1193,22 @@ bbbfly.map.drawing.handler._getSelected = function(selected){
     }
   }
   return drawings;
+};
+bbbfly.map.drawing.handler._beginSelecting = function(){
+  this._IgnoreSelectChange++;
+  this._SelectChanged = false;
+};
+bbbfly.map.drawing.handler._endSelecting = function(){
+  if(--this._IgnoreSelectChange > 0){return;}
+
+  if(this._SelectChanged){
+    if(Function.isFunction(this.OnSelectedChanged)){
+      this.OnSelectedChanged();
+    }
+  }
+
+  this._SelectChanged = false;
+  this._IgnoreSelectChange = 0;
 };
 bbbfly.map.drawing.handler.listener._onEmpty = function(){
   var drawing = this.EventSource;
@@ -1204,16 +1230,13 @@ bbbfly.map.drawing.handler.listener._onSetSelected = function(){
   return false;
 };
 bbbfly.map.drawing.handler.listener._onSelectedChanged = function(drawing){
-
   var handler = this.Owner;
+  handler.BeginSelecting();
 
   if(drawing.GetSelected()){
     switch(handler.Options.SelectType){
       case bbbfly.MapDrawingsHandler.selecttype.single:
-        this._ignoreSelectChange = true;
         handler.ClearSelected();
-        this._ignoreSelectChange = false;
-
       case bbbfly.MapDrawingsHandler.selecttype.multi:
         handler._Selected[drawing.ID] = drawing;
       break;
@@ -1225,10 +1248,8 @@ bbbfly.map.drawing.handler.listener._onSelectedChanged = function(drawing){
     }
   }
 
-  if(this._ignoreSelectChange){return;}
-  if(Function.isFunction(handler.OnSelectedChanged)){
-    handler.OnSelectedChanged();
-  }
+  handler._SelectChanged = true;
+  handler.EndSelecting();
 };
 bbbfly.MapDrawing = function(options){
   if(!Object.isObject(options)){options = {};}
@@ -1443,6 +1464,8 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   this._Drawings = {};
   this._Selected = {};
   this._CurrentCluster = null;
+  this._IgnoreSelectChange = 0;
+  this._SelectChanged = false;
   this._DrawingListener = {
     Owner: this,
     Listen: ['OnEmpty','OnSetSelected','OnSelectedChanged'],
@@ -1465,6 +1488,8 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   this.SetSelected = bbbfly.map.drawing.handler._setSelected;
   this.ClearSelected = bbbfly.map.drawing.handler._clearSelected;
   this.GetSelected = bbbfly.map.drawing.handler._getSelected;
+  this.BeginSelecting = bbbfly.map.drawing.handler._beginSelecting;
+  this.EndSelecting = bbbfly.map.drawing.handler._endSelecting;
   this.OnSelectedChanged = null;
 };
 bbbfly.MapDrawingsHandler.selecttype = {

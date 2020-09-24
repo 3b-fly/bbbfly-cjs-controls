@@ -1279,9 +1279,12 @@ bbbfly.map.drawing.handler._select = function(drawing,selected){
   if(String.isString(drawing)){drawing = this.GetDrawing(drawing);}
   if(!(drawing instanceof bbbfly.MapDrawingItem)){return false;}
 
+  this.BeginSelecting();
+
   if(!Boolean.isBoolean(selected)){selected = true;}
   drawing.SetSelected(selected,true);
 
+  this.EndSelecting();
   return true;
 };
 
@@ -1289,6 +1292,7 @@ bbbfly.map.drawing.handler._select = function(drawing,selected){
 bbbfly.map.drawing.handler._setSelected = function(drawings){
   if(!Array.isArray(drawings)){return false;}
 
+  this.BeginSelecting();
   var setIds = {};
 
   for(var i in drawings){
@@ -1309,11 +1313,15 @@ bbbfly.map.drawing.handler._setSelected = function(drawings){
       drawing.SetSelected(false,true);
     }
   }
+
+  this.EndSelecting();
   return true;
 };
 
 /** @ignore */
 bbbfly.map.drawing.handler._clearSelected = function(){
+  this.BeginSelecting();
+
   for(var id in this._Selected){
     var drawing = this._Selected[id];
 
@@ -1321,6 +1329,8 @@ bbbfly.map.drawing.handler._clearSelected = function(){
       drawing.SetSelected(false,true);
     }
   }
+
+  this.EndSelecting();
 };
 
 /** @ignore */
@@ -1339,6 +1349,26 @@ bbbfly.map.drawing.handler._getSelected = function(selected){
     }
   }
   return drawings;
+};
+
+/** @ignore */
+bbbfly.map.drawing.handler._beginSelecting = function(){
+  this._IgnoreSelectChange++;
+  this._SelectChanged = false;
+};
+
+/** @ignore */
+bbbfly.map.drawing.handler._endSelecting = function(){
+  if(--this._IgnoreSelectChange > 0){return;}
+
+  if(this._SelectChanged){
+    if(Function.isFunction(this.OnSelectedChanged)){
+      this.OnSelectedChanged();
+    }
+  }
+
+  this._SelectChanged = false;
+  this._IgnoreSelectChange = 0;
 };
 
 /** @ignore */
@@ -1366,16 +1396,13 @@ bbbfly.map.drawing.handler.listener._onSetSelected = function(){
 
 /** @ignore */
 bbbfly.map.drawing.handler.listener._onSelectedChanged = function(drawing){
-
   var handler = this.Owner;
+  handler.BeginSelecting();
 
   if(drawing.GetSelected()){
     switch(handler.Options.SelectType){
       case bbbfly.MapDrawingsHandler.selecttype.single:
-        this._ignoreSelectChange = true;
         handler.ClearSelected();
-        this._ignoreSelectChange = false;
-
       case bbbfly.MapDrawingsHandler.selecttype.multi:
         handler._Selected[drawing.ID] = drawing;
       break;
@@ -1387,10 +1414,8 @@ bbbfly.map.drawing.handler.listener._onSelectedChanged = function(drawing){
     }
   }
 
-  if(this._ignoreSelectChange){return;}
-  if(Function.isFunction(handler.OnSelectedChanged)){
-    handler.OnSelectedChanged();
-  }
+  handler._SelectChanged = true;
+  handler.EndSelecting();
 };
 
 /**
@@ -2167,6 +2192,10 @@ bbbfly.MapDrawingsHandler = function(feature,options){
   this._Selected = {};
   /** @private */
   this._CurrentCluster = null;
+  /** @private */
+  this._IgnoreSelectChange = 0;
+  /** @private */
+  this._SelectChanged = false;
 
   /** @private */
   this._DrawingListener = {
@@ -2298,6 +2327,8 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @see {@link bbbfly.MapDrawingsHandler#SetSelected|SetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#ClearSelected|ClearSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#BeginSelecting|BeginSelecting()}
+   * @see {@link bbbfly.MapDrawingsHandler#EndSelecting|EndSelecting()}
    * @see {@link bbbfly.MapDrawingsHandler#event:OnSelectedChanged|OnSelectedChanged}
    */
   this.Select = bbbfly.map.drawing.handler._select;
@@ -2313,6 +2344,8 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @see {@link bbbfly.MapDrawingsHandler#Select|Select()}
    * @see {@link bbbfly.MapDrawingsHandler#ClearSelected|ClearSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#BeginSelecting|BeginSelecting()}
+   * @see {@link bbbfly.MapDrawingsHandler#EndSelecting|EndSelecting()}
    * @see {@link bbbfly.MapDrawingsHandler#event:OnSelectedChanged|OnSelectedChanged}
    */
   this.SetSelected = bbbfly.map.drawing.handler._setSelected;
@@ -2326,6 +2359,8 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @see {@link bbbfly.MapDrawingsHandler#Select|Select()}
    * @see {@link bbbfly.MapDrawingsHandler#SetSelected|SetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#BeginSelecting|BeginSelecting()}
+   * @see {@link bbbfly.MapDrawingsHandler#EndSelecting|EndSelecting()}
    * @see {@link bbbfly.MapDrawingsHandler#event:OnSelectedChanged|OnSelectedChanged}
    */
   this.ClearSelected = bbbfly.map.drawing.handler._clearSelected;
@@ -2342,9 +2377,43 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @see {@link bbbfly.MapDrawingsHandler#Select|Select()}
    * @see {@link bbbfly.MapDrawingsHandler#SetSelected|SetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#ClearSelected|ClearSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#BeginSelecting|BeginSelecting()}
+   * @see {@link bbbfly.MapDrawingsHandler#EndSelecting|EndSelecting()}
    * @see {@link bbbfly.MapDrawingsHandler#event:OnSelectedChanged|OnSelectedChanged}
    */
   this.GetSelected = bbbfly.map.drawing.handler._getSelected;
+
+  /**
+   * @function
+   * @name BeginSelecting
+   * @memberof bbbfly.MapDrawingsHandler#
+   *
+   * @description Begin "OnSelectedChanged" events grouping
+   *
+   * @see {@link bbbfly.MapDrawingsHandler#Select|Select()}
+   * @see {@link bbbfly.MapDrawingsHandler#SetSelected|SetSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#ClearSelected|ClearSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#EndSelecting|EndSelecting()}
+   * @see {@link bbbfly.MapDrawingsHandler#event:OnSelectedChanged|OnSelectedChanged}
+   */
+  this.BeginSelecting = bbbfly.map.drawing.handler._beginSelecting;
+
+  /**
+   * @function
+   * @name EndSelecting
+   * @memberof bbbfly.MapDrawingsHandler#
+   *
+   * @description End "OnSelectedChanged" events grouping
+   *
+   * @see {@link bbbfly.MapDrawingsHandler#Select|Select()}
+   * @see {@link bbbfly.MapDrawingsHandler#SetSelected|SetSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#ClearSelected|ClearSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#BeginSelecting|BeginSelecting()}
+   * @see {@link bbbfly.MapDrawingsHandler#event:OnSelectedChanged|OnSelectedChanged}
+   */
+  this.EndSelecting = bbbfly.map.drawing.handler._endSelecting;
 
   /**
    * @event
@@ -2355,6 +2424,8 @@ bbbfly.MapDrawingsHandler = function(feature,options){
    * @see {@link bbbfly.MapDrawingsHandler#SetSelected|SetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#GetSelected|GetSelected()}
    * @see {@link bbbfly.MapDrawingsHandler#ClearSelected|ClearSelected()}
+   * @see {@link bbbfly.MapDrawingsHandler#BeginSelecting|BeginSelecting()}
+   * @see {@link bbbfly.MapDrawingsHandler#EndSelecting|EndSelecting()}
    */
   this.OnSelectedChanged = null;
 };
