@@ -23,6 +23,8 @@ bbbfly.grid._onUpdated = function(){
   var cHolder = this.GetControlsHolder();
   var items = cHolder.ChildControls;
 
+  var gridHeight = 0;
+
   this._Rows = new Array();
   this._Columns = new Array();
 
@@ -69,8 +71,6 @@ bbbfly.grid._onUpdated = function(){
       }
     }
 
-    var gridHeight = 0;
-
     for(var j in this._Rows){
       var row = this._Rows[j];
       var rowHeight = 0;
@@ -113,22 +113,22 @@ bbbfly.grid._onUpdated = function(){
       }
       gridHeight += rowHeight;
     }
+  }
 
-    if(this.AutoSize){
-      var cPanel = this.GetControlsPanel();
+  if(this.AutoSize){
+    var cPanel = this.GetControlsPanel();
 
-      if(cPanel && cPanel.Bounds){
-        if(Number.isNumber(cPanel.Bounds.T)){gridHeight += cPanel.Bounds.T;}
-        if(Number.isNumber(cPanel.Bounds.B)){gridHeight += cPanel.Bounds.B;}
-      }
+    if(cPanel && cPanel.Bounds){
+      if(Number.isNumber(cPanel.Bounds.T)){gridHeight += cPanel.Bounds.T;}
+      if(Number.isNumber(cPanel.Bounds.B)){gridHeight += cPanel.Bounds.B;}
+    }
 
-      if(this.SetBounds({ H: gridHeight })){
-        this.Update(false);
-      }
+    if(this.SetBounds({ H: gridHeight })){
+      this.Update(false);
+    }
 
-      if(Function.isFunction(this.OnAutoSized)){
-        this.OnAutoSized();
-      }
+    if(Function.isFunction(this.OnAutoSized)){
+      this.OnAutoSized();
     }
   }
   return true;
