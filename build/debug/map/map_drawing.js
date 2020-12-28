@@ -499,6 +499,21 @@ bbbfly.map.drawing.item._update = function(){
     }
   }
 
+  if(this._GeoJSON){
+    var gLayers = this._GeoJSON.getLayers();
+    var gStyle = this.GetGeometryStyle();
+
+    if(gStyle){
+      for(var i in gLayers){
+        var layer = gLayers[i];
+
+        if(layer instanceof L.Path){
+          layer.setStyle(gStyle);
+        }
+      }
+    }
+  }
+
   this.UpdateTooltip();
 };
 bbbfly.map.drawing.item._dispose = function(){
