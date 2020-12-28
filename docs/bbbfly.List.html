@@ -2229,6 +2229,9 @@
         <li data-name="fillOpacity">
           <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:fillOpacity">fillOpacity</a>
         </li>
+        <li data-name="className">
+          <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:className">className</a>
+        </li>
     </ul>
 </li>
 <li class="item" data-name="bbbfly.MapDrawingItem.IconStyle">
@@ -2300,6 +2303,9 @@
         <li data-name="bbbfly.MapDrawingsHandler#BeginClustering">
           <a href="bbbfly.MapDrawingsHandler.html#BeginClustering">BeginClustering</a>
         </li>
+        <li data-name="bbbfly.MapDrawingsHandler#BeginSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting</a>
+        </li>
         <li data-name="bbbfly.MapDrawingsHandler#ClearDrawings">
           <a href="bbbfly.MapDrawingsHandler.html#ClearDrawings">ClearDrawings</a>
         </li>
@@ -2314,6 +2320,9 @@
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#EndClustering">
           <a href="bbbfly.MapDrawingsHandler.html#EndClustering">EndClustering</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#EndSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting</a>
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#GetDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#GetDrawing">GetDrawing</a>
@@ -2333,8 +2342,11 @@
         <li data-name="bbbfly.MapDrawingsHandler#RemoveDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#RemoveDrawing">RemoveDrawing</a>
         </li>
-        <li data-name="bbbfly.MapDrawingsHandler#Selected">
-          <a href="bbbfly.MapDrawingsHandler.html#Selected">Selected</a>
+        <li data-name="bbbfly.MapDrawingsHandler#Select">
+          <a href="bbbfly.MapDrawingsHandler.html#Select">Select</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#SetSelected">
+          <a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected</a>
         </li>
     </ul>
     <ul class="events itemMembers">
@@ -2420,6 +2432,9 @@
         </li>
         <li data-name="bbbfly.MapTooltip#Hide">
           <a href="bbbfly.MapTooltip.html#Hide">Hide</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#IsShown">
+          <a href="bbbfly.MapTooltip.html#IsShown">IsShown</a>
         </li>
         <li data-name="bbbfly.MapTooltip#Show">
           <a href="bbbfly.MapTooltip.html#Show">Show</a>
@@ -3322,13 +3337,17 @@
         <tbody>
             <tr id="property:ListIndent">
                     <td class="name">
-                      <span class="param-name">ListIndent</span>
+                      <span class="param-name">
+                        ListIndent
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         0
+                      </span>
                     </td>
                 <td class="description last">
                   First level indent
@@ -3336,13 +3355,17 @@
             </tr>
             <tr id="property:DefaultIndent">
                     <td class="name">
-                      <span class="param-name">DefaultIndent</span>
+                      <span class="param-name">
+                        DefaultIndent
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         10
+                      </span>
                     </td>
                 <td class="description last">
                   Each other tree level indent
@@ -3350,13 +3373,17 @@
             </tr>
             <tr id="property:Invalid">
                     <td class="name">
-                      <span class="param-name">Invalid</span>
+                      <span class="param-name">
+                        Invalid
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">boolean</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         false
+                      </span>
                     </td>
                 <td class="description last">
                   If list is invalid
@@ -3364,13 +3391,17 @@
             </tr>
             <tr id="property:HighlightClass">
                     <td class="name">
-                      <span class="param-name">HighlightClass</span>
+                      <span class="param-name">
+                        HighlightClass
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         'highlight'
+                      </span>
                     </td>
                 <td class="description last">
                   Highlighted item CSS class
@@ -3378,13 +3409,17 @@
             </tr>
             <tr id="property:HighlightInterval">
                     <td class="name">
-                      <span class="param-name">HighlightInterval</span>
+                      <span class="param-name">
+                        HighlightInterval
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         300
+                      </span>
                     </td>
                 <td class="description last">
                   Interval between highlight flashes
@@ -3392,13 +3427,17 @@
             </tr>
             <tr id="property:HighlightFlashCnt">
                     <td class="name">
-                      <span class="param-name">HighlightFlashCnt</span>
+                      <span class="param-name">
+                        HighlightFlashCnt
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         2
+                      </span>
                     </td>
                 <td class="description last">
                   Number of highlight flashes
@@ -3406,7 +3445,9 @@
             </tr>
             <tr id="property:Columns">
                     <td class="name">
-                      <span class="param-name">Columns</span>
+                      <span class="param-name">
+                        Columns
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">array</span>
@@ -3414,7 +3455,9 @@
 <span class="param-type">object</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         null
+                      </span>
                     </td>
                 <td class="description last">
                   Define columns as object to allow their merging
@@ -3422,7 +3465,9 @@
             </tr>
             <tr id="property:Items">
                     <td class="name">
-                      <span class="param-name">Items</span>
+                      <span class="param-name">
+                        Items
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">array</span>
@@ -3430,7 +3475,9 @@
 <span class="param-type">object</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         null
+                      </span>
                     </td>
                 <td class="description last">
                   Define items as object to allow their merging

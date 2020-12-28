@@ -2229,6 +2229,9 @@
         <li data-name="fillOpacity">
           <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:fillOpacity">fillOpacity</a>
         </li>
+        <li data-name="className">
+          <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:className">className</a>
+        </li>
     </ul>
 </li>
 <li class="item" data-name="bbbfly.MapDrawingItem.IconStyle">
@@ -2300,6 +2303,9 @@
         <li data-name="bbbfly.MapDrawingsHandler#BeginClustering">
           <a href="bbbfly.MapDrawingsHandler.html#BeginClustering">BeginClustering</a>
         </li>
+        <li data-name="bbbfly.MapDrawingsHandler#BeginSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting</a>
+        </li>
         <li data-name="bbbfly.MapDrawingsHandler#ClearDrawings">
           <a href="bbbfly.MapDrawingsHandler.html#ClearDrawings">ClearDrawings</a>
         </li>
@@ -2314,6 +2320,9 @@
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#EndClustering">
           <a href="bbbfly.MapDrawingsHandler.html#EndClustering">EndClustering</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#EndSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting</a>
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#GetDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#GetDrawing">GetDrawing</a>
@@ -2333,8 +2342,11 @@
         <li data-name="bbbfly.MapDrawingsHandler#RemoveDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#RemoveDrawing">RemoveDrawing</a>
         </li>
-        <li data-name="bbbfly.MapDrawingsHandler#Selected">
-          <a href="bbbfly.MapDrawingsHandler.html#Selected">Selected</a>
+        <li data-name="bbbfly.MapDrawingsHandler#Select">
+          <a href="bbbfly.MapDrawingsHandler.html#Select">Select</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#SetSelected">
+          <a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected</a>
         </li>
     </ul>
     <ul class="events itemMembers">
@@ -2420,6 +2432,9 @@
         </li>
         <li data-name="bbbfly.MapTooltip#Hide">
           <a href="bbbfly.MapTooltip.html#Hide">Hide</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#IsShown">
+          <a href="bbbfly.MapTooltip.html#IsShown">IsShown</a>
         </li>
         <li data-name="bbbfly.MapTooltip#Show">
           <a href="bbbfly.MapTooltip.html#Show">Show</a>
@@ -3323,7 +3338,9 @@
         <tbody>
             <tr id="property:UploadURL">
                     <td class="name">
-                      <span class="param-name">UploadURL</span>
+                      <span class="param-name">
+                        UploadURL
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="global.html#url">url</a></span>
@@ -3335,7 +3352,9 @@
             </tr>
             <tr id="property:FileUploadID">
                     <td class="name">
-                      <span class="param-name">FileUploadID</span>
+                      <span class="param-name">
+                        FileUploadID
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="global.html#url">url</a></span>
@@ -3348,13 +3367,17 @@
             </tr>
             <tr id="property:DragAndDrop">
                     <td class="name">
-                      <span class="param-name">DragAndDrop</span>
+                      <span class="param-name">
+                        DragAndDrop
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">boolean</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         true
+                      </span>
                     </td>
                 <td class="description last">
                   If drag&drop is enabled
@@ -3362,7 +3385,9 @@
             </tr>
             <tr id="property:MaxFileSize">
                     <td class="name">
-                      <span class="param-name">MaxFileSize</span>
+                      <span class="param-name">
+                        MaxFileSize
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
@@ -3375,7 +3400,9 @@
             </tr>
             <tr id="property:MaxBatchSize">
                     <td class="name">
-                      <span class="param-name">MaxBatchSize</span>
+                      <span class="param-name">
+                        MaxBatchSize
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
@@ -3388,7 +3415,9 @@
             </tr>
             <tr id="property:MinFilesCount">
                     <td class="name">
-                      <span class="param-name">MinFilesCount</span>
+                      <span class="param-name">
+                        MinFilesCount
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
@@ -3401,7 +3430,9 @@
             </tr>
             <tr id="property:MaxFilesCount">
                     <td class="name">
-                      <span class="param-name">MaxFilesCount</span>
+                      <span class="param-name">
+                        MaxFilesCount
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
@@ -3414,7 +3445,9 @@
             </tr>
             <tr id="property:AllowedExtensions">
                     <td class="name">
-                      <span class="param-name">AllowedExtensions</span>
+                      <span class="param-name">
+                        AllowedExtensions
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">Array.&lt;string></span>
@@ -3427,13 +3460,17 @@
             </tr>
             <tr id="property:ErrorLevel">
                     <td class="name">
-                      <span class="param-name">ErrorLevel</span>
+                      <span class="param-name">
+                        ErrorLevel
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="bbbfly.FileUploader.html#.errorlevel">bbbfly.FileUploader.errorlevel</a></span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         grouped
+                      </span>
                     </td>
                 <td class="description last">
                   - Error message precision
@@ -3483,7 +3520,9 @@
         <tbody>
             <tr id="property:Name">
                     <td class="name">
-                      <span class="param-name">Name</span>
+                      <span class="param-name">
+                        Name
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
@@ -3494,7 +3533,9 @@
             </tr>
             <tr id="property:Error">
                     <td class="name">
-                      <span class="param-name">Error</span>
+                      <span class="param-name">
+                        Error
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="bbbfly.FileUploader.html#.errortype">bbbfly.FileUploader.errortype</a></span>
@@ -3560,7 +3601,9 @@
         <tbody>
             <tr id="property:Id">
                     <td class="name">
-                      <span class="param-name">Id</span>
+                      <span class="param-name">
+                        Id
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
@@ -3571,7 +3614,9 @@
             </tr>
             <tr id="property:Name">
                     <td class="name">
-                      <span class="param-name">Name</span>
+                      <span class="param-name">
+                        Name
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
@@ -3624,39 +3669,51 @@
         <tbody>
             <tr id="property:minimal">
                     <td class="name">
-                      <span class="param-name">minimal</span>
+                      <span class="param-name">
+                        minimal
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         1
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:grouped">
                     <td class="name">
-                      <span class="param-name">grouped</span>
+                      <span class="param-name">
+                        grouped
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         2
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:fulllog">
                     <td class="name">
-                      <span class="param-name">fulllog</span>
+                      <span class="param-name">
+                        fulllog
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         3
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
@@ -3701,78 +3758,102 @@
         <tbody>
             <tr id="property:main">
                     <td class="name">
-                      <span class="param-name">main</span>
+                      <span class="param-name">
+                        main
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         1
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:general">
                     <td class="name">
-                      <span class="param-name">general</span>
+                      <span class="param-name">
+                        general
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         2
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:extension">
                     <td class="name">
-                      <span class="param-name">extension</span>
+                      <span class="param-name">
+                        extension
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         3
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:size">
                     <td class="name">
-                      <span class="param-name">size</span>
+                      <span class="param-name">
+                        size
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         4
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:count">
                     <td class="name">
-                      <span class="param-name">count</span>
+                      <span class="param-name">
+                        count
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         5
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:batch">
                     <td class="name">
-                      <span class="param-name">batch</span>
+                      <span class="param-name">
+                        batch
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         6
+                      </span>
                     </td>
                 <td class="description last">
                 </td>

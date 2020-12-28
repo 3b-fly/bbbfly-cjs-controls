@@ -2229,6 +2229,9 @@
         <li data-name="fillOpacity">
           <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:fillOpacity">fillOpacity</a>
         </li>
+        <li data-name="className">
+          <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:className">className</a>
+        </li>
     </ul>
 </li>
 <li class="item" data-name="bbbfly.MapDrawingItem.IconStyle">
@@ -2300,6 +2303,9 @@
         <li data-name="bbbfly.MapDrawingsHandler#BeginClustering">
           <a href="bbbfly.MapDrawingsHandler.html#BeginClustering">BeginClustering</a>
         </li>
+        <li data-name="bbbfly.MapDrawingsHandler#BeginSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting</a>
+        </li>
         <li data-name="bbbfly.MapDrawingsHandler#ClearDrawings">
           <a href="bbbfly.MapDrawingsHandler.html#ClearDrawings">ClearDrawings</a>
         </li>
@@ -2314,6 +2320,9 @@
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#EndClustering">
           <a href="bbbfly.MapDrawingsHandler.html#EndClustering">EndClustering</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#EndSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting</a>
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#GetDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#GetDrawing">GetDrawing</a>
@@ -2333,8 +2342,11 @@
         <li data-name="bbbfly.MapDrawingsHandler#RemoveDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#RemoveDrawing">RemoveDrawing</a>
         </li>
-        <li data-name="bbbfly.MapDrawingsHandler#Selected">
-          <a href="bbbfly.MapDrawingsHandler.html#Selected">Selected</a>
+        <li data-name="bbbfly.MapDrawingsHandler#Select">
+          <a href="bbbfly.MapDrawingsHandler.html#Select">Select</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#SetSelected">
+          <a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected</a>
         </li>
     </ul>
     <ul class="events itemMembers">
@@ -2420,6 +2432,9 @@
         </li>
         <li data-name="bbbfly.MapTooltip#Hide">
           <a href="bbbfly.MapTooltip.html#Hide">Hide</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#IsShown">
+          <a href="bbbfly.MapTooltip.html#IsShown">IsShown</a>
         </li>
         <li data-name="bbbfly.MapTooltip#Show">
           <a href="bbbfly.MapTooltip.html#Show">Show</a>
@@ -3323,13 +3338,17 @@
         <tbody>
             <tr id="property:Crs">
                     <td class="name">
-                      <span class="param-name">Crs</span>
+                      <span class="param-name">
+                        Crs
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="bbbfly.Map.html#.crs">bbbfly.Map.crs</a></span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         PseudoMercator
+                      </span>
                     </td>
                 <td class="description last">
                   Default map coordinate reference system
@@ -3337,7 +3356,9 @@
             </tr>
             <tr id="property:BoundsPadding">
                     <td class="name">
-                      <span class="param-name">BoundsPadding</span>
+                      <span class="param-name">
+                        BoundsPadding
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="global.html#padding">padding</a></span>
@@ -3345,7 +3366,9 @@
 <span class="param-type"><a href="global.html#px">px</a></span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         null
+                      </span>
                     </td>
                 <td class="description last">
                   Use this padding to fit bounds or coords
@@ -3353,13 +3376,17 @@
             </tr>
             <tr id="property:MaxBounds">
                     <td class="name">
-                      <span class="param-name">MaxBounds</span>
+                      <span class="param-name">
+                        MaxBounds
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="global.html#mapBounds">mapBounds</a></span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         null
+                      </span>
                     </td>
                 <td class="description last">
                   Keep map within these bounds
@@ -3367,13 +3394,17 @@
             </tr>
             <tr id="property:MinZoom">
                     <td class="name">
-                      <span class="param-name">MinZoom</span>
+                      <span class="param-name">
+                        MinZoom
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">number</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         null
+                      </span>
                     </td>
                 <td class="description last">
                   Map minimal zoom level
@@ -3381,13 +3412,17 @@
             </tr>
             <tr id="property:MaxZoom">
                     <td class="name">
-                      <span class="param-name">MaxZoom</span>
+                      <span class="param-name">
+                        MaxZoom
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">number</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         null
+                      </span>
                     </td>
                 <td class="description last">
                   Map maximal zoom level
@@ -3395,13 +3430,17 @@
             </tr>
             <tr id="property:Animate">
                     <td class="name">
-                      <span class="param-name">Animate</span>
+                      <span class="param-name">
+                        Animate
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">number</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         true
+                      </span>
                     </td>
                 <td class="description last">
                   If map animation is allowed
@@ -3409,13 +3448,17 @@
             </tr>
             <tr id="property:Layers">
                     <td class="name">
-                      <span class="param-name">Layers</span>
+                      <span class="param-name">
+                        Layers
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">Array.&lt;<a href="bbbfly.Map.Layer.html">bbbfly.Map.Layer</a>></span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         []
+                      </span>
                     </td>
                 <td class="description last">
                   Map layers definition
@@ -3423,7 +3466,9 @@
             </tr>
             <tr id="property:DefaultLayer">
                     <td class="name">
-                      <span class="param-name">DefaultLayer</span>
+                      <span class="param-name">
+                        DefaultLayer
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="bbbfly.Map.Layer.html">bbbfly.Map.Layer</a></span>
@@ -3440,7 +3485,7 @@
 <dl class="details">
 </dl>
         <h5>Examples</h5>
-  <pre><code class="language-javascript"><span class="token keyword">var</span> appForm<span class="token punctuation">;</span><span class="token keyword">function</span> <span class="token function">ngMain</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>  appForm <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ngControls</span><span class="token punctuation">(</span><span class="token punctuation">{</span>    Map<span class="token punctuation">:</span> <span class="token punctuation">{</span>      Type<span class="token punctuation">:</span> <span class="token string">'bbbfly.Map'</span><span class="token punctuation">,</span>      L<span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">,</span>T<span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">,</span>R<span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">,</span>B<span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">,</span>      Data<span class="token punctuation">:</span> <span class="token punctuation">{</span>        Layers<span class="token punctuation">:</span> <span class="token punctuation">[</span>          <span class="token operator">...</span>        <span class="token punctuation">]</span>      <span class="token punctuation">}</span>    <span class="token punctuation">}</span>  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  appForm<span class="token punctuation">.</span><span class="token function">Update</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">}</span></code></pre>
+    <pre><code class="language-javascript"><span class="token keyword">var</span> appForm<span class="token punctuation">;</span><span class="token keyword">function</span> <span class="token function">ngMain</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>  appForm <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ngControls</span><span class="token punctuation">(</span><span class="token punctuation">{</span>    Map<span class="token punctuation">:</span> <span class="token punctuation">{</span>      Type<span class="token punctuation">:</span> <span class="token string">'bbbfly.Map'</span><span class="token punctuation">,</span>      L<span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">,</span>T<span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">,</span>R<span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">,</span>B<span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">,</span>      Data<span class="token punctuation">:</span> <span class="token punctuation">{</span>        Layers<span class="token punctuation">:</span> <span class="token punctuation">[</span>          <span class="token operator">...</span>        <span class="token punctuation">]</span>      <span class="token punctuation">}</span>    <span class="token punctuation">}</span>  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  appForm<span class="token punctuation">.</span><span class="token function">Update</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">}</span></code></pre>
 </dd>
     </div>
         <h3>Extends</h3>
@@ -3480,7 +3525,9 @@
         <tbody>
             <tr id="property:Name">
                     <td class="name">
-                      <span class="param-name">Name</span>
+                      <span class="param-name">
+                        Name
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
@@ -3491,7 +3538,9 @@
             </tr>
             <tr id="property:Attributions">
                     <td class="name">
-                      <span class="param-name">Attributions</span>
+                      <span class="param-name">
+                        Attributions
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">Array.&lt;string></span>
@@ -3532,7 +3581,9 @@
         <tbody>
             <tr id="property:Id">
                     <td class="name">
-                      <span class="param-name">Id</span>
+                      <span class="param-name">
+                        Id
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
@@ -3542,7 +3593,9 @@
             </tr>
             <tr id="property:Display">
                     <td class="name">
-                      <span class="param-name">Display</span>
+                      <span class="param-name">
+                        Display
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="bbbfly.Map.Layer.html#.display">bbbfly.Map.Layer.display</a></span>
@@ -3552,7 +3605,9 @@
             </tr>
             <tr id="property:NameRes">
                     <td class="name">
-                      <span class="param-name">NameRes</span>
+                      <span class="param-name">
+                        NameRes
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
@@ -3564,7 +3619,9 @@
             </tr>
             <tr id="property:Name">
                     <td class="name">
-                      <span class="param-name">Name</span>
+                      <span class="param-name">
+                        Name
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
@@ -3578,7 +3635,9 @@
             </tr>
             <tr id="property:Visible">
                     <td class="name">
-                      <span class="param-name">Visible</span>
+                      <span class="param-name">
+                        Visible
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">boolean</span>
@@ -3588,7 +3647,9 @@
             </tr>
             <tr id="property:Layer">
                     <td class="name">
-                      <span class="param-name">Layer</span>
+                      <span class="param-name">
+                        Layer
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="global.html#mapLayer">mapLayer</a></span>
@@ -3629,7 +3690,9 @@
         <tbody>
             <tr id="property:Listen">
                     <td class="name">
-                      <span class="param-name">Listen</span>
+                      <span class="param-name">
+                        Listen
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">Array.&lt;string></span>
@@ -3640,7 +3703,9 @@
             </tr>
             <tr id="property:EventName...">
                     <td class="name">
-                      <span class="param-name">EventName...</span>
+                      <span class="param-name">
+                        EventName...
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">function</span>
@@ -3707,39 +3772,51 @@
         <tbody>
             <tr id="property:WorldMercator">
                     <td class="name">
-                      <span class="param-name">WorldMercator</span>
+                      <span class="param-name">
+                        WorldMercator
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         EPSG3395
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:PseudoMercator">
                     <td class="name">
-                      <span class="param-name">PseudoMercator</span>
+                      <span class="param-name">
+                        PseudoMercator
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         EPSG3857
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:WGS84">
                     <td class="name">
-                      <span class="param-name">WGS84</span>
+                      <span class="param-name">
+                        WGS84
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         EPSG4326
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
@@ -5276,6 +5353,70 @@
     <div class="nameContainer">
         <h4 id="SetBoundsPadding">
           SetBoundsPadding
+          <span class="signature">(<span class="optional">padding</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="global.html#padding">padding</a>}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map.js#L866">map/map.js, line 866</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Get map bounds padding.</div>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">padding</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="global.html#padding">padding</a></span>
+            </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Bounds padding
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Map.html#SetBoundsPadding">SetBoundsPadding()</a></li>
+          <li><a href="bbbfly.Map.html#FitBounds">FitBounds()</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        <a href="global.html#padding">padding</a>
+            </td>
+            <td class="description last">Bounds padding</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="SetBoundsPadding">
+          SetBoundsPadding
           <span class="signature">(padding)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
@@ -5333,70 +5474,6 @@
                         boolean
             </td>
             <td class="description last">If padding was set</td>
-        </tr>
-    </tbody>
-</table>
-</dd>
-<dt>
-    <div class="nameContainer">
-        <h4 id="SetBoundsPadding">
-          SetBoundsPadding
-          <span class="signature">(<span class="optional">padding</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="global.html#padding">padding</a>}</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map.js#L866">map/map.js, line 866</a>
-        </div>
-    </div>
-</dt>
-<dd>
-      <div class="description">Get map bounds padding.</div>
-        <h5>Parameters:</h5>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
-        <tr>
-                <td class="name">
-                  <span class="param-name">padding</span>
-                </td>
-            <td class="type">
-<span class="param-type"><a href="global.html#padding">padding</a></span>
-            </td>
-            <td class="description last">
-                        <span class="optional">optional</span>
-                Bounds padding
-            </td>
-        </tr>
-	</tbody>
-</table>
-<dl class="details">
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-      <ul class="dummy">
-          <li><a href="bbbfly.Map.html#SetBoundsPadding">SetBoundsPadding()</a></li>
-          <li><a href="bbbfly.Map.html#FitBounds">FitBounds()</a></li>
-      </ul>
-    </dd>
-</dl>
-    <h5>Returns:</h5>
-<table class="params">
-    <thead>
-    <tr>
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="type">
-                        <a href="global.html#padding">padding</a>
-            </td>
-            <td class="description last">Bounds padding</td>
         </tr>
     </tbody>
 </table>

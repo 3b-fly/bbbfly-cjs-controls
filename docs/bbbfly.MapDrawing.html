@@ -2229,6 +2229,9 @@
         <li data-name="fillOpacity">
           <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:fillOpacity">fillOpacity</a>
         </li>
+        <li data-name="className">
+          <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:className">className</a>
+        </li>
     </ul>
 </li>
 <li class="item" data-name="bbbfly.MapDrawingItem.IconStyle">
@@ -2300,6 +2303,9 @@
         <li data-name="bbbfly.MapDrawingsHandler#BeginClustering">
           <a href="bbbfly.MapDrawingsHandler.html#BeginClustering">BeginClustering</a>
         </li>
+        <li data-name="bbbfly.MapDrawingsHandler#BeginSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting</a>
+        </li>
         <li data-name="bbbfly.MapDrawingsHandler#ClearDrawings">
           <a href="bbbfly.MapDrawingsHandler.html#ClearDrawings">ClearDrawings</a>
         </li>
@@ -2314,6 +2320,9 @@
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#EndClustering">
           <a href="bbbfly.MapDrawingsHandler.html#EndClustering">EndClustering</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#EndSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting</a>
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#GetDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#GetDrawing">GetDrawing</a>
@@ -2333,8 +2342,11 @@
         <li data-name="bbbfly.MapDrawingsHandler#RemoveDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#RemoveDrawing">RemoveDrawing</a>
         </li>
-        <li data-name="bbbfly.MapDrawingsHandler#Selected">
-          <a href="bbbfly.MapDrawingsHandler.html#Selected">Selected</a>
+        <li data-name="bbbfly.MapDrawingsHandler#Select">
+          <a href="bbbfly.MapDrawingsHandler.html#Select">Select</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#SetSelected">
+          <a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected</a>
         </li>
     </ul>
     <ul class="events itemMembers">
@@ -2420,6 +2432,9 @@
         </li>
         <li data-name="bbbfly.MapTooltip#Hide">
           <a href="bbbfly.MapTooltip.html#Hide">Hide</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#IsShown">
+          <a href="bbbfly.MapTooltip.html#IsShown">IsShown</a>
         </li>
         <li data-name="bbbfly.MapTooltip#Show">
           <a href="bbbfly.MapTooltip.html#Show">Show</a>
@@ -3250,7 +3265,7 @@
           <span class="signature">(options)</span>
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1342">map/map_drawing.js, line 1342</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1445">map/map_drawing.js, line 1445</a>
         </div>
     </div>
 </dt>
@@ -3290,7 +3305,9 @@
         <tbody>
             <tr id="property:ID">
                     <td class="name">
-                      <span class="param-name">ID</span>
+                      <span class="param-name">
+                        ID
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
@@ -3302,7 +3319,9 @@
             </tr>
             <tr id="property:Options">
                     <td class="name">
-                      <span class="param-name">Options</span>
+                      <span class="param-name">
+                        Options
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="bbbfly.MapDrawing.html#.options">bbbfly.MapDrawing.options</a></span>
@@ -3349,7 +3368,9 @@
         <tbody>
             <tr id="property:ID">
                     <td class="name">
-                      <span class="param-name">ID</span>
+                      <span class="param-name">
+                        ID
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
@@ -3370,7 +3391,7 @@
           <span class="signature">(layer, index, layers)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean|undefind}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2285">map/map_drawing.js, line 2285</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2464">map/map_drawing.js, line 2464</a>
         </div>
     </div>
 </dt>
@@ -3447,64 +3468,10 @@
     <div class="nameContainer">
         <h4 id="AddTo">
           AddTo
-          <span class="signature">(handler)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1399">map/map_drawing.js, line 1399</a>
-        </div>
-    </div>
-</dt>
-<dd>
-        <h5>Parameters:</h5>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
-        <tr>
-                <td class="name">
-                  <span class="param-name">handler</span>
-                </td>
-            <td class="type">
-<span class="param-type"><a href="bbbfly.MapDrawingsHandler.html">bbbfly.MapDrawingsHandler</a></span>
-            </td>
-            <td class="description last">
-            </td>
-        </tr>
-	</tbody>
-</table>
-<dl class="details">
-</dl>
-    <h5>Returns:</h5>
-<table class="params">
-    <thead>
-    <tr>
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="type">
-                        boolean
-            </td>
-            <td class="description last">If was set</td>
-        </tr>
-    </tbody>
-</table>
-</dd>
-<dt>
-    <div class="nameContainer">
-        <h4 id="AddTo">
-          AddTo
           <span class="signature">(feature)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1409">map/map_drawing.js, line 1409</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1512">map/map_drawing.js, line 1512</a>
         </div>
     </div>
 </dt>
@@ -3560,6 +3527,60 @@
 </dd>
 <dt>
     <div class="nameContainer">
+        <h4 id="AddTo">
+          AddTo
+          <span class="signature">(handler)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1502">map/map_drawing.js, line 1502</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">handler</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.MapDrawingsHandler.html">bbbfly.MapDrawingsHandler</a></span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">If was set</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
         <h4 id="Create">
   <span class="attribs">
       <span class="type-signature abstract">
@@ -3570,7 +3591,7 @@
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="global.html#mapLayer">mapLayer</a>|Array.&lt;<a href="global.html#mapLayer">mapLayer</a>>}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1368">map/map_drawing.js, line 1368</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1471">map/map_drawing.js, line 1471</a>
         </div>
     </div>
 </dt>
@@ -3611,7 +3632,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1390">map/map_drawing.js, line 1390</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1493">map/map_drawing.js, line 1493</a>
         </div>
     </div>
 </dt>
@@ -3633,7 +3654,7 @@
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{GeoJSON|null}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1575">map/map_drawing.js, line 1575</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1678">map/map_drawing.js, line 1678</a>
         </div>
     </div>
 </dt>
@@ -3667,7 +3688,7 @@
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="global.html#mapPoint">mapPoint</a>}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1567">map/map_drawing.js, line 1567</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1670">map/map_drawing.js, line 1670</a>
         </div>
     </div>
 </dt>
@@ -3699,7 +3720,7 @@
           <span class="signature">(<span class="optional">feature</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1420">map/map_drawing.js, line 1420</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1523">map/map_drawing.js, line 1523</a>
         </div>
     </div>
 </dt>
@@ -3761,7 +3782,7 @@
           <span class="signature">(layer)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1431">map/map_drawing.js, line 1431</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1534">map/map_drawing.js, line 1534</a>
         </div>
     </div>
 </dt>
@@ -3816,7 +3837,7 @@
           <span class="signature">(callback, def)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1440">map/map_drawing.js, line 1440</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1543">map/map_drawing.js, line 1543</a>
         </div>
     </div>
 </dt>
@@ -3886,7 +3907,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1380">map/map_drawing.js, line 1380</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1483">map/map_drawing.js, line 1483</a>
         </div>
     </div>
 </dt>
@@ -3911,7 +3932,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1480">map/map_drawing.js, line 1480</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1583">map/map_drawing.js, line 1583</a>
         </div>
     </div>
 </dt>
@@ -3935,7 +3956,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1491">map/map_drawing.js, line 1491</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1594">map/map_drawing.js, line 1594</a>
         </div>
     </div>
 </dt>
@@ -3959,7 +3980,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1451">map/map_drawing.js, line 1451</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1554">map/map_drawing.js, line 1554</a>
         </div>
     </div>
 </dt>
@@ -3974,7 +3995,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1457">map/map_drawing.js, line 1457</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1560">map/map_drawing.js, line 1560</a>
         </div>
     </div>
 </dt>
@@ -3998,7 +4019,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1468">map/map_drawing.js, line 1468</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1571">map/map_drawing.js, line 1571</a>
         </div>
     </div>
 </dt>
@@ -4022,7 +4043,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1502">map/map_drawing.js, line 1502</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1605">map/map_drawing.js, line 1605</a>
         </div>
     </div>
 </dt>

@@ -2229,6 +2229,9 @@
         <li data-name="fillOpacity">
           <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:fillOpacity">fillOpacity</a>
         </li>
+        <li data-name="className">
+          <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:className">className</a>
+        </li>
     </ul>
 </li>
 <li class="item" data-name="bbbfly.MapDrawingItem.IconStyle">
@@ -2300,6 +2303,9 @@
         <li data-name="bbbfly.MapDrawingsHandler#BeginClustering">
           <a href="bbbfly.MapDrawingsHandler.html#BeginClustering">BeginClustering</a>
         </li>
+        <li data-name="bbbfly.MapDrawingsHandler#BeginSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting</a>
+        </li>
         <li data-name="bbbfly.MapDrawingsHandler#ClearDrawings">
           <a href="bbbfly.MapDrawingsHandler.html#ClearDrawings">ClearDrawings</a>
         </li>
@@ -2314,6 +2320,9 @@
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#EndClustering">
           <a href="bbbfly.MapDrawingsHandler.html#EndClustering">EndClustering</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#EndSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting</a>
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#GetDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#GetDrawing">GetDrawing</a>
@@ -2333,8 +2342,11 @@
         <li data-name="bbbfly.MapDrawingsHandler#RemoveDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#RemoveDrawing">RemoveDrawing</a>
         </li>
-        <li data-name="bbbfly.MapDrawingsHandler#Selected">
-          <a href="bbbfly.MapDrawingsHandler.html#Selected">Selected</a>
+        <li data-name="bbbfly.MapDrawingsHandler#Select">
+          <a href="bbbfly.MapDrawingsHandler.html#Select">Select</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#SetSelected">
+          <a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected</a>
         </li>
     </ul>
     <ul class="events itemMembers">
@@ -2420,6 +2432,9 @@
         </li>
         <li data-name="bbbfly.MapTooltip#Hide">
           <a href="bbbfly.MapTooltip.html#Hide">Hide</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#IsShown">
+          <a href="bbbfly.MapTooltip.html#IsShown">IsShown</a>
         </li>
         <li data-name="bbbfly.MapTooltip#Show">
           <a href="bbbfly.MapTooltip.html#Show">Show</a>
@@ -3252,7 +3267,9 @@
         <tbody>
             <tr id="property:Id">
                     <td class="name">
-                      <span class="param-name">Id</span>
+                      <span class="param-name">
+                        Id
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
@@ -3265,7 +3282,9 @@
             </tr>
             <tr id="property:Type">
                     <td class="name">
-                      <span class="param-name">Type</span>
+                      <span class="param-name">
+                        Type
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="bbbfly.Map.Layer.html#.type">bbbfly.Map.Layer.type</a></span>
@@ -3277,13 +3296,17 @@
             </tr>
             <tr id="property:Display">
                     <td class="name">
-                      <span class="param-name">Display</span>
+                      <span class="param-name">
+                        Display
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="bbbfly.Map.Layer.html#.display">bbbfly.Map.Layer.display</a></span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         fixed
+                      </span>
                     </td>
                 <td class="description last">
                         <span class="optional">optional</span>
@@ -3291,7 +3314,9 @@
             </tr>
             <tr id="property:NameRes">
                     <td class="name">
-                      <span class="param-name">NameRes</span>
+                      <span class="param-name">
+                        NameRes
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
@@ -3305,7 +3330,9 @@
             </tr>
             <tr id="property:Name">
                     <td class="name">
-                      <span class="param-name">Name</span>
+                      <span class="param-name">
+                        Name
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
@@ -3321,7 +3348,9 @@
             </tr>
             <tr id="property:ZIndex">
                     <td class="name">
-                      <span class="param-name">ZIndex</span>
+                      <span class="param-name">
+                        ZIndex
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">number</span>
@@ -3335,7 +3364,9 @@
             </tr>
             <tr id="property:Opacity">
                     <td class="name">
-                      <span class="param-name">Opacity</span>
+                      <span class="param-name">
+                        Opacity
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">number</span>
@@ -3349,7 +3380,9 @@
             </tr>
             <tr id="property:ClassName">
                     <td class="name">
-                      <span class="param-name">ClassName</span>
+                      <span class="param-name">
+                        ClassName
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
@@ -3403,13 +3436,17 @@
         <tbody>
             <tr id="property:fixed">
                     <td class="name">
-                      <span class="param-name">fixed</span>
+                      <span class="param-name">
+                        fixed
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         fixed
+                      </span>
                     </td>
                 <td class="description last">
                   Always shown
@@ -3417,13 +3454,17 @@
             </tr>
             <tr id="property:visible">
                     <td class="name">
-                      <span class="param-name">visible</span>
+                      <span class="param-name">
+                        visible
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         visible
+                      </span>
                     </td>
                 <td class="description last">
                   Optional, shown as default
@@ -3431,13 +3472,17 @@
             </tr>
             <tr id="property:hidden">
                     <td class="name">
-                      <span class="param-name">hidden</span>
+                      <span class="param-name">
+                        hidden
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         hidden
+                      </span>
                     </td>
                 <td class="description last">
                   Optional, hidden as default
@@ -3484,117 +3529,153 @@
         <tbody>
             <tr id="property:color">
                     <td class="name">
-                      <span class="param-name">color</span>
+                      <span class="param-name">
+                        color
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         ColorLayer
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:image">
                     <td class="name">
-                      <span class="param-name">image</span>
+                      <span class="param-name">
+                        image
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         ImageLayer
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:tile">
                     <td class="name">
-                      <span class="param-name">tile</span>
+                      <span class="param-name">
+                        tile
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         TileLayer
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:wms">
                     <td class="name">
-                      <span class="param-name">wms</span>
+                      <span class="param-name">
+                        wms
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         WMSLayer
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:arcgis_online">
                     <td class="name">
-                      <span class="param-name">arcgis_online</span>
+                      <span class="param-name">
+                        arcgis_online
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         ArcGISOnlineLayer
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:arcgis_server">
                     <td class="name">
-                      <span class="param-name">arcgis_server</span>
+                      <span class="param-name">
+                        arcgis_server
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         ArcGISServerLayer
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:arcgis_enterprise">
                     <td class="name">
-                      <span class="param-name">arcgis_enterprise</span>
+                      <span class="param-name">
+                        arcgis_enterprise
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         ArcGISEnterpriseLayer
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:mapbox_tile">
                     <td class="name">
-                      <span class="param-name">mapbox_tile</span>
+                      <span class="param-name">
+                        mapbox_tile
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         MapboxTileLayer
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:mapbox_style">
                     <td class="name">
-                      <span class="param-name">mapbox_style</span>
+                      <span class="param-name">
+                        mapbox_style
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         MapboxStyleLayer
+                      </span>
                     </td>
                 <td class="description last">
                 </td>

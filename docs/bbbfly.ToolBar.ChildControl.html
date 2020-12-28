@@ -2229,6 +2229,9 @@
         <li data-name="fillOpacity">
           <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:fillOpacity">fillOpacity</a>
         </li>
+        <li data-name="className">
+          <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:className">className</a>
+        </li>
     </ul>
 </li>
 <li class="item" data-name="bbbfly.MapDrawingItem.IconStyle">
@@ -2300,6 +2303,9 @@
         <li data-name="bbbfly.MapDrawingsHandler#BeginClustering">
           <a href="bbbfly.MapDrawingsHandler.html#BeginClustering">BeginClustering</a>
         </li>
+        <li data-name="bbbfly.MapDrawingsHandler#BeginSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting</a>
+        </li>
         <li data-name="bbbfly.MapDrawingsHandler#ClearDrawings">
           <a href="bbbfly.MapDrawingsHandler.html#ClearDrawings">ClearDrawings</a>
         </li>
@@ -2314,6 +2320,9 @@
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#EndClustering">
           <a href="bbbfly.MapDrawingsHandler.html#EndClustering">EndClustering</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#EndSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting</a>
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#GetDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#GetDrawing">GetDrawing</a>
@@ -2333,8 +2342,11 @@
         <li data-name="bbbfly.MapDrawingsHandler#RemoveDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#RemoveDrawing">RemoveDrawing</a>
         </li>
-        <li data-name="bbbfly.MapDrawingsHandler#Selected">
-          <a href="bbbfly.MapDrawingsHandler.html#Selected">Selected</a>
+        <li data-name="bbbfly.MapDrawingsHandler#Select">
+          <a href="bbbfly.MapDrawingsHandler.html#Select">Select</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#SetSelected">
+          <a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected</a>
         </li>
     </ul>
     <ul class="events itemMembers">
@@ -2420,6 +2432,9 @@
         </li>
         <li data-name="bbbfly.MapTooltip#Hide">
           <a href="bbbfly.MapTooltip.html#Hide">Hide</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#IsShown">
+          <a href="bbbfly.MapTooltip.html#IsShown">IsShown</a>
         </li>
         <li data-name="bbbfly.MapTooltip#Show">
           <a href="bbbfly.MapTooltip.html#Show">Show</a>
@@ -3234,8 +3249,7 @@
 </header>
 <article>
     <div class="container-overview">
-            <div class="description"><a href="bbbfly.ToolBar.html">ToolBar</a> child controls can implement
-  this to modify how toolbar handles them.</div>
+            <div class="description"><a href="bbbfly.ToolBar.html">ToolBar</a> child controls can implement  this to modify how toolbar handles them.</div>
 <dl class="details">
     <h3>Properties</h3>
     <table class="props" my="test">
@@ -3250,13 +3264,17 @@
         <tbody>
             <tr id="property:ToolBarIgnore">
                     <td class="name">
-                      <span class="param-name">ToolBarIgnore</span>
+                      <span class="param-name">
+                        ToolBarIgnore
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">boolean</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         false
+                      </span>
                     </td>
                 <td class="description last">
                         <span class="optional">optional</span>
@@ -3265,13 +3283,17 @@
             </tr>
             <tr id="property:ToolBarAutoUpdate">
                     <td class="name">
-                      <span class="param-name">ToolBarAutoUpdate</span>
+                      <span class="param-name">
+                        ToolBarAutoUpdate
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">boolean</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         true
+                      </span>
                     </td>
                 <td class="description last">
                         <span class="optional">optional</span>
@@ -3280,13 +3302,17 @@
             </tr>
             <tr id="property:ToolBarIndent">
                     <td class="name">
-                      <span class="param-name">ToolBarIndent</span>
+                      <span class="param-name">
+                        ToolBarIndent
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="global.html#px">px</a></span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         0
+                      </span>
                     </td>
                 <td class="description last">
                         <span class="optional">optional</span>
@@ -3295,7 +3321,9 @@
             </tr>
             <tr id="property:ToolBarHPadding">
                     <td class="name">
-                      <span class="param-name">ToolBarHPadding</span>
+                      <span class="param-name">
+                        ToolBarHPadding
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="global.html#px">px</a></span>
@@ -3309,7 +3337,9 @@
             </tr>
             <tr id="property:ToolBarVPadding">
                     <td class="name">
-                      <span class="param-name">ToolBarVPadding</span>
+                      <span class="param-name">
+                        ToolBarVPadding
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="global.html#px">px</a></span>
@@ -3323,7 +3353,9 @@
             </tr>
             <tr id="property:ToolBarWidth">
                     <td class="name">
-                      <span class="param-name">ToolBarWidth</span>
+                      <span class="param-name">
+                        ToolBarWidth
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="global.html#px">px</a></span>
@@ -3337,7 +3369,9 @@
             </tr>
             <tr id="property:ToolBarHeight">
                     <td class="name">
-                      <span class="param-name">ToolBarHeight</span>
+                      <span class="param-name">
+                        ToolBarHeight
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="global.html#px">px</a></span>
@@ -3351,13 +3385,17 @@
             </tr>
             <tr id="property:ToolBarBreak">
                     <td class="name">
-                      <span class="param-name">ToolBarBreak</span>
+                      <span class="param-name">
+                        ToolBarBreak
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">boolean</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         false
+                      </span>
                     </td>
                 <td class="description last">
                         <span class="optional">optional</span>
@@ -3366,13 +3404,17 @@
             </tr>
             <tr id="property:ToolBarNoWrap">
                     <td class="name">
-                      <span class="param-name">ToolBarNoWrap</span>
+                      <span class="param-name">
+                        ToolBarNoWrap
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">boolean</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         false
+                      </span>
                     </td>
                 <td class="description last">
                         <span class="optional">optional</span>

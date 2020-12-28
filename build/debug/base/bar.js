@@ -5,6 +5,7 @@
  * @license see license in 'LICENSE' file
 */
 
+
 var bbbfly = bbbfly || {};
 bbbfly.toolbar = {};
 bbbfly.toolbar._setControlsPanelProps = function(){

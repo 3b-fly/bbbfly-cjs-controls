@@ -2229,6 +2229,9 @@
         <li data-name="fillOpacity">
           <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:fillOpacity">fillOpacity</a>
         </li>
+        <li data-name="className">
+          <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:className">className</a>
+        </li>
     </ul>
 </li>
 <li class="item" data-name="bbbfly.MapDrawingItem.IconStyle">
@@ -2300,6 +2303,9 @@
         <li data-name="bbbfly.MapDrawingsHandler#BeginClustering">
           <a href="bbbfly.MapDrawingsHandler.html#BeginClustering">BeginClustering</a>
         </li>
+        <li data-name="bbbfly.MapDrawingsHandler#BeginSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting</a>
+        </li>
         <li data-name="bbbfly.MapDrawingsHandler#ClearDrawings">
           <a href="bbbfly.MapDrawingsHandler.html#ClearDrawings">ClearDrawings</a>
         </li>
@@ -2314,6 +2320,9 @@
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#EndClustering">
           <a href="bbbfly.MapDrawingsHandler.html#EndClustering">EndClustering</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#EndSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting</a>
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#GetDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#GetDrawing">GetDrawing</a>
@@ -2333,8 +2342,11 @@
         <li data-name="bbbfly.MapDrawingsHandler#RemoveDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#RemoveDrawing">RemoveDrawing</a>
         </li>
-        <li data-name="bbbfly.MapDrawingsHandler#Selected">
-          <a href="bbbfly.MapDrawingsHandler.html#Selected">Selected</a>
+        <li data-name="bbbfly.MapDrawingsHandler#Select">
+          <a href="bbbfly.MapDrawingsHandler.html#Select">Select</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#SetSelected">
+          <a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected</a>
         </li>
     </ul>
     <ul class="events itemMembers">
@@ -2420,6 +2432,9 @@
         </li>
         <li data-name="bbbfly.MapTooltip#Hide">
           <a href="bbbfly.MapTooltip.html#Hide">Hide</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#IsShown">
+          <a href="bbbfly.MapTooltip.html#IsShown">IsShown</a>
         </li>
         <li data-name="bbbfly.MapTooltip#Show">
           <a href="bbbfly.MapTooltip.html#Show">Show</a>
@@ -3250,7 +3265,7 @@
           <span class="signature">(options)</span>
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1888">map/map_drawing.js, line 1888</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L1996">map/map_drawing.js, line 1996</a>
         </div>
     </div>
 </dt>
@@ -3330,6 +3345,28 @@
                     <span class="optional">optional</span>
         </td>
     </tr>
+    <tr id="param:options.fillOpacity" class="subparam subrowlevel_1">
+            <td class="name">
+              <span class="param-name">fillOpacity</span>
+            </td>
+        <td class="type">
+<span class="param-type">number</span>
+        </td>
+        <td class="description last">
+                    <span class="optional">optional</span>
+        </td>
+    </tr>
+    <tr id="param:options.className" class="subparam subrowlevel_1">
+            <td class="name">
+              <span class="param-name">className</span>
+            </td>
+        <td class="type">
+<span class="param-type">string</span>
+        </td>
+        <td class="description last">
+                    <span class="optional">optional</span>
+        </td>
+    </tr>
 	</tbody>
 </table>
 <dl class="details">
@@ -3346,7 +3383,9 @@
         <tbody>
             <tr id="property:fill">
                     <td class="name">
-                      <span class="param-name">fill</span>
+                      <span class="param-name">
+                        fill
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">boolean</span>
@@ -3358,7 +3397,9 @@
             </tr>
             <tr id="property:stroke">
                     <td class="name">
-                      <span class="param-name">stroke</span>
+                      <span class="param-name">
+                        stroke
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">boolean</span>
@@ -3370,65 +3411,102 @@
             </tr>
             <tr id="property:weight">
                     <td class="name">
-                      <span class="param-name">weight</span>
+                      <span class="param-name">
+                        weight
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         1
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:color">
                     <td class="name">
-                      <span class="param-name">color</span>
+                      <span class="param-name">
+                        color
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         '#000000'
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:fillColor">
                     <td class="name">
-                      <span class="param-name">fillColor</span>
+                      <span class="param-name">
+                        fillColor
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">string</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         null
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:opacity">
                     <td class="name">
-                      <span class="param-name">opacity</span>
+                      <span class="param-name">
+                        opacity
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">number</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         1
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:fillOpacity">
                     <td class="name">
-                      <span class="param-name">fillOpacity</span>
+                      <span class="param-name">
+                        fillOpacity
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">number</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         0.2
+                      </span>
+                    </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:className">
+                    <td class="name">
+                      <span class="param-name">
+                        className
+                      </span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                    <td class="default">
+                      <span class="param-default">
+                        ''
+                      </span>
                     </td>
                 <td class="description last">
                 </td>

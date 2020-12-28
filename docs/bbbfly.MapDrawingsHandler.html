@@ -2229,6 +2229,9 @@
         <li data-name="fillOpacity">
           <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:fillOpacity">fillOpacity</a>
         </li>
+        <li data-name="className">
+          <a href="bbbfly.MapDrawingItem.GeometryStyle.html#property:className">className</a>
+        </li>
     </ul>
 </li>
 <li class="item" data-name="bbbfly.MapDrawingItem.IconStyle">
@@ -2300,6 +2303,9 @@
         <li data-name="bbbfly.MapDrawingsHandler#BeginClustering">
           <a href="bbbfly.MapDrawingsHandler.html#BeginClustering">BeginClustering</a>
         </li>
+        <li data-name="bbbfly.MapDrawingsHandler#BeginSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting</a>
+        </li>
         <li data-name="bbbfly.MapDrawingsHandler#ClearDrawings">
           <a href="bbbfly.MapDrawingsHandler.html#ClearDrawings">ClearDrawings</a>
         </li>
@@ -2314,6 +2320,9 @@
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#EndClustering">
           <a href="bbbfly.MapDrawingsHandler.html#EndClustering">EndClustering</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#EndSelecting">
+          <a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting</a>
         </li>
         <li data-name="bbbfly.MapDrawingsHandler#GetDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#GetDrawing">GetDrawing</a>
@@ -2333,8 +2342,11 @@
         <li data-name="bbbfly.MapDrawingsHandler#RemoveDrawing">
           <a href="bbbfly.MapDrawingsHandler.html#RemoveDrawing">RemoveDrawing</a>
         </li>
-        <li data-name="bbbfly.MapDrawingsHandler#Selected">
-          <a href="bbbfly.MapDrawingsHandler.html#Selected">Selected</a>
+        <li data-name="bbbfly.MapDrawingsHandler#Select">
+          <a href="bbbfly.MapDrawingsHandler.html#Select">Select</a>
+        </li>
+        <li data-name="bbbfly.MapDrawingsHandler#SetSelected">
+          <a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected</a>
         </li>
     </ul>
     <ul class="events itemMembers">
@@ -2420,6 +2432,9 @@
         </li>
         <li data-name="bbbfly.MapTooltip#Hide">
           <a href="bbbfly.MapTooltip.html#Hide">Hide</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#IsShown">
+          <a href="bbbfly.MapTooltip.html#IsShown">IsShown</a>
         </li>
         <li data-name="bbbfly.MapTooltip#Show">
           <a href="bbbfly.MapTooltip.html#Show">Show</a>
@@ -3250,7 +3265,7 @@
           <span class="signature">(feature, options)</span>
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2087">map/map_drawing.js, line 2087</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2199">map/map_drawing.js, line 2199</a>
         </div>
     </div>
 </dt>
@@ -3300,7 +3315,9 @@
         <tbody>
             <tr id="property:Options">
                     <td class="name">
-                      <span class="param-name">Options</span>
+                      <span class="param-name">
+                        Options
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="bbbfly.MapDrawingsHandler.html#.options">bbbfly.MapDrawingsHandler.options</a></span>
@@ -3348,13 +3365,17 @@
         <tbody>
             <tr id="property:SelectType">
                     <td class="name">
-                      <span class="param-name">SelectType</span>
+                      <span class="param-name">
+                        SelectType
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="bbbfly.MapDrawingsHandler.html#.selecttype">bbbfly.MapDrawingsHandler.selecttype</a></span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         none
+                      </span>
                     </td>
                 <td class="description last">
                         <span class="optional">optional</span>
@@ -3362,13 +3383,17 @@
             </tr>
             <tr id="property:MaxClusterRadius">
                     <td class="name">
-                      <span class="param-name">MaxClusterRadius</span>
+                      <span class="param-name">
+                        MaxClusterRadius
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         50
+                      </span>
                     </td>
                 <td class="description last">
                         <span class="optional">optional</span>
@@ -3376,7 +3401,9 @@
             </tr>
             <tr id="property:MinGeometrySize">
                     <td class="name">
-                      <span class="param-name">MinGeometrySize</span>
+                      <span class="param-name">
+                        MinGeometrySize
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type"><a href="global.html#px">px</a></span>
@@ -3430,39 +3457,51 @@
         <tbody>
             <tr id="property:none">
                     <td class="name">
-                      <span class="param-name">none</span>
+                      <span class="param-name">
+                        none
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         0
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:single">
                     <td class="name">
-                      <span class="param-name">single</span>
+                      <span class="param-name">
+                        single
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         1
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
             </tr>
             <tr id="property:multi">
                     <td class="name">
-                      <span class="param-name">multi</span>
+                      <span class="param-name">
+                        multi
+                      </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
                 </td>
                     <td class="default">
+                      <span class="param-default">
                         2
+                      </span>
                     </td>
                 <td class="description last">
                 </td>
@@ -3483,7 +3522,7 @@
           <span class="signature">(drawing)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2124">map/map_drawing.js, line 2124</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2240">map/map_drawing.js, line 2240</a>
         </div>
     </div>
 </dt>
@@ -3537,7 +3576,7 @@
           <span class="signature">(cluster)</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2202">map/map_drawing.js, line 2202</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2318">map/map_drawing.js, line 2318</a>
         </div>
     </div>
 </dt>
@@ -3575,12 +3614,39 @@
 </dd>
 <dt>
     <div class="nameContainer">
+        <h4 id="BeginSelecting">
+          BeginSelecting
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2408">map/map_drawing.js, line 2408</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Begin "OnSelectedChanged" events grouping</div>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.MapDrawingsHandler.html#Select">Select()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#ClearSelected">ClearSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#GetSelected">GetSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#event:OnSelectedChanged">OnSelectedChanged</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer">
         <h4 id="ClearDrawings">
           ClearDrawings
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2151">map/map_drawing.js, line 2151</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2267">map/map_drawing.js, line 2267</a>
         </div>
     </div>
 </dt>
@@ -3603,7 +3669,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2190">map/map_drawing.js, line 2190</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2306">map/map_drawing.js, line 2306</a>
         </div>
     </div>
 </dt>
@@ -3626,7 +3692,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2179">map/map_drawing.js, line 2179</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2295">map/map_drawing.js, line 2295</a>
         </div>
     </div>
 </dt>
@@ -3649,7 +3715,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2251">map/map_drawing.js, line 2251</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2374">map/map_drawing.js, line 2374</a>
         </div>
     </div>
 </dt>
@@ -3659,8 +3725,11 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
       <ul class="dummy">
-          <li>Select()</li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#Select">Select()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected()</a></li>
           <li><a href="bbbfly.MapDrawingsHandler.html#GetSelected">GetSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting()</a></li>
           <li><a href="bbbfly.MapDrawingsHandler.html#event:OnSelectedChanged">OnSelectedChanged</a></li>
       </ul>
     </dd>
@@ -3673,7 +3742,7 @@
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2212">map/map_drawing.js, line 2212</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2328">map/map_drawing.js, line 2328</a>
         </div>
     </div>
 </dt>
@@ -3706,12 +3775,39 @@
 </dd>
 <dt>
     <div class="nameContainer">
+        <h4 id="EndSelecting">
+          EndSelecting
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2424">map/map_drawing.js, line 2424</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">End "OnSelectedChanged" events grouping</div>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.MapDrawingsHandler.html#Select">Select()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#GetSelected">GetSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#ClearSelected">ClearSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#event:OnSelectedChanged">OnSelectedChanged</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer">
         <h4 id="GetDrawing">
           GetDrawing
           <span class="signature">(id)</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="bbbfly.MapDrawing.html">bbbfly.MapDrawing</a>|null}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2115">map/map_drawing.js, line 2115</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2231">map/map_drawing.js, line 2231</a>
         </div>
     </div>
 </dt>
@@ -3767,7 +3863,7 @@
           <span class="signature">(id)</span><span class="arrow-right"></span><span class="type-signature returnType">{Array.&lt;<a href="bbbfly.MapDrawing.html">bbbfly.MapDrawing</a>>}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2142">map/map_drawing.js, line 2142</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2258">map/map_drawing.js, line 2258</a>
         </div>
     </div>
 </dt>
@@ -3821,7 +3917,7 @@
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{GeoJSON|null}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2171">map/map_drawing.js, line 2171</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2287">map/map_drawing.js, line 2287</a>
         </div>
     </div>
 </dt>
@@ -3855,7 +3951,7 @@
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{Array.&lt;<a href="global.html#mapPoint">mapPoint</a>>}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2163">map/map_drawing.js, line 2163</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2279">map/map_drawing.js, line 2279</a>
         </div>
     </div>
 </dt>
@@ -3884,15 +3980,15 @@
     <div class="nameContainer">
         <h4 id="GetSelected">
           GetSelected
-          <span class="signature">(<span class="optional">selected</span>)</span>
+          <span class="signature">(<span class="optional">selected</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{Array.&lt;<a href="bbbfly.MapDrawingItem.html">bbbfly.MapDrawingItem</a>>}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2237">map/map_drawing.js, line 2237</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2389">map/map_drawing.js, line 2389</a>
         </div>
     </div>
 </dt>
 <dd>
-      <div class="description">Get all drawings</div>
+      <div class="description">Get selected drawings</div>
         <h5>Parameters:</h5>
 <table class="params">
     <thead>
@@ -3916,6 +4012,7 @@
                 </td>
             <td class="description last">
                         <span class="optional">optional</span>
+                If get selected or unselected
             </td>
         </tr>
 	</tbody>
@@ -3924,12 +4021,32 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
       <ul class="dummy">
-          <li>Select()</li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#Select">Select()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected()</a></li>
           <li><a href="bbbfly.MapDrawingsHandler.html#ClearSelected">ClearSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting()</a></li>
           <li><a href="bbbfly.MapDrawingsHandler.html#event:OnSelectedChanged">OnSelectedChanged</a></li>
       </ul>
     </dd>
 </dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        Array.&lt;<a href="bbbfly.MapDrawingItem.html">bbbfly.MapDrawingItem</a>>
+            </td>
+            <td class="description last">- Selected drawings</td>
+        </tr>
+    </tbody>
+</table>
 </dd>
 <dt>
     <div class="nameContainer">
@@ -3938,7 +4055,7 @@
           <span class="signature">(drawing)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2133">map/map_drawing.js, line 2133</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2249">map/map_drawing.js, line 2249</a>
         </div>
     </div>
 </dt>
@@ -3987,17 +4104,87 @@
 </dd>
 <dt>
     <div class="nameContainer">
-        <h4 id="Selected">
-          Selected
-          <span class="signature">(id)</span>
+        <h4 id="Select">
+          Select
+          <span class="signature">(drawing, <span class="optional">selected</span>)</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2223">map/map_drawing.js, line 2223</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2339">map/map_drawing.js, line 2339</a>
         </div>
     </div>
 </dt>
 <dd>
       <div class="description">Select drawing and locate it</div>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">drawing</span>
+                </td>
+            <td class="type">
+<span class="param-type">string</span>
+|
+<span class="param-type"><a href="bbbfly.MapDrawingItem.html">bbbfly.MapDrawingItem</a></span>
+            </td>
+                <td class="default">
+                </td>
+            <td class="description last">
+                Drawing id or reference
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">selected</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+                <td class="default">
+                    true
+                </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                If set selected or unselected
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#ClearSelected">ClearSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#GetSelected">GetSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#event:OnSelectedChanged">OnSelectedChanged</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="SetSelected">
+          SetSelected
+          <span class="signature">(drawings)</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2357">map/map_drawing.js, line 2357</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Set selected drawings</div>
         <h5>Parameters:</h5>
 <table class="params">
     <thead>
@@ -4010,12 +4197,15 @@
 	<tbody>
         <tr>
                 <td class="name">
-                  <span class="param-name">id</span>
+                  <span class="param-name">drawings</span>
                 </td>
             <td class="type">
-<span class="param-type">string</span>
+<span class="param-type">Array.&lt;string></span>
+|
+<span class="param-type">Array.&lt;<a href="bbbfly.MapDrawingItem.html">bbbfly.MapDrawingItem</a>></span>
             </td>
             <td class="description last">
+                Drawing ids or references
             </td>
         </tr>
 	</tbody>
@@ -4024,8 +4214,11 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
       <ul class="dummy">
-          <li><a href="bbbfly.MapDrawingsHandler.html#GetSelected">GetSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#Select">Select()</a></li>
           <li><a href="bbbfly.MapDrawingsHandler.html#ClearSelected">ClearSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#GetSelected">GetSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting()</a></li>
           <li><a href="bbbfly.MapDrawingsHandler.html#event:OnSelectedChanged">OnSelectedChanged</a></li>
       </ul>
     </dd>
@@ -4041,7 +4234,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2264">map/map_drawing.js, line 2264</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_drawing.js#L2440">map/map_drawing.js, line 2440</a>
         </div>
     </div>
 </dt>
@@ -4050,9 +4243,12 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
       <ul class="dummy">
-          <li>Select()</li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#Select">Select()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#SetSelected">SetSelected()</a></li>
           <li><a href="bbbfly.MapDrawingsHandler.html#GetSelected">GetSelected()</a></li>
           <li><a href="bbbfly.MapDrawingsHandler.html#ClearSelected">ClearSelected()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#BeginSelecting">BeginSelecting()</a></li>
+          <li><a href="bbbfly.MapDrawingsHandler.html#EndSelecting">EndSelecting()</a></li>
       </ul>
     </dd>
 </dl>
