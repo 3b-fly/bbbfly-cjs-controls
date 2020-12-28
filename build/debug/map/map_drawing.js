@@ -1380,11 +1380,11 @@ bbbfly.MapDrawingItem.Style.Define = function(id,style){
 bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(images,className){
 
-    if(!Array.isArray(images)){images = null;}
-    if(!String.isString(className)){className = '';}
+    this.images = null;
+    this.className = '';
 
-    this.images = images;
-    this.className = className;
+    if(Array.isArray(images)){this.images = images;}
+    if(String.isString(className)){this.className = className;}
   }
 );
 bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
@@ -1400,6 +1400,8 @@ bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
     this.opacity = 1;
     this.fillOpacity = 0.2;
 
+    this.className = '';
+
     if(!Object.isObject(options)){return;}
 
     if(Number.isInteger(options.weight)){this.weight = options.weight;}
@@ -1409,6 +1411,8 @@ bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
 
     if(Number.isNumber(options.opacity)){this.opacity = options.opacity;}
     if(Number.isNumber(options.fillOpacity)){this.fillOpacity = options.fillOpacity;}
+
+    if(String.isString(options.className)){this.className = options.className;}
 
     this.stroke = !!((this.weight > 0) && (this.opacity > 0));
     this.fill = !!(this.fillColor && (this.fillOpacity > 0));

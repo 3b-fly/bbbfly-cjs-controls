@@ -1952,7 +1952,7 @@ bbbfly.MapDrawingItem.Style.Define = function(id,style){
  * @inpackage mapbox
  *
  * @param {bbbfly.Renderer.image[]} [images=undefined] - Stack of icon images
- * @param {string} [className=''] - Leaflet marker div class name
+ * @param {string} [className=undefined] - Leaflet marker div class name
  *
  * @property {bbbfly.Renderer.image[]} [images=null]
  * @property {string} [className='']
@@ -1960,11 +1960,11 @@ bbbfly.MapDrawingItem.Style.Define = function(id,style){
 bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(images,className){
 
-    if(!Array.isArray(images)){images = null;}
-    if(!String.isString(className)){className = '';}
+    this.images = null;
+    this.className = '';
 
-    this.images = images;
-    this.className = className;
+    if(Array.isArray(images)){this.images = images;}
+    if(String.isString(className)){this.className = className;}
   }
 );
 
@@ -1981,6 +1981,8 @@ bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
  * @param {string} [options.fillColor=undefined]
  * @param {number} [options.opacity=undefined]
  * @param {number} [options.fillOpacity=undefined]
+ * @param {number} [options.fillOpacity=undefined]
+ * @param {string} [options.className=undefined]
  *
  * @property {boolean} fill
  * @property {boolean} stroke
@@ -1989,6 +1991,7 @@ bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
  * @property {string} [fillColor=null]
  * @property {number} [opacity=1]
  * @property {number} [fillOpacity=0.2]
+ * @property {string} [className='']
  */
 bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(options){
@@ -2003,6 +2006,8 @@ bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
     this.opacity = 1;
     this.fillOpacity = 0.2;
 
+    this.className = '';
+
     if(!Object.isObject(options)){return;}
 
     if(Number.isInteger(options.weight)){this.weight = options.weight;}
@@ -2012,6 +2017,8 @@ bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
 
     if(Number.isNumber(options.opacity)){this.opacity = options.opacity;}
     if(Number.isNumber(options.fillOpacity)){this.fillOpacity = options.fillOpacity;}
+
+    if(String.isString(options.className)){this.className = options.className;}
 
     this.stroke = !!((this.weight > 0) && (this.opacity > 0));
     this.fill = !!(this.fillColor && (this.fillOpacity > 0));
