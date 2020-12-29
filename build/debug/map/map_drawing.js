@@ -18,9 +18,15 @@ bbbfly.map.drawing = {
   utils: {},
   layer: {},
   core: {},
-  item: {},
-  cluster: { listener : {} },
-  handler: { listener : {} }
+  item: {
+    geometrystyle: {}
+  },
+  cluster: {
+    listener : {}
+  },
+  handler: {
+    listener : {}
+  }
 };
 bbbfly.map.drawing.utils.LeafletId = function(obj){
   var id = Object.isObject(obj) ? L.stamp(obj) : null;
@@ -392,9 +398,12 @@ bbbfly.map.drawing.item._create = function(){
   if(hasGeom){
     geom = bbbfly.map.drawing.utils.NormalizeGeoJSON(geom);
     var geometry = new L.GeoJSON(geom);
+    var state = this.GetState();
 
     var gLayers = geometry.getLayers();
     var gStyle = this.GetGeometryStyle();
+
+    var style = gStyle ? gStyle.GetStyle(state) : null;
 
     for(var i in gLayers){
       var layer = gLayers[i];
@@ -407,7 +416,7 @@ bbbfly.map.drawing.item._create = function(){
           bbbfly.map.drawing.item._projectGeometry
         );
 
-        if(gStyle){layer.setStyle(gStyle);}
+        if(style){layer.setStyle(style);}
         if(showGeom){layers.push(layer);}
       }
     }
@@ -504,11 +513,13 @@ bbbfly.map.drawing.item._update = function(){
     var gStyle = this.GetGeometryStyle();
 
     if(gStyle){
+      var style = gStyle.GetStyle(state);
+
       for(var i in gLayers){
         var layer = gLayers[i];
 
         if(layer instanceof L.Path){
-          layer.setStyle(gStyle);
+          layer.setStyle(style);
         }
       }
     }
@@ -742,6 +753,32 @@ bbbfly.map.drawing.item._onDblClick = function(){
   if((this.Options.SelectType & bbbfly.MapDrawingItem.selecttype.dblclick)){
     this.SetSelected(!this.GetSelected(),true);
   }
+};
+bbbfly.map.drawing.item.geometrystyle._getStyle = function(state){
+  var opts = this._options;
+  var def = this._defoptions;
+
+  var weight = bbbfly.Renderer.GetStateValue(opts,state,'weight');
+  var color = bbbfly.Renderer.GetStateValue(opts,state,'color');
+  var fillColor = bbbfly.Renderer.GetStateValue(opts,state,'fillColor');
+  var opacity = bbbfly.Renderer.GetStateValue(opts,state,'opacity');
+  var fillOpacity = bbbfly.Renderer.GetStateValue(opts,state,'fillOpacity');
+  var className = bbbfly.Renderer.GetStateValue(opts,state,'className');
+
+  var style = {
+    weight: (Number.isInteger(weight) ? weight : def.weight),
+    color: (String.isString(color) ? color : def.color),
+    fillColor: (String.isString(fillColor) ? fillColor : def.fillColor),
+    opacity: (Number.isNumber(opacity) ? opacity : def.opacity),
+    fillOpacity: (Number.isNumber(fillOpacity) ? fillOpacity : def.fillOpacity),
+    className: (String.isString(className) ? className : def.className)
+  };
+
+  style.stroke = !!((style.weight > 0) && (style.opacity > 0));
+  style.fill = !!(style.fillColor && (style.fillOpacity > 0));
+
+    console.info('GET STYLE',this._options,style);
+  return style;
 };
 bbbfly.map.drawing.cluster._create = function(){
   var sStyle = this.GetSpiderStyle();
@@ -1390,32 +1427,17 @@ bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
 bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(options){
 
-    this.stroke = false;
-    this.fill = false;
-    this.weight = 1;
+    this._options = ng_CopyVar(options);
 
-    this.color = '#000000';
-    this.fillColor = null;
-
-    this.opacity = 1;
-    this.fillOpacity = 0.2;
-
-    this.className = '';
-
-    if(!Object.isObject(options)){return;}
-
-    if(Number.isInteger(options.weight)){this.weight = options.weight;}
-
-    if(String.isString(options.color)){this.color = options.color;}
-    if(String.isString(options.fillColor)){this.fillColor = options.fillColor;}
-
-    if(Number.isNumber(options.opacity)){this.opacity = options.opacity;}
-    if(Number.isNumber(options.fillOpacity)){this.fillOpacity = options.fillOpacity;}
-
-    if(String.isString(options.className)){this.className = options.className;}
-
-    this.stroke = !!((this.weight > 0) && (this.opacity > 0));
-    this.fill = !!(this.fillColor && (this.fillOpacity > 0));
+    this._defoptions = {
+      weight: 1,
+      color: '#000000',
+      fillColor: null,
+      opacity: 1,
+      fillOpacity: 0.2,
+      className: ''
+    };
+    this.GetStyle = bbbfly.map.drawing.item.geometrystyle._getStyle;
   }
 );
 bbbfly.MapDrawingItem.state = {
