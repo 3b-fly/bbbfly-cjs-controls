@@ -9,18 +9,10 @@
 var bbbfly = bbbfly || {};
 bbbfly.wrapper = {};
 bbbfly.wrapper._onCreated = function(wrapper){
-  if(wrapper._Stretcher){return;}
-
-  var def = {Type:'bbbfly.Panel'};
-  var cHolder = wrapper.GetControlsHolder();
-  wrapper._Stretcher = ngCreateControl(def,undefined,cHolder.ID);
-
-  if(wrapper._Stretcher){
-    def.parent = cHolder.ID;
-    def.id = wrapper._Stretcher.ID;
-
-    ngAddChildControl(cHolder,wrapper._Stretcher);
-    wrapper._Stretcher.Create(def);
+  if(!wrapper._Stretcher){
+    wrapper._Stretcher = wrapper.CreateChildControl({
+      Type:'bbbfly.Panel'
+    });
   }
 };
 bbbfly.wrapper._onUpdate = function(){

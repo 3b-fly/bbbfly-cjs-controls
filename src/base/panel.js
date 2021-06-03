@@ -359,6 +359,25 @@ bbbfly.panel._setSelected = function(selected,update){
 };
 
 /** @ignore */
+bbbfly.panel._createChildControl = function(def){
+  if(!Object.isObject(def)){return null;}
+
+  var cHolder = this.GetControlsHolder();
+  var ctrl = ngCreateControl(def,undefined,cHolder.ID);
+  if(!Object.isObject(ctrl)){return null;}
+
+  def.parent = cHolder.ID;
+  def.id = ctrl.ID;
+
+  if(Function.isFunction(cHolder.AddChildControl)){
+    cHolder.AddChildControl(ctrl);
+  }
+
+  ctrl.Create(def);
+  return ctrl;
+};
+
+/** @ignore */
 bbbfly.frame._doCreate = function(def,ref,node){
   this.DoCreate.callParent(def,ref,node);
   if(!this.Frame){return;}
@@ -880,7 +899,16 @@ bbbfly.Panel = function(def,ref,parent){
        * @see {@link bbbfly.Panel#event:OnSetSelected|OnSetSelected}
        * @see {@link bbbfly.Panel#event:OnSelectedChanged|OnSelectedChanged}
        */
-      SetSelected: bbbfly.panel._setSelected
+      SetSelected: bbbfly.panel._setSelected,
+
+      /**
+       * @function
+       * @name CreateChildControl
+       * @memberof bbbfly.Panel#
+       *
+       * @param {ngControl.Definition} [def] - Control definition
+       */
+      CreateChildControl: bbbfly.panel._createChildControl
     }
   });
 

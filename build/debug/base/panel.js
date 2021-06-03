@@ -312,6 +312,23 @@ bbbfly.panel._setSelected = function(selected,update){
   }
   return true;
 };
+bbbfly.panel._createChildControl = function(def){
+  if(!Object.isObject(def)){return null;}
+
+  var cHolder = this.GetControlsHolder();
+  var ctrl = ngCreateControl(def,undefined,cHolder.ID);
+  if(!Object.isObject(ctrl)){return null;}
+
+  def.parent = cHolder.ID;
+  def.id = ctrl.ID;
+
+  if(Function.isFunction(cHolder.AddChildControl)){
+    cHolder.AddChildControl(ctrl);
+  }
+
+  ctrl.Create(def);
+  return ctrl;
+};
 bbbfly.frame._doCreate = function(def,ref,node){
   this.DoCreate.callParent(def,ref,node);
   if(!this.Frame){return;}
@@ -566,7 +583,8 @@ bbbfly.Panel = function(def,ref,parent){
       SetEnabled: bbbfly.panel._setEnabled,
       SetInvalid: bbbfly.panel._setInvalid,
       SetReadOnly: bbbfly.panel._setReadOnly,
-      SetSelected: bbbfly.panel._setSelected
+      SetSelected: bbbfly.panel._setSelected,
+      CreateChildControl: bbbfly.panel._createChildControl
     }
   });
 
