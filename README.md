@@ -54,6 +54,7 @@
   - `bbbfly.Menu` (control)
 - **panel**
   - `bbbfly.Panel` (control)
+  - `bbbfly.Envelope` (control)
   - `bbbfly.Frame` (control)
   - `bbbfly.Line` (control)
 - **progress**

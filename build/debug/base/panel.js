@@ -9,6 +9,7 @@
 var bbbfly = bbbfly || {};
 bbbfly.panelgroup = {};
 bbbfly.panel = {};
+bbbfly.envelope = {};
 bbbfly.frame = {};
 bbbfly.line = {};
 bbbfly.panelgroup._registerControl = function(ctrl,def){
@@ -329,6 +330,112 @@ bbbfly.panel._createChildControl = function(def){
   ctrl.Create(def);
   return ctrl;
 };
+bbbfly.panel._addChildControl = function(ctrl){
+  this.AddChildControl.callParent(ctrl);
+
+  if(Function.isFunction(this.OnChildControlAdded)){
+    this.OnChildControlAdded(ctrl);
+  }
+};
+bbbfly.panel._removeChildControl = function(ctrl){
+  this.RemoveChildControl.callParent(ctrl);
+
+  if(Function.isFunction(this.OnChildControlRemoved)){
+    this.OnChildControlRemoved(ctrl);
+  }
+};
+bbbfly.envelope._trackChildControl = function(ctrl,track){
+  if(!Object.isObject(ctrl)){return;}
+  if(!Boolean.isBoolean(track)){track = true;}
+
+  if(!Array.isArray(ctrl._trackers)){
+    ctrl._trackers = new Array();
+  }
+
+  if(track){
+    ctrl._trackers.push({
+      ctrl: this,
+      options: {}
+    });
+
+    if(Function.isFunction(ctrl.AddEvent)){
+      ctrl.AddEvent('OnVisibleChanged',
+        bbbfly.envelope._onChildControlVisibleChanged,true
+      );
+      ctrl.AddEvent('OnUpdated',
+        bbbfly.envelope._onChildControlUpdated,true
+      );
+    }
+  }
+  else{
+    var idx = Array.indexOf(ctrl._trackers,this);
+    if(idx >= 0){ctrl._trackers.splice(idx,1);}
+
+    if(ctrl._trackers.length < 1){
+      delete ctrl._trackers;
+
+      if(Function.isFunction(ctrl.RemoveEvent)){
+        ctrl.RemoveEvent('OnVisibleChanged',
+          bbbfly.envelope._onChildControlVisibleChanged
+        );
+        ctrl.RemoveEvent('OnUpdated',
+          bbbfly.envelope._onChildControlUpdated
+        );
+      }
+    }
+  }
+};
+bbbfly.envelope._isChildControlChanged = function(ctrl,options){
+  var changed = false;
+
+  var bounds = ctrl.Bounds ? ctrl.Bounds : {};
+  var oBounds = options.Bounds ? options.Bounds : {};
+
+  if(bounds.L !== oBounds.L){changed = true;}
+  if(bounds.R !== oBounds.R){changed = true;}
+  if(bounds.T !== oBounds.T){changed = true;}
+  if(bounds.B !== oBounds.B){changed = true;}
+  if(options.Visible !== ctrl.Visible){changed = true;}
+
+  options.Bounds = ng_CopyVar(ctrl.Bounds);
+  options.Visible = ctrl.Visible;
+
+  return changed;
+};
+bbbfly.envelope._onChildControlChanged = function(){
+  this.Update(false);
+};
+bbbfly.envelope._onChildControlVisibleChanged = function(){
+  if(!Array.isArray(this._trackers)){return;}
+  if(this.Visible){return;}
+
+  for(var i in this._trackers){
+    bbbfly.envelope._onChildControlChange(
+      this,this._trackers[i]
+    );
+  }
+};
+bbbfly.envelope._onChildControlUpdated = function(){
+  if(!Array.isArray(this._trackers)){return;}
+
+  for(var i in this._trackers){
+    bbbfly.envelope._onChildControlChange(
+      this,this._trackers[i]
+    );
+  }
+};
+bbbfly.envelope._onChildControlChange = function(ctrl,tracker){
+  if(!tracker || !Object.isObject(tracker.ctrl)){return;}
+
+  if(
+    Function.isFunction(tracker.ctrl.IsChildControlChanged)
+      && tracker.ctrl.IsChildControlChanged(ctrl,tracker.options)
+  ){
+    if(Function.isFunction(tracker.ctrl.OnChildControlChanged)){
+      tracker.ctrl.OnChildControlChanged(ctrl);
+    }
+  }
+};
 bbbfly.frame._doCreate = function(def,ref,node){
   this.DoCreate.callParent(def,ref,node);
   if(!this.Frame){return;}
@@ -566,7 +673,9 @@ bbbfly.Panel = function(def,ref,parent){
       OnSetReadOnly: null,
       OnReadOnlyChanged: null,
       OnSetSelected: null,
-      OnSelectedChanged: null
+      OnSelectedChanged: null,
+      OnChildControlAdded: null,
+      OnChildControlRemoved: null
     },
     Methods: {
       DoCreate: bbbfly.panel._doCreate,
@@ -584,11 +693,28 @@ bbbfly.Panel = function(def,ref,parent){
       SetInvalid: bbbfly.panel._setInvalid,
       SetReadOnly: bbbfly.panel._setReadOnly,
       SetSelected: bbbfly.panel._setSelected,
-      CreateChildControl: bbbfly.panel._createChildControl
+      CreateChildControl: bbbfly.panel._createChildControl,
+      AddChildControl: bbbfly.panel._addChildControl,
+      RemoveChildControl: bbbfly.panel._removeChildControl
     }
   });
 
   return ngCreateControlAsType(def,'ngPanel',ref,parent);
+};
+bbbfly.Envelope = function(def,ref,parent){
+  def = def || {};
+
+  ng_MergeDef(def,{
+    Events: {
+      OnChildControlChanged: bbbfly.envelope._onChildControlChanged
+    },
+    Methods: {
+      TrackChildControl: bbbfly.envelope._trackChildControl,
+      IsChildControlChanged: bbbfly.envelope._isChildControlChanged
+    }
+  });
+
+  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
 };
 bbbfly.Frame = function(def,ref,parent){
   def = def || {};
@@ -616,7 +742,7 @@ bbbfly.Frame = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Envelope',ref,parent);
 };
 bbbfly.Line = function(def,ref,parent){
   def = def || {};
@@ -640,6 +766,7 @@ ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_panel'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.Panel',bbbfly.Panel);
+    ngRegisterControlType('bbbfly.Envelope',bbbfly.Envelope);
     ngRegisterControlType('bbbfly.Frame',bbbfly.Frame);
     ngRegisterControlType('bbbfly.Line',bbbfly.Line);
   }

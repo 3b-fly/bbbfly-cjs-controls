@@ -13,6 +13,8 @@ bbbfly.panelgroup = {};
 /** @ignore */
 bbbfly.panel = {};
 /** @ignore */
+bbbfly.envelope = {};
+/** @ignore */
 bbbfly.frame = {};
 /** @ignore */
 bbbfly.line = {};
@@ -375,6 +377,128 @@ bbbfly.panel._createChildControl = function(def){
 
   ctrl.Create(def);
   return ctrl;
+};
+
+/** @ignore */
+bbbfly.panel._addChildControl = function(ctrl){
+  this.AddChildControl.callParent(ctrl);
+
+  if(Function.isFunction(this.OnChildControlAdded)){
+    this.OnChildControlAdded(ctrl);
+  }
+};
+
+/** @ignore */
+bbbfly.panel._removeChildControl = function(ctrl){
+  this.RemoveChildControl.callParent(ctrl);
+
+  if(Function.isFunction(this.OnChildControlRemoved)){
+    this.OnChildControlRemoved(ctrl);
+  }
+};
+
+/** @ignore */
+bbbfly.envelope._trackChildControl = function(ctrl,track){
+  if(!Object.isObject(ctrl)){return;}
+  if(!Boolean.isBoolean(track)){track = true;}
+
+  if(!Array.isArray(ctrl._trackers)){
+    ctrl._trackers = new Array();
+  }
+
+  if(track){
+    ctrl._trackers.push({
+      ctrl: this,
+      options: {}
+    });
+
+    if(Function.isFunction(ctrl.AddEvent)){
+      ctrl.AddEvent('OnVisibleChanged',
+        bbbfly.envelope._onChildControlVisibleChanged,true
+      );
+      ctrl.AddEvent('OnUpdated',
+        bbbfly.envelope._onChildControlUpdated,true
+      );
+    }
+  }
+  else{
+    var idx = Array.indexOf(ctrl._trackers,this);
+    if(idx >= 0){ctrl._trackers.splice(idx,1);}
+
+    if(ctrl._trackers.length < 1){
+      delete ctrl._trackers;
+
+      if(Function.isFunction(ctrl.RemoveEvent)){
+        ctrl.RemoveEvent('OnVisibleChanged',
+          bbbfly.envelope._onChildControlVisibleChanged
+        );
+        ctrl.RemoveEvent('OnUpdated',
+          bbbfly.envelope._onChildControlUpdated
+        );
+      }
+    }
+  }
+};
+
+/** @ignore */
+bbbfly.envelope._isChildControlChanged = function(ctrl,options){
+  var changed = false;
+
+  var bounds = ctrl.Bounds ? ctrl.Bounds : {};
+  var oBounds = options.Bounds ? options.Bounds : {};
+
+  if(bounds.L !== oBounds.L){changed = true;}
+  if(bounds.R !== oBounds.R){changed = true;}
+  if(bounds.T !== oBounds.T){changed = true;}
+  if(bounds.B !== oBounds.B){changed = true;}
+  if(options.Visible !== ctrl.Visible){changed = true;}
+
+  options.Bounds = ng_CopyVar(ctrl.Bounds);
+  options.Visible = ctrl.Visible;
+
+  return changed;
+};
+
+/** @ignore */
+bbbfly.envelope._onChildControlChanged = function(){
+  this.Update(false);
+};
+
+/** @ignore */
+bbbfly.envelope._onChildControlVisibleChanged = function(){
+  if(!Array.isArray(this._trackers)){return;}
+  if(this.Visible){return;}
+
+  for(var i in this._trackers){
+    bbbfly.envelope._onChildControlChange(
+      this,this._trackers[i]
+    );
+  }
+};
+
+/** @ignore */
+bbbfly.envelope._onChildControlUpdated = function(){
+  if(!Array.isArray(this._trackers)){return;}
+
+  for(var i in this._trackers){
+    bbbfly.envelope._onChildControlChange(
+      this,this._trackers[i]
+    );
+  }
+};
+
+/** @ignore */
+bbbfly.envelope._onChildControlChange = function(ctrl,tracker){
+  if(!tracker || !Object.isObject(tracker.ctrl)){return;}
+
+  if(
+    Function.isFunction(tracker.ctrl.IsChildControlChanged)
+      && tracker.ctrl.IsChildControlChanged(ctrl,tracker.options)
+  ){
+    if(Function.isFunction(tracker.ctrl.OnChildControlChanged)){
+      tracker.ctrl.OnChildControlChanged(ctrl);
+    }
+  }
 };
 
 /** @ignore */
@@ -802,7 +926,32 @@ bbbfly.Panel = function(def,ref,parent){
        * @see {@link bbbfly.Panel#SetSelected|SetSelected()}
        * @see {@link bbbfly.Panel#event:OnSetSelected|OnSetSelected}
        */
-      OnSelectedChanged: null
+      OnSelectedChanged: null,
+
+      /**
+       * @event
+       * @name OnChildControlAdded
+       * @memberof bbbfly.Panel#
+       *
+       * @param {ngControl} [ctrl] - Child control reference
+       *
+       * @see {@link bbbfly.Panel#AddChildControl|AddChildControl()}
+       * @see {@link bbbfly.Panel#RemoveChildControl|RemoveChildControl()}
+       * @see {@link bbbfly.Panel#event:OnChildControlRemoved|OnChildControlRemoved}
+       */
+      OnChildControlAdded: null,
+      /**
+       * @event
+       * @name OnChildControlRemoved
+       * @memberof bbbfly.Panel#
+       *
+       * @param {ngControl} [ctrl] - Child control reference
+       *
+       * @see {@link bbbfly.Panel#AddChildControl|AddChildControl()}
+       * @see {@link bbbfly.Panel#RemoveChildControl|RemoveChildControl()}
+       * @see {@link bbbfly.Panel#event:OnChildControlAdded|OnChildControlAdded}
+       */
+      OnChildControlRemoved: null
     },
     Methods: {
       /** @private */
@@ -906,9 +1055,38 @@ bbbfly.Panel = function(def,ref,parent){
        * @name CreateChildControl
        * @memberof bbbfly.Panel#
        *
-       * @param {ngControl.Definition} [def] - Control definition
+       * @param {ngControl.Definition} [def] - Child control definition
+       *
+       * @see {@link bbbfly.Panel#AddChildControl|AddChildControl()}
+       * @see {@link bbbfly.Panel#RemoveChildControl|RemoveChildControl()}
+       * @see {@link bbbfly.Panel#event:OnChildControlAdded|OnChildControlAdded}
+       * @see {@link bbbfly.Panel#event:OnChildControlRemoved|OnChildControlRemoved}
        */
-      CreateChildControl: bbbfly.panel._createChildControl
+      CreateChildControl: bbbfly.panel._createChildControl,
+      /**
+       * @function
+       * @name AddChildControl
+       * @memberof bbbfly.Panel#
+       *
+       * @param {ngControl} [ctrl] - Child control reference
+       *
+       * @see {@link bbbfly.Panel#RemoveChildControl|RemoveChildControl()}
+       * @see {@link bbbfly.Panel#event:OnChildControlAdded|OnChildControlAdded}
+       * @see {@link bbbfly.Panel#event:OnChildControlRemoved|OnChildControlRemoved}
+       */
+      AddChildControl: bbbfly.panel._addChildControl,
+      /**
+       * @function
+       * @name RemoveChildControl
+       * @memberof bbbfly.Panel#
+       *
+       * @param {ngControl} [ctrl] - Child control reference
+       *
+       * @see {@link bbbfly.Panel#AddChildControl|AddChildControl()}
+       * @see {@link bbbfly.Panel#event:OnChildControlAdded|OnChildControlAdded}
+       * @see {@link bbbfly.Panel#event:OnChildControlRemoved|OnChildControlRemoved}
+       */
+      RemoveChildControl: bbbfly.panel._removeChildControl
     }
   });
 
@@ -921,7 +1099,60 @@ bbbfly.Panel = function(def,ref,parent){
  * @extends bbbfly.Panel
  *
  * @description
- *   Panel with conditioned frame support.
+ *   Panel with child controls handling.
+ *
+ * @inpackage panel
+ *
+ * @param {bbbfly.Panel.Definition} [def=undefined] - Descendant definition
+ * @param {object} [ref=undefined] - Reference owner
+ * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
+ */
+bbbfly.Envelope = function(def,ref,parent){
+  def = def || {};
+
+  ng_MergeDef(def,{
+    Events: {
+      /**
+       * @event
+       * @name OnChildControlChanged
+       * @memberof bbbfly.Envelope#
+       *
+       * @param {ngControl} [ctrl] - Child control reference
+       */
+      OnChildControlChanged: bbbfly.envelope._onChildControlChanged
+    },
+    Methods: {
+      /**
+       * @function
+       * @name TrackChildControl
+       * @memberof bbbfly.Envelope#
+       *
+       * @param {ngControl} [ctrl] - Child control reference
+       * @param {boolean} [track=true] - Pass false to cancel tracking
+       */
+      TrackChildControl: bbbfly.envelope._trackChildControl,
+      /**
+       * @event
+       * @name IsChildControlChanged
+       * @memberof bbbfly.Envelope#
+       *
+       * @param {ngControl} [ctrl] - Child control reference
+       * @param {object} [options] - Per tracker options
+       */
+      IsChildControlChanged: bbbfly.envelope._isChildControlChanged
+    }
+  });
+
+  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+};
+
+/**
+ * @class
+ * @type control
+ * @extends bbbfly.Envelope
+ *
+ * @description
+ *   Envelope with conditioned frame support.
  *
  * @inpackage panel
  *
@@ -1011,7 +1242,7 @@ bbbfly.Frame = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'bbbfly.Panel',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Envelope',ref,parent);
 };
 
 /**
@@ -1061,6 +1292,7 @@ ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_panel'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.Panel',bbbfly.Panel);
+    ngRegisterControlType('bbbfly.Envelope',bbbfly.Envelope);
     ngRegisterControlType('bbbfly.Frame',bbbfly.Frame);
     ngRegisterControlType('bbbfly.Line',bbbfly.Line);
   }
