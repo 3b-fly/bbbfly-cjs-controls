@@ -8,9 +8,30 @@
 
 var bbbfly = bbbfly || {};
 bbbfly.wrapper = {};
-bbbfly.wrapper._onCreated = function(wrapper){
-  if(!wrapper._Stretcher){
-    wrapper._Stretcher = wrapper.CreateChildControl({
+
+bbbfly.wrapper._doCreate = function(def,ref,node){
+  this.DoCreate.callParent(def,ref,node);
+
+  var cHolder = this.GetControlsHolder();
+
+  if(Function.isFunction(cHolder.AddEvent)){
+    var wrapper = this;
+
+    cHolder.AddEvent('OnChildControlAdded',function(ctrl){
+      wrapper.TrackControl(ctrl,true);
+    });
+    cHolder.AddEvent('OnChildControlRemoved',function(ctrl){
+      wrapper.TrackControl(ctrl,false);
+    });
+  }
+
+  for(var i in cHolder.ChildControls){
+    var ctrl = cHolder.ChildControls[i];
+    this.TrackControl(ctrl,true);
+  }
+
+  if(!this._Stretcher){
+    this._Stretcher = this.CreateChildControl({
       Type:'bbbfly.Panel'
     });
   }
@@ -74,10 +95,9 @@ bbbfly.wrapper._onUpdated = function(){
 
   for(var i in childControls){
     childCtrl = childControls[i];
-    if(this._Stretcher && (childCtrl === this._Stretcher)){continue;}
 
-    bbbfly.wrapper._trackChildControl(this,childCtrl);
     if(!childCtrl.Visible){continue;}
+    if(this._Stretcher && (childCtrl === this._Stretcher)){continue;}
 
     childOpts = bbbfly.wrapper._getWrapOptions(childCtrl,opts);
 
@@ -161,6 +181,53 @@ bbbfly.wrapper._onUpdated = function(){
     }
   }
 };
+
+bbbfly.wrapper._isTrackedControlChanged = function(ctrl,options){
+  var opts = bbbfly.wrapper._getWrapperOptions(this);
+  var childOpts = bbbfly.wrapper._getWrapOptions(ctrl,opts);
+  if(!childOpts.TrackChanges){return false;}
+
+  var ctrlFloat = childOpts.Float;
+  var optsFloat = options.Float;
+
+  var ctrlVisible = ctrl.Visible;
+  var optsVisible = options.Visible;
+
+  var ctrlBounds = ctrl.Bounds ? ctrl.Bounds : {};
+  var optsBounds = options.Bounds ? options.Bounds : {};
+
+  options.Float = ctrlFloat;
+  options.Visible = ctrlVisible;
+  options.Bounds = ng_CopyVar(ctrlBounds);
+
+  if(ctrlFloat !== optsFloat){return true;}
+  if(ctrlVisible !== optsVisible){return true;}
+
+  switch(opts.Orientation){
+    case bbbfly.Wrapper.orientation.vertical:
+      if(ctrlBounds.H !== optsBounds.H){
+        switch(childOpts.Float){
+          case bbbfly.Wrapper.float.top:
+          case bbbfly.Wrapper.float.bottom:
+          case bbbfly.Wrapper.float.stretch:
+            return true;
+        }
+      }
+    break;
+    case bbbfly.Wrapper.orientation.horizontal:
+      if(ctrlBounds.W !== optsBounds.W){
+        switch(childOpts.Float){
+          case bbbfly.Wrapper.float.left:
+          case bbbfly.Wrapper.float.right:
+          case bbbfly.Wrapper.float.stretch:
+            return true;
+        }
+      }
+    break;
+  }
+
+  return false;
+};
 bbbfly.wrapper._getWrapperOptions = function(ctrl){
   var opts = ng_CopyVar(ctrl.WrapperOptions);
   if((typeof opts !== 'object') || (opts === null)){opts = {};}
@@ -199,74 +266,6 @@ bbbfly.wrapper._getWrapOptions = function(ctrl,opts){
   ng_MergeDef(childOpts,defOpts);
   return childOpts;
 },
-bbbfly.wrapper._trackChildControl = function(wrapper,ctrl){
-  if(
-    !ctrl
-    || (typeof ctrl._trackedBounds !== 'undefined')
-    || (typeof ctrl._trackedFloat !== 'undefined')
-    || !Function.isFunction(ctrl.AddEvent)
-  ){return;}
-
-  ctrl.AddEvent('OnVisibleChanged',
-    bbbfly.wrapper._onChildControlVisibleChanged,true
-  );
-  ctrl.AddEvent('OnUpdated',
-    bbbfly.wrapper._onChildControlUpdated,true
-  );
-  ctrl._parentWrapper = wrapper;
-  ctrl._trackedBounds = null;
-  ctrl._trackedFloat = null;
-};
-bbbfly.wrapper._onChildControlVisibleChanged = function(){
-  var opts = bbbfly.wrapper._getWrapperOptions(this._parentWrapper);
-  var childOpts = bbbfly.wrapper._getWrapOptions(this,opts);
-  if(!childOpts.TrackChanges){return;}
-
-  if(childOpts.Float){this._parentWrapper.Update(false);}
-};
-bbbfly.wrapper._onChildControlUpdated = function(){
-  var opts = bbbfly.wrapper._getWrapperOptions(this._parentWrapper);
-  var childOpts = bbbfly.wrapper._getWrapOptions(this,opts);
-  if(!childOpts.TrackChanges){return;}
-
-  var ctrlBounds = this.Bounds ? ng_CopyVar(this.Bounds) : {};
-  var lastBounds = this._trackedBounds ? this._trackedBounds : {};
-  this._trackedBounds = ctrlBounds;
-
-  var ctrlFloat = childOpts.Float;
-  var lastFloat = this._trackedFloat;
-  this._trackedFloat = ctrlFloat;
-
-  if(ctrlFloat !== lastFloat){
-    this._parentWrapper.Update(false);
-    return;
-  }
-
-  switch(opts.Orientation){
-    case bbbfly.Wrapper.orientation.vertical:
-      if(ctrlBounds.H === lastBounds.H){return;}
-
-      if(
-        (childOpts.Float === bbbfly.Wrapper.float.top)
-        || (childOpts.Float === bbbfly.Wrapper.float.bottom)
-        || (childOpts.Float === bbbfly.Wrapper.float.stretch)
-      ){
-        this._parentWrapper.Update(false);
-      }
-    break;
-    case bbbfly.Wrapper.orientation.horizontal:
-      if(ctrlBounds.W === lastBounds.W){return;}
-
-      if(
-        (childOpts.Float === bbbfly.Wrapper.float.left)
-        || (childOpts.Float === bbbfly.Wrapper.float.right)
-        || (childOpts.Float === bbbfly.Wrapper.float.stretch)
-      ){
-        this._parentWrapper.Update(false);
-      }
-    break;
-  }
-};
 bbbfly.wrapper._setMargin = function(vars,direction,opts,type){
   var newVal = null;
   var revDir = direction;
@@ -439,11 +438,14 @@ bbbfly.Wrapper = function(def,ref,parent){
       WrapperOptions: undefined,
       _Stretcher: null
     },
-    OnCreated: bbbfly.wrapper._onCreated,
     Events: {
       OnUpdate: bbbfly.wrapper._onUpdate,
       OnUpdated: bbbfly.wrapper._onUpdated,
       OnAutoSized: null
+    },
+    Methods: {
+      DoCreate: bbbfly.wrapper._doCreate,
+      IsTrackedControlChanged: bbbfly.wrapper._isTrackedControlChanged
     }
   });
 
