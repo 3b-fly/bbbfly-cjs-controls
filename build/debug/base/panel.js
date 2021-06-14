@@ -344,7 +344,7 @@ bbbfly.panel._removeChildControl = function(ctrl){
     this.OnChildControlRemoved(ctrl);
   }
 };
-bbbfly.envelope._trackChildControl = function(ctrl,track){
+bbbfly.envelope._trackControl = function(ctrl,track){
   if(!Object.isObject(ctrl)){return;}
   if(!Boolean.isBoolean(track)){track = true;}
 
@@ -360,10 +360,10 @@ bbbfly.envelope._trackChildControl = function(ctrl,track){
 
     if(Function.isFunction(ctrl.AddEvent)){
       ctrl.AddEvent('OnVisibleChanged',
-        bbbfly.envelope._onChildControlVisibleChanged,true
+        bbbfly.envelope._onTrackedControlVisibleChanged,true
       );
       ctrl.AddEvent('OnUpdated',
-        bbbfly.envelope._onChildControlUpdated,true
+        bbbfly.envelope._onTrackedControlUpdated,true
       );
     }
   }
@@ -376,63 +376,64 @@ bbbfly.envelope._trackChildControl = function(ctrl,track){
 
       if(Function.isFunction(ctrl.RemoveEvent)){
         ctrl.RemoveEvent('OnVisibleChanged',
-          bbbfly.envelope._onChildControlVisibleChanged
+          bbbfly.envelope._onTrackedControlVisibleChanged
         );
         ctrl.RemoveEvent('OnUpdated',
-          bbbfly.envelope._onChildControlUpdated
+          bbbfly.envelope._onTrackedControlUpdated
         );
       }
     }
   }
 };
-bbbfly.envelope._isChildControlChanged = function(ctrl,options){
-  var changed = false;
+bbbfly.envelope._isTrackedControlChanged = function(ctrl,options){
+  var ctrlVisible = ctrl.Visible;
+  var optsVisible = options.Visible;
 
-  var bounds = ctrl.Bounds ? ctrl.Bounds : {};
-  var oBounds = options.Bounds ? options.Bounds : {};
+  var ctrlBounds = ctrl.Bounds ? ctrl.Bounds : {};
+  var optsBounds = options.Bounds ? options.Bounds : {};
 
-  if(bounds.L !== oBounds.L){changed = true;}
-  if(bounds.R !== oBounds.R){changed = true;}
-  if(bounds.T !== oBounds.T){changed = true;}
-  if(bounds.B !== oBounds.B){changed = true;}
-  if(options.Visible !== ctrl.Visible){changed = true;}
+  options.Visible = ctrlVisible;
+  options.Bounds = ng_CopyVar(ctrlBounds);
 
-  options.Bounds = ng_CopyVar(ctrl.Bounds);
-  options.Visible = ctrl.Visible;
+  if(ctrlVisible !== optsVisible){return true;}
+  if(ctrlBounds.L !== optsBounds.L){return true;}
+  if(ctrlBounds.R !== optsBounds.R){return true;}
+  if(ctrlBounds.T !== optsBounds.T){return true;}
+  if(ctrlBounds.B !== optsBounds.B){return true;}
 
-  return changed;
+  return false;
 };
-bbbfly.envelope._onChildControlChanged = function(){
+bbbfly.envelope._onTrackedControlChanged = function(){
   this.Update(false);
 };
-bbbfly.envelope._onChildControlVisibleChanged = function(){
+bbbfly.envelope._onTrackedControlVisibleChanged = function(){
   if(!Array.isArray(this._trackers)){return;}
   if(this.Visible){return;}
 
   for(var i in this._trackers){
-    bbbfly.envelope._onChildControlChange(
+    bbbfly.envelope._onTrackedControlChange(
       this,this._trackers[i]
     );
   }
 };
-bbbfly.envelope._onChildControlUpdated = function(){
+bbbfly.envelope._onTrackedControlUpdated = function(){
   if(!Array.isArray(this._trackers)){return;}
 
   for(var i in this._trackers){
-    bbbfly.envelope._onChildControlChange(
+    bbbfly.envelope._onTrackedControlChange(
       this,this._trackers[i]
     );
   }
 };
-bbbfly.envelope._onChildControlChange = function(ctrl,tracker){
+bbbfly.envelope._onTrackedControlChange = function(ctrl,tracker){ //TODO: track/treck
   if(!tracker || !Object.isObject(tracker.ctrl)){return;}
 
   if(
-    Function.isFunction(tracker.ctrl.IsChildControlChanged)
-      && tracker.ctrl.IsChildControlChanged(ctrl,tracker.options)
+    Function.isFunction(tracker.ctrl.IsTrackedControlChanged)
+      && tracker.ctrl.IsTrackedControlChanged(ctrl,tracker.options)
   ){
-    if(Function.isFunction(tracker.ctrl.OnChildControlChanged)){
-      tracker.ctrl.OnChildControlChanged(ctrl);
+    if(Function.isFunction(tracker.ctrl.OnTrackedControlChanged)){
+      tracker.ctrl.OnTrackedControlChanged(ctrl);
     }
   }
 };
@@ -706,11 +707,11 @@ bbbfly.Envelope = function(def,ref,parent){
 
   ng_MergeDef(def,{
     Events: {
-      OnChildControlChanged: bbbfly.envelope._onChildControlChanged
+      OnTrackedControlChanged: bbbfly.envelope._onTrackedControlChanged
     },
     Methods: {
-      TrackChildControl: bbbfly.envelope._trackChildControl,
-      IsChildControlChanged: bbbfly.envelope._isChildControlChanged
+      TrackControl: bbbfly.envelope._trackControl,
+      IsTrackedControlChanged: bbbfly.envelope._isTrackedControlChanged
     }
   });
 
