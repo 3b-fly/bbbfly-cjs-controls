@@ -6,7 +6,6 @@
 */
 
 
-
 var ngc_Lang = ngc_Lang || {};
 ngc_Lang.cs = ngc_Lang.cs || {};
 ngc_Lang.cs.bbbfly_searchedit_noresults = 'Nebyl nalezen žádný výsledek.';

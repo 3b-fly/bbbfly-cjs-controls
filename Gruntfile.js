@@ -10,11 +10,20 @@ module.exports = function(grunt) {
   controlsJSON.Name = packageJSON.description;
   controlsJSON.Copyright = packageJSON.author.name;
 
+  var normalizeLinebreak = function(text){
+    return text.replace(/(\r\n|\n\r|\r)/g,'\n');
+  };
+
   grunt.initConfig({
     pkg: packageJSON,
     clean: [buildPath],
     copy: {
       debug: {
+        options: {
+          process: function(content){
+            return normalizeLinebreak(content);
+          }
+        },
         files: [{
           cwd: srcPath,
           src: ['**/*.js','!**/libs/**'],
@@ -23,6 +32,11 @@ module.exports = function(grunt) {
         }]
       },
       css_debug: {
+        options: {
+          process: function(content){
+            return normalizeLinebreak(content);
+          }
+        },
         files: [{
           cwd: srcPath,
           src: ['**/*.css','!**/libs/**'],
@@ -31,6 +45,11 @@ module.exports = function(grunt) {
         }]
       },
       css_release: {
+        options: {
+          process: function(content){
+            return normalizeLinebreak(content);
+          }
+        },
         files: [{
           cwd: srcPath,
           src: ['**/*.css','!**/libs/**'],
@@ -77,6 +96,11 @@ module.exports = function(grunt) {
         }]
       },
       license: {
+        options: {
+          process: function(content){
+            return normalizeLinebreak(content);
+          }
+        },
         files: [
           {
             src: 'LICENSE',
@@ -123,7 +147,12 @@ module.exports = function(grunt) {
     },
     usebanner: {
       options: {
-        banner: grunt.file.read('HEADER')
+        linebreak: false,
+        process: function(){
+          var banner = grunt.file.read('HEADER');
+          banner = grunt.template.process(banner);
+          return normalizeLinebreak(banner+'\n');
+        }
       },
       files: {
         cwd: buildPath,

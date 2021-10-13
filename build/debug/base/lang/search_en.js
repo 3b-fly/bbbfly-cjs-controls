@@ -6,7 +6,6 @@
 */
 
 
-
 var ngc_Lang = ngc_Lang || {};
 ngc_Lang.en = ngc_Lang.en || {};
 ngc_Lang.en.bbbfly_searchedit_noresults = 'No result was found.';

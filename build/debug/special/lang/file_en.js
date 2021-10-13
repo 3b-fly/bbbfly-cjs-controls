@@ -6,7 +6,6 @@
 */
 
 
-
 var ngc_Lang = ngc_Lang || {};
 ngc_Lang.en = ngc_Lang.en || {};
 ngc_Lang.en.bbbfly_fileuploader_file = 'File name';
