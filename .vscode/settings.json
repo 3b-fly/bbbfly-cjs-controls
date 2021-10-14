@@ -9,8 +9,8 @@
         "node_modules": true,
         "node_jar": true,
         "nbproject": true,
-        "build": false,
-        ".vscode": false
+        "build": true,
+        ".vscode": true
     },
     "explorerExclude.backup": null
 }
