@@ -43,7 +43,7 @@
   "templates": {
     "applicationName": "bbbfly-cjs-controls",
     "sourceLinks": {
-      "../src/": "https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/%path%#L%lineno%"
+      "src/": "https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/%path%#L%lineno%"
     },
     "socialLinks": {
       "Email": "mailto:support@3b-fly.eu",
