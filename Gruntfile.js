@@ -1,6 +1,7 @@
 module.exports = function(grunt) {
   var srcPath = 'src';
   var buildPath = 'build';
+  var docsPath = 'docs';
 
   var packageJSON = grunt.file.readJSON('package.json');
   var controlsJSON = grunt.file.readJSON(srcPath+'/controls.json');
@@ -160,6 +161,31 @@ module.exports = function(grunt) {
         dest: buildPath,
         expand: true
       }
+    },
+    jsdoc: {
+      docs: {
+        src: [
+          srcPath+'/README.md',
+          srcPath+'/package.json',
+          srcPath+'/**/*.jsdoc',
+          srcPath+'/**/*.js',
+          '!**/libs/**'
+        ],
+        options: {
+          destination: docsPath,
+          configure: "jsdoc.json"
+        }
+      }
+    },
+    replace: {
+      docs: {
+        src: docsPath+'/**/*.html',
+        overwrite: true,
+        replacements: [
+          { from: /(\r\n|\n\r|\r)/g, to: '\n' },
+          { from: /\n\s*\n/g, to: '\n' }
+        ]
+      }
     }
   });
 
@@ -203,11 +229,17 @@ module.exports = function(grunt) {
     'copy:license'
   ]);
 
+  grunt.registerTask('docs',[
+    'jsdoc:docs','replace:docs'
+  ]);
+
   grunt.registerTask('default','build');
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-closure-tools');
   grunt.loadNpmTasks('grunt-stripcomments');
+  grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-banner');
+  grunt.loadNpmTasks('grunt-jsdoc');
 };

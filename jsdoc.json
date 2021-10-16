@@ -1,0 +1,18 @@
+{
+  "plugins": [
+    "../controlsjs-jsdoc/plugins/controlsjs"
+  ],
+  "opts": {
+    "template": "../controlsjs-jsdoc"
+  },
+  "templates": {
+    "applicationName": "bbbfly-cjs-controls",
+    "sourceLinks": {
+      "src/": "https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/%path%#L%lineno%"
+    },
+    "socialLinks": {
+      "Email": "mailto:support@3b-fly.eu",
+      "GitHub": "https://github.com/3b-fly/bbbfly-cjs-controls"
+    }
+  }
+}
