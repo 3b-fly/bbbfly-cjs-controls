@@ -192,7 +192,7 @@ module.exports = function(grunt) {
     }
   );
 
-  grunt.registerTask('default',[
+  grunt.registerTask('build',[
     'clean',
     'copy:debug','closureCompiler:release',
     'comments:remove','usebanner',
@@ -202,6 +202,8 @@ module.exports = function(grunt) {
     'exportJSON',
     'copy:license'
   ]);
+
+  grunt.registerTask('default','build');
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
