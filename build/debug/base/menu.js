@@ -54,7 +54,7 @@ bbbfly.menu._onMenuClick = function(event,menu,item){
 };
 bbbfly.Menu = function(def,ref,parent){
   def = def || {};
-  
+
   ng_MergeDef(def, {
     Data: {
       Items: null

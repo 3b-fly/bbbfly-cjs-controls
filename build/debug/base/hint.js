@@ -143,7 +143,7 @@ bbbfly.hint.Hintify = function(def){
 };
 bbbfly.TextHint = function(def,ref,parent){
   def = def || {};
-  
+
   ng_MergeDef(def,{
     Events: {
       IsInsidePopup: bbbfly.hint._isInsidePopup

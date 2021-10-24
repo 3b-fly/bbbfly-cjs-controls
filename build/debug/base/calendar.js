@@ -15,7 +15,7 @@ bbbfly.EditDate = function(def,ref,parent){
 };
 bbbfly.EditTime = function(def,ref,parent){
   def = def || {};
-  
+
   return (bbbfly.Edit)
     ? bbbfly.Edit(def,ref,parent,'ngEditTime')
     : ngCreateControlAsType(def,'ngEditTime',ref,parent);
