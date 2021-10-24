@@ -1,7 +1,10 @@
 module.exports = function(grunt) {
   var srcPath = 'src';
-  var buildPath = 'build';
   var docsPath = 'docs';
+
+  var buildPath = 'build';
+  var debugPath = 'debug';
+  var releasePath = 'release';
 
   var packageJSON = grunt.file.readJSON('package.json');
   var controlsJSON = grunt.file.readJSON(srcPath+'/controls.json');
@@ -28,7 +31,7 @@ module.exports = function(grunt) {
         files: [{
           cwd: srcPath,
           src: ['**/*.js','!**/libs/**'],
-          dest: buildPath+'/debug',
+          dest: buildPath+'/'+debugPath,
           expand: true
         }]
       },
@@ -41,7 +44,7 @@ module.exports = function(grunt) {
         files: [{
           cwd: srcPath,
           src: ['**/*.css','!**/libs/**'],
-          dest: buildPath+'/debug',
+          dest: buildPath+'/'+debugPath,
           expand: true
         }]
       },
@@ -49,7 +52,7 @@ module.exports = function(grunt) {
         files: [{
           cwd: srcPath,
           src: ['**/*.{png,jpg,gif}','!**/libs/**'],
-          dest: buildPath+'/debug',
+          dest: buildPath+'/'+debugPath,
           expand: true
         }]
       },
@@ -57,7 +60,7 @@ module.exports = function(grunt) {
         files: [{
           cwd: srcPath,
           src: ['**/*.{png,jpg,gif}','!**/libs/**'],
-          dest: buildPath+'/release',
+          dest: buildPath+'/'+releasePath,
           expand: true
         }]
       },
@@ -65,7 +68,7 @@ module.exports = function(grunt) {
         files: [{
           cwd: srcPath,
           src: '**/libs/debug/**',
-          dest: buildPath+'/debug',
+          dest: buildPath+'/'+debugPath,
           expand: true,
           rename: function (dest,src){
             return dest+'/'+src.replace('libs/debug','libs');
@@ -76,7 +79,7 @@ module.exports = function(grunt) {
         files: [{
           cwd: srcPath,
           src: '**/libs/release/**',
-          dest: buildPath+'/release',
+          dest: buildPath+'/'+releasePath,
           expand: true,
           rename: function (dest,src){
             return dest+'/'+src.replace('libs/release','libs');
@@ -92,12 +95,12 @@ module.exports = function(grunt) {
         files: [
           {
             src: 'LICENSE',
-            dest: buildPath+'/debug',
+            dest: buildPath+'/'+debugPath,
             expand: true
           },
           {
             src: 'LICENSE',
-            dest: buildPath+'/release',
+            dest: buildPath+'/'+releasePath,
             expand: true
           }
         ]
@@ -115,7 +118,7 @@ module.exports = function(grunt) {
         files: [{
           cwd: srcPath,
           src: ['**/*.js','!**/libs/**'],
-          dest: buildPath+'/release',
+          dest: buildPath+'/'+releasePath,
           expand: true
         }]
       }
@@ -125,7 +128,7 @@ module.exports = function(grunt) {
         files: [{
           cwd: srcPath,
           src: ['**/*.css','!**/libs/**'],
-          dest: buildPath+'/release',
+          dest: buildPath+'/'+releasePath,
           expand: true
         }]
       }
@@ -198,12 +201,12 @@ module.exports = function(grunt) {
 
           if(debugFiles){
             for(var i in debugFiles){
-              debugFiles[i] = 'debug/'+debugFiles[i];
+              debugFiles[i] = debugPath+'/'+debugFiles[i];
             }
           }
           if(releaseFiles){
             for(var j in releaseFiles){
-              releaseFiles[j] = 'release/'+releaseFiles[j];
+              releaseFiles[j] = releasePath+'/'+releaseFiles[j];
             }
           }
         }
