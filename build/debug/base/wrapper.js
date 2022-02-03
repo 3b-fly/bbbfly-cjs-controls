@@ -7,7 +7,6 @@
 
 var bbbfly = bbbfly || {};
 bbbfly.wrapper = {};
-
 bbbfly.wrapper._doCreate = function(def,ref,node){
   this.DoCreate.callParent(def,ref,node);
 
@@ -54,8 +53,7 @@ bbbfly.wrapper._onUpdated = function(){
 
   var vars = {
     value: {
-      position: {start:0,end:0},
-      margin: {start:null,end:null}
+      position: {start:0,end:0}
     }
   };
 
@@ -180,7 +178,6 @@ bbbfly.wrapper._onUpdated = function(){
     }
   }
 };
-
 bbbfly.wrapper._isTrackedControlChanged = function(ctrl,options){
   var opts = bbbfly.wrapper._getWrapperOptions(this);
   var childOpts = bbbfly.wrapper._getWrapOptions(ctrl,opts);
@@ -240,7 +237,7 @@ bbbfly.wrapper._getWrapperOptions = function(ctrl){
     TrackChanges: false
   });
   return opts;
-},
+};
 bbbfly.wrapper._getWrapOptions = function(ctrl,opts){
   var childOpts = ng_CopyVar(ctrl.WrapOptions);
   if((typeof childOpts !== 'object') || (childOpts === null)){childOpts = {};}
@@ -264,7 +261,7 @@ bbbfly.wrapper._getWrapOptions = function(ctrl,opts){
 
   ng_MergeDef(childOpts,defOpts);
   return childOpts;
-},
+};
 bbbfly.wrapper._setMargin = function(vars,direction,opts,type){
   var newVal = null;
   var revDir = direction;
@@ -285,7 +282,7 @@ bbbfly.wrapper._setMargin = function(vars,direction,opts,type){
   }
 
   bbbfly.wrapper._addMargin(vars,direction);
-},
+};
 bbbfly.wrapper._addMargin = function(vars,direction){
   var addVal = vars.value.margin[direction];
   if(Number.isNumber(addVal)){
@@ -294,11 +291,11 @@ bbbfly.wrapper._addMargin = function(vars,direction){
       case 'end': vars.value.position.start += addVal; break;
     }
   }
-},
+};
 bbbfly.wrapper._overwriteMargin = function(vars,direction,opts,type){
   var newVal = opts[vars[type][direction]];
   vars.value.margin[direction] = Number.isNumber(newVal) ? newVal : null;
-},
+};
 bbbfly.wrapper._positionCtrl = function(ctrl,vars,direction,opts){
   var boundNames = null;
   switch(opts.Orientation){
@@ -342,7 +339,7 @@ bbbfly.wrapper._positionCtrl = function(ctrl,vars,direction,opts){
       if(Number.isNumber(dimBound)){position[direction] += dimBound;}
     break;
   }
-},
+};
 bbbfly.wrapper._positionStretcher = function(ctrl,vars,direction,opts){
   var margin = vars.value.margin[direction];
   var dim = (Number.isNumber(margin) && (margin > 0)) ? 1 : 0;
@@ -365,7 +362,7 @@ bbbfly.wrapper._positionStretcher = function(ctrl,vars,direction,opts){
       ctrl.SetBounds(bounds);
     break;
   }
-},
+};
 bbbfly.wrapper._canPlaceStretchCtrls = function(wrapper,ctrls,vars,opts){
   if(!opts.AutoSize && (ctrls.length > 0)){
     var cHolder = wrapper.GetControlsHolder();
@@ -388,7 +385,7 @@ bbbfly.wrapper._canPlaceStretchCtrls = function(wrapper,ctrls,vars,opts){
     return ((position.start < maxPos) && (position.end < maxPos));
   }
   return false;
-},
+};
 bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
   var dimension = (vars.value.position.start + vars.value.position.end);
 
