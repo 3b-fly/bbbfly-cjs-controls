@@ -62,7 +62,8 @@ bbbfly.wrapper._onUpdated = function(){
 
   var vars = {
     value: {
-      position: {start:0,end:0}
+      position: {start:0,end:0},
+      margin: {start:null,end:null}
     }
   };
 
