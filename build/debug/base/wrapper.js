@@ -30,7 +30,8 @@ bbbfly.wrapper._doCreate = function(def,ref,node){
 
   if(!this._Stretcher){
     this._Stretcher = this.CreateChildControl({
-      Type:'bbbfly.Panel'
+      Type:'bbbfly.Panel',
+      W:1,H:1,Data: {Visible: false}
     });
   }
 };
@@ -411,19 +412,21 @@ bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
     case bbbfly.Wrapper.orientation.vertical:
       if(wrapper.SetBounds({ H:dimension })){
         autoSized = true;
-        wrapper.Update();
       }
     break;
     case bbbfly.Wrapper.orientation.horizontal:
       if(wrapper.SetBounds({ W:dimension })){
         autoSized = true;
-        wrapper.Update();
       }
     break;
   }
 
-  if(autoSized && Function.isFunction(wrapper.OnAutoSized)){
-    wrapper.OnAutoSized();
+  if(autoSized){
+    wrapper.Update(false);
+
+    if(Function.isFunction(wrapper.OnAutoSized)){
+      wrapper.OnAutoSized();
+    }
   }
 };
 bbbfly.Wrapper = function(def,ref,parent){
