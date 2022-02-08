@@ -40,13 +40,17 @@
       "Libraries": {
         "controls.js": {
           "Packages": [
-            "Controls.js",
-            "Controls.js UI"
+            "Controls.js"
           ]
         },
         "bbbfly-cjs": {
           "Packages": [
             "crossbrowser"
+          ]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": [
+            "panel"
           ]
         }
       }
