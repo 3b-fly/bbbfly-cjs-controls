@@ -14,7 +14,7 @@
 
 - **hint** - Provides simple control hints definition.<br/><br/>
 - **bar**
-  - `bbbfly.ToolBar` (control)
+  - `bbbfly.Bar` (control)
 - **button**
   - `bbbfly.Button` (control)
 - **calendar**
