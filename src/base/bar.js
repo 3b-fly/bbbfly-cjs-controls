@@ -15,6 +15,24 @@ bbbfly.bar = {};
 bbbfly.bar._doCreate = function(def,ref,node){
   this.DoCreate.callParent(def,ref,node);
 
+  var cHolder = this.GetControlsHolder();
+
+  if(Function.isFunction(cHolder.AddEvent)){
+    var bar = this;
+
+    cHolder.AddEvent('OnChildControlAdded',function(ctrl){
+      bar.TrackControl(ctrl,true);
+    });
+    cHolder.AddEvent('OnChildControlRemoved',function(ctrl){
+      bar.TrackControl(ctrl,false);
+    });
+  }
+
+  for(var i in cHolder.ChildControls){
+    var ctrl = cHolder.ChildControls[i];
+    this.TrackControl(ctrl,true);
+  }
+
   if(!this._Stretcher){
     this._Stretcher = this.CreateChildControl({
       Type:'bbbfly.Panel',
@@ -172,6 +190,33 @@ bbbfly.bar._onUpdated = function(){
   if(this._Stretcher){
     bbbfly.bar._positionStretcher(this._Stretcher,vars);
   }
+};
+
+/** @ignore */
+bbbfly.bar._isTrackedControlChanged = function(ctrl,options){
+  var opts = bbbfly.bar._getBarOptions(this);
+  var childOpts = bbbfly.bar._getItemOptions(ctrl,opts);
+  if(!childOpts.TrackChanges){return false;}
+
+  var ctrlVisible = ctrl.Visible;
+  var optsVisible = options.Visible;
+
+  var ctrlBounds = ctrl.Bounds ? ctrl.Bounds : {};
+  var optsBounds = options.Bounds ? options.Bounds : {};
+
+  options.Visible = ctrlVisible;
+  options.Bounds = ng_CopyVar(ctrlBounds);
+
+  if(ctrlVisible !== optsVisible){return true;}
+
+  if(
+    (ctrlBounds.H !== optsBounds.H)
+    ||(ctrlBounds.W !== optsBounds.W)
+   ){
+    return true;
+  }
+  
+  return false;
 };
 
 /** @ignore */
@@ -529,7 +574,9 @@ bbbfly.Bar = function(def,ref,parent){
     },
     Methods: {
       /** @private */
-      DoCreate: bbbfly.bar._doCreate
+      DoCreate: bbbfly.bar._doCreate,
+      /** @private */
+      IsTrackedControlChanged: bbbfly.bar._isTrackedControlChanged
     }
   });
 
