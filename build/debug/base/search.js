@@ -11,25 +11,14 @@ bbbfly.searchedit = {};
 bbbfly.searchbox = {};
 bbbfly.listsearchbox = {};
 bbbfly.search._normalizeText = function(text){
-  text = String.trim(text).toLowerCase().replace(
-    /[.*+?^${}()|[\]\\]/g, "\\$&"
-  );
+  if(String.isString(text)){
+    text = bbbfly.locale.TextToAscii(text);
+    text = String.trim(text).toLowerCase();
 
-  var inChars = "áäąăčćďđéěęíĺľłńňóôőöŕřšśşťţúůűüýžźż";
-  var outChars = "aaaaccddeeeilllnnoooorrsssttuuuuyzzz";
-
-  var normalized = '';
-  for(var i=0;i<text.length;i++){
-    var character = text.charAt(i);
-    var characterIndex = inChars.indexOf(character);
-    if (characterIndex !== -1){
-      normalized += outChars.charAt(characterIndex);
-    }
-    else{
-      normalized += character;
-    }
+    text = text.replace(/\s+/gu,' ');
+    text = text.replace(/[^a-zA-Z0-9\s]/gu,'');
   }
-  return normalized;
+  return text;
 };
 bbbfly.searchedit._search = function(text){
   if(String.isString(text)){this.SetText(text);}

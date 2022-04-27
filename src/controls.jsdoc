@@ -165,6 +165,7 @@
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.0): crossbrowser}
+ * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:locale|bbbfly-cjs (2.0.0): locale}
  * @requires {@link package:edit|bbbfly-cjs-controls (2.0.0): edit}
  */
 

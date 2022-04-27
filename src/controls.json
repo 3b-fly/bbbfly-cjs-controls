@@ -297,7 +297,7 @@
           "Packages": ["Controls.js","Controls.js UI"]
         },
         "bbbfly-cjs": {
-          "Packages": ["crossbrowser"]
+          "Packages": ["crossbrowser","locale"]
         },
         "bbbfly-cjs-controls": {
           "Packages": ["edit"]

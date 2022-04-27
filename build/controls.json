@@ -383,7 +383,8 @@
         },
         "bbbfly-cjs": {
           "Packages": [
-            "crossbrowser"
+            "crossbrowser",
+            "locale"
           ]
         },
         "bbbfly-cjs-controls": {
