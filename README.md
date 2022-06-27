@@ -50,6 +50,16 @@
   - `bbbfly.MapDrawingsHandler` (class)
   - `bbbfly.MapTooltip` (class)
   - `bbbfly.MapTooltip.Style` (class)
+- **map_copyrights**
+  - `bbbfly.MapCopyrights` (control)
+- **map_layers**
+  - `bbbfly.MapLayers` (control)
+- **map_map_modebar**
+  - `bbbfly.MapModeBar` (control)
+- **map_sidebar**
+  - `bbbfly.MapSideBar` (control)
+- **map_zoomslider**
+  - `bbbfly.MapZoomSlider` (control)
 - **menu**
   - `bbbfly.Menu` (control)
 - **panel**

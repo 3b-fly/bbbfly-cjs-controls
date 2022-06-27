@@ -265,6 +265,127 @@
         }
       }
     },
+    "map_copyrights": {
+      "DebugFiles": [
+        "map/controls/map_copyrights.js",
+        "map/controls/lang/map_copyrights_cs.js",
+        "map/controls/lang/map_copyrights_en.js"
+      ],
+      "ReleaseFiles": [
+        "map/controls/map_copyrights.js",
+        "map/controls/lang/map_copyrights_cs.js",
+        "map/controls/lang/map_copyrights_en.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": ["Controls.js"]
+        },
+
+        "bbbfly-cjs": {
+          "Packages": ["crossbrowser"]
+        },
+
+        "bbbfly-cjs-controls": {
+          "Packages": ["panel","button","text","mapbox"]
+        }
+      }
+    },
+    "map_layers": {
+      "DebugFiles": [
+        "map/controls/map_layers.js",
+        "map/controls/lang/map_layers_cs.js",
+        "map/controls/lang/map_layers_en.js"
+      ],
+      "ReleaseFiles": [
+        "map/controls/map_layers.js",
+        "map/controls/lang/map_layers_cs.js",
+        "map/controls/lang/map_layers_en.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": ["Controls.js"]
+        },
+
+        "bbbfly-cjs": {
+          "Packages": ["crossbrowser"]
+        },
+
+        "bbbfly-cjs-controls": {
+          "Packages": ["panel","button","text","list","map","mapbox"]
+        }
+      }
+    },
+    "map_modebar": {
+      "DebugFiles": [
+        "map/controls/map_modebar.js"
+      ],
+      "ReleaseFiles": [
+        "map/controls/map_modebar.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": ["Controls.js"]
+        },
+
+        "bbbfly-cjs": {
+          "Packages": ["crossbrowser"]
+        },
+
+        "bbbfly-cjs-controls": {
+          "Packages": ["panel","button","mapbox"]
+        }
+      }
+    },
+    "map_sidebar": {
+      "DebugFiles": [
+        "map/controls/map_sidebar.js",
+        "map/controls/lang/map_sidebar_cs.js",
+        "map/controls/lang/map_sidebar_en.js"
+      ],
+      "ReleaseFiles": [
+        "map/controls/map_sidebar.js",
+        "map/controls/lang/map_sidebar_cs.js",
+        "map/controls/lang/map_sidebar_en.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": ["Controls.js"]
+        },
+
+        "bbbfly-cjs": {
+          "Packages": ["crossbrowser"]
+        },
+
+        "bbbfly-cjs-controls": {
+          "Packages": ["panel","button","mapbox"]
+        }
+      }
+    },
+    "map_zoomslider": {
+      "DebugFiles": [
+        "map/controls/map_zoomslider.js",
+        "map/controls/lang/map_zoomslider_cs.js",
+        "map/controls/lang/map_zoomslider_en.js"
+      ],
+      "ReleaseFiles": [
+        "map/controls/map_zoomslider.js",
+        "map/controls/lang/map_zoomslider_cs.js",
+        "map/controls/lang/map_zoomslider_en.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": ["Controls.js"]
+        },
+
+        "bbbfly-cjs": {
+          "Packages": ["crossbrowser"]
+        },
+
+        "bbbfly-cjs-controls": {
+          "Packages": ["panel","button","mapbox"]
+        }
+      }
+    },
     "menu": {
       "DebugFiles": [
         "base/menu.js"
