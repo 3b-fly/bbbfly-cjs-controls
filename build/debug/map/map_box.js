@@ -142,6 +142,35 @@ bbbfly.map.box._fitDrawings = function(){
   }
   return false;
 };
+bbbfly.map.box._setMode = function(modeType,mode){
+  if(!String.isString(modeType)){return false;}
+  if((!String.isString(mode) && (mode !== null))){return false;}
+
+  var changed = false;
+
+  if(mode === null){
+    changed = !!this._MapMode[modeType];
+    delete this._MapMode[modeType];
+  }
+  else{
+    changed = (mode !== this._MapMode[modeType]);
+    this._MapMode[modeType] = mode;
+  }
+
+  if(changed && Function.isFunction(this.OnModeChanged)){
+    this.OnModeChanged(modeType,mode);
+  }
+  return true;
+};
+bbbfly.map.box._getMode = function(modeType){
+  if(this._MapMode && String.isString(this._MapMode[modeType])){
+    return this._MapMode[modeType];
+  }
+  return null;
+};
+bbbfly.map.box._getModes = function(){
+  return (this._MapMode ? this._MapMode : {});
+};
 bbbfly.MapBox = function(def,ref,parent){
   def = def || {};
 
@@ -150,11 +179,13 @@ bbbfly.MapBox = function(def,ref,parent){
       Drawings: null,
       _DrawingsFeature: null,
       _MapControls: {},
-      _MapControlsRegistered: false
+      _MapControlsRegistered: false,
+      _MapMode: {}
     },
     OnCreated: bbbfly.map.box._onCreated,
     Events: {
-      OnUpdate: bbbfly.map.box._onUpdate
+      OnUpdate: bbbfly.map.box._onUpdate,
+      OnModeChanged: null
     },
     Methods: {
       DoCreateMap: bbbfly.map.box._doCreateMap,
@@ -164,7 +195,10 @@ bbbfly.MapBox = function(def,ref,parent){
       GetMapControls: bbbfly.map.box._getMapControls,
       SetMapControlsVisible: bbbfly.map.box._setMapControlsVisible,
       FitDrawing: bbbfly.map.box._fitDrawing,
-      FitDrawings: bbbfly.map.box._fitDrawings
+      FitDrawings: bbbfly.map.box._fitDrawings,
+      SetMode: bbbfly.map.box._setMode,
+      GetMode: bbbfly.map.box._getMode,
+      GetModes: bbbfly.map.box._getModes
     }
   });
 

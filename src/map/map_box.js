@@ -165,6 +165,41 @@ bbbfly.map.box._fitDrawings = function(){
   return false;
 };
 
+/** @ignore */
+bbbfly.map.box._setMode = function(modeType,mode){
+  if(!String.isString(modeType)){return false;}
+  if((!String.isString(mode) && (mode !== null))){return false;}
+
+  var changed = false;
+
+  if(mode === null){
+    changed = !!this._MapMode[modeType];
+    delete this._MapMode[modeType];
+  }
+  else{
+    changed = (mode !== this._MapMode[modeType]);
+    this._MapMode[modeType] = mode;
+  }
+
+  if(changed && Function.isFunction(this.OnModeChanged)){
+    this.OnModeChanged(modeType,mode);
+  }
+  return true;
+};
+
+/** @ignore */
+bbbfly.map.box._getMode = function(modeType){
+  if(this._MapMode && String.isString(this._MapMode[modeType])){
+    return this._MapMode[modeType];
+  }
+  return null;
+};
+
+/** @ignore */
+bbbfly.map.box._getModes = function(){
+  return (this._MapMode ? this._MapMode : {});
+};
+
 /**
  * @class
  * @type control
@@ -190,12 +225,29 @@ bbbfly.MapBox = function(def,ref,parent){
       /** @private */
       _MapControls: {},
       /** @private */
-      _MapControlsRegistered: false
+      _MapControlsRegistered: false,
+
+      /** @private */
+      _MapMode: {}
     },
     OnCreated: bbbfly.map.box._onCreated,
     Events: {
       /** @private */
-      OnUpdate: bbbfly.map.box._onUpdate
+      OnUpdate: bbbfly.map.box._onUpdate,
+
+      /**
+       * @event
+       * @name OnModeChanged
+       * @memberof bbbfly.MapBox#
+       *
+       * @param {string} modeType
+       * @param {string|null} mode
+       *
+       * @see {@link bbbfly.MapBox#SetMode|SetMode()}
+       * @see {@link bbbfly.MapBox#GetMode|GetMode()}
+       * @see {@link bbbfly.MapBox#GetModes|GetModes()}
+       */
+      OnModeChanged: null
     },
     Methods: {
       /** @private */
@@ -213,6 +265,10 @@ bbbfly.MapBox = function(def,ref,parent){
        * @param {string} type
        * @param {bbbfly.MapControl} ctrl
        * @return {boolean} If control was linked
+       *
+       * @see {@link bbbfly.MapBox#UnlinkMapControl|UnlinkMapControl()}
+       * @see {@link bbbfly.MapBox#GetMapControls|GetMapControls()}
+       * @see {@link bbbfly.MapBox#SetMapControlsVisible|SetMapControlsVisible()}
        */
       LinkMapControl: bbbfly.map.box._linkMapControl,
       /**
@@ -225,6 +281,10 @@ bbbfly.MapBox = function(def,ref,parent){
        * @param {string} type
        * @param {bbbfly.MapControl} ctrl
        * @return {boolean} If control was unlinked
+       *
+       * @see {@link bbbfly.MapBox#LinkMapControl|LinkMapControl()}
+       * @see {@link bbbfly.MapBox#GetMapControls|GetMapControls()}
+       * @see {@link bbbfly.MapBox#SetMapControlsVisible|SetMapControlsVisible()}
        */
       UnlinkMapControl: bbbfly.map.box._unlinkMapControl,
       /**
@@ -233,8 +293,12 @@ bbbfly.MapBox = function(def,ref,parent){
        * @memberof bbbfly.MapBox#
        * @description Get passed type linked map controls.
        *
-       * @param {string} [type=undefined]
+       * @param {string} [type=undeUnlinkMapControlfined]
        * @return {bbbfly.MapControl[]}
+       *
+       * @see {@link bbbfly.MapBox#LinkMapControl|LinkMapControl()}
+       * @see {@link bbbfly.MapBox#UnlinkMapControl|UnlinkMapControl()}
+       * @see {@link bbbfly.MapBox#SetMapControlsVisible|SetMapControlsVisible()}
        */
       GetMapControls: bbbfly.map.box._getMapControls,
       /**
@@ -246,6 +310,10 @@ bbbfly.MapBox = function(def,ref,parent){
        * @param {string} type
        * @param {boolean} [visible=true]
        * @return {boolean} If map control visibility was set.
+       *
+       * @see {@link bbbfly.MapBox#LinkMapControl|LinkMapControl()}
+       * @see {@link bbbfly.MapBox#UnlinkMapControl|UnlinkMapControl()}
+       * @see {@link bbbfly.MapBox#GetMapControls|GetMapControls()}
        */
       SetMapControlsVisible: bbbfly.map.box._setMapControlsVisible,
 
@@ -258,6 +326,8 @@ bbbfly.MapBox = function(def,ref,parent){
       * @param {string} id
       *
       * @return {boolean} If fit was successful
+      *
+      * @see {@link bbbfly.MapBox#FitDrawings|FitDrawings()}
       */
       FitDrawing: bbbfly.map.box._fitDrawing,
       /**
@@ -267,8 +337,53 @@ bbbfly.MapBox = function(def,ref,parent){
       * @description Pan and zoom to see all drawings
       *
       * @return {boolean} If fit was successful
+      *
+      * @see {@link bbbfly.MapBox#FitDrawing|FitDrawing()}
       */
-      FitDrawings: bbbfly.map.box._fitDrawings
+      FitDrawings: bbbfly.map.box._fitDrawings,
+
+      /**
+       * @function
+       * @name SetMode
+       * @memberof bbbfly.MapBox#
+       * @description Set map mode
+       *
+       * @param {string} modeType
+       * @param {string|null} mode
+       * @return {string|null}
+       *
+       * @see {@link bbbfly.MapBox#GetMode|GetMode()}
+       * @see {@link bbbfly.MapBox#GetModes|GetModes()}
+       * @see {@link bbbfly.MapBox#event:OnModeChanged|OnModeChanged}
+       */
+      SetMode: bbbfly.map.box._setMode,
+      /**
+       * @function
+       * @name GetMode
+       * @memberof bbbfly.MapBox#
+       * @description Get map mode
+       *
+       * @param {string} modeType
+       * @return {string|null}
+       *
+       * @see {@link bbbfly.MapBox#SetMode|SetMode()}
+       * @see {@link bbbfly.MapBox#GetModes|GetModes()}
+       * @see {@link bbbfly.MapBox#event:OnModeChanged|OnModeChanged}
+       */
+      GetMode: bbbfly.map.box._getMode,
+      /**
+       * @function
+       * @name GetModes
+       * @memberof bbbfly.MapBox#
+       * @description Get all map modes
+       *
+       * @return {string[]}
+       *
+       * @see {@link bbbfly.MapBox#SetMode|SetMode()}
+       * @see {@link bbbfly.MapBox#GetMode|GetMode()}
+       * @see {@link bbbfly.MapBox#event:OnModeChanged|OnModeChanged}
+       */
+      GetModes: bbbfly.map.box._getModes
     }
   });
 
