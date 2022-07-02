@@ -139,7 +139,8 @@ bbbfly.MapSideBar = function(def,ref,parent){
 
   if(mapControls){
     var mapCtrlsDef = {};
-    if(mapControls & bbbfly.MapCrate.control.layers){
+
+    if(mapControls & bbbfly.MapBox.control.layers){
       mapCtrlsDef.Layers = {
         Data: {
           Action: bbbfly.MapSideBar.action.map_control,
@@ -149,7 +150,8 @@ bbbfly.MapSideBar = function(def,ref,parent){
         }
       };
     }
-    if(mapControls & bbbfly.MapCrate.control.copyrights){
+
+    if(mapControls & bbbfly.MapBox.control.copyrights){
       mapCtrlsDef.Copyrights = {
         Data: {
           Action: bbbfly.MapSideBar.action.map_control,

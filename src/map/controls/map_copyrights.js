@@ -3,7 +3,7 @@
  * @author Jan Nejedly [support@3b-fly.eu]
  * @copyright Jan Nejedly
  *
- * @inpackage map_copyrights
+ * @inpackage mapbox
  */
 
 /** @ignore */
@@ -103,7 +103,7 @@ bbbfly.map.control.copyrights._close = function(){
  * @type control
  * @extends bbbfly.MapControl
  *
- * @inpackage map_copyrights
+ * @inpackage mapbox
  *
  * @param {object} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner

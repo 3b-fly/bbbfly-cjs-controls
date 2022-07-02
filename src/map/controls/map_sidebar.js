@@ -3,7 +3,7 @@
  * @author Jan Nejedly [support@3b-fly.eu]
  * @copyright Jan Nejedly
  *
- * @inpackage map_sidebar
+ * @inpackage mapbox
  */
 
 /** @ignore */
@@ -112,7 +112,7 @@ bbbfly.map.control.sidebar._onBtnSelectedChanged = function(){
  * @type control
  * @extends bbbfly.MapSideBar
  *
- * @inpackage map_sidebar
+ * @inpackage mapbox
  *
  * @param {object} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
@@ -191,8 +191,7 @@ bbbfly.MapSideBar = function(def,ref,parent){
   if(mapControls){
     var mapCtrlsDef = {};
 
-    //add layers
-    if(mapControls & bbbfly.MapCrate.control.layers){
+    if(mapControls & bbbfly.MapBox.control.layers){
       mapCtrlsDef.Layers = {
         Data: {
           Action: bbbfly.MapSideBar.action.map_control,
@@ -202,8 +201,8 @@ bbbfly.MapSideBar = function(def,ref,parent){
         }
       };
     }
-    //add copyrights
-    if(mapControls & bbbfly.MapCrate.control.copyrights){
+
+    if(mapControls & bbbfly.MapBox.control.copyrights){
       mapCtrlsDef.Copyrights = {
         Data: {
           Action: bbbfly.MapSideBar.action.map_control,

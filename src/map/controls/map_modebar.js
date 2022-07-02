@@ -3,7 +3,7 @@
  * @author Jan Nejedly [support@3b-fly.eu]
  * @copyright Jan Nejedly
  *
- * @inpackage map_modebar
+ * @inpackage mapbox
  */
 
 /** @ignore */
@@ -129,7 +129,7 @@ bbbfly.map.control.modebar._onButtonClick = function(){
  * @type control
  * @extends bbbfly.MapControl
  *
- * @inpackage map_modebar
+ * @inpackage mapbox
  *
  * @param {object} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner

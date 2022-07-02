@@ -137,71 +137,10 @@
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:renderer|bbbfly-cjs (2.0.0): renderer}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:listener|bbbfly-cjs (2.0.0): listener}
  * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
- * @requires {@link package:map|bbbfly-cjs-controls (2.0.0): map}
- */
-
-/**
- * @package map_copyrights
- *
- * @version 2.0.0
- *
- * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
- * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.0): crossbrowser}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
- * @requires {@link package:button|bbbfly-cjs-controls (2.0.0): button}
- * @requires {@link package:text|bbbfly-cjs-controls (2.0.0): text}
- * @requires {@link package:mapbox|bbbfly-cjs-controls (2.0.0): mapbox}
- */
-
-/**
- * @package map_layers
- *
- * @version 2.0.0
- *
- * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
- * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.0): crossbrowser}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
  * @requires {@link package:button|bbbfly-cjs-controls (2.0.0): button}
  * @requires {@link package:text|bbbfly-cjs-controls (2.0.0): text}
  * @requires {@link package:list|bbbfly-cjs-controls (2.0.0): list}
  * @requires {@link package:map|bbbfly-cjs-controls (2.0.0): map}
- * @requires {@link package:mapbox|bbbfly-cjs-controls (2.0.0): mapbox}
- */
-
-/**
- * @package map_modebar
- *
- * @version 2.0.0
- *
- * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
- * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.0): crossbrowser}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
- * @requires {@link package:button|bbbfly-cjs-controls (2.0.0): button}
- * @requires {@link package:mapbox|bbbfly-cjs-controls (2.0.0): mapbox}
- */
-
-/**
- * @package map_sidebar
- *
- * @version 2.0.0
- *
- * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
- * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.0): crossbrowser}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
- * @requires {@link package:button|bbbfly-cjs-controls (2.0.0): button}
- * @requires {@link package:mapbox|bbbfly-cjs-controls (2.0.0): mapbox}
- */
-
-/**
- * @package map_zoomslider
- *
- * @version 2.0.0
- *
- * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
- * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.0): crossbrowser}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
- * @requires {@link package:button|bbbfly-cjs-controls (2.0.0): button}
- * @requires {@link package:mapbox|bbbfly-cjs-controls (2.0.0): mapbox}
  */
 
 /**

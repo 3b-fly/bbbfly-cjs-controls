@@ -3,7 +3,7 @@
  * @author Jan Nejedly [support@3b-fly.eu]
  * @copyright Jan Nejedly
  *
- * @inpackage map_copyrights
+ * @inpackage mapbox
  */
 
 var ngc_Lang = ngc_Lang || {};
