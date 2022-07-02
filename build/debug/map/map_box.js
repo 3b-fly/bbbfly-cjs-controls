@@ -176,11 +176,13 @@ bbbfly.MapBox = function(def,ref,parent){
 
   ng_MergeDef(def,{
     Data: {
+      MapControls: bbbfly.MapBox.control.none,
       Drawings: null,
       _DrawingsFeature: null,
       _MapControls: {},
       _MapControlsRegistered: false,
-      _MapMode: {}
+      _MapMode: {},
+      ChildHandling: ngChildEnabledParentAware
     },
     OnCreated: bbbfly.map.box._onCreated,
     Events: {
@@ -202,7 +204,79 @@ bbbfly.MapBox = function(def,ref,parent){
     }
   });
 
+  var mapControls = def.Data.MapControls;
+  if(mapControls){
+
+    if(mapControls & bbbfly.MapBox.control.copyrights){
+      ng_MergeDef(def,{
+        Controls: {
+          Copyrights: {
+            Type: 'bbbfly.MapCopyrights',
+            style: { zIndex: 3 },
+            Data: { Visible: false }
+          }
+        }
+      });
+    }
+
+    if(mapControls & bbbfly.MapBox.control.layers){
+      ng_MergeDef(def,{
+        Controls: {
+          Layers: {
+            Type: 'bbbfly.MapLayers',
+            style: { zIndex: 3 },
+            Data: { Visible: false }
+          }
+        }
+      });
+    }
+
+    if(mapControls & bbbfly.MapBox.control.modeBar){
+      ng_MergeDef(def,{
+        Controls: {
+          ModeBar: {
+            Type: 'bbbfly.MapModeBar',
+            style: { zIndex: 2 }
+          }
+        }
+      });
+    }
+
+    if(mapControls & bbbfly.MapBox.control.sideBar){
+      ng_MergeDef(def,{
+        Controls: {
+          SideBar: {
+            Type: 'bbbfly.MapSideBar',
+            style: { zIndex: 2 },
+            Data: { MapControls: mapControls }
+          }
+        }
+      });
+    }
+
+    if(mapControls & bbbfly.MapBox.control.zoomSlider){
+      ng_MergeDef(def,{
+        Controls: {
+          ZoomSlider: {
+            Type: 'bbbfly.MapZoomSlider',
+            style: { zIndex: 2 }
+          }
+        }
+      });
+    }
+  }
+
+  bbbfly.listener.Initialize();
+
   return ngCreateControlAsType(def,'bbbfly.Map',ref,parent);
+};
+bbbfly.MapBox.control = {
+  none: 0,
+  sideBar: 1,
+  zoomSlider: 2,
+  copyrights: 4,
+  layers: 8,
+  modeBar: 16
 };
 ngUserControls = ngUserControls || [];
 ngUserControls['bbbfly_map_box'] = {
