@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Namespace: hint</title>
+    <title>Class: MapSideBar</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -4381,53 +4381,37 @@
   }
 })();</script>
     <div class="main">
-<section class="kind-namespace">
+<section class="kind-class">
 <header>
     <h1 class="name">
           <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
-        hint
+        MapSideBar
   <span class="types">
-      <span class="type-signature namespace">
-        namespace
+      <span class="type-signature class">
+        class
+      </span>
+      <span class="type-signature control">
+        control
       </span>
   </span>
     </h1>
 </header>
 <article>
     <div class="container-overview">
-<dl class="details">
-</dl>
-    </div>
-        <h3>In Packages</h3>
-        <ul>
-              <li><a href="packages.html#package:hint">hint</a></li>
-        </ul>
-        <h3>Interfaces</h3>
-        <ul>
-            <li><a href="bbbfly.hint.Hintified.html">Hintified</a></li>
-        </ul>
-        <h3>Methods</h3>
-        <dl>
 <dt>
     <div class="nameContainer">
-        <h4 id=".Hintify">
-  <span class="attribs">
-      <span class="type-signature static">
-        static
-      </span>
-  </span>
-          bbbfly.hint.Hintify
-          <span class="signature">(<span class="optional">def</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{object}</span>
-        </h4>
+        <h2 id="MapSideBar">
+          new 
+          bbbfly.MapSideBar
+          <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
+        </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/hint.js#L134">base/hint.js, line 134</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/controls/map_sidebar.js#L127">map/controls/map_sidebar.js, line 127</a>
         </div>
     </div>
 </dt>
 <dd>
-      <div class="description">Modifies passed defintion to make control
-  implement <a href="bbbfly.hint.Hintified.html">Hintified</a> interface.</div>
-        <h5>Parameters:</h5>
+        <h3>Parameters</h3>
 <table class="params">
     <thead>
 	<tr>
@@ -4442,11 +4426,256 @@
                   <span class="param-name">def</span>
                 </td>
             <td class="type">
-<span class="param-type">ngControl.Definition</span>
+<span class="param-type">object</span>
             </td>
             <td class="description last">
                         <span class="optional">optional</span>
-                Control definition
+                Descendant definition
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">ref</span>
+                </td>
+            <td class="type">
+<span class="param-type">object</span>
+            </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Reference owner
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">parent</span>
+                </td>
+            <td class="type">
+<span class="param-type">object</span>
+            </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Parent DIV element or it's ID
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <h3>Properties</h3>
+    <table class="props" my="test">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr id="property:ControlType">
+                    <td class="name">
+                      <span class="param-name">
+                        ControlType
+                      </span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                    <td class="default">
+                      <span class="param-default">
+                        bbbfly.map.control.sidebar.control_type
+                      </span>
+                    </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:MapControls">
+                    <td class="name">
+                      <span class="param-name">
+                        MapControls
+                      </span>
+                    </td>
+                <td class="type">
+<span class="param-type">bbbfly.MapCrate.control</span>
+                </td>
+                    <td class="default">
+                      <span class="param-default">
+                        none
+                      </span>
+                    </td>
+                <td class="description last">
+                  Map controls to handle
+                </td>
+            </tr>
+            <tr id="property:SectionDef">
+                    <td class="name">
+                      <span class="param-name">
+                        SectionDef
+                      </span>
+                    </td>
+                <td class="type">
+<span class="param-type">object</span>
+                </td>
+                    <td class="default">
+                    </td>
+                <td class="description last">
+                  Section definition
+                </td>
+            </tr>
+            <tr id="property:ButtonDef">
+                    <td class="name">
+                      <span class="param-name">
+                        ButtonDef
+                      </span>
+                    </td>
+                <td class="type">
+<span class="param-type">object</span>
+                </td>
+                    <td class="default">
+                    </td>
+                <td class="description last">
+                  Button definition
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</dl>
+<dl class="details">
+</dl>
+</dd>
+    </div>
+        <h3>Extends</h3>
+        <ul>
+            <li><a href="bbbfly.MapSideBar.html">bbbfly.MapSideBar</a></li>
+        </ul>
+        <h3>In Packages</h3>
+        <ul>
+              <li><a href="packages.html#package:mapbox">mapbox</a></li>
+        </ul>
+        <h3>Members</h3>
+        <dl>
+<dt>
+  <div class="nameContainer">
+    <h4 class="name" id=".action">
+  <span class="attribs">
+      <span class="type-signature static">
+        static
+      </span>
+  </span>
+      action
+  <span class="types">
+      <span class="type-signature enum">
+        enum
+      </span>
+      <span class="type-signature integer">
+        integer
+      </span>
+  </span>
+    </h4>
+  </div>
+</dt>
+<dd class="member-content">
+<dl class="details">
+    <table class="props" my="test">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr id="property:map_control">
+                    <td class="name">
+                      <span class="param-name">
+                        map_control
+                      </span>
+                    </td>
+                <td class="type">
+<span class="param-type">integer</span>
+                </td>
+                    <td class="default">
+                      <span class="param-default">
+                        1
+                      </span>
+                    </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:map_mode">
+                    <td class="name">
+                      <span class="param-name">
+                        map_mode
+                      </span>
+                    </td>
+                <td class="type">
+<span class="param-type">integer</span>
+                </td>
+                    <td class="default">
+                      <span class="param-default">
+                        2
+                      </span>
+                    </td>
+                <td class="description last">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</dl>
+<dl class="details">
+</dl>
+</dd>
+        </dl>
+        <h3>Methods</h3>
+        <dl>
+<dt>
+    <div class="nameContainer overrides">
+        <h4 id="GetButtonAlt">
+  <span class="attribs">
+      <span class="type-signature overrides">
+        <a href="bbbfly.MapSideBar.html#GetButtonAlt">overrides</a>
+      </span>
+  </span>
+          GetButtonAlt
+          <span class="signature">(id, group)</span><span class="arrow-right"></span><span class="type-signature returnType">{string|null}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/controls/map_sidebar.js#L164">map/controls/map_sidebar.js, line 164</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Get button alt string</div>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">id</span>
+                </td>
+            <td class="type">
+<span class="param-type">string</span>
+            </td>
+            <td class="description last">
+                Button ID
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">group</span>
+                </td>
+            <td class="type">
+<span class="param-type">string</span>
+            </td>
+            <td class="description last">
+                Button group
             </td>
         </tr>
 	</tbody>
@@ -4464,9 +4693,83 @@
     <tbody>
         <tr>
             <td class="type">
-                        object
+                        string
+                         | 
+                        null
             </td>
-            <td class="description last">Control definition</td>
+            <td class="description last">- Button alt</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer overrides">
+        <h4 id="GetButtonIcon">
+  <span class="attribs">
+      <span class="type-signature overrides">
+        <a href="bbbfly.MapSideBar.html#GetButtonIcon">overrides</a>
+      </span>
+  </span>
+          GetButtonIcon
+          <span class="signature">(id, group)</span><span class="arrow-right"></span><span class="type-signature returnType">{bbbfly.Renderer.image}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/controls/map_sidebar.js#L175">map/controls/map_sidebar.js, line 175</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Get button icon</div>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">id</span>
+                </td>
+            <td class="type">
+<span class="param-type">string</span>
+            </td>
+            <td class="description last">
+                Button ID
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">group</span>
+                </td>
+            <td class="type">
+<span class="param-type">string</span>
+            </td>
+            <td class="description last">
+                Button group
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        bbbfly.Renderer.image
+            </td>
+            <td class="description last">Icon definition</td>
         </tr>
     </tbody>
 </table>
