@@ -2016,6 +2016,12 @@
         <li data-name="Drawings">
           <a href="bbbfly.MapBox.html#property:Drawings">Drawings</a>
         </li>
+        <li data-name="DrawSingleIcon">
+          <a href="bbbfly.MapBox.html#property:DrawSingleIcon">DrawSingleIcon</a>
+        </li>
+        <li data-name="DrawSingleGeometry">
+          <a href="bbbfly.MapBox.html#property:DrawSingleGeometry">DrawSingleGeometry</a>
+        </li>
     </ul>
     <ul class="members itemMembers">
       <span class="subtitle">Members</span>
@@ -2145,6 +2151,9 @@
         <li data-name="bbbfly.MapBox#SetCenter">
           <a href="bbbfly.MapBox.html#SetCenter">SetCenter</a>
         </li>
+        <li data-name="bbbfly.MapBox#SetDrawControlDrawing">
+          <a href="bbbfly.MapBox.html#SetDrawControlDrawing">SetDrawControlDrawing</a>
+        </li>
         <li data-name="bbbfly.MapBox#SetEnabled">
           <a href="bbbfly.MapBox.html#SetEnabled">SetEnabled</a>
         </li>
@@ -2180,6 +2189,9 @@
         </li>
         <li data-name="bbbfly.MapBox#SetZoom">
           <a href="bbbfly.MapBox.html#SetZoom">SetZoom</a>
+        </li>
+        <li data-name="bbbfly.MapBox#StopDrawControlActions">
+          <a href="bbbfly.MapBox.html#StopDrawControlActions">StopDrawControlActions</a>
         </li>
         <li data-name="bbbfly.MapBox#TrackControl">
           <a href="bbbfly.MapBox.html#TrackControl">TrackControl</a>
@@ -3287,6 +3299,9 @@
         </li>
         <li data-name="bbbfly.MapTooltip#Dispose">
           <a href="bbbfly.MapTooltip.html#Dispose">Dispose</a>
+        </li>
+        <li data-name="bbbfly.MapTooltip#GetHTML">
+          <a href="bbbfly.MapTooltip.html#GetHTML">GetHTML</a>
         </li>
         <li data-name="bbbfly.MapTooltip#GetStyle">
           <a href="bbbfly.MapTooltip.html#GetStyle">GetStyle</a>
@@ -4406,7 +4421,7 @@
           <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L217">map/map_box.js, line 217</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L347">map/map_box.js, line 347</a>
         </div>
     </div>
 </dt>
@@ -4504,6 +4519,42 @@
                     </td>
                 <td class="description last">
                   Drawings handler
+                </td>
+            </tr>
+            <tr id="property:DrawSingleIcon">
+                    <td class="name">
+                      <span class="param-name">
+                        DrawSingleIcon
+                      </span>
+                    </td>
+                <td class="type">
+<span class="param-type">boolean</span>
+                </td>
+                    <td class="default">
+                      <span class="param-default">
+                        false
+                      </span>
+                    </td>
+                <td class="description last">
+                  If map can contain max one icon
+                </td>
+            </tr>
+            <tr id="property:DrawSingleGeometry">
+                    <td class="name">
+                      <span class="param-name">
+                        DrawSingleGeometry
+                      </span>
+                    </td>
+                <td class="type">
+<span class="param-type">boolean</span>
+                </td>
+                    <td class="default">
+                      <span class="param-default">
+                        false
+                      </span>
+                    </td>
+                <td class="description last">
+                  If map can contain max one geometry
                 </td>
             </tr>
         </tbody>
@@ -4653,6 +4704,40 @@
                     <td class="default">
                       <span class="param-default">
                         16
+                      </span>
+                    </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:drawMarker">
+                    <td class="name">
+                      <span class="param-name">
+                        drawMarker
+                      </span>
+                    </td>
+                <td class="type">
+<span class="param-type">integer</span>
+                </td>
+                    <td class="default">
+                      <span class="param-default">
+                        32
+                      </span>
+                    </td>
+                <td class="description last">
+                </td>
+            </tr>
+            <tr id="property:drawGeometry">
+                    <td class="name">
+                      <span class="param-name">
+                        drawGeometry
+                      </span>
+                    </td>
+                <td class="type">
+<span class="param-type">integer</span>
+                </td>
+                    <td class="default">
+                      <span class="param-default">
+                        64
                       </span>
                     </td>
                 <td class="description last">
@@ -5436,7 +5521,7 @@
           <span class="signature">(id)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L326">map/map_box.js, line 326</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L465">map/map_box.js, line 465</a>
         </div>
     </div>
 </dt>
@@ -5497,7 +5582,7 @@
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L339">map/map_box.js, line 339</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L478">map/map_box.js, line 478</a>
         </div>
     </div>
 </dt>
@@ -6124,7 +6209,7 @@
           <span class="signature">(<span class="optional">type</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{Array.&lt;<a href="bbbfly.MapControl.html">bbbfly.MapControl</a>>}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L296">map/map_box.js, line 296</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L435">map/map_box.js, line 435</a>
         </div>
     </div>
 </dt>
@@ -6350,7 +6435,7 @@
           <span class="signature">(modeType)</span><span class="arrow-right"></span><span class="type-signature returnType">{string|null}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L366">map/map_box.js, line 366</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L505">map/map_box.js, line 505</a>
         </div>
     </div>
 </dt>
@@ -6415,7 +6500,7 @@
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{Array.&lt;string>}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L380">map/map_box.js, line 380</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L519">map/map_box.js, line 519</a>
         </div>
     </div>
 </dt>
@@ -6542,7 +6627,7 @@
           <span class="signature">(type, ctrl)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L264">map/map_box.js, line 264</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L403">map/map_box.js, line 403</a>
         </div>
     </div>
 </dt>
@@ -6943,6 +7028,61 @@
 </table>
 </dd>
 <dt>
+    <div class="nameContainer">
+        <h4 id="SetDrawControlDrawing">
+          SetDrawControlDrawing
+          <span class="signature">(drawing)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L533">map/map_box.js, line 533</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Set draw control geometry type</div>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">drawing</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.MapDrawingItem.html">bbbfly.MapDrawingItem</a></span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last"></td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
     <div class="nameContainer inherited">
         <h4 id="SetEnabled">
   <span class="attribs">
@@ -7200,7 +7340,7 @@
           <span class="signature">(type, <span class="optional">visible</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L310">map/map_box.js, line 310</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L449">map/map_box.js, line 449</a>
         </div>
     </div>
 </dt>
@@ -7487,7 +7627,7 @@
           <span class="signature">(modeType, mode)</span><span class="arrow-right"></span><span class="type-signature returnType">{string|null}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L351">map/map_box.js, line 351</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L490">map/map_box.js, line 490</a>
         </div>
     </div>
 </dt>
@@ -7887,6 +8027,22 @@
 </table>
 </dd>
 <dt>
+    <div class="nameContainer">
+        <h4 id="StopDrawControlActions">
+          StopDrawControlActions
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L543">map/map_box.js, line 543</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Stop all draw control actions</div>
+<dl class="details">
+</dl>
+</dd>
+<dt>
     <div class="nameContainer inherited">
         <h4 id="TrackControl">
   <span class="attribs">
@@ -7955,7 +8111,7 @@
           <span class="signature">(type, ctrl)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L280">map/map_box.js, line 280</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L419">map/map_box.js, line 419</a>
         </div>
     </div>
 </dt>
@@ -8416,7 +8572,7 @@
           <span class="signature">(modeType, mode)</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L244">map/map_box.js, line 244</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map_box.js#L381">map/map_box.js, line 381</a>
         </div>
     </div>
 </dt>
