@@ -20,9 +20,15 @@ bbbfly.map.box._onUpdate = function(){
   }
   return true;
 };
-
 bbbfly.map.box._doCreateMap = function(options){
+  if(!options){options = {};}
+
+  options.drawControl = false;
+  options.attributionControl = false;
+  options.zoomControl = false;
+
   var map = this.DoCreateMap.callParent(options);
+  if(!map){return null;}
 
   this._DrawingsFeature = new L.FeatureGroup();
   this._DrawingsFeature.addTo(map);
@@ -33,7 +39,81 @@ bbbfly.map.box._doCreateMap = function(options){
     );
   }
 
+  this.CreateDrawControls(map);
   return map;
+};
+bbbfly.map.box._createDrawControls = function(map){
+  if(!map){return null;}
+  map.on('draw:created',bbbfly.map.box._onDrawCreated);
+  map.on('draw:deleted',bbbfly.map.box._onDrawDeleted);
+  var drawMarker = !!(this.MapControls & bbbfly.MapBox.control.drawMarker);
+  var drawGeometry = !!(this.MapControls & bbbfly.MapBox.control.drawGeometry);
+
+  if((drawMarker || drawGeometry) && L.Control.Draw){
+    L.drawLocal = ngTxt('bbbfly_map_control_draw');
+
+    this._DrawControl = new L.Control.Draw({
+      position: 'topright',
+      draw: {
+        polygon: (drawGeometry ? { repeatMode: true } : false),
+        polyline: (drawGeometry ? { repeatMode: true } : false),
+        rectangle: (drawGeometry ? { repeatMode: true } : false),
+        circle: false,
+        circlemarker: false,
+        marker: drawMarker
+      },
+      edit: {
+        featureGroup: this._DrawingsFeature
+      }
+    }).addTo(map);
+  }
+
+  if(this._DrawDrawing){
+    this.SetDrawControlDrawing(this._DrawDrawing);
+  }
+};
+bbbfly.map.box._onDrawCreated = function(event){
+  var map = event.target.Owner;
+  if(!map._DrawDrawing){return;}
+
+  if(event.layer instanceof L.Marker){
+    if(map.DrawSingleIcon){map.Drawings.ClearIcons();}
+
+    var opts = ng_CopyVar(map._DrawDrawing.Options);
+    opts.Point = event.layer.getLatLng();
+
+    map.Drawings.AddDrawing(
+      new bbbfly.MapDrawingItem(opts)
+    );
+  }
+  else if(event.layer instanceof L.Polyline){
+    if(map.DrawSingleGeometry){map.Drawings.ClearGeometries();}
+
+    var opts = ng_CopyVar(map._DrawDrawing.Options);
+    opts.Geometry = event.layer.toGeoJSON();
+
+    map.Drawings.AddDrawing(
+      new bbbfly.MapDrawingItem(opts)
+    );
+  }
+};
+bbbfly.map.box._onDrawDeleted = function(event){
+  if(event.layers instanceof L.LayerGroup){
+    event.layers.eachLayer(function(layer){
+
+      var drawing = layer.Owner;
+      if(!(drawing instanceof bbbfly.MapDrawingItem)){
+        return;
+      }
+
+      if(layer instanceof L.Marker){
+        drawing.RemoveIcon(layer);
+      }
+      else if(layer instanceof L.Polyline){
+        drawing.RemoveGeometry(layer);
+      }
+    });
+  }
 };
 bbbfly.map.box._registerControls = function(){
   if(!this.Controls){return;}
@@ -171,14 +251,51 @@ bbbfly.map.box._getMode = function(modeType){
 bbbfly.map.box._getModes = function(){
   return (this._MapMode ? this._MapMode : {});
 };
+bbbfly.map.box._setDrawControlDrawing = function(drawing){
+  if(!(drawing instanceof bbbfly.MapDrawingItem)){return false;}
+  this._DrawDrawing = drawing;
+
+  if(this._DrawControl){
+
+    var state = {
+      readonly: true,
+      selected: true
+    };
+
+    var icon = drawing.NewIcon(state);
+    var geomStyle = drawing.GetGeometryStyle();
+
+    this._DrawControl.setDrawingOptions({
+      marker: { icon: icon },
+      polygon: { shapeOptions: geomStyle },
+      polyline: { shapeOptions: geomStyle },
+      rectangle: { shapeOptions: geomStyle }
+    });
+  }
+
+  return true;
+};
+bbbfly.map.box._stopDrawControlActions = function(){
+  if(this._DrawControl){
+    for(var i in this._DrawControl._toolbars){
+      var toolbar = this._DrawControl._toolbars[i];
+      toolbar.disable();
+    }
+  }
+};
 bbbfly.MapBox = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
     Data: {
       MapControls: bbbfly.MapBox.control.none,
+
       Drawings: null,
+      DrawSingleIcon: false,
+      DrawSingleGeometry: false,
       _DrawingsFeature: null,
+      _DrawControl: null,
+      _DrawDrawing: null,
       _MapControls: {},
       _MapControlsRegistered: false,
       _MapMode: {},
@@ -192,6 +309,7 @@ bbbfly.MapBox = function(def,ref,parent){
     Methods: {
       DoCreateMap: bbbfly.map.box._doCreateMap,
       RegisterControls: bbbfly.map.box._registerControls,
+      CreateDrawControls: bbbfly.map.box._createDrawControls,
       LinkMapControl: bbbfly.map.box._linkMapControl,
       UnlinkMapControl: bbbfly.map.box._unlinkMapControl,
       GetMapControls: bbbfly.map.box._getMapControls,
@@ -200,7 +318,9 @@ bbbfly.MapBox = function(def,ref,parent){
       FitDrawings: bbbfly.map.box._fitDrawings,
       SetMode: bbbfly.map.box._setMode,
       GetMode: bbbfly.map.box._getMode,
-      GetModes: bbbfly.map.box._getModes
+      GetModes: bbbfly.map.box._getModes,
+      SetDrawControlDrawing: bbbfly.map.box._setDrawControlDrawing,
+      StopDrawControlActions: bbbfly.map.box._stopDrawControlActions
     }
   });
 
@@ -276,7 +396,10 @@ bbbfly.MapBox.control = {
   zoomSlider: 2,
   copyrights: 4,
   layers: 8,
-  modeBar: 16
+  modeBar: 16,
+
+  drawMarker: 32,
+  drawGeometry: 64
 };
 ngUserControls = ngUserControls || [];
 ngUserControls['bbbfly_map_box'] = {

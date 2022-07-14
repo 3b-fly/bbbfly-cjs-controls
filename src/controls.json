@@ -251,6 +251,8 @@
 
         "map/controls/lang/map_copyrights_cs.js",
         "map/controls/lang/map_copyrights_en.js",
+        "map/controls/lang/map_draw_cs.js",
+        "map/controls/lang/map_draw_en.js",
         "map/controls/lang/map_layers_cs.js",
         "map/controls/lang/map_layers_en.js",
         "map/controls/lang/map_sidebar_cs.js",
@@ -276,6 +278,8 @@
 
         "map/controls/lang/map_copyrights_cs.js",
         "map/controls/lang/map_copyrights_en.js",
+        "map/controls/lang/map_draw_cs.js",
+        "map/controls/lang/map_draw_en.js",
         "map/controls/lang/map_layers_cs.js",
         "map/controls/lang/map_layers_en.js",
         "map/controls/lang/map_sidebar_cs.js",

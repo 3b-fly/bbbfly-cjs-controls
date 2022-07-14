@@ -119,7 +119,7 @@ bbbfly.map.control.sidebar._onBtnSelectedChanged = function(){
  * @param {object} [parent=undefined] - Parent DIV element or it's ID
  *
  * @property {string} [ControlType=bbbfly.map.control.sidebar.control_type]
- * @property {bbbfly.MapCrate.control} [MapControls=none] - Map controls to handle
+ * @property {bbbfly.MapBox.control} [MapControls=none] - Map controls to handle
  *
  * @property {object} SectionDef - Section definition
  * @property {object} ButtonDef - Button definition
@@ -149,7 +149,7 @@ bbbfly.MapSideBar = function(def,ref,parent){
     },
     Data: {
       ControlType: bbbfly.map.control.sidebar.control_type,
-      MapControls: bbbfly.MapCrate.control.none,
+      MapControls: bbbfly.MapBox.control.none,
 
       /** @private */
       _Buttons: []

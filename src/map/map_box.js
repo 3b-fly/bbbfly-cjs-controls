@@ -29,8 +29,16 @@ bbbfly.map.box._onUpdate = function(){
   return true;
 };
 
+/** @ignore */
 bbbfly.map.box._doCreateMap = function(options){
+  if(!options){options = {};}
+
+  options.drawControl = false;
+  options.attributionControl = false;
+  options.zoomControl = false;
+
   var map = this.DoCreateMap.callParent(options);
+  if(!map){return null;}
 
   this._DrawingsFeature = new L.FeatureGroup();
   this._DrawingsFeature.addTo(map);
@@ -41,7 +49,91 @@ bbbfly.map.box._doCreateMap = function(options){
     );
   }
 
+  this.CreateDrawControls(map);
   return map;
+};
+
+/** @ignore */
+bbbfly.map.box._createDrawControls = function(map){
+  if(!map){return null;}
+
+  //set map callbacks
+  map.on('draw:created',bbbfly.map.box._onDrawCreated);
+  map.on('draw:deleted',bbbfly.map.box._onDrawDeleted);
+
+  //create draw controls
+  var drawMarker = !!(this.MapControls & bbbfly.MapBox.control.drawMarker);
+  var drawGeometry = !!(this.MapControls & bbbfly.MapBox.control.drawGeometry);
+
+  if((drawMarker || drawGeometry) && L.Control.Draw){
+    L.drawLocal = ngTxt('bbbfly_map_control_draw');
+
+    this._DrawControl = new L.Control.Draw({
+      position: 'topright',
+      draw: {
+        polygon: (drawGeometry ? { repeatMode: true } : false),
+        polyline: (drawGeometry ? { repeatMode: true } : false),
+        rectangle: (drawGeometry ? { repeatMode: true } : false),
+        circle: false,
+        circlemarker: false,
+        marker: drawMarker
+      },
+      edit: {
+        featureGroup: this._DrawingsFeature
+      }
+    }).addTo(map);
+  }
+
+  if(this._DrawDrawing){
+    this.SetDrawControlDrawing(this._DrawDrawing);
+  }
+};
+
+/** @ignore */
+bbbfly.map.box._onDrawCreated = function(event){
+  var map = event.target.Owner;
+  if(!map._DrawDrawing){return;}
+
+  if(event.layer instanceof L.Marker){
+    if(map.DrawSingleIcon){map.Drawings.ClearIcons();}
+
+    var opts = ng_CopyVar(map._DrawDrawing.Options);
+    opts.Point = event.layer.getLatLng();
+
+    map.Drawings.AddDrawing(
+      new bbbfly.MapDrawingItem(opts)
+    );
+  }
+  else if(event.layer instanceof L.Polyline){
+    if(map.DrawSingleGeometry){map.Drawings.ClearGeometries();}
+
+    var opts = ng_CopyVar(map._DrawDrawing.Options);
+    opts.Geometry = event.layer.toGeoJSON();
+
+    map.Drawings.AddDrawing(
+      new bbbfly.MapDrawingItem(opts)
+    );
+  }
+};
+
+/** @ignore */
+bbbfly.map.box._onDrawDeleted = function(event){
+  if(event.layers instanceof L.LayerGroup){
+    event.layers.eachLayer(function(layer){
+
+      var drawing = layer.Owner;
+      if(!(drawing instanceof bbbfly.MapDrawingItem)){
+        return;
+      }
+
+      if(layer instanceof L.Marker){
+        drawing.RemoveIcon(layer);
+      }
+      else if(layer instanceof L.Polyline){
+        drawing.RemoveGeometry(layer);
+      }
+    });
+  }
 };
 
 /** @ignore */
@@ -200,6 +292,42 @@ bbbfly.map.box._getModes = function(){
   return (this._MapMode ? this._MapMode : {});
 };
 
+/** @ignore */
+bbbfly.map.box._setDrawControlDrawing = function(drawing){
+  if(!(drawing instanceof bbbfly.MapDrawingItem)){return false;}
+  this._DrawDrawing = drawing;
+
+  if(this._DrawControl){
+
+    var state = {
+      readonly: true,
+      selected: true
+    };
+
+    var icon = drawing.NewIcon(state);
+    var geomStyle = drawing.GetGeometryStyle();
+
+    this._DrawControl.setDrawingOptions({
+      marker: { icon: icon },
+      polygon: { shapeOptions: geomStyle },
+      polyline: { shapeOptions: geomStyle },
+      rectangle: { shapeOptions: geomStyle }
+    });
+  }
+
+  return true;
+};
+
+/** @ignore */
+bbbfly.map.box._stopDrawControlActions = function(){
+  if(this._DrawControl){
+    for(var i in this._DrawControl._toolbars){
+      var toolbar = this._DrawControl._toolbars[i];
+      toolbar.disable();
+    }
+  }
+};
+
 /**
  * @class
  * @type control
@@ -209,6 +337,8 @@ bbbfly.map.box._getModes = function(){
  *
  * @property {bbbfly.MapBox.control} [MapControls=none] - Set this property to allow desired map controls.
  * @property {bbbfly.MapDrawingsHandler} Drawings - Drawings handler
+ * @property {boolean} [DrawSingleIcon=false] - If map can contain max one icon
+ * @property {boolean} [DrawSingleGeometry=false] - If map can contain max one geometry
  *
  * @param {object} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
@@ -220,10 +350,17 @@ bbbfly.MapBox = function(def,ref,parent){
   ng_MergeDef(def,{
     Data: {
       MapControls: bbbfly.MapBox.control.none,
+
       Drawings: null,
+      DrawSingleIcon: false,
+      DrawSingleGeometry: false,
 
       /** @private */
       _DrawingsFeature: null,
+      /** @private */
+      _DrawControl: null,
+      /** @private */
+      _DrawDrawing: null,
 
       /** @private */
       _MapControls: {},
@@ -260,6 +397,8 @@ bbbfly.MapBox = function(def,ref,parent){
       DoCreateMap: bbbfly.map.box._doCreateMap,
       /** @private */
       RegisterControls: bbbfly.map.box._registerControls,
+      /** @private */
+      CreateDrawControls: bbbfly.map.box._createDrawControls,
 
       /**
        * @function
@@ -389,7 +528,25 @@ bbbfly.MapBox = function(def,ref,parent){
        * @see {@link bbbfly.MapBox#GetMode|GetMode()}
        * @see {@link bbbfly.MapBox#event:OnModeChanged|OnModeChanged}
        */
-      GetModes: bbbfly.map.box._getModes
+      GetModes: bbbfly.map.box._getModes,
+
+      /**
+       * @function
+       * @name SetDrawControlDrawing
+       * @memberof bbbfly.MapBox#
+       * @description Set draw control geometry type
+       *
+       * @param {bbbfly.MapDrawingItem} drawing
+       * @return {boolean}
+       */
+      SetDrawControlDrawing: bbbfly.map.box._setDrawControlDrawing,
+      /**
+       * @function
+       * @name StopDrawControlActions
+       * @memberof bbbfly.MapBox#
+       * @description Stop all draw control actions
+       */
+      StopDrawControlActions: bbbfly.map.box._stopDrawControlActions
     }
   });
 
@@ -471,7 +628,10 @@ bbbfly.MapBox.control = {
   zoomSlider: 2,
   copyrights: 4,
   layers: 8,
-  modeBar: 16
+  modeBar: 16,
+
+  drawMarker: 32,
+  drawGeometry: 64
 };
 
 /** @ignore */

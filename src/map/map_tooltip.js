@@ -404,7 +404,7 @@ bbbfly.MapTooltip = function(options){
   /**
    * @function
    * @name GetHTML
-   * @memberof bbbfly.MapCrateTooltip#
+   * @memberof bbbfly.MapTooltip#
    *
    * @param {bbbfly.Renderer.frame} [frame=undefined]
    * @param {string} [innerHTML=undefined]

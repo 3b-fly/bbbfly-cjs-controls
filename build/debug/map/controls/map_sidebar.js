@@ -122,7 +122,7 @@ bbbfly.MapSideBar = function(def,ref,parent){
     },
     Data: {
       ControlType: bbbfly.map.control.sidebar.control_type,
-      MapControls: bbbfly.MapCrate.control.none,
+      MapControls: bbbfly.MapBox.control.none,
       _Buttons: []
     },
     Events: {
