@@ -5,8 +5,7 @@
   "Copyright": "Jan Nejedly",
   "RequiredLibraries": {
     "controls.js": "5.0.0",
-    "bbbfly-cjs": "2.0.0",
-    "bbbfly-cjs-controls": "2.0.0"
+    "bbbfly-cjs": "2.0.0"
   },
   "Packages": {
     "panel": {
