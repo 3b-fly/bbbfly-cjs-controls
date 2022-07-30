@@ -18,6 +18,7 @@ bbbfly.map.drawing = {
   layer: {},
   core: {},
   item: {
+    iconstyle: {},
     geometrystyle: {}
   },
   cluster: {
@@ -484,11 +485,12 @@ bbbfly.map.drawing.item._update = function(){
 
   if(this._Marker){
     var iStyle = this.GetIconStyle();
+    var style = iStyle ? iStyle.GetStyle(state) : null;
 
     var over = state.mouseover;
     state.mouseover = false;
 
-    var proxy = bbbfly.Renderer.StackProxy(iStyle.images,state,this.ID+'_I');
+    var proxy = bbbfly.Renderer.StackProxy(style.images,state,this.ID+'_I');
     var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg');
 
     this._IconProxy = proxy;
@@ -500,7 +502,7 @@ bbbfly.map.drawing.item._update = function(){
       var icon = new L.DivIcon({
         iconSize: [proxy.W,proxy.H],
         iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
-        className: iStyle.className,
+        className: style.className,
         html: html
       });
 
@@ -543,13 +545,15 @@ bbbfly.map.drawing.item._newIcon = function(state,id){
     if(!String.isString(id)){id = bbbfly.map.drawing.utils.DrawingId();}
 
     var iStyle = this.GetIconStyle();
-    var proxy = bbbfly.Renderer.StackProxy(iStyle.images,state,id+'_I');
+    var style = iStyle ? iStyle.GetStyle(state) : null;
+
+    var proxy = bbbfly.Renderer.StackProxy(style.images,state,id+'_I');
     var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg');
 
     return new L.DivIcon({
       iconSize: [proxy.W,proxy.H],
       iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
-      className: iStyle.className,
+      className: style.className,
       html: html
     });
 };
@@ -756,31 +760,57 @@ bbbfly.map.drawing.item._onDblClick = function(){
     this.SetSelected(!this.GetSelected(),true);
   }
 };
-bbbfly.map.drawing.item.geometrystyle._getStyle = function(state){
-  var opts = this._options;
+bbbfly.map.drawing.item.iconstyle._getStyle = function(state){
+  var finalStyle = ng_CopyVar(this._defStyle);
+  var style = this._style;
 
-  var style = ng_CopyVar(this._defoptions);
+  if(Object.isObject(style)){
+    var images = style.images;
+    var className = bbbfly.Renderer.GetStateValue(style,state,'className');
 
-  if(Object.isObject(opts)){
-    var weight = bbbfly.Renderer.GetStateValue(opts,state,'weight');
-    var color = bbbfly.Renderer.GetStateValue(opts,state,'color');
-    var fillColor = bbbfly.Renderer.GetStateValue(opts,state,'fillColor');
-    var opacity = bbbfly.Renderer.GetStateValue(opts,state,'opacity');
-    var fillOpacity = bbbfly.Renderer.GetStateValue(opts,state,'fillOpacity');
-    var className = bbbfly.Renderer.GetStateValue(opts,state,'className');
-
-    if(Number.isInteger(weight)){style.weight = weight;}
-    if(String.isString(color)){style.color = color;}
-    if(String.isString(fillColor)){style.fillColor = fillColor;}
-    if(Number.isNumber(opacity)){style.opacity = opacity;}
-    if(Number.isNumber(fillOpacity)){style.fillOpacity = fillOpacity;}
-    if(String.isString(className)){style.className = weight;}
-
-    style.stroke = !!((style.weight > 0) && (style.opacity > 0));
-    style.fill = !!(style.fillColor && (style.fillOpacity > 0));
+    if(Array.isArray(images)){finalStyle.images = images;}
+    if(String.isString(className)){finalStyle.className = className;}
   }
+  return finalStyle;
+};
+bbbfly.map.drawing.item.iconstyle._setStyle = function(options){
+  if(Object.isObject(options) || (options === null)){
+    this._style = ng_CopyVar(options);
+  }
+};
+bbbfly.map.drawing.item.geometrystyle._getStyle = function(state){
+  var finalStyle = ng_CopyVar(this._defStyle);
+  var style = this._style;
 
-  return style;
+  if(Object.isObject(style)){
+    var weight = bbbfly.Renderer.GetStateValue(style,state,'weight');
+    var color = bbbfly.Renderer.GetStateValue(style,state,'color');
+    var fillColor = bbbfly.Renderer.GetStateValue(style,state,'fillColor');
+    var opacity = bbbfly.Renderer.GetStateValue(style,state,'opacity');
+    var fillOpacity = bbbfly.Renderer.GetStateValue(style,state,'fillOpacity');
+    var className = bbbfly.Renderer.GetStateValue(style,state,'className');
+
+    if(Number.isInteger(weight)){finalStyle.weight = weight;}
+    if(String.isString(color)){finalStyle.color = color;}
+    if(String.isString(fillColor)){finalStyle.fillColor = fillColor;}
+    if(Number.isNumber(opacity)){finalStyle.opacity = opacity;}
+    if(Number.isNumber(fillOpacity)){finalStyle.fillOpacity = fillOpacity;}
+    if(String.isString(className)){finalStyle.className = className;}
+
+    weight = finalStyle.weight;
+    opacity = finalStyle.opacity;
+    fillColor = finalStyle.fillColor;
+    fillOpacity = finalStyle.fillOpacity;
+
+    finalStyle.stroke = !!((weight > 0) && (opacity > 0));
+    finalStyle.fill = !!(fillColor && (fillOpacity > 0));
+  }
+  return finalStyle;
+};
+bbbfly.map.drawing.item.geometrystyle._setStyle = function(options){
+  if(Object.isObject(options) || (options === null)){
+    this._style = ng_CopyVar(options);
+  }
 };
 bbbfly.map.drawing.cluster._create = function(){
   var sStyle = this.GetSpiderStyle();
@@ -863,11 +893,13 @@ bbbfly.map.drawing.cluster._createIcon = function(cluster){
   var drawing = cluster._group.Owner;
   var childCnt = cluster.getChildCount();
 
-  var iStyle = drawing.GetIconStyle(childCnt);
   var state = drawing.GetState(cluster);
+  var iStyle = drawing.GetIconStyle(childCnt);
+  var style = iStyle ? iStyle.GetStyle(state) : null;
+
 
   var id = bbbfly.map.drawing.utils.LeafletId(cluster);
-  var proxy = bbbfly.Renderer.StackProxy(iStyle.images,state);
+  var proxy = bbbfly.Renderer.StackProxy(style.images,state);
   var html = bbbfly.Renderer.StackHTML(proxy,state,'MapIconImg',id);
 
   var showNumber = drawing.Options.ShowNumber;
@@ -896,7 +928,7 @@ bbbfly.map.drawing.cluster._createIcon = function(cluster){
   return L.divIcon({
       iconSize: [proxy.W,proxy.H],
       iconAnchor: [proxy.Anchor.L,proxy.Anchor.T],
-      className: iStyle.className,
+      className: style.className,
       html: html
     });
 };
@@ -1417,21 +1449,23 @@ bbbfly.MapDrawingItem.Style.Define = function(id,style){
   return true;
 };
 bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
-  bbbfly.MapDrawingItem.Style,function(images,className){
-
-    this.images = null;
-    this.className = '';
-
-    if(Array.isArray(images)){this.images = images;}
-    if(String.isString(className)){this.className = className;}
+  bbbfly.MapDrawingItem.Style,function(options){
+    this._style = null;
+    this._defStyle = {
+      images: null,
+      className: ''
+    };
+    this.GetStyle = bbbfly.map.drawing.item.iconstyle._getStyle;
+    this.SetStyle = bbbfly.map.drawing.item.iconstyle._setStyle;
+    this.SetStyle(options);
   }
 );
 bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(options){
 
-    this._options = ng_CopyVar(options);
+    this._style = null;
 
-    this._defoptions = {
+    this._defStyle = {
       weight: 1,
       color: '#000000',
       fillColor: null,
@@ -1443,6 +1477,8 @@ bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
       fill: false
     };
     this.GetStyle = bbbfly.map.drawing.item.geometrystyle._getStyle;
+    this.SetStyle = bbbfly.map.drawing.item.geometrystyle._setStyle;
+    this.SetStyle(options);
   }
 );
 bbbfly.MapDrawingItem.state = {
