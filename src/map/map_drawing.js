@@ -2080,8 +2080,10 @@ bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
 bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(options){
 
+    /** @private */
     this._style = null;
 
+    /** @private */
     this._defStyle = {
       weight: 1,
       color: '#000000',
