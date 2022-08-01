@@ -18,6 +18,7 @@ bbbfly.map.drawing = {
   layer: {},
   core: {},
   item: {
+    style:{},
     iconstyle: {},
     geometrystyle: {}
   },
@@ -760,16 +761,18 @@ bbbfly.map.drawing.item._onDblClick = function(){
     this.SetSelected(!this.GetSelected(),true);
   }
 };
+bbbfly.map.drawing.item.style._getClassName = function(){
+  return String.isString(this.ClassName) ? this.ClassName : '';
+};
 bbbfly.map.drawing.item.iconstyle._getStyle = function(state){
   var finalStyle = ng_CopyVar(this._defStyle);
+  finalStyle.className = this.GetClassName();
+
   var style = this._style;
 
   if(Object.isObject(style)){
     var images = style.images;
-    var className = bbbfly.Renderer.GetStateValue(style,state,'className');
-
     if(Array.isArray(images)){finalStyle.images = images;}
-    if(String.isString(className)){finalStyle.className = className;}
   }
   return finalStyle;
 };
@@ -780,6 +783,8 @@ bbbfly.map.drawing.item.iconstyle._setStyle = function(options){
 };
 bbbfly.map.drawing.item.geometrystyle._getStyle = function(state){
   var finalStyle = ng_CopyVar(this._defStyle);
+  finalStyle.className = this.GetClassName();
+
   var style = this._style;
 
   if(Object.isObject(style)){
@@ -788,23 +793,17 @@ bbbfly.map.drawing.item.geometrystyle._getStyle = function(state){
     var fillColor = bbbfly.Renderer.GetStateValue(style,state,'fillColor');
     var opacity = bbbfly.Renderer.GetStateValue(style,state,'opacity');
     var fillOpacity = bbbfly.Renderer.GetStateValue(style,state,'fillOpacity');
-    var className = bbbfly.Renderer.GetStateValue(style,state,'className');
 
     if(Number.isInteger(weight)){finalStyle.weight = weight;}
     if(String.isString(color)){finalStyle.color = color;}
     if(String.isString(fillColor)){finalStyle.fillColor = fillColor;}
     if(Number.isNumber(opacity)){finalStyle.opacity = opacity;}
     if(Number.isNumber(fillOpacity)){finalStyle.fillOpacity = fillOpacity;}
-    if(String.isString(className)){finalStyle.className = className;}
-
-    weight = finalStyle.weight;
-    opacity = finalStyle.opacity;
-    fillColor = finalStyle.fillColor;
-    fillOpacity = finalStyle.fillOpacity;
-
-    finalStyle.stroke = !!((weight > 0) && (opacity > 0));
-    finalStyle.fill = !!(fillColor && (fillOpacity > 0));
   }
+
+  finalStyle.stroke = !!((finalStyle.weight > 0) && (finalStyle.opacity > 0));
+  finalStyle.fill = !!(finalStyle.fillColor && (finalStyle.fillOpacity > 0));
+
   return finalStyle;
 };
 bbbfly.map.drawing.item.geometrystyle._setStyle = function(options){
@@ -1426,7 +1425,11 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
     return this;
   }
 );
-bbbfly.MapDrawingItem.Style = function(){};
+bbbfly.MapDrawingItem.Style = function(){
+
+  this.ClassName = 'bbbfly.MapDrawingItem';
+    this.GetClassName = bbbfly.map.drawing.item.style._getClassName;
+};
 bbbfly.MapDrawingItem.Style.Get = function(id){
   if(String.isString(id)){
     var style = bbbfly.map.drawing._styles[id];
@@ -1450,10 +1453,12 @@ bbbfly.MapDrawingItem.Style.Define = function(id,style){
 };
 bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(options){
+    bbbfly.MapDrawingItem.Style.call(this);
+
+    this.ClassName = 'bbbfly.MapDrawingItem.Icon';
     this._style = null;
     this._defStyle = {
-      images: null,
-      className: ''
+      images: null
     };
     this.GetStyle = bbbfly.map.drawing.item.iconstyle._getStyle;
     this.SetStyle = bbbfly.map.drawing.item.iconstyle._setStyle;
@@ -1462,17 +1467,16 @@ bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
 );
 bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(options){
+    bbbfly.MapDrawingItem.Style.call(this);
+
+    this.ClassName = 'bbbfly.MapDrawingItem.Geometry';
     this._style = null;
     this._defStyle = {
       weight: 1,
       color: '#000000',
       fillColor: null,
       opacity: 1,
-      fillOpacity: 0.2,
-      className: '',
-
-      stroke: true,
-      fill: false
+      fillOpacity: 0.2
     };
     this.GetStyle = bbbfly.map.drawing.item.geometrystyle._getStyle;
     this.SetStyle = bbbfly.map.drawing.item.geometrystyle._setStyle;
