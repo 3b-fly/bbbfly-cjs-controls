@@ -761,8 +761,10 @@ bbbfly.map.drawing.item._onDblClick = function(){
     this.SetSelected(!this.GetSelected(),true);
   }
 };
-bbbfly.map.drawing.item.style._getClassName = function(){
-  return String.isString(this.ClassName) ? this.ClassName : '';
+bbbfly.map.drawing.item.style._getClassName = function(suffix){
+  return String.isString(suffix)
+    ? this.BaseClassName+suffix
+    : this.BaseClassName;
 };
 bbbfly.map.drawing.item.iconstyle._getStyle = function(state){
   var finalStyle = ng_CopyVar(this._defStyle);
@@ -1427,7 +1429,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
 );
 bbbfly.MapDrawingItem.Style = function(){
 
-  this.ClassName = 'bbbfly.MapDrawingItem';
+  this.BaseClassName = 'bbbfly.MapDrawingItem';
     this.GetClassName = bbbfly.map.drawing.item.style._getClassName;
 };
 bbbfly.MapDrawingItem.Style.Get = function(id){
@@ -1455,7 +1457,7 @@ bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(options){
     bbbfly.MapDrawingItem.Style.call(this);
 
-    this.ClassName = 'bbbfly.MapDrawingItem.Icon';
+    this.BaseClassName = 'bbbfly.MapDrawingItem.Icon';
     this._style = null;
     this._defStyle = {
       images: null
@@ -1469,7 +1471,7 @@ bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(options){
     bbbfly.MapDrawingItem.Style.call(this);
 
-    this.ClassName = 'bbbfly.MapDrawingItem.Geometry';
+    this.BaseClassName = 'bbbfly.MapDrawingItem.Geometry';
     this._style = null;
     this._defStyle = {
       weight: 1,

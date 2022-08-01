@@ -849,8 +849,10 @@ bbbfly.map.drawing.item._onDblClick = function(){
 };
 
 /** @ignore */
-bbbfly.map.drawing.item.style._getClassName = function(){
-  return String.isString(this.ClassName) ? this.ClassName : '';
+bbbfly.map.drawing.item.style._getClassName = function(suffix){
+  return String.isString(suffix)
+    ? this.BaseClassName+suffix
+    : this.BaseClassName;
 };
 
 /** @ignore */
@@ -1981,14 +1983,15 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
  */
 bbbfly.MapDrawingItem.Style = function(){
 
-  this.ClassName = 'bbbfly.MapDrawingItem';
+  this.BaseClassName = 'bbbfly.MapDrawingItem';
 
   /**
      * @function
      * @name GetClassName
      * @memberof bbbfly.MapDrawingItem.Style#
      *
-     * @return {string} ClassName
+     * @param {string} [suffix=undefined] - Drawing part class name
+     * @return {string} Drawing class name
      */
     this.GetClassName = bbbfly.map.drawing.item.style._getClassName;
 };
@@ -2052,7 +2055,7 @@ bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(options){
     bbbfly.MapDrawingItem.Style.call(this);
 
-    this.ClassName = 'bbbfly.MapDrawingItem.Icon';
+    this.BaseClassName = 'bbbfly.MapDrawingItem.Icon';
 
     /** @private */
     this._style = null;
@@ -2096,7 +2099,7 @@ bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(options){
     bbbfly.MapDrawingItem.Style.call(this);
 
-    this.ClassName = 'bbbfly.MapDrawingItem.Geometry';
+    this.BaseClassName = 'bbbfly.MapDrawingItem.Geometry';
 
     /** @private */
     this._style = null;
