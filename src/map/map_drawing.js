@@ -2636,7 +2636,6 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @memberOf bbbfly.MapDrawingItem.IconStyle
  *
  * @property {bbbfly.Renderer.image[]} [images=null]
- * @property {string|bbbfly.Renderer.statevalues} [className='']
  */
 
 /**
@@ -2648,5 +2647,4 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @property {string|bbbfly.Renderer.statevalues} [fillColor=null]
  * @property {number|bbbfly.Renderer.statevalues} [opacity=1]
  * @property {number|bbbfly.Renderer.statevalues} [fillOpacity=0.2]
- * @property {string|bbbfly.Renderer.statevalues} [className='']
  */
