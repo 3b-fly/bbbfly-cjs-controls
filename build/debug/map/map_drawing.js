@@ -766,22 +766,17 @@ bbbfly.map.drawing.item.style._getClassName = function(suffix){
     ? this.BaseClassName+suffix
     : this.BaseClassName;
 };
-bbbfly.map.drawing.item.iconstyle._getStyle = function(state){
-  var finalStyle = ng_CopyVar(this._defStyle);
-  finalStyle.className = this.GetClassName();
+bbbfly.map.drawing.item.iconstyle._getImages = function(){
+  if(!Object.isObject(this.Options)){return null;}
 
-  var style = this._style;
-
-  if(Object.isObject(style)){
-    var images = style.images;
-    if(Array.isArray(images)){finalStyle.images = images;}
-  }
-  return finalStyle;
+  var imgs = this.Options.Images;
+  return Array.isArray(imgs) ? imgs : null;
 };
-bbbfly.map.drawing.item.iconstyle._setStyle = function(options){
-  if(Object.isObject(options) || (options === null)){
-    this._style = ng_CopyVar(options);
-  }
+bbbfly.map.drawing.item.iconstyle._getStyle = function(){
+  return {
+    images: this.GetImages(),
+    className: this.GetClassName()
+  };
 };
 bbbfly.map.drawing.item.geometrystyle._getStyle = function(state){
   var finalStyle = ng_CopyVar(this._defStyle);
@@ -1428,7 +1423,6 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
   }
 );
 bbbfly.MapDrawingItem.Style = function(){
-
   this.BaseClassName = 'bbbfly.MapDrawingItem';
     this.GetClassName = bbbfly.map.drawing.item.style._getClassName;
 };
@@ -1456,15 +1450,10 @@ bbbfly.MapDrawingItem.Style.Define = function(id,style){
 bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(options){
     bbbfly.MapDrawingItem.Style.call(this);
-
     this.BaseClassName = 'bbbfly.MapDrawingItem.Icon';
-    this._style = null;
-    this._defStyle = {
-      images: null
-    };
+    this.Options = options;
+    this.GetImages = bbbfly.map.drawing.item.iconstyle._getImages;
     this.GetStyle = bbbfly.map.drawing.item.iconstyle._getStyle;
-    this.SetStyle = bbbfly.map.drawing.item.iconstyle._setStyle;
-    this.SetStyle(options);
   }
 );
 bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
@@ -1500,6 +1489,7 @@ bbbfly.MapDrawingItem.selecttype = {
 };
 bbbfly.MapDrawingCluster = bbbfly.object.Extend(
   bbbfly.MapDrawing,function(options){
+
     bbbfly.MapDrawing.call(this,options);
     this._ClusterGroup = null;
     this._DrawingListener = {

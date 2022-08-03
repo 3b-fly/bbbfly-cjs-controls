@@ -856,24 +856,19 @@ bbbfly.map.drawing.item.style._getClassName = function(suffix){
 };
 
 /** @ignore */
-bbbfly.map.drawing.item.iconstyle._getStyle = function(state){
-  var finalStyle = ng_CopyVar(this._defStyle);
-  finalStyle.className = this.GetClassName();
+bbbfly.map.drawing.item.iconstyle._getImages = function(){
+  if(!Object.isObject(this.Options)){return null;}
 
-  var style = this._style;
-
-  if(Object.isObject(style)){
-    var images = style.images;
-    if(Array.isArray(images)){finalStyle.images = images;}
-  }
-  return finalStyle;
+  var imgs = this.Options.Images;
+  return Array.isArray(imgs) ? imgs : null;
 };
 
 /** @ignore */
-bbbfly.map.drawing.item.iconstyle._setStyle = function(options){
-  if(Object.isObject(options) || (options === null)){
-    this._style = ng_CopyVar(options);
-  }
+bbbfly.map.drawing.item.iconstyle._getStyle = function(){
+  return {
+    images: this.GetImages(),
+    className: this.GetClassName()
+  };
 };
 
 /** @ignore */
@@ -1982,7 +1977,7 @@ bbbfly.MapDrawingItem = bbbfly.object.Extend(
  * @inpackage mapbox
  */
 bbbfly.MapDrawingItem.Style = function(){
-
+  /** @private */
   this.BaseClassName = 'bbbfly.MapDrawingItem';
 
   /**
@@ -2049,20 +2044,27 @@ bbbfly.MapDrawingItem.Style.Define = function(id,style){
  *
  * @inpackage mapbox
  *
- * @param {bbbfly.MapDrawingItem.IconStyle.options} [options=null]
+ * @param {bbbfly.MapDrawingItem.IconStyle} options
+ *
+ * @property {bbbfly.MapDrawingItem.IconStyle} Options
  */
 bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(options){
     bbbfly.MapDrawingItem.Style.call(this);
 
+    /** @private */
     this.BaseClassName = 'bbbfly.MapDrawingItem.Icon';
+    /** @private */
+    this.Options = options;
 
-    /** @private */
-    this._style = null;
-    /** @private */
-    this._defStyle = {
-      images: null
-    };
+    /**
+     * @function
+     * @name GetImages
+     * @memberof bbbfly.MapDrawingItem.IconStyle#
+     *
+     * @return {bbbfly.Renderer.image[]|null} images
+     */
+    this.GetImages = bbbfly.map.drawing.item.iconstyle._getImages;
 
     /**
      * @function
@@ -2073,16 +2075,6 @@ bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
      * @return {object} style
      */
     this.GetStyle = bbbfly.map.drawing.item.iconstyle._getStyle;
-
-    /**
-     * @function
-     * @name SetStyle
-     * @memberof bbbfly.MapDrawingItem.IconStyle#
-     *
-     * @param {bbbfly.MapDrawingItem.IconStyle.options} [options=null]
-     */
-    this.SetStyle = bbbfly.map.drawing.item.iconstyle._setStyle;
-    this.SetStyle(options);
   }
 );
 
@@ -2170,6 +2162,7 @@ bbbfly.MapDrawingItem.selecttype = {
  */
 bbbfly.MapDrawingCluster = bbbfly.object.Extend(
   bbbfly.MapDrawing,function(options){
+
     bbbfly.MapDrawing.call(this,options);
 
     /** @private */
@@ -2635,7 +2628,7 @@ bbbfly.MapDrawingsHandler.selecttype = {
  * @typedef {object} options
  * @memberOf bbbfly.MapDrawingItem.IconStyle
  *
- * @property {bbbfly.Renderer.image[]} [images=null]
+ * @property {bbbfly.Renderer.image[]} [Images=null]
  */
 
 /**
