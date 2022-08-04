@@ -390,7 +390,8 @@
         },
         "bbbfly-cjs": {
           "Packages": [
-            "crossbrowser"
+            "crossbrowser",
+            "renderer"
           ]
         }
       }
