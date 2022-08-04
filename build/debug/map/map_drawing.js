@@ -779,34 +779,34 @@ bbbfly.map.drawing.item.iconstyle._getStyle = function(){
   };
 };
 bbbfly.map.drawing.item.geometrystyle._getStyle = function(state){
-  var finalStyle = ng_CopyVar(this._defStyle);
-  finalStyle.className = this.GetClassName();
+  var style = {
+    weight: 1,
+    color: '#000000',
+    opacity: 1,
+    fillColor: null,
+    fillOpacity: 0.2,
+    className: this.GetClassName()
+  };
 
-  var style = this._style;
+  var opts = this.Options;
+  if(Object.isObject(opts)){
+    var lWidth = bbbfly.Renderer.GetStateValue(opts,state,'LineWidth');
+    var lColor = bbbfly.Renderer.GetStateValue(opts,state,'LineColor');
+    var lOpacity = bbbfly.Renderer.GetStateValue(opts,state,'LineOpacity');
+    var fColor = bbbfly.Renderer.GetStateValue(opts,state,'FillColor');
+    var fOpacity = bbbfly.Renderer.GetStateValue(opts,state,'FillOpacity');
 
-  if(Object.isObject(style)){
-    var weight = bbbfly.Renderer.GetStateValue(style,state,'weight');
-    var color = bbbfly.Renderer.GetStateValue(style,state,'color');
-    var fillColor = bbbfly.Renderer.GetStateValue(style,state,'fillColor');
-    var opacity = bbbfly.Renderer.GetStateValue(style,state,'opacity');
-    var fillOpacity = bbbfly.Renderer.GetStateValue(style,state,'fillOpacity');
-
-    if(Number.isInteger(weight)){finalStyle.weight = weight;}
-    if(String.isString(color)){finalStyle.color = color;}
-    if(String.isString(fillColor)){finalStyle.fillColor = fillColor;}
-    if(Number.isNumber(opacity)){finalStyle.opacity = opacity;}
-    if(Number.isNumber(fillOpacity)){finalStyle.fillOpacity = fillOpacity;}
+    if(Number.isInteger(lWidth)){style.weight = lWidth;}
+    if(String.isString(lColor)){style.color = lColor;}
+    if(Number.isNumber(lOpacity)){style.opacity = lOpacity;}
+    if(String.isString(fColor)){style.fillColor = fColor;}
+    if(Number.isNumber(fOpacity)){style.fillOpacity = fOpacity;}
   }
 
-  finalStyle.stroke = !!((finalStyle.weight > 0) && (finalStyle.opacity > 0));
-  finalStyle.fill = !!(finalStyle.fillColor && (finalStyle.fillOpacity > 0));
+  style.stroke = !!((style.weight > 0) && (style.opacity > 0));
+  style.fill = !!(style.fillColor && (style.fillOpacity > 0));
 
-  return finalStyle;
-};
-bbbfly.map.drawing.item.geometrystyle._setStyle = function(options){
-  if(Object.isObject(options) || (options === null)){
-    this._style = ng_CopyVar(options);
-  }
+  return style;
 };
 bbbfly.map.drawing.cluster._create = function(){
   var sStyle = this.GetSpiderStyle();
@@ -1458,20 +1458,11 @@ bbbfly.MapDrawingItem.IconStyle = bbbfly.object.Extend(
 );
 bbbfly.MapDrawingItem.GeometryStyle = bbbfly.object.Extend(
   bbbfly.MapDrawingItem.Style,function(options){
-    bbbfly.MapDrawingItem.Style.call(this);
 
+    bbbfly.MapDrawingItem.Style.call(this);
     this.BaseClassName = 'bbbfly.MapDrawingItem.Geometry';
-    this._style = null;
-    this._defStyle = {
-      weight: 1,
-      color: '#000000',
-      fillColor: null,
-      opacity: 1,
-      fillOpacity: 0.2
-    };
+    this.Options = options;
     this.GetStyle = bbbfly.map.drawing.item.geometrystyle._getStyle;
-    this.SetStyle = bbbfly.map.drawing.item.geometrystyle._setStyle;
-    this.SetStyle(options);
   }
 );
 bbbfly.MapDrawingItem.state = {
