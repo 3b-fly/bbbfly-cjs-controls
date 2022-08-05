@@ -577,6 +577,17 @@ bbbfly.MapBox = function(def,ref,parent){
       });
     }
 
+    if(mapControls & bbbfly.MapBox.control.drawBar){
+      ng_MergeDef(def,{
+        Controls: {
+          DrawBar: {
+            Type: 'bbbfly.MapDrawBar',
+            style: { zIndex: 2 }
+          }
+        }
+      });
+    }
+
     if(mapControls & bbbfly.MapBox.control.modeBar){
       ng_MergeDef(def,{
         Controls: {
@@ -624,14 +635,15 @@ bbbfly.MapBox = function(def,ref,parent){
  */
 bbbfly.MapBox.control = {
   none: 0,
-  sideBar: 1,
-  zoomSlider: 2,
-  copyrights: 4,
-  layers: 8,
-  modeBar: 16,
+  copyrights: 1,
+  layers: 2,
+  drawBar: 4,
+  modeBar: 8,
+  sideBar: 16,
+  zoomSlider: 32,
 
-  drawMarker: 32,
-  drawGeometry: 64
+  drawMarker: 64,
+  drawGeometry: 128
 };
 
 /** @ignore */
