@@ -242,7 +242,7 @@ bbbfly.fileuploader._uploadFiles = function(form){
         rpc.SetParam(param,params[param]);
       }
 
-      rpc.sendRequest(this.UploadURL+urlParams);
+      rpc.sendRequest(this.UploadURL);
       return;
     }
   }
@@ -273,6 +273,9 @@ bbbfly.fileuploader._onRPCUpload = function(rpc,info){
   delete info.ReqHeaders['Content-length'];
 
   info.PostParams = rpc.FileFormData;
+
+  var params = rpc.GetURLParams();
+  if(params){info.URL = ng_AddURLParam(info.URL,params);}
   return true;
 };
 bbbfly.fileuploader._onRPCUploaded = function(rpc,data){
