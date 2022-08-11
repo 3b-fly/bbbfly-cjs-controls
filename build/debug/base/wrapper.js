@@ -181,6 +181,8 @@ bbbfly.wrapper._onUpdated = function(){
   }
 };
 bbbfly.wrapper._isTrackedControlChanged = function(ctrl,options){
+  if(ctrl === this._Stretcher){return false;}
+
   var opts = bbbfly.wrapper._getWrapperOptions(this);
   var childOpts = bbbfly.wrapper._getWrapOptions(ctrl,opts);
   if(!childOpts.TrackChanges){return false;}
