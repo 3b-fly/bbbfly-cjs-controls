@@ -424,7 +424,7 @@ bbbfly.envelope._onTrackedControlUpdated = function(){
     );
   }
 };
-bbbfly.envelope._onTrackedControlChange = function(ctrl,tracker){ //TODO: track/treck
+bbbfly.envelope._onTrackedControlChange = function(ctrl,tracker){
   if(!tracker || !Object.isObject(tracker.ctrl)){return;}
 
   if(
