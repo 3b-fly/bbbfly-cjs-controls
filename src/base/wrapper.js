@@ -34,7 +34,7 @@ bbbfly.wrapper._doCreate = function(def,ref,node){
   }
 
   if(!this._Stretcher){
-    this._Stretcher = this.CreateChildControl({
+    this._Stretcher = this.CreateControl({
       Type:'bbbfly.Panel',
       W:1,H:1,Data: {Visible: false}
     });

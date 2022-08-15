@@ -312,7 +312,21 @@ bbbfly.panel._setSelected = function(selected,update){
   }
   return true;
 };
-bbbfly.panel._createChildControl = function(def){
+bbbfly.panel._addChildControl = function(ctrl){
+  this.AddChildControl.callParent(ctrl);
+
+  if(Function.isFunction(this.OnChildControlAdded)){
+    this.OnChildControlAdded(ctrl);
+  }
+};
+bbbfly.panel._removeChildControl = function(ctrl){
+  this.RemoveChildControl.callParent(ctrl);
+
+  if(Function.isFunction(this.OnChildControlRemoved)){
+    this.OnChildControlRemoved(ctrl);
+  }
+};
+bbbfly.panel._createControl = function(def){
   if(!Object.isObject(def)){return null;}
 
   var cHolder = this.GetControlsHolder();
@@ -329,18 +343,15 @@ bbbfly.panel._createChildControl = function(def){
   ctrl.Create(def);
   return ctrl;
 };
-bbbfly.panel._addChildControl = function(ctrl){
-  this.AddChildControl.callParent(ctrl);
+bbbfly.panel._disposeControls = function(){
+  var cHolder = this.GetControlsHolder();
 
-  if(Function.isFunction(this.OnChildControlAdded)){
-    this.OnChildControlAdded(ctrl);
-  }
-};
-bbbfly.panel._removeChildControl = function(ctrl){
-  this.RemoveChildControl.callParent(ctrl);
+  for(var i in cHolder.ChildControls){
+    var ctrl = cHolder.ChildControls[i];
 
-  if(Function.isFunction(this.OnChildControlRemoved)){
-    this.OnChildControlRemoved(ctrl);
+    if(Function.isFunction(ctrl.Dispose)){
+      ctrl.Dispose();
+    }
   }
 };
 bbbfly.envelope._trackControl = function(ctrl,track){
@@ -693,9 +704,10 @@ bbbfly.Panel = function(def,ref,parent){
       SetInvalid: bbbfly.panel._setInvalid,
       SetReadOnly: bbbfly.panel._setReadOnly,
       SetSelected: bbbfly.panel._setSelected,
-      CreateChildControl: bbbfly.panel._createChildControl,
       AddChildControl: bbbfly.panel._addChildControl,
-      RemoveChildControl: bbbfly.panel._removeChildControl
+      RemoveChildControl: bbbfly.panel._removeChildControl,
+      CreateControl: bbbfly.panel._createControl,
+      DisposeControls: bbbfly.panel._disposeControls
     }
   });
 

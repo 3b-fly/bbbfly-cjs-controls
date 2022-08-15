@@ -361,7 +361,25 @@ bbbfly.panel._setSelected = function(selected,update){
 };
 
 /** @ignore */
-bbbfly.panel._createChildControl = function(def){
+bbbfly.panel._addChildControl = function(ctrl){
+  this.AddChildControl.callParent(ctrl);
+
+  if(Function.isFunction(this.OnChildControlAdded)){
+    this.OnChildControlAdded(ctrl);
+  }
+};
+
+/** @ignore */
+bbbfly.panel._removeChildControl = function(ctrl){
+  this.RemoveChildControl.callParent(ctrl);
+
+  if(Function.isFunction(this.OnChildControlRemoved)){
+    this.OnChildControlRemoved(ctrl);
+  }
+};
+
+/** @ignore */
+bbbfly.panel._createControl = function(def){
   if(!Object.isObject(def)){return null;}
 
   var cHolder = this.GetControlsHolder();
@@ -380,20 +398,15 @@ bbbfly.panel._createChildControl = function(def){
 };
 
 /** @ignore */
-bbbfly.panel._addChildControl = function(ctrl){
-  this.AddChildControl.callParent(ctrl);
+bbbfly.panel._disposeControls = function(){
+  var cHolder = this.GetControlsHolder();
 
-  if(Function.isFunction(this.OnChildControlAdded)){
-    this.OnChildControlAdded(ctrl);
-  }
-};
+  for(var i in cHolder.ChildControls){
+    var ctrl = cHolder.ChildControls[i];
 
-/** @ignore */
-bbbfly.panel._removeChildControl = function(ctrl){
-  this.RemoveChildControl.callParent(ctrl);
-
-  if(Function.isFunction(this.OnChildControlRemoved)){
-    this.OnChildControlRemoved(ctrl);
+    if(Function.isFunction(ctrl.Dispose)){
+      ctrl.Dispose();
+    }
   }
 };
 
@@ -1053,19 +1066,6 @@ bbbfly.Panel = function(def,ref,parent){
 
       /**
        * @function
-       * @name CreateChildControl
-       * @memberof bbbfly.Panel#
-       *
-       * @param {ngControl.Definition} [def] - Child control definition
-       *
-       * @see {@link bbbfly.Panel#AddChildControl|AddChildControl()}
-       * @see {@link bbbfly.Panel#RemoveChildControl|RemoveChildControl()}
-       * @see {@link bbbfly.Panel#event:OnChildControlAdded|OnChildControlAdded}
-       * @see {@link bbbfly.Panel#event:OnChildControlRemoved|OnChildControlRemoved}
-       */
-      CreateChildControl: bbbfly.panel._createChildControl,
-      /**
-       * @function
        * @name AddChildControl
        * @memberof bbbfly.Panel#
        *
@@ -1087,7 +1087,30 @@ bbbfly.Panel = function(def,ref,parent){
        * @see {@link bbbfly.Panel#event:OnChildControlAdded|OnChildControlAdded}
        * @see {@link bbbfly.Panel#event:OnChildControlRemoved|OnChildControlRemoved}
        */
-      RemoveChildControl: bbbfly.panel._removeChildControl
+      RemoveChildControl: bbbfly.panel._removeChildControl,
+
+      /**
+       * @function
+       * @name CreateControl
+       * @memberof bbbfly.Panel#
+       *
+       * @param {ngControl.Definition} [def] - Child control definition
+       *
+       * @see {@link bbbfly.Panel#AddChildControl|AddChildControl()}
+       * @see {@link bbbfly.Panel#RemoveChildControl|RemoveChildControl()}
+       * @see {@link bbbfly.Panel#DisposeControls|DisposeControls()}
+       */
+      CreateControl: bbbfly.panel._createControl,
+      /**
+       * @function
+       * @name DisposeControls
+       * @memberof bbbfly.Panel#
+       *
+       * @see {@link bbbfly.Panel#AddChildControl|AddChildControl()}
+       * @see {@link bbbfly.Panel#RemoveChildControl|RemoveChildControl()}
+       * @see {@link bbbfly.Panel#CreateControl|CreateControl()}
+       */
+      DisposeControls: bbbfly.panel._disposeControls
     }
   });
 
