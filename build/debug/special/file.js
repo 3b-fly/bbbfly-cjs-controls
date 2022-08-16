@@ -970,7 +970,7 @@ bbbfly.FileUploader.errorlevel = {
   fulllog: 3
 };
 ngUserControls = ngUserControls || new Array();
-ngUserControls['bbbfly_fileuploader'] = {
+ngUserControls['bbbfly_file'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.FileUploader',bbbfly.FileUploader);
   }
