@@ -11,6 +11,10 @@ bbbfly.panel = {};
 bbbfly.envelope = {};
 bbbfly.frame = {};
 bbbfly.line = {};
+bbbfly.panelgroup._newGroupId = function(){
+  var id = this._LastGroupId++;
+  return 'bbbfly.PanelGroup_'+id;
+};
 bbbfly.panelgroup._registerControl = function(ctrl,def){
   var registered = false;
 
@@ -654,6 +658,8 @@ bbbfly.line._setBounds = function(bounds){
 bbbfly.PanelGroup = {
   _Groups: {},
   _ControlGroups: {},
+  _LastGroupId: 0,
+  NewGroupId: bbbfly.panelgroup._newGroupId,
   RegisterControl: bbbfly.panelgroup._registerControl,
   RegisterGroup: bbbfly.panelgroup._registerGroup,
   UnregisterControl: bbbfly.panelgroup._unregisterControl,

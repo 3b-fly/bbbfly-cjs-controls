@@ -20,6 +20,12 @@ bbbfly.frame = {};
 bbbfly.line = {};
 
 /** @ignore */
+bbbfly.panelgroup._newGroupId = function(){
+  var id = this._LastGroupId++;
+  return 'bbbfly.PanelGroup_'+id;
+};
+
+/** @ignore */
 bbbfly.panelgroup._registerControl = function(ctrl,def){
   var registered = false;
 
@@ -761,7 +767,17 @@ bbbfly.PanelGroup = {
   _Groups: {},
   /** @private */
   _ControlGroups: {},
+  /** @private */
+  _LastGroupId: 0,
 
+  /**
+   * @function
+   * @name NewGroup
+   * @memberof bbbfly.PanelGroup#
+   *
+   * @return {string} State group ID
+   */
+  NewGroupId: bbbfly.panelgroup._newGroupId,
   /**
    * @function
    * @name RegisterControl
