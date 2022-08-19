@@ -83,17 +83,22 @@ bbbfly.menubar._setItems = function(items){
 };
 
 /** @ignore */
+bbbfly.menubar._getItems = function(){
+  return Object.isObject(this.Items) ? this.Items : null;
+};
+
+/** @ignore */
 bbbfly.menubar._fillItems = function(){
-  for(var id in this._Buttons){
-    var ctrl = this._Buttons[id];
+  for(var i in this._Buttons){
+    var ctrl = this._Buttons[i];
 
     if(Function.isFunction(ctrl.Dispose)){
-      delete this._Buttons[id];
+      this._Buttons.pop(i);
       ctrl.Dispose();
     }
   }
 
-  var items = this.Items;
+  var items = this.GetItems();
 
   if(!Object.isObject(items)){return;}
 
@@ -121,8 +126,13 @@ bbbfly.menubar._fillItems = function(){
     var def = { Data: def };
     var ctrl = this.CreateItemButton(item,def);
 
-    this._Buttons[ctrl.ID] = ctrl;
+    this._Buttons.push(ctrl);
   }
+};
+
+/** @ignore */
+bbbfly.menubar._getButtons = function(){
+  return Array.isArray(this._Buttons) ? this._Buttons : [];
 };
 
 /** @ignore */
@@ -234,7 +244,7 @@ bbbfly.MenuBar = function(def,ref,parent){
       Items: null,
 
       /** @private */
-      _Buttons: {}
+      _Buttons: []
     },
     Events: {
       /**
@@ -265,16 +275,32 @@ bbbfly.MenuBar = function(def,ref,parent){
        * @name SetItems
        * @memberof bbbfly.MenuBar#
        *
-       * @param {bbbfly.MenuBar} [items=null]
+       * @param {bbbfly.MenuBar.Items} [items=null]
        * @return {boolean} - If items were set
        */
       SetItems: bbbfly.menubar._setItems,
+      /**
+       * @function
+       * @name GetItems
+       * @memberof bbbfly.MenuBar#
+       *
+       * @return {bbbfly.MenuBar.Items|null}
+       */
+      GetItems: bbbfly.menubar._getItems,
       /**
        * @function
        * @name FillItems
        * @memberof bbbfly.MenuBar#
        */
       FillItems: bbbfly.menubar._fillItems,
+      /**
+       * @function
+       * @name GetButtons
+       * @memberof bbbfly.MenuBar#
+       *
+       * @return {bbbfly.Button[]}
+       */
+      GetButtons: bbbfly.menubar._getButtons,
       /**
        * @function
        * @name CreateItemButton

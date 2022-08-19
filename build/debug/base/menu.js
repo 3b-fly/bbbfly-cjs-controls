@@ -65,17 +65,20 @@ bbbfly.menubar._setItems = function(items){
   this.Update();
   return true;
 };
+bbbfly.menubar._getItems = function(){
+  return Object.isObject(this.Items) ? this.Items : null;
+};
 bbbfly.menubar._fillItems = function(){
-  for(var id in this._Buttons){
-    var ctrl = this._Buttons[id];
+  for(var i in this._Buttons){
+    var ctrl = this._Buttons[i];
 
     if(Function.isFunction(ctrl.Dispose)){
-      delete this._Buttons[id];
+      this._Buttons.pop(i);
       ctrl.Dispose();
     }
   }
 
-  var items = this.Items;
+  var items = this.GetItems();
 
   if(!Object.isObject(items)){return;}
 
@@ -103,8 +106,11 @@ bbbfly.menubar._fillItems = function(){
     var def = { Data: def };
     var ctrl = this.CreateItemButton(item,def);
 
-    this._Buttons[ctrl.ID] = ctrl;
+    this._Buttons.push(ctrl);
   }
+};
+bbbfly.menubar._getButtons = function(){
+  return Array.isArray(this._Buttons) ? this._Buttons : [];
 };
 bbbfly.menubar._createItemButton = function(item,def){
   if(!Object.isObject(item)){return null;}
@@ -174,7 +180,7 @@ bbbfly.MenuBar = function(def,ref,parent){
         }
       },
       Items: null,
-      _Buttons: {}
+      _Buttons: []
     },
     Events: {
       OnItemClick: null,
@@ -183,7 +189,9 @@ bbbfly.MenuBar = function(def,ref,parent){
     Methods: {
       DoCreate: bbbfly.menubar._doCreate,
       SetItems: bbbfly.menubar._setItems,
+      GetItems: bbbfly.menubar._getItems,
       FillItems: bbbfly.menubar._fillItems,
+      GetButtons: bbbfly.menubar._getButtons,
       CreateItemButton: bbbfly.menubar._createItemButton
     }
   });
