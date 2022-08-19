@@ -110,7 +110,7 @@ bbbfly.button._doCreate = function(def,ref,node){
   holder.style.overflow = 'hidden';
   node.appendChild(holder);
 
-  if(!this.Icon){return;}
+  if(!this.GetIcon()){return;}
 
   var icon = document.createElement('DIV');
   icon.id = this.ID+'_I';
