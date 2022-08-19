@@ -10,19 +10,22 @@
   },
 
   "Packages": {
-    "panel": {
+    "app": {
       "DebugFiles": [
-        "base/panel.js"
+        "special/app.js"
       ],
       "ReleaseFiles": [
-        "base/panel.js"
+        "special/app.js"
       ],
       "Libraries": {
         "controls.js": {
-          "Packages": ["Controls.js","Controls.js UI"]
+          "Packages": ["Controls.js"]
         },
         "bbbfly-cjs": {
-          "Packages": ["renderer"]
+          "Packages": ["crossbrowser"]
+        },
+        "bbbfly-cjs-controls": {
+          "Packages": ["wrapper","button","menu"]
         }
       }
     },
@@ -319,6 +322,22 @@
         }
       }
     },
+    "panel": {
+      "DebugFiles": [
+        "base/panel.js"
+      ],
+      "ReleaseFiles": [
+        "base/panel.js"
+      ],
+      "Libraries": {
+        "controls.js": {
+          "Packages": ["Controls.js","Controls.js UI"]
+        },
+        "bbbfly-cjs": {
+          "Packages": ["renderer"]
+        }
+      }
+    },
     "search": {
       "DebugFiles": [
         "base/search.js",
@@ -342,12 +361,12 @@
         }
       }
     },
-    "wrapper": {
+    "text": {
       "DebugFiles": [
-        "base/wrapper.js"
+        "base/text.js"
       ],
       "ReleaseFiles": [
-        "base/wrapper.js"
+        "base/text.js"
       ],
       "Libraries": {
         "controls.js": {
@@ -361,12 +380,12 @@
         }
       }
     },
-    "text": {
+    "wrapper": {
       "DebugFiles": [
-        "base/text.js"
+        "base/wrapper.js"
       ],
       "ReleaseFiles": [
-        "base/text.js"
+        "base/wrapper.js"
       ],
       "Libraries": {
         "controls.js": {

@@ -12,7 +12,8 @@
 
 ### Packages and Controls
 
-- **hint** - Provides simple control hints definition.<br/><br/>
+- **app**
+  - `bbbfly.AppHeader` (control)
 - **bar**
   - `bbbfly.Bar` (control)
 - **button**
@@ -57,6 +58,7 @@
   - `bbbfly.MapZoomSlider` (control)
 - **menu**
   - `bbbfly.Menu` (control)
+  - `bbbfly.MenuBar` (control)
 - **panel**
   - `bbbfly.Panel` (control)
   - `bbbfly.Envelope` (control)
