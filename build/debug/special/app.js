@@ -7,10 +7,13 @@
 
 var bbbfly = bbbfly || {};
 bbbfly.appheader = {};
-bbbfly.appheader._setLogo = function(icon){
+bbbfly.appheader.logo = {};
+bbbfly.appheader.menu = {};
+bbbfly.appheader.auth = {};
+bbbfly.appheader._setLogoIcon = function(icon){
   if(!Object.isObject(icon) && (icon !== null)){return false;}
 
-  this.Logo = icon;
+  this.LogoIcon = icon;
   var button = this.Controls.AppLogo;
 
   if(Object.isObject(button) && Function.isFunction(button.Update)){
@@ -32,13 +35,20 @@ bbbfly.appheader._setMenuItems = function(items){
 
   return true;
 };
-bbbfly.appheader._getIcon = function(){
-  var icon = this.ParentControl.Logo;
+bbbfly.appheader.logo._getIcon = function(){
+  var icon = this.ParentControl.LogoIcon;
   return (Object.isObject(icon) ? icon : {});
 };
-bbbfly.appheader._getItems = function(){
+bbbfly.appheader.menu._getItems = function(){
   var items = this.ParentControl.MenuItems;
   return Object.isObject(items) ? items : null;
+};
+bbbfly.appheader.auth._getText = function(){
+  var data = bbbfly.Auth.GetUserData();
+  if(!Object.isObject(data)){return null;}
+
+  return String.isString(data.Name)
+    ? data.Name : null;
 };
 bbbfly.AppHeader = function(def,ref,parent){
   def = def || {};
@@ -47,11 +57,11 @@ bbbfly.AppHeader = function(def,ref,parent){
     Data: {
       HeaderControls: bbbfly.AppHeader.control.none,
 
-      Logo: true,
+      LogoIcon: true,
       MenuItems: null
     },
     Methods: {
-      SetLogo: bbbfly.appheader._setLogo,
+      SetLogoIcon: bbbfly.appheader._setLogoIcon,
       SetMenuItems: bbbfly.appheader._setMenuItems
     }
   });
@@ -68,7 +78,7 @@ bbbfly.AppHeader = function(def,ref,parent){
               ReadOnly: true
             },
             Methods: {
-              GetIcon: bbbfly.appheader._getIcon
+              GetIcon: bbbfly.appheader.logo._getIcon
             }
           }
         }
@@ -81,7 +91,7 @@ bbbfly.AppHeader = function(def,ref,parent){
           AppMenu: {
             Type: 'bbbfly.MenuBar',
             Methods: {
-              GetItems: bbbfly.appheader._getItems
+              GetItems: bbbfly.appheader.menu._getItems
             }
           }
         }
@@ -95,6 +105,9 @@ bbbfly.AppHeader = function(def,ref,parent){
             Type: 'bbbfly.Button',
             Data: {
               ReadOnly: true
+            },
+            Methods: {
+              GetText: bbbfly.appheader.auth._getText
             }
           }
         }

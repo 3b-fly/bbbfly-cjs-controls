@@ -23,7 +23,8 @@
         },
         "bbbfly-cjs": {
           "Packages": [
-            "crossbrowser"
+            "crossbrowser",
+            "auth"
           ]
         },
         "bbbfly-cjs-controls": {

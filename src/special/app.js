@@ -10,12 +10,18 @@
 var bbbfly = bbbfly || {};
 /** @ignore */
 bbbfly.appheader = {};
+/** @ignore */
+bbbfly.appheader.logo = {};
+/** @ignore */
+bbbfly.appheader.menu = {};
+/** @ignore */
+bbbfly.appheader.auth = {};
 
 /** @ignore */
-bbbfly.appheader._setLogo = function(icon){
+bbbfly.appheader._setLogoIcon = function(icon){
   if(!Object.isObject(icon) && (icon !== null)){return false;}
 
-  this.Logo = icon;
+  this.LogoIcon = icon;
   var button = this.Controls.AppLogo;
 
   if(Object.isObject(button) && Function.isFunction(button.Update)){
@@ -41,15 +47,24 @@ bbbfly.appheader._setMenuItems = function(items){
 };
 
 /** @ignore */
-bbbfly.appheader._getIcon = function(){
-  var icon = this.ParentControl.Logo;
+bbbfly.appheader.logo._getIcon = function(){
+  var icon = this.ParentControl.LogoIcon;
   return (Object.isObject(icon) ? icon : {});
 };
 
 /** @ignore */
-bbbfly.appheader._getItems = function(){
+bbbfly.appheader.menu._getItems = function(){
   var items = this.ParentControl.MenuItems;
   return Object.isObject(items) ? items : null;
+};
+
+/** @ignore */
+bbbfly.appheader.auth._getText = function(){
+  var data = bbbfly.Auth.GetUserData();
+  if(!Object.isObject(data)){return null;}
+
+  return String.isString(data.Name)
+    ? data.Name : null;
 };
 
 /**
@@ -64,7 +79,7 @@ bbbfly.appheader._getItems = function(){
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *
  * @property {bbbfly.AppHeader.control} [HeaderControls=none] - Set this property to add desired controls.
- * @property {boolean|bbbfly.Renderer.image} [Logo=true]
+ * @property {boolean|bbbfly.Renderer.image} [LogoIcon=true]
  * @property {bbbfly.MenuBar.Items} [MenuItems=null]
  */
 bbbfly.AppHeader = function(def,ref,parent){
@@ -74,19 +89,19 @@ bbbfly.AppHeader = function(def,ref,parent){
     Data: {
       HeaderControls: bbbfly.AppHeader.control.none,
 
-      Logo: true,
+      LogoIcon: true,
       MenuItems: null
     },
     Methods: {
       /**
        * @function
-       * @name SetLogo
+       * @name SetLogoIcon
        * @memberof bbbfly.AppHeader#
        *
        * @param {bbbfly.Renderer.image} [icon=null]
        * @return {boolean} - If logo icon were set
        */
-      SetLogo: bbbfly.appheader._setLogo,
+      SetLogoIcon: bbbfly.appheader._setLogoIcon,
       /**
        * @function
        * @name SetMenuItems
@@ -111,7 +126,7 @@ bbbfly.AppHeader = function(def,ref,parent){
               ReadOnly: true
             },
             Methods: {
-              GetIcon: bbbfly.appheader._getIcon
+              GetIcon: bbbfly.appheader.logo._getIcon
             }
           }
         }
@@ -124,7 +139,7 @@ bbbfly.AppHeader = function(def,ref,parent){
           AppMenu: {
             Type: 'bbbfly.MenuBar',
             Methods: {
-              GetItems: bbbfly.appheader._getItems
+              GetItems: bbbfly.appheader.menu._getItems
             }
           }
         }
@@ -138,6 +153,9 @@ bbbfly.AppHeader = function(def,ref,parent){
             Type: 'bbbfly.Button',
             Data: {
               ReadOnly: true
+            },
+            Methods: {
+              GetText: bbbfly.appheader.auth._getText
             }
           }
         }

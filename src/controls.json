@@ -22,7 +22,7 @@
           "Packages": ["Controls.js"]
         },
         "bbbfly-cjs": {
-          "Packages": ["crossbrowser"]
+          "Packages": ["crossbrowser","auth"]
         },
         "bbbfly-cjs-controls": {
           "Packages": ["wrapper","button","menu"]
