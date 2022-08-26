@@ -460,6 +460,29 @@ bbbfly.envelope._trackControl = function(ctrl,track){
 };
 
 /** @ignore */
+bbbfly.envelope._trackChildControls = function(def,ref,node){
+  var cHolder = this.GetControlsHolder();
+
+  if(Function.isFunction(cHolder.AddEvent)){
+    var envelope = this;
+
+    cHolder.AddEvent('OnChildControlAdded',function(ctrl){
+      envelope.TrackControl(ctrl,true);
+    });
+    cHolder.AddEvent('OnChildControlRemoved',function(ctrl){
+      envelope.TrackControl(ctrl,false);
+    });
+  }
+
+  if(Array.isArray(cHolder.ChildControls)){
+    for(var i in cHolder.ChildControls){
+      var ctrl = cHolder.ChildControls[i];
+      this.TrackControl(ctrl,true);
+    }
+  }
+};
+
+/** @ignore */
 bbbfly.envelope._isTrackedControlChanged = function(ctrl,options){
   var ctrlVisible = ctrl.Visible;
   var optsVisible = options.Visible;
@@ -1171,6 +1194,12 @@ bbbfly.Envelope = function(def,ref,parent){
        * @param {boolean} [track=true] - Pass false to cancel tracking
        */
       TrackControl: bbbfly.envelope._trackControl,
+      /**
+       * @function
+       * @name TrackChildControls
+       * @memberof bbbfly.Envelope#
+       */
+      TrackChildControls: bbbfly.envelope._trackChildControls,
       /**
        * @event
        * @name IsTrackedControlChanged

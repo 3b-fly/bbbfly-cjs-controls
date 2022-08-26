@@ -9,24 +9,7 @@ var bbbfly = bbbfly || {};
 bbbfly.wrapper = {};
 bbbfly.wrapper._doCreate = function(def,ref,node){
   this.DoCreate.callParent(def,ref,node);
-
-  var cHolder = this.GetControlsHolder();
-
-  if(Function.isFunction(cHolder.AddEvent)){
-    var wrapper = this;
-
-    cHolder.AddEvent('OnChildControlAdded',function(ctrl){
-      wrapper.TrackControl(ctrl,true);
-    });
-    cHolder.AddEvent('OnChildControlRemoved',function(ctrl){
-      wrapper.TrackControl(ctrl,false);
-    });
-  }
-
-  for(var i in cHolder.ChildControls){
-    var ctrl = cHolder.ChildControls[i];
-    this.TrackControl(ctrl,true);
-  }
+  this.TrackChildControls();
 
   if(!this._Stretcher){
     this._Stretcher = this.CreateControl({
