@@ -629,10 +629,10 @@ ngUserControls['bbbfly_bar'] = {
  * @typedef {object} itemOptions
  * @memberOf bbbfly.Bar
  *
- * @property {px} [MarginTop=undefined]
- * @property {px} [MarginBottom=undefined]
- * @property {px} [MarginLeft=undefined]
- * @property {px} [MarginRight=undefined]
+ * @property {px} [MarginTop=null]
+ * @property {px} [MarginBottom=null]
+ * @property {px} [MarginLeft=null]
+ * @property {px} [MarginRight=null]
  * @property {boolean} [TrackChanges=false] - Overrides bar option
  */
 
