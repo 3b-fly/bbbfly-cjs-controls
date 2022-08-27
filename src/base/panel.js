@@ -726,17 +726,27 @@ bbbfly.frame._getFrame = function(){
 /** @ignore */
 bbbfly.frame._getFrameDims = function(){
   var dims = { L:0, T:0, R:0, B:0, W:undefined, H:undefined };
-
   var fPanel = this.GetFramePanel();
-  var fProxy = (fPanel) ? fPanel._FrameProxy : null;
 
-  if(Object.isObject(fProxy)){
-    if(Number.isInteger(fProxy.L.W)){dims.L = fProxy.L.W;}
-    if(Number.isInteger(fProxy.T.H)){dims.T = fProxy.T.H;}
-    if(Number.isInteger(fProxy.R.W)){dims.R = fProxy.R.W;}
-    if(Number.isInteger(fProxy.B.H)){dims.B = fProxy.B.H;}
-    if(Number.isInteger(fProxy.C.W)){dims.W = fProxy.C.W;}
-    if(Number.isInteger(fProxy.C.H)){dims.H = fProxy.C.H;}
+  if(Object.isObject(fPanel)){
+    var fBounds = fPanel.Bounds;
+    var fProxy = fPanel._FrameProxy;
+
+    if(Object.isObject(fBounds)){
+      if(Number.isInteger(fBounds.L)){dims.L += fBounds.L;}
+      if(Number.isInteger(fBounds.T)){dims.T += fBounds.T;}
+      if(Number.isInteger(fBounds.R)){dims.R += fBounds.R;}
+      if(Number.isInteger(fBounds.B)){dims.B += fBounds.B;}
+    }
+
+    if(Object.isObject(fProxy)){
+      if(Number.isInteger(fProxy.L.W)){dims.L += fProxy.L.W;}
+      if(Number.isInteger(fProxy.T.H)){dims.T += fProxy.T.H;}
+      if(Number.isInteger(fProxy.R.W)){dims.R += fProxy.R.W;}
+      if(Number.isInteger(fProxy.B.H)){dims.B += fProxy.B.H;}
+      if(Number.isInteger(fProxy.C.W)){dims.W = fProxy.C.W;}
+      if(Number.isInteger(fProxy.C.H)){dims.H = fProxy.C.H;}
+    }
   }
   return dims;
 };
