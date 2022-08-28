@@ -22,10 +22,15 @@ bbbfly.bar._onUpdate = function(){
   var cHolder = this.GetControlsHolder();
   var opts = bbbfly.bar._getBarOptions(this);
 
-  cHolder.SetScrollBars(
-    (opts.AutoSize === bbbfly.Bar.autosize.none)
-    ? ssAuto : ssNone
-  );
+  if(Function.isFunction(cHolder.SetScrollBars)){
+    var autosize = bbbfly.bar._getAutoSize(opts);
+    var bars = ssNone;
+
+    if(autosize.major === bbbfly.Bar.autosize.none){bars = ssAuto;}
+    if(autosize.minor === bbbfly.Bar.autosize.none){bars = ssAuto;}
+
+    cHolder.SetScrollBars(bars);
+  }
   return true;
 };
 bbbfly.bar._onUpdated = function(){
@@ -146,9 +151,11 @@ bbbfly.bar._onUpdated = function(){
     if(this._Stretcher && (childCtrl === this._Stretcher)){continue;}
 
     var childOpts = bbbfly.bar._getItemOptions(childCtrl,opts);
+    var majorLimit = null;
 
-    var majorLimit = (vars.value.autosize.major || (vars.value.idx.major < 1))
-      ? null : vars.value.size.major;
+    if((vars.value.autosize.major === bbbfly.Bar.autosize.none)&& (vars.value.idx.major > 0)){
+      majorLimit = vars.value.size.major;
+    }
 
     if(!bbbfly.bar._positionCtrl(childCtrl,vars,childOpts,majorLimit)){
       bbbfly.bar._newLine(vars);
@@ -197,7 +204,8 @@ bbbfly.bar._getBarOptions = function(ctrl){
   ng_MergeDef(opts,{
     Orientation: bbbfly.Bar.orientation.horizontal,
     Float: bbbfly.Bar.float.left_top,
-    AutoSize: bbbfly.Bar.autosize.none,
+    MajorAutoSize: bbbfly.Bar.autosize.none,
+    MinorAutoSize: bbbfly.Bar.autosize.none,
     PaddingTop: null,
     PaddingBottom: null,
     PaddingLeft: null,
@@ -222,26 +230,13 @@ bbbfly.bar._getItemOptions = function(ctrl,opts){
   return childOpts;
 };
 bbbfly.bar._getAutoSize = function(opts){
-  var autosize = {major:false,minor:false};
+  var autosize = {
+    major: bbbfly.Bar.autosize.none,
+    minor: bbbfly.Bar.autosize.none
+  };
 
-  switch(opts.Orientation){
-    case bbbfly.Wrapper.orientation.vertical:
-      if(opts.AutoSize & bbbfly.Bar.autosize.vertical){
-        autosize.major = true;
-      }
-      if(opts.AutoSize & bbbfly.Bar.autosize.horizontal){
-        autosize.minor = true;
-      }
-    break;
-    case bbbfly.Wrapper.orientation.horizontal:
-      if(opts.AutoSize & bbbfly.Bar.autosize.horizontal){
-        autosize.major = true;
-      }
-      if(opts.AutoSize & bbbfly.Bar.autosize.vertical){
-        autosize.minor = true;
-      }
-    break;
-  }
+  if(Number.isInteger(opts.MajorAutoSize)){autosize.major = opts.MajorAutoSize;}
+  if(Number.isInteger(opts.MinorAutoSize)){autosize.minor = opts.MinorAutoSize;}
 
   return autosize;
 };
@@ -423,24 +418,34 @@ bbbfly.bar._closeLines = function(vars){
 };
 bbbfly.bar._positionStretcher = function(ctrl,vars){
   var vals = vars.value;
+
   if(
-    (vals.margin.major > 0) || (vals.margin.minor > 0)
-    || !vals.autosize.major || !vals.autosize.minor
+    ((vals.autosize.major === bbbfly.Bar.autosize.none) && (vals.margin.major > 0))
+    || ((vals.autosize.minor === bbbfly.Bar.autosize.none) && (vals.margin.minor > 0))
   ){
     vals.margin.major -= 1;
     vals.margin.minor -= 1;
 
     bbbfly.bar._positionCtrl(ctrl,vars);
+    ctrl.SetVisible(true);
     return;
   }
   ctrl.SetVisible(false);
 };
 bbbfly.bar._autoSize = function(bar,vars){
+  if(bbbfly.bar._stretch(bar,vars) || bbbfly.bar._slide(bar,vars)){
+    if(Function.isFunction(bar.OnAutoSized)){bar.OnAutoSized();}
+  }
+};
+bbbfly.bar._stretch = function(bar,vars){
   var vals = vars.value;
-  if(!vals.autosize.major && !vals.autosize.minor){return;}
+
+  var stretchMajor = (vals.autosize.major === bbbfly.Bar.autosize.stretch);
+  var stretchMinor = (vals.autosize.minor === bbbfly.Bar.autosize.stretch);
+  if(!stretchMajor && !stretchMinor){return false;}
 
   var boundNames = bbbfly.bar._getBoundNames(vars);
-  if(!Object.isObject(boundNames)){return;}
+  if(!Object.isObject(boundNames)){return false;}
 
   var dims = {
     major: (vals.position.major + vals.margin.major),
@@ -462,21 +467,23 @@ bbbfly.bar._autoSize = function(bar,vars){
   }
 
   var bounds = {};
-
-  if(vals.autosize.major){
-    bounds[boundNames.major.dim] = dims.major;
-  }
-  if(vals.autosize.minor){
-    bounds[boundNames.minor.dim] = dims.minor;
-  }
+  if(stretchMajor){bounds[boundNames.major.dim] = dims.major;}
+  if(stretchMinor){bounds[boundNames.minor.dim] = dims.minor;}
 
   if(bar.SetBounds(bounds)){
     bar.Update(false);
-
-    if(Function.isFunction(bar.OnAutoSized)){
-      bar.OnAutoSized();
-    }
+    return true;
   }
+  return false;
+};
+bbbfly.bar._slide = function(bar,vars){
+  var vals = vars.value;
+
+  var slideMajor = (vals.autosize.major === bbbfly.Bar.autosize.slide);
+  var slideMinor = (vals.autosize.minor === bbbfly.Bar.autosize.slide);
+  if(!slideMajor && !slideMinor){return false;}
+
+  return false;
 };
 bbbfly.Bar = function(def,ref,parent){
   def = def || {};
@@ -512,9 +519,8 @@ bbbfly.Bar.float = {
 };
 bbbfly.Bar.autosize = {
   none: 0,
-  vertical: 1,
-  horizontal: 2,
-  both: 3
+  stretch: 1,
+  slide: 2
 };
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_bar'] = {
