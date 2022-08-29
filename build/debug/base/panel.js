@@ -179,7 +179,6 @@ bbbfly.panel._doCreate = function(){
     );
   }
 };
-
 bbbfly.panel._doDispose = function(){
   return bbbfly.PanelGroup.UnregisterControl(this);
 };
@@ -248,10 +247,10 @@ bbbfly.panel._setEnabled = function(enabled,update){
     && !this.OnSetEnabled(enabled)
   ){return false;}
 
-  if(!Boolean.isBoolean(update)){update = true;}
   this.SetChildControlsEnabled(enabled,this);
-
   this.Enabled = enabled;
+
+  if(!Boolean.isBoolean(update)){update = true;}
   this.DoChangeState(update);
 
   if(Function.isFunction(this.OnEnabledChanged)){
@@ -268,9 +267,9 @@ bbbfly.panel._setInvalid = function(invalid,update){
     && !this.OnSetInvalid(invalid)
   ){return false;}
 
-  if(!Boolean.isBoolean(update)){update = true;}
-
   this.Invalid = invalid;
+
+  if(!Boolean.isBoolean(update)){update = true;}
   this.DoChangeState(update);
 
   if(Function.isFunction(this.OnInvalidChanged)){
@@ -287,9 +286,9 @@ bbbfly.panel._setReadOnly = function(readOnly,update){
     && !this.OnSetReadOnly(readOnly)
   ){return false;}
 
-  if(!Boolean.isBoolean(update)){update = true;}
-
   this.ReadOnly = readOnly;
+
+  if(!Boolean.isBoolean(update)){update = true;}
   this.DoChangeState(update);
 
   if(Function.isFunction(this.OnReadOnlyChanged)){
@@ -306,9 +305,9 @@ bbbfly.panel._setSelected = function(selected,update){
     && !this.OnSetSelected(selected)
   ){return false;}
 
-  if(!Boolean.isBoolean(update)){update = true;}
-
   this.Selected = selected;
+
+  if(!Boolean.isBoolean(update)){update = true;}
   this.DoChangeState(update);
 
   if(Function.isFunction(this.OnSelectedChanged)){
