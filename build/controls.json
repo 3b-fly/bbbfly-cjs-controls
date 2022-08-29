@@ -412,7 +412,7 @@
         },
         "bbbfly-cjs-controls": {
           "Packages": [
-            "wrapper",
+            "bar",
             "button"
           ]
         }

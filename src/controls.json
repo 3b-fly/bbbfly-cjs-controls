@@ -321,7 +321,7 @@
           "Packages": ["crossbrowser","renderer"]
         },
         "bbbfly-cjs-controls": {
-          "Packages": ["wrapper","button"]
+          "Packages": ["bar","button"]
         }
       }
     },

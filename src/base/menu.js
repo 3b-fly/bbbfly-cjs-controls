@@ -210,7 +210,7 @@ bbbfly.Menu = function(def,ref,parent){
 /**
  * @class
  * @type control
- * @extends bbbfly.Wrapper
+ * @extends bbbfly.Bar
  *
  * @inpackage menu
  *
@@ -218,8 +218,8 @@ bbbfly.Menu = function(def,ref,parent){
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
- * @property {object} WrapperOptions
- * @property {boolean} WrapperOptions.TrackChanges=true
+ * @property {object} BarOptions
+ * @property {boolean} BarOptions.TrackChanges=true
  * @property {object} [ButtonDef=null] - Definition shared by all buttons
  * @property {bbbfly.MenuBar.Items} [Items=null]
  */
@@ -228,7 +228,7 @@ bbbfly.MenuBar = function(def,ref,parent){
 
   ng_MergeDef(def,{
     Data: {
-      WrapperOptions: {
+      BarOptions: {
         TrackChanges: true
       },
       ButtonDef: {
@@ -314,7 +314,7 @@ bbbfly.MenuBar = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'bbbfly.Wrapper',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Bar',ref,parent);
 };
 
 /** @ignore */

@@ -166,7 +166,7 @@ bbbfly.MenuBar = function(def,ref,parent){
 
   ng_MergeDef(def,{
     Data: {
-      WrapperOptions: {
+      BarOptions: {
         TrackChanges: true
       },
       ButtonDef: {
@@ -196,7 +196,7 @@ bbbfly.MenuBar = function(def,ref,parent){
     }
   });
 
-  return ngCreateControlAsType(def,'bbbfly.Wrapper',ref,parent);
+  return ngCreateControlAsType(def,'bbbfly.Bar',ref,parent);
 };
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_menu'] = {
