@@ -212,6 +212,7 @@ bbbfly.panel._doDispose = function(){
 bbbfly.panel._doUpdate = function(node){
   this.DoUpdateHtmlClass(node);
   this.DoUpdateHtmlState(node);
+  this.DoUpdateHtmlOverflow(node);
   return true;
 };
 
@@ -241,6 +242,22 @@ bbbfly.panel._doUpdateHtmlState = function(node){
   if(node){bbbfly.Renderer.UpdateHTMLState(node,state);}
 
   return state;
+};
+
+/** @ignore */
+bbbfly.panel._doUpdateHtmlOverflow = function(node){
+  if(typeof node === 'undefined'){node = this.Elm();}
+
+  if(node){
+    bbbfly.Renderer.UpdateHTMLOverflow(
+      node,this.OverflowX,this.OverflowY
+    );
+  }
+
+  return {
+    OverflowX: this.OverflowX,
+    OverflowY: this.OverflowY
+  };
 };
 
 /** @ignore */
@@ -279,6 +296,17 @@ bbbfly.panel._doChangeState = function(update){
     var node = this.Elm();
     this.DoUpdateHtmlClass(node);
     this.DoUpdateHtmlState(node);
+  }
+};
+
+/** @ignore */
+bbbfly.panel._doChangeOverflow = function(update){
+  if(update){
+    this.Update();
+  }
+  else{
+    var node = this.Elm();
+    this.DoUpdateHtmlOverflow(node);
   }
 };
 
@@ -363,6 +391,33 @@ bbbfly.panel._setSelected = function(selected,update){
 
   if(Function.isFunction(this.OnSelectedChanged)){
     this.OnSelectedChanged();
+  }
+  return true;
+};
+
+/** @ignore */
+bbbfly.panel._setOverflow = function(overflowX,overflowY,update){
+  var vals = bbbfly.Renderer.overflow;
+  if(!Object.includes(vals,overflowX)){overflowX = vals.hidden;}
+  if(!Object.includes(vals,overflowY)){overflowY = vals.hidden;}
+
+  if((overflowX === this.OverflowX) && (overflowY === this.OverflowY)){
+    return true;
+  }
+
+  if(
+    Function.isFunction(this.OnSetOverflow)
+    && !this.OnSetOverflow(overflowX,overflowY)
+  ){return false;}
+
+  this.OverflowX = overflowX;
+  this.OverflowY = overflowY;
+
+  if(!Boolean.isBoolean(update)){update = true;}
+  this.DoChangeOverflow(update);
+
+  if(Function.isFunction(this.OnOverflowChanged)){
+    this.OnOverflowChanged();
   }
   return true;
 };
@@ -891,6 +946,9 @@ bbbfly.PanelGroup.state = {
  * @property {boolean} [ReadOnly=false]
  * @property {boolean} [Selected=false]
  *
+ * @property {bbbfly.Renderer.overflow} [OverflowX=hidden]
+ * @property {bbbfly.Renderer.overflow} [OverflowY=hidden]
+ *
  * @property {bbbfly.PanelGroup.def} [Group=null]
  */
 bbbfly.Panel = function(def,ref,parent){
@@ -902,6 +960,9 @@ bbbfly.Panel = function(def,ref,parent){
       Invalid: false,
       ReadOnly: false,
       Selected: false,
+
+      OverflowX: bbbfly.Renderer.overflow.hidden,
+      OverflowY: bbbfly.Renderer.overflow.hidden,
 
       Group: null
     },
@@ -994,6 +1055,29 @@ bbbfly.Panel = function(def,ref,parent){
 
       /**
        * @event
+       * @name OnSetOverflow
+       * @memberof bbbfly.Panel#
+       *
+       * @param {bbbfly.Renderer.overflow} [overflowX] - Horizontal value to set
+       * @param {bbbfly.Renderer.overflow} [overflowY] - Vertical value to set
+       * @return {boolean} Return false to deny values change
+       *
+       * @see {@link bbbfly.Panel#SetOverflow|SetOverflow()}
+       * @see {@link bbbfly.Panel#event:OnOverflowChanged|OnOverflowChanged}
+       */
+       OnSetOverflow: null,
+       /**
+        * @event
+        * @name OnOverflowChanged
+        * @memberof bbbfly.Panel#
+        *
+        * @see {@link bbbfly.Panel#SetOverflow|SetOverflow()}
+        * @see {@link bbbfly.Panel#event:OnSetOverflow|OnSetOverflow}
+        */
+       OnOverflowChanged: null,
+
+      /**
+       * @event
        * @name OnChildControlAdded
        * @memberof bbbfly.Panel#
        *
@@ -1031,9 +1115,13 @@ bbbfly.Panel = function(def,ref,parent){
       /** @private */
       DoChangeState: bbbfly.panel._doChangeState,
       /** @private */
+      DoChangeOverflow: bbbfly.panel._doChangeOverflow,
+      /** @private */
       DoUpdateHtmlClass: bbbfly.panel._doUpdateHtmlClass,
       /** @private */
       DoUpdateHtmlState: bbbfly.panel._doUpdateHtmlState,
+      /** @private */
+      DoUpdateHtmlOverflow: bbbfly.panel._doUpdateHtmlOverflow,
 
       /**
        * @function
@@ -1113,6 +1201,21 @@ bbbfly.Panel = function(def,ref,parent){
        * @see {@link bbbfly.Panel#event:OnSelectedChanged|OnSelectedChanged}
        */
       SetSelected: bbbfly.panel._setSelected,
+
+      /**
+       * @function
+       * @name SetOverflow
+       * @memberof bbbfly.Panel#
+       *
+       * @param {bbbfly.Renderer.overflow} [overflowX=hidden] - Horizontal value to set
+       * @param {bbbfly.Renderer.overflow} [overflowY=hidden] - Vertical value to set
+       * @param {boolean} [update=true] - If update control
+       * @return {boolean} False if change was denied
+       *
+       * @see {@link bbbfly.Panel#event:OnSetOverflow|OnSetOverflow}
+       * @see {@link bbbfly.Panel#event:OnOverflowChanged|OnOverflowChanged}
+       */
+      SetOverflow: bbbfly.panel._setOverflow,
 
       /**
        * @function
