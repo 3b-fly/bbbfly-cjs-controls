@@ -605,6 +605,20 @@ bbbfly.frame._doCreate = function(def,ref,node){
   this.DoCreate.callParent(def,ref,node);
   if(!this.Frame){return;}
 
+  var overflowX = bbbfly.Renderer.overflow.hidden;
+  var overflowY = bbbfly.Renderer.overflow.hidden;
+
+  if(Object.isObject(def.Data)){
+    if(def.Data.hasOwnProperty('OverflowX')){
+      overflowX = def.Data.OverflowX;
+      delete def.Data.OverflowX;
+    }
+    if(def.Data.hasOwnProperty('OverflowY')){
+      overflowY = def.Data.OverflowY;
+      delete def.Data.OverflowY;
+    }
+  }
+
   var refDef = {};
 
   if(def.FramePanel !== null){
@@ -617,7 +631,6 @@ bbbfly.frame._doCreate = function(def,ref,node){
         L:0,T:0,R:0,B:0,
         Type: 'bbbfly.Panel',
         id: this.ID + '_F',
-        ScrollBars: ssNone,
         style: { zIndex: 1 },
         className: 'FramePanel',
         Data: {
@@ -638,8 +651,11 @@ bbbfly.frame._doCreate = function(def,ref,node){
         L:0,T:0,R:0,B:0,
         Type: 'bbbfly.Panel',
         id: this.ID + '_P',
-        ScrollBars: ssAuto,
         style: { zIndex: 2 },
+        Data: {
+          OverflowX: overflowX,
+          OverflowY: overflowY
+        },
         Controls: def.Controls,
         ModifyControls: def.ModifyControls,
         className: 'ControlsPanel'
