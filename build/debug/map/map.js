@@ -13,9 +13,6 @@ bbbfly.map.layer = {
   mapbox_style: {}
 };
 bbbfly.map.map._onCreated = function(map){
-  var cHolder = map.GetControlsHolder();
-  cHolder.SetScrollBars(ssNone);
-
   map.CreateMap();
   return true;
 };
