@@ -27,16 +27,27 @@ bbbfly.bar._doCreate = function(def,ref,node){
 /** @ignore */
 bbbfly.bar._onUpdate = function(){
   var cHolder = this.GetControlsHolder();
-  var opts = bbbfly.bar._getBarOptions(this);
 
-  if(Function.isFunction(cHolder.SetScrollBars)){
+  if(cHolder && Function.isFunction(cHolder.SetOverflow)){
+    var opts = bbbfly.bar._getBarOptions(this);
     var autosize = bbbfly.bar._getAutoSize(opts);
-    var bars = ssNone;
 
-    if(autosize.major === bbbfly.Bar.autosize.none){bars = ssAuto;}
-    if(autosize.minor === bbbfly.Bar.autosize.none){bars = ssAuto;}
+    var overflowMajor = (autosize.major === bbbfly.Bar.autosize.none)
+      ? bbbfly.Renderer.overflow.auto
+      : bbbfly.Renderer.overflow.hidden;
 
-    cHolder.SetScrollBars(bars);
+    var overflowMinor = (autosize.minor === bbbfly.Bar.autosize.none)
+      ? bbbfly.Renderer.overflow.auto
+      : bbbfly.Renderer.overflow.hidden;
+
+    switch(opts.Orientation){
+      case bbbfly.Wrapper.orientation.vertical:
+        cHolder.SetOverflow(overflowMinor,overflowMajor,false);
+      break;
+      case bbbfly.Wrapper.orientation.horizontal:
+        cHolder.SetOverflow(overflowMajor,overflowMinor,false);
+      break;
+    }
   }
   return true;
 };
@@ -549,7 +560,6 @@ bbbfly.Bar = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
-    ScrollBars: ssNone,
     Data: {
       BarOptions: undefined,
 

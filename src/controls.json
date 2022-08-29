@@ -41,7 +41,7 @@
           "Packages": ["Controls.js"]
         },
         "bbbfly-cjs": {
-          "Packages": ["crossbrowser"]
+          "Packages": ["crossbrowser","renderer"]
         },
         "bbbfly-cjs-controls": {
           "Packages": ["panel"]
