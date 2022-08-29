@@ -14,7 +14,16 @@ bbbfly.grid = {};
 /** @ignore */
 bbbfly.grid._onUpdate = function(){
   var cHolder = this.GetControlsHolder();
-  cHolder.SetScrollBars(this.AutoSize ? ssNone : ssAuto);
+
+  if(cHolder && Function.isFunction(cHolder.SetOverflow)){
+    var overflowX = bbbfly.Renderer.overflow.hidden;
+
+    var overflowY = this.AutoSize
+      ? bbbfly.Renderer.overflow.hidden
+      : bbfly.Renderer.overflow.auto;
+
+    cHolder.SetOverflow(overflowX,overflowY,false);
+  }
   return true;
 };
 
