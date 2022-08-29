@@ -20,9 +20,24 @@ bbbfly.wrapper._doCreate = function(def,ref,node){
 };
 bbbfly.wrapper._onUpdate = function(){
   var cHolder = this.GetControlsHolder();
-  var opts = bbbfly.wrapper._getWrapperOptions(this);
 
-  cHolder.SetScrollBars(opts.AutoSize ? ssNone : ssAuto);
+  if(cHolder && Function.isFunction(cHolder.SetOverflow)){
+    var opts = bbbfly.wrapper._getWrapperOptions(this);
+
+    var overflowX = bbbfly.Renderer.overflow.hidden;
+    var overflowY = bbbfly.Renderer.overflow.hidden;
+
+    switch(opts.Orientation){
+      case bbbfly.Wrapper.orientation.vertical:
+        if(!opts.AutoSize){overflowY = bbbfly.Renderer.overflow.auto;}
+      break;
+      case bbbfly.Wrapper.orientation.horizontal:
+        if(!opts.AutoSize){overflowX = bbbfly.Renderer.overflow.auto;}
+      break;
+    }
+
+    cHolder.SetOverflow(overflowX,overflowY,false);
+  }
   return true;
 };
 bbbfly.wrapper._onUpdated = function(){
@@ -418,7 +433,6 @@ bbbfly.Wrapper = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def, {
-    ScrollBars: ssNone,
     Data: {
       WrapperOptions: undefined,
       _Stretcher: null

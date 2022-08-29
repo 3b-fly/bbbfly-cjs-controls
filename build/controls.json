@@ -503,7 +503,8 @@
         },
         "bbbfly-cjs": {
           "Packages": [
-            "crossbrowser"
+            "crossbrowser",
+            "renderer"
           ]
         },
         "bbbfly-cjs-controls": {
