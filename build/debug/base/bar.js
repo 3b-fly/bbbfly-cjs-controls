@@ -34,10 +34,10 @@ bbbfly.bar._onUpdate = function(){
       : bbbfly.Renderer.overflow.hidden;
 
     switch(opts.Orientation){
-      case bbbfly.Wrapper.orientation.vertical:
+      case bbbfly.Bar.orientation.vertical:
         cHolder.SetOverflow(overflowMinor,overflowMajor,false);
       break;
-      case bbbfly.Wrapper.orientation.horizontal:
+      case bbbfly.Bar.orientation.horizontal:
         cHolder.SetOverflow(overflowMajor,overflowMinor,false);
       break;
     }
@@ -68,7 +68,7 @@ bbbfly.bar._onUpdated = function(){
   };
 
   switch(opts.Orientation){
-    case bbbfly.Wrapper.orientation.vertical:
+    case bbbfly.Bar.orientation.vertical:
       switch(opts.Float){
         case bbbfly.Bar.float.left_top:
           vars.direction = {
@@ -107,7 +107,7 @@ bbbfly.bar._onUpdated = function(){
         ng_EndMeasureElement(cHolderNode);
       }
     break;
-    case bbbfly.Wrapper.orientation.horizontal:
+    case bbbfly.Bar.orientation.horizontal:
       switch(opts.Float){
         case bbbfly.Bar.float.left_top:
           vars.direction = {
@@ -215,8 +215,8 @@ bbbfly.bar._getBarOptions = function(ctrl){
   ng_MergeDef(opts,{
     Orientation: bbbfly.Bar.orientation.horizontal,
     Float: bbbfly.Bar.float.left_top,
-    MajorAutoSize: bbbfly.Bar.autosize.none,
-    MinorAutoSize: bbbfly.Bar.autosize.none,
+    HAutoSize: bbbfly.Bar.autosize.none,
+    VAutoSize: bbbfly.Bar.autosize.none,
     PaddingTop: null,
     PaddingBottom: null,
     PaddingLeft: null,
@@ -246,8 +246,16 @@ bbbfly.bar._getAutoSize = function(opts){
     minor: bbbfly.Bar.autosize.none
   };
 
-  if(Number.isInteger(opts.MajorAutoSize)){autosize.major = opts.MajorAutoSize;}
-  if(Number.isInteger(opts.MinorAutoSize)){autosize.minor = opts.MinorAutoSize;}
+  switch(opts.Orientation){
+    case bbbfly.Bar.orientation.vertical:
+      if(Number.isInteger(opts.VAutoSize)){autosize.major = opts.VAutoSize;}
+      if(Number.isInteger(opts.HAutoSize)){autosize.minor = opts.HAutoSize;}
+    break;
+    case bbbfly.Bar.orientation.horizontal:
+      if(Number.isInteger(opts.HAutoSize)){autosize.major = opts.HAutoSize;}
+      if(Number.isInteger(opts.VAutoSize)){autosize.minor = opts.VAutoSize;}
+    break;
+  }
 
   return autosize;
 };
