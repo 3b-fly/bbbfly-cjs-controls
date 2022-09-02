@@ -603,23 +603,39 @@ bbbfly.envelope._onTrackedControlChange = function(ctrl,tracker){
 /** @ignore */
 bbbfly.frame._doCreate = function(def,ref,node){
   this.DoCreate.callParent(def,ref,node);
+  this.CreateControls(def,ref,node);
+};
+
+/** @ignore */
+bbbfly.frame._createControls = function(def,ref,node){
   if(!this.Frame){return;}
 
-  var overflowX = bbbfly.Renderer.overflow.hidden;
-  var overflowY = bbbfly.Renderer.overflow.hidden;
-
-  if(Object.isObject(def.Data)){
-    if(def.Data.hasOwnProperty('OverflowX')){
-      overflowX = def.Data.OverflowX;
-      delete def.Data.OverflowX;
-    }
-    if(def.Data.hasOwnProperty('OverflowY')){
-      overflowY = def.Data.OverflowY;
-      delete def.Data.OverflowY;
-    }
+  if(!def.ParentReferences){
+    this.Controls = {};
+    this.Controls.Owner = this;
+    ref = this.Controls;
   }
 
   var refDef = {};
+
+  if(Function.isFunction(this.OnCreateControls)){
+    this.OnCreateControls(def,refDef);
+  }
+
+  var refs = ngCreateControls(refDef,undefined,node);
+
+  if(Function.isFunction(this.OnControlsCreated)){
+    this.OnControlsCreated(def,refs);
+  }
+
+  delete def.Controls;
+  delete def.ModifyControls;
+  
+  ngCloneRefs(ref,refs);
+};
+
+/** @ignore */
+bbbfly.frame._onCreateControls = function(def,refDef){
 
   if(def.FramePanel !== null){
     if(Object.isObject(def.FramePanel)){
@@ -645,7 +661,21 @@ bbbfly.frame._doCreate = function(def,ref,node){
     if(Object.isObject(def.ControlsPanel)){
       refDef.ControlsPanel = ng_CopyVar(def.ControlsPanel);
     }
-
+  
+    var overflowX = bbbfly.Renderer.overflow.hidden;
+    var overflowY = bbbfly.Renderer.overflow.hidden;
+  
+    if(Object.isObject(def.Data)){
+      if(def.Data.hasOwnProperty('OverflowX')){
+        overflowX = def.Data.OverflowX;
+        delete def.Data.OverflowX;
+      }
+      if(def.Data.hasOwnProperty('OverflowY')){
+        overflowY = def.Data.OverflowY;
+        delete def.Data.OverflowY;
+      }
+    }
+  
     ng_MergeDef(refDef,{
       ControlsPanel: {
         L:0,T:0,R:0,B:0,
@@ -662,31 +692,23 @@ bbbfly.frame._doCreate = function(def,ref,node){
       }
     });
   }
+};
 
-  if(!def.ParentReferences){
-    this.Controls = {};
-    this.Controls.Owner = this;
-    ref = this.Controls;
-  }
-
-  var refs = ngCreateControls(refDef,undefined,node);
-
-  if(refs.ControlsPanel){
-    this.ControlsPanel = refs.ControlsPanel;
-    this.ControlsPanel.Owner = this;
-  }
+/** @ignore */
+bbbfly.frame._onControlsCreated = function(def,refs){
 
   if(refs.FramePanel){
     this.FramePanel = refs.FramePanel;
     this.FramePanel.Owner = this;
   }
 
-  delete def.Controls;
-  delete def.ModifyControls;
-  delete refs.ControlsPanel;
-  delete refs.FramePanel;
+  if(refs.ControlsPanel){
+    this.ControlsPanel = refs.ControlsPanel;
+    this.ControlsPanel.Owner = this;
+  }
 
-  ngCloneRefs(ref,refs);
+  delete refs.FramePanel;
+  delete refs.ControlsPanel;
 };
 
 /** @ignore */
@@ -1371,9 +1393,17 @@ bbbfly.Frame = function(def,ref,parent){
     },
     FramePanel: undefined,
     ControlsPanel: undefined,
+    Events: {
+      /** @private */
+      OnCreateControls: bbbfly.frame._onCreateControls,
+      /** @private */
+      OnControlsCreated: bbbfly.frame._onControlsCreated
+    },
     Methods: {
       /** @private */
       DoCreate: bbbfly.frame._doCreate,
+      /** @private */
+      CreateControls: bbbfly.frame._createControls,
       /** @private */
       DoUpdate: bbbfly.frame._doUpdate,
       /** @private */
