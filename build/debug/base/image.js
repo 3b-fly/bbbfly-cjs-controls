@@ -14,7 +14,7 @@ bbbfly.image._doCreate = function(def,ref,node){
   var icon = document.createElement('DIV');
   icon.id = this.ID+'_I';
 
-  icon.style.zIndex = 3;
+  icon.style.zIndex = 300;
   icon.style.visibility = 'hidden';
   node.appendChild(icon);
 };

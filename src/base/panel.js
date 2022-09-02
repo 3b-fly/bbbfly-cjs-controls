@@ -647,7 +647,7 @@ bbbfly.frame._onCreateControls = function(def,refDef){
         L:0,T:0,R:0,B:0,
         Type: 'bbbfly.Panel',
         id: this.ID + '_F',
-        style: { zIndex: 1 },
+        style: { zIndex: 100 },
         className: 'FramePanel',
         Data: {
           _FrameProxy: null,
@@ -681,7 +681,7 @@ bbbfly.frame._onCreateControls = function(def,refDef){
         L:0,T:0,R:0,B:0,
         Type: 'bbbfly.Panel',
         id: this.ID + '_P',
-        style: { zIndex: 2 },
+        style: { zIndex: 200 },
         Data: {
           OverflowX: overflowX,
           OverflowY: overflowY

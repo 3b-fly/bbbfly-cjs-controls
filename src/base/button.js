@@ -121,7 +121,7 @@ bbbfly.button._doCreate = function(def,ref,node){
   var holder = document.createElement('DIV');
   holder.id = this.ID+'_H';
 
-  holder.style.zIndex = 3;
+  holder.style.zIndex = 300;
   holder.style.display = 'block';
   holder.style.position = 'absolute';
   holder.style.overflow = 'hidden';
@@ -132,7 +132,7 @@ bbbfly.button._doCreate = function(def,ref,node){
   var icon = document.createElement('DIV');
   icon.id = this.ID+'_I';
 
-  icon.style.zIndex = 3;
+  icon.style.zIndex = 300;
   icon.style.visibility = 'hidden';
   node.appendChild(icon);
 };
