@@ -699,17 +699,11 @@ bbbfly.frame._doUpdateFrame = function(panel,frame){
     bbbfly.Renderer.UpdateFrameHTML(proxy,state);
   }
 };
-bbbfly.frame._doUpdateFramePanel = function(){
-  var fPanel = this.GetFramePanel();
-  var fFrame = this.GetFrame();
-  this.DoUpdateFrame(fPanel,fFrame);
-};
-bbbfly.frame._doUpdateControlsPanel = function(){
-  var cPanel = this.GetControlsPanel();
-  if(!cPanel){return;}
+bbbfly.frame._doUpdatePanel = function(panel,dims){
+  if(!Object.isObject(panel) || !Function.isFunction(panel.SetBounds)){return;}
+  if(!Object.isObject(dims)){return;}
 
-  var dims = this.GetFrameDims();
-  cPanel.SetBounds({
+  panel.SetBounds({
     L: dims.L,
     T: dims.T,
     R: dims.R,
@@ -717,6 +711,18 @@ bbbfly.frame._doUpdateControlsPanel = function(){
     W: null,
     H: null
   });
+};
+bbbfly.frame._doUpdateFramePanel = function(){
+  var fPanel = this.GetFramePanel();
+  var fFrame = this.GetFrame();
+
+  this.DoUpdateFrame(fPanel,fFrame);
+};
+bbbfly.frame._doUpdateControlsPanel = function(){
+  var cPanel = this.GetControlsPanel();
+  var dims = this.GetFrameDims();
+
+  this.DoUpdatePanel(cPanel,dims);
 };
 bbbfly.frame._needsFramePanel = function(){
   return !!this.Frame;
@@ -890,6 +896,7 @@ bbbfly.Frame = function(def,ref,parent){
       DoChangeState: bbbfly.frame._doChangeState,
       DoUpdateImages: bbbfly.frame._doUpdateImages,
       DoUpdateFrame: bbbfly.frame._doUpdateFrame,
+      DoUpdatePanel: bbbfly.frame._doUpdatePanel,
       DoUpdateFramePanel: bbbfly.frame._doUpdateFramePanel,
       DoUpdateControlsPanel: bbbfly.frame._doUpdateControlsPanel,
       NeedsFramePanel: bbbfly.frame._needsFramePanel,
