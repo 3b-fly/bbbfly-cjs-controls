@@ -25,6 +25,48 @@ bbbfly.bar._doCreate = function(def,ref,node){
 };
 
 /** @ignore */
+bbbfly.bar._createControlsDef = function(def,refDef){
+  var changed = this.CreateControlsDef.callParent(def,refDef);
+
+  if(this.NeedsSlidePanel() && (def.SlidePanel !== null)){
+    if(Object.isObject(def.SlidePanel)){
+      refDef.SlidePanel = ng_CopyVar(def.SlidePanel);
+    }
+
+    ng_MergeDef(refDef,{
+      SlidePanel: {
+        L:0,T:0,R:0,B:0,
+        Type: 'bbbfly.Panel',
+        id: this.ID + '_S',
+        style: { zIndex: 150 },
+        className: 'SlidePanel',
+        Data: {
+          _FrameProxy: null,
+          _FrameHtml: ''
+        }
+      }
+    });
+
+    changed = true;
+  }
+  return changed;
+};
+
+/** @ignore */
+bbbfly.bar._setControlsRef = function(def,refs){
+  var changed = this.SetControlsRef.callParent(def,refs);
+
+  if(refs.SlidePanel){
+    this.SlidePanel = refs.SlidePanel;
+    this.SlidePanel.Owner = this;
+
+    delete refs.SlidePanel;
+    changed = true;
+  }
+  return changed;
+};
+
+/** @ignore */
 bbbfly.bar._onUpdate = function(){
   var cHolder = this.GetControlsHolder();
 
@@ -194,6 +236,33 @@ bbbfly.bar._onUpdated = function(){
 };
 
 /** @ignore */
+bbbfly.bar._doUpdateControls = function(node){
+  this.DoUpdateFramePanel(node);
+  this.DoUpdateSlidePanel(node);
+  this.DoUpdateControlsPanel(node);
+};
+
+/** @ignore */
+bbbfly.bar._doUpdateSlidePanel = function(){
+  var sPanel = this.GetSlidePanel();
+  var sFrame = this.GetSlideFrame();
+  var dims = this.GetFrameDims.callParent();
+
+  this.DoUpdateFrame(sPanel,sFrame);
+  this.DoUpdatePanel(sPanel,dims);
+};
+
+/** @ignore */
+bbbfly.bar._needsSlidePanel = function(){
+  return !!this.SlideFrame;
+}
+
+/** @ignore */
+bbbfly.bar._needsControlsPanel = function(){
+  return this.NeedsSlidePanel() || this.NeedsFramePanel();
+}
+
+/** @ignore */
 bbbfly.bar._isTrackedControlChanged = function(ctrl,options){
   var opts = bbbfly.bar._getBarOptions(this);
   var childOpts = bbbfly.bar._getItemOptions(ctrl,opts);
@@ -218,6 +287,54 @@ bbbfly.bar._isTrackedControlChanged = function(ctrl,options){
   }
 
   return false;
+};
+
+/** @ignore */
+bbbfly.bar._getFrameDims = function(){
+  var sPanel = this.GetSlidePanel();
+
+  var fDims = this.GetFrameDims.callParent();
+  if(!Object.isObject(sPanel)){return fDims;}
+
+  var sDims = { L:0, T:0, R:0, B:0, W:undefined, H:undefined };
+
+  var sBounds = sPanel.Bounds;
+  var sProxy = sPanel._FrameProxy;
+
+  if(Object.isObject(sBounds)){
+    if(Number.isInteger(sBounds.L)){sDims.L += sBounds.L;}
+    if(Number.isInteger(sBounds.T)){sDims.T += sBounds.T;}
+    if(Number.isInteger(sBounds.R)){sDims.R += sBounds.R;}
+    if(Number.isInteger(sBounds.B)){sDims.B += sBounds.B;}
+  }
+//TODO: apply hidden images
+  if(Object.isObject(sProxy)){
+    if(Number.isInteger(sProxy.L.W)){sDims.L += sProxy.L.W;}
+    if(Number.isInteger(sProxy.T.H)){sDims.T += sProxy.T.H;}
+    if(Number.isInteger(sProxy.R.W)){sDims.R += sProxy.R.W;}
+    if(Number.isInteger(sProxy.B.H)){sDims.B += sProxy.B.H;}
+    if(Number.isInteger(sProxy.C.W)){sDims.W = sProxy.C.W;}
+    if(Number.isInteger(sProxy.C.H)){sDims.H = sProxy.C.H;}
+  }
+
+  return {
+    L: (sDims.L > fDims.L) ? sDims.L : fDims.L,
+    T: (sDims.T > fDims.T) ? sDims.T : fDims.T,
+    R: (sDims.R > fDims.R) ? sDims.R : fDims.R,
+    B: (sDims.B > fDims.B) ? sDims.B : fDims.B,
+    W: (sDims.W > fDims.W) ? sDims.W : fDims.W,
+    H: (sDims.H > fDims.H) ? sDims.H : fDims.H
+  };
+};
+
+/** @ignore */
+bbbfly.bar._getSlideFrame = function(){
+  return (Object.isObject(this.SlideFrame) ? this.SlideFrame : {});
+};
+
+/** @ignore */
+bbbfly.bar._getSlidePanel = function(){
+  return this.SlidePanel ? this.SlidePanel : null;
 };
 
 /** @ignore */
@@ -543,8 +660,14 @@ bbbfly.bar._slide = function(bar,vars){
   var slideMinor = (vals.autosize.minor === bbbfly.Bar.autosize.slide);
   if(!slideMajor && !slideMinor){return false;}
 
-  //TODO
-  
+  var size = vals.size;
+  var pos = vals.max.pos;
+
+  var slideMajor = (slideMajor && (size.major < pos.major));
+  var slideMinor = (slideMinor && (size.minor < pos.minor));
+  if(!slideMajor && !slideMinor){return false;}
+
+  //TODO: show/hide slide frame images
   return false;
 };
 
@@ -558,11 +681,13 @@ bbbfly.bar._slide = function(bar,vars){
  *
  * @inpackage bar
  *
- * @param {bbbfly.Frame.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Bar.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *
  * @property {bbbfly.Bar.barOptions} [BarOptions=undefined]
+ * @property {boolean|bbbfly.Renderer.frame} [SlideFrame=false] - Slide buttons definition
+ *   Define frame or set it to true before panel creation to support slide buttons
  */
 bbbfly.Bar = function(def,ref,parent){
   def = def || {};
@@ -570,10 +695,12 @@ bbbfly.Bar = function(def,ref,parent){
   ng_MergeDef(def,{
     Data: {
       BarOptions: undefined,
+      SlideFrame: undefined,
 
       /** @private */
       _Stretcher: null
     },
+    SlidePanel: undefined,
     Events: {
       /** @private */
       OnUpdate: bbbfly.bar._onUpdate,
@@ -590,7 +717,50 @@ bbbfly.Bar = function(def,ref,parent){
       /** @private */
       DoCreate: bbbfly.bar._doCreate,
       /** @private */
-      IsTrackedControlChanged: bbbfly.bar._isTrackedControlChanged
+      CreateControlsDef: bbbfly.bar._createControlsDef,
+      /** @private */
+      SetControlsRef: bbbfly.bar._setControlsRef,
+
+      /** @private */
+      DoUpdateControls: bbbfly.bar._doUpdateControls,
+      /** @private */
+      DoUpdateSlidePanel: bbbfly.bar._doUpdateSlidePanel,
+
+      /** @private */
+      NeedsSlidePanel: bbbfly.bar._needsSlidePanel,
+      /** @private */
+      NeedsControlsPanel: bbbfly.bar._needsControlsPanel,
+      /** @private */
+      IsTrackedControlChanged: bbbfly.bar._isTrackedControlChanged,
+
+    /**
+      * @function
+      * @name GetFrameDims
+      * @memberof bbbfly.Bar#
+      *
+      * @return {object} Frame dimensions
+      */
+      GetFrameDims: bbbfly.bar._getFrameDims,
+      /**
+       * @function
+       * @name GetSlideFrame
+       * @memberof bbbfly.Bar#
+       *
+       * @return {bbbfly.Renderer.frame} Frame definition
+       */
+      GetSlideFrame: bbbfly.bar._getSlideFrame,
+      /**
+      * @function
+      * @name GetSlidePanel
+      * @memberof bbbfly.Bar#
+      *
+      * @return {object|null} FramePanel control
+      *
+      * @see {@link bbbfly.Frame#GetSlidePanel|GetControlsPanel()}
+      * @see {@link bbbfly.Frame#GetControlsPanel|GetControlsPanel()}
+      * @see {@link bbbfly.Frame#GetControlsHolder|GetControlsHolder()}
+      */
+      GetSlidePanel: bbbfly.bar._getSlidePanel
     }
   });
 
@@ -677,4 +847,14 @@ ngUserControls['bbbfly_bar'] = {
  *   this to define their minimal distance from other child controls.
  *
  * @property {bbbfly.Bar.itemOptions} [BarItemOptions=undefined]
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.Bar
+ * @extends bbbfly.Frame.Definition
+ *
+ * @description Slide control definition
+ *
+ * @property {ngControl.Definition} [SlidePanel=undefined] - Control definition
  */
