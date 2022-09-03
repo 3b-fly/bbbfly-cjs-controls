@@ -525,34 +525,31 @@ bbbfly.frame._doCreate = function(def,ref,node){
   this.CreateControls(def,ref,node);
 };
 bbbfly.frame._createControls = function(def,ref,node){
-  if(!this.Frame){return;}
+  var refDef = {};
+
+  if(
+    Function.isFunction(this.OnCreateControls)
+    && !this.OnCreateControls(def,refDef)
+  ){return;}
+
+  var refs = ngCreateControls(refDef,undefined,node);
+
+  if(
+    Function.isFunction(this.OnControlsCreated)
+    && !this.OnControlsCreated(def,refs)
+  ){return;}
 
   if(!def.ParentReferences){
     this.Controls = {};
     this.Controls.Owner = this;
     ref = this.Controls;
   }
-
-  var refDef = {};
-
-  if(Function.isFunction(this.OnCreateControls)){
-    this.OnCreateControls(def,refDef);
-  }
-
-  var refs = ngCreateControls(refDef,undefined,node);
-
-  if(Function.isFunction(this.OnControlsCreated)){
-    this.OnControlsCreated(def,refs);
-  }
-
-  delete def.Controls;
-  delete def.ModifyControls;
-
   ngCloneRefs(ref,refs);
 };
 bbbfly.frame._onCreateControls = function(def,refDef){
+  var added = false;
 
-  if(def.FramePanel !== null){
+  if(this.NeedsFramePanel() && (def.FramePanel !== null)){
     if(Object.isObject(def.FramePanel)){
       refDef.FramePanel = ng_CopyVar(def.FramePanel);
     }
@@ -570,9 +567,11 @@ bbbfly.frame._onCreateControls = function(def,refDef){
         }
       }
     });
+
+    added = true;
   }
 
-  if(def.ControlsPanel !== null){
+  if(this.NeedsControlsPanel() && (def.ControlsPanel !== null)){
     if(Object.isObject(def.ControlsPanel)){
       refDef.ControlsPanel = ng_CopyVar(def.ControlsPanel);
     }
@@ -606,22 +605,33 @@ bbbfly.frame._onCreateControls = function(def,refDef){
         className: 'ControlsPanel'
       }
     });
+
+    delete def.Controls;
+    delete def.ModifyControls;
+
+    added = true;
   }
+  return added;
 };
 bbbfly.frame._onControlsCreated = function(def,refs){
+  var added = false;
 
   if(refs.FramePanel){
     this.FramePanel = refs.FramePanel;
     this.FramePanel.Owner = this;
+    added = true;
   }
 
   if(refs.ControlsPanel){
     this.ControlsPanel = refs.ControlsPanel;
     this.ControlsPanel.Owner = this;
+    added = true;
   }
 
   delete refs.FramePanel;
   delete refs.ControlsPanel;
+
+  return added;
 };
 bbbfly.frame._doUpdate = function(node){
   this.DoUpdateFrame(node);
@@ -710,6 +720,12 @@ bbbfly.frame._doUpdateControlsPanel = function(){
     H: null
   });
 };
+bbbfly.frame._needsFramePanel = function(){
+  return !!this.Frame;
+}
+bbbfly.frame._needsControlsPanel = function(){
+  return !!this.Frame;
+}
 bbbfly.frame._getFrame = function(){
   return (Object.isObject(this.Frame) ? this.Frame : {});
 };
@@ -877,6 +893,8 @@ bbbfly.Frame = function(def,ref,parent){
       DoUpdateFrame: bbbfly.frame._doUpdateFrame,
       DoUpdateImages: bbbfly.frame._doUpdateImages,
       DoUpdateControlsPanel: bbbfly.frame._doUpdateControlsPanel,
+      NeedsFramePanel: bbbfly.frame._needsFramePanel,
+      NeedsControlsPanel: bbbfly.frame._needsControlsPanel,
       GetFrame: bbbfly.frame._getFrame,
       GetFrameDims: bbbfly.frame._getFrameDims,
       GetFramePanel: bbbfly.frame._getFramePanel,
