@@ -631,7 +631,7 @@ bbbfly.frame._doUpdate = function(node){
   return this.DoUpdate.callParent(node);
 };
 bbbfly.frame._doUpdateControls = function(node){
-  this.DoUpdateFrame(node);
+  this.DoUpdateFramePanel(node);
   this.DoUpdateControlsPanel(node);
 };
 bbbfly.frame._doMouseEnter = function(event,options){
@@ -664,33 +664,6 @@ bbbfly.frame._doChangeState = function(update){
   this.DoChangeState.callParent(update);
   if(!update){this.DoUpdateImages();}
 };
-bbbfly.frame._doUpdateFrame = function(){
-  var fPanel = this.GetFramePanel();
-  if(!fPanel){return;}
-
-  var fNode = fPanel.Elm();
-  if(!fNode){return;}
-
-  var frame = this.GetFrame();
-  var state = this.GetState();
-
-  var over = state.mouseover;
-
-  state.mouseover = false;
-  var proxy = bbbfly.Renderer.FrameProxy(frame,state,this.ID);
-  var html = bbbfly.Renderer.FrameHTML(proxy,state);
-  state.mouseover = over;
-
-  fPanel._FrameProxy = proxy;
-  if(html === fPanel._FrameHtml){return;}
-
-  fPanel._FrameHtml = html;
-  fNode.innerHTML = html;
-
-  if(over){
-    bbbfly.Renderer.UpdateFrameHTML(proxy,state);
-  }
-};
 bbbfly.frame._doUpdateImages = function(){
   var fPanel = this.GetFramePanel();
   if(!fPanel){return;}
@@ -701,6 +674,35 @@ bbbfly.frame._doUpdateImages = function(){
   var state = this.GetState();
   bbbfly.Renderer.UpdateFrameProxy(proxy,state);
   bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+};
+bbbfly.frame._doUpdateFrame = function(panel,frame){
+  if(!panel){return;}
+
+  var node = panel.Elm();
+  if(!node){return;}
+
+  var state = this.GetState();
+  var over = state.mouseover;
+
+  state.mouseover = false;
+  var proxy = bbbfly.Renderer.FrameProxy(frame,state,this.ID);
+  var html = bbbfly.Renderer.FrameHTML(proxy,state);
+  state.mouseover = over;
+
+  panel._FrameProxy = proxy;
+  if(html === panel._FrameHtml){return;}
+
+  panel._FrameHtml = html;
+  node.innerHTML = html;
+
+  if(over){
+    bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+  }
+};
+bbbfly.frame._doUpdateFramePanel = function(){
+  var fPanel = this.GetFramePanel();
+  var fFrame = this.GetFrame();
+  this.DoUpdateFrame(fPanel,fFrame);
 };
 bbbfly.frame._doUpdateControlsPanel = function(){
   var cPanel = this.GetControlsPanel();
@@ -886,8 +888,9 @@ bbbfly.Frame = function(def,ref,parent){
       DoMouseEnter: bbbfly.frame._doMouseEnter,
       DoMouseLeave: bbbfly.frame._doMouseLeave,
       DoChangeState: bbbfly.frame._doChangeState,
-      DoUpdateFrame: bbbfly.frame._doUpdateFrame,
       DoUpdateImages: bbbfly.frame._doUpdateImages,
+      DoUpdateFrame: bbbfly.frame._doUpdateFrame,
+      DoUpdateFramePanel: bbbfly.frame._doUpdateFramePanel,
       DoUpdateControlsPanel: bbbfly.frame._doUpdateControlsPanel,
       NeedsFramePanel: bbbfly.frame._needsFramePanel,
       NeedsControlsPanel: bbbfly.frame._needsControlsPanel,

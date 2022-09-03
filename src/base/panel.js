@@ -722,7 +722,7 @@ bbbfly.frame._doUpdate = function(node){
 
 /** @ignore */
 bbbfly.frame._doUpdateControls = function(node){
-  this.DoUpdateFrame(node);
+  this.DoUpdateFramePanel(node);
   this.DoUpdateControlsPanel(node);
 };
 
@@ -763,35 +763,6 @@ bbbfly.frame._doChangeState = function(update){
 };
 
 /** @ignore */
-bbbfly.frame._doUpdateFrame = function(){
-  var fPanel = this.GetFramePanel();
-  if(!fPanel){return;}
-
-  var fNode = fPanel.Elm();
-  if(!fNode){return;}
-
-  var frame = this.GetFrame();
-  var state = this.GetState();
-
-  var over = state.mouseover;
-
-  state.mouseover = false;
-  var proxy = bbbfly.Renderer.FrameProxy(frame,state,this.ID);
-  var html = bbbfly.Renderer.FrameHTML(proxy,state);
-  state.mouseover = over;
-
-  fPanel._FrameProxy = proxy;
-  if(html === fPanel._FrameHtml){return;}
-
-  fPanel._FrameHtml = html;
-  fNode.innerHTML = html;
-
-  if(over){
-    bbbfly.Renderer.UpdateFrameHTML(proxy,state);
-  }
-};
-
-/** @ignore */
 bbbfly.frame._doUpdateImages = function(){
   var fPanel = this.GetFramePanel();
   if(!fPanel){return;}
@@ -802,6 +773,39 @@ bbbfly.frame._doUpdateImages = function(){
   var state = this.GetState();
   bbbfly.Renderer.UpdateFrameProxy(proxy,state);
   bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+};
+
+/** @ignore */
+bbbfly.frame._doUpdateFrame = function(panel,frame){
+  if(!panel){return;}
+
+  var node = panel.Elm();
+  if(!node){return;}
+
+  var state = this.GetState();
+  var over = state.mouseover;
+
+  state.mouseover = false;
+  var proxy = bbbfly.Renderer.FrameProxy(frame,state,this.ID);
+  var html = bbbfly.Renderer.FrameHTML(proxy,state);
+  state.mouseover = over;
+
+  panel._FrameProxy = proxy;
+  if(html === panel._FrameHtml){return;}
+
+  panel._FrameHtml = html;
+  node.innerHTML = html;
+
+  if(over){
+    bbbfly.Renderer.UpdateFrameHTML(proxy,state);
+  }
+};
+
+/** @ignore */
+bbbfly.frame._doUpdateFramePanel = function(){
+  var fPanel = this.GetFramePanel();
+  var fFrame = this.GetFrame();
+  this.DoUpdateFrame(fPanel,fFrame);
 };
 
 /** @ignore */
@@ -1433,9 +1437,11 @@ bbbfly.Frame = function(def,ref,parent){
       /** @private */
       DoChangeState: bbbfly.frame._doChangeState,
       /** @private */
+      DoUpdateImages: bbbfly.frame._doUpdateImages,
+      /** @private */
       DoUpdateFrame: bbbfly.frame._doUpdateFrame,
       /** @private */
-      DoUpdateImages: bbbfly.frame._doUpdateImages,
+      DoUpdateFramePanel: bbbfly.frame._doUpdateFramePanel,
       /** @private */
       DoUpdateControlsPanel: bbbfly.frame._doUpdateControlsPanel,
 
