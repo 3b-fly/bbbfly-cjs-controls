@@ -627,9 +627,12 @@ bbbfly.frame._setControlsRef = function(def,refs){
   return changed;
 };
 bbbfly.frame._doUpdate = function(node){
+  this.DoUpdateControls(node);
+  return this.DoUpdate.callParent(node);
+};
+bbbfly.frame._doUpdateControls = function(node){
   this.DoUpdateFrame(node);
   this.DoUpdateControlsPanel(node);
-  return this.DoUpdate.callParent(node);
 };
 bbbfly.frame._doMouseEnter = function(event,options){
   var state = this.DoMouseEnter.callParent(event,options);
@@ -717,35 +720,36 @@ bbbfly.frame._needsFramePanel = function(){
   return !!this.Frame;
 }
 bbbfly.frame._needsControlsPanel = function(){
-  return !!this.Frame;
+  return this.NeedsFramePanel();
 }
 bbbfly.frame._getFrame = function(){
   return (Object.isObject(this.Frame) ? this.Frame : {});
 };
 bbbfly.frame._getFrameDims = function(){
-  var dims = { L:0, T:0, R:0, B:0, W:undefined, H:undefined };
   var fPanel = this.GetFramePanel();
 
-  if(Object.isObject(fPanel)){
-    var fBounds = fPanel.Bounds;
-    var fProxy = fPanel._FrameProxy;
+  var dims = { L:0, T:0, R:0, B:0, W:undefined, H:undefined };
+  if(!Object.isObject(fPanel)){return dims;}
 
-    if(Object.isObject(fBounds)){
-      if(Number.isInteger(fBounds.L)){dims.L += fBounds.L;}
-      if(Number.isInteger(fBounds.T)){dims.T += fBounds.T;}
-      if(Number.isInteger(fBounds.R)){dims.R += fBounds.R;}
-      if(Number.isInteger(fBounds.B)){dims.B += fBounds.B;}
-    }
+  var fBounds = fPanel.Bounds;
+  var fProxy = fPanel._FrameProxy;
 
-    if(Object.isObject(fProxy)){
-      if(Number.isInteger(fProxy.L.W)){dims.L += fProxy.L.W;}
-      if(Number.isInteger(fProxy.T.H)){dims.T += fProxy.T.H;}
-      if(Number.isInteger(fProxy.R.W)){dims.R += fProxy.R.W;}
-      if(Number.isInteger(fProxy.B.H)){dims.B += fProxy.B.H;}
-      if(Number.isInteger(fProxy.C.W)){dims.W = fProxy.C.W;}
-      if(Number.isInteger(fProxy.C.H)){dims.H = fProxy.C.H;}
-    }
+  if(Object.isObject(fBounds)){
+    if(Number.isInteger(fBounds.L)){dims.L += fBounds.L;}
+    if(Number.isInteger(fBounds.T)){dims.T += fBounds.T;}
+    if(Number.isInteger(fBounds.R)){dims.R += fBounds.R;}
+    if(Number.isInteger(fBounds.B)){dims.B += fBounds.B;}
   }
+
+  if(Object.isObject(fProxy)){
+    if(Number.isInteger(fProxy.L.W)){dims.L += fProxy.L.W;}
+    if(Number.isInteger(fProxy.T.H)){dims.T += fProxy.T.H;}
+    if(Number.isInteger(fProxy.R.W)){dims.R += fProxy.R.W;}
+    if(Number.isInteger(fProxy.B.H)){dims.B += fProxy.B.H;}
+    if(Number.isInteger(fProxy.C.W)){dims.W = fProxy.C.W;}
+    if(Number.isInteger(fProxy.C.H)){dims.H = fProxy.C.H;}
+  }
+
   return dims;
 };
 bbbfly.frame._getFramePanel = function(){
@@ -878,6 +882,7 @@ bbbfly.Frame = function(def,ref,parent){
       CreateControlsDef: bbbfly.frame._createControlsDef,
       SetControlsRef: bbbfly.frame._setControlsRef,
       DoUpdate: bbbfly.frame._doUpdate,
+      DoUpdateControls: bbbfly.frame._doUpdateControls,
       DoMouseEnter: bbbfly.frame._doMouseEnter,
       DoMouseLeave: bbbfly.frame._doMouseLeave,
       DoChangeState: bbbfly.frame._doChangeState,
