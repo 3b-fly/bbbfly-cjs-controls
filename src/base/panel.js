@@ -610,17 +610,9 @@ bbbfly.frame._doCreate = function(def,ref,node){
 bbbfly.frame._createControls = function(def,ref,node){
   var refDef = {};
 
-  if(
-    Function.isFunction(this.OnCreateControls)
-    && !this.OnCreateControls(def,refDef)
-  ){return;}
-
+  if(!this.CreateControlsDef(def,refDef)){return;}
   var refs = ngCreateControls(refDef,undefined,node);
-
-  if(
-    Function.isFunction(this.OnControlsCreated)
-    && !this.OnControlsCreated(def,refs)
-  ){return;}
+  if(!this.SetControlsRef(def,refs)){return;}
 
   if(!def.ParentReferences){
     this.Controls = {};
@@ -631,8 +623,8 @@ bbbfly.frame._createControls = function(def,ref,node){
 };
 
 /** @ignore */
-bbbfly.frame._onCreateControls = function(def,refDef){
-  var added = false;
+bbbfly.frame._createControlsDef = function(def,refDef){
+  var changed = false;
 
   if(this.NeedsFramePanel() && (def.FramePanel !== null)){
     if(Object.isObject(def.FramePanel)){
@@ -653,7 +645,7 @@ bbbfly.frame._onCreateControls = function(def,refDef){
       }
     });
 
-    added = true;
+    changed = true;
   }
 
   if(this.NeedsControlsPanel() && (def.ControlsPanel !== null)){
@@ -694,31 +686,32 @@ bbbfly.frame._onCreateControls = function(def,refDef){
     delete def.Controls;
     delete def.ModifyControls;
 
-    added = true;
+    changed = true;
   }
-  return added;
+  return changed;
 };
 
 /** @ignore */
-bbbfly.frame._onControlsCreated = function(def,refs){
-  var added = false;
+bbbfly.frame._setControlsRef = function(def,refs){
+  var changed = false;
 
   if(refs.FramePanel){
     this.FramePanel = refs.FramePanel;
     this.FramePanel.Owner = this;
-    added = true;
+
+    delete refs.FramePanel;
+    changed = true;
   }
 
   if(refs.ControlsPanel){
     this.ControlsPanel = refs.ControlsPanel;
     this.ControlsPanel.Owner = this;
-    added = true;
+
+    delete refs.ControlsPanel;
+    changed = true;
   }
 
-  delete refs.FramePanel;
-  delete refs.ControlsPanel;
-  
-  return added;
+  return changed;
 };
 
 /** @ignore */
@@ -1413,17 +1406,16 @@ bbbfly.Frame = function(def,ref,parent){
     },
     FramePanel: undefined,
     ControlsPanel: undefined,
-    Events: {
-      /** @private */
-      OnCreateControls: bbbfly.frame._onCreateControls,
-      /** @private */
-      OnControlsCreated: bbbfly.frame._onControlsCreated
-    },
     Methods: {
       /** @private */
       DoCreate: bbbfly.frame._doCreate,
       /** @private */
       CreateControls: bbbfly.frame._createControls,
+      /** @private */
+      CreateControlsDef: bbbfly.frame._createControlsDef,
+      /** @private */
+      SetControlsRef: bbbfly.frame._setControlsRef,
+
       /** @private */
       DoUpdate: bbbfly.frame._doUpdate,
       /** @private */
