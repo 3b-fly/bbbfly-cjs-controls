@@ -317,12 +317,12 @@ bbbfly.bar._getSlideDims = function(){
   }
 
   if(Object.isObject(sProxy)){
-    if(Number.isInteger(sProxy.L.W)){sDims.L += sProxy.L.W;}
-    if(Number.isInteger(sProxy.T.H)){sDims.T += sProxy.T.H;}
-    if(Number.isInteger(sProxy.R.W)){sDims.R += sProxy.R.W;}
-    if(Number.isInteger(sProxy.B.H)){sDims.B += sProxy.B.H;}
-    if(Number.isInteger(sProxy.C.W)){sDims.W = sProxy.C.W;}
-    if(Number.isInteger(sProxy.C.H)){sDims.H = sProxy.C.H;}
+    if(Number.isInteger(sProxy.L.W) && sProxy.L.Visible){sDims.L += sProxy.L.W;}
+    if(Number.isInteger(sProxy.T.H) && sProxy.T.Visible){sDims.T += sProxy.T.H;}
+    if(Number.isInteger(sProxy.R.W) && sProxy.R.Visible){sDims.R += sProxy.R.W;}
+    if(Number.isInteger(sProxy.B.H) && sProxy.B.Visible){sDims.B += sProxy.B.H;}
+    if(Number.isInteger(sProxy.C.W) && sProxy.C.Visible){sDims.W = sProxy.C.W;}
+    if(Number.isInteger(sProxy.C.H) && sProxy.C.Visible){sDims.H = sProxy.C.H;}
   }
 
   return {

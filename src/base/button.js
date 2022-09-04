@@ -201,8 +201,8 @@ bbbfly.button._doUpdateHolder = function(){
   };
 
   var iSize = {
-    W: Number.isInteger(iProxy.W) ? iProxy.W : 0,
-    H: Number.isInteger(iProxy.H) ? iProxy.H : 0
+    W: (Number.isInteger(iProxy.W) && iProxy.Visible) ? iProxy.W : 0,
+    H: (Number.isInteger(iProxy.H) && iProxy.Visible) ? iProxy.H : 0
   };
 
   var minHDim = {W:0,H:0};

@@ -865,12 +865,12 @@ bbbfly.frame._getFrameDims = function(){
   }
 
   if(Object.isObject(fProxy)){
-    if(Number.isInteger(fProxy.L.W)){dims.L += fProxy.L.W;}
-    if(Number.isInteger(fProxy.T.H)){dims.T += fProxy.T.H;}
-    if(Number.isInteger(fProxy.R.W)){dims.R += fProxy.R.W;}
-    if(Number.isInteger(fProxy.B.H)){dims.B += fProxy.B.H;}
-    if(Number.isInteger(fProxy.C.W)){dims.W = fProxy.C.W;}
-    if(Number.isInteger(fProxy.C.H)){dims.H = fProxy.C.H;}
+    if(Number.isInteger(fProxy.L.W) && fProxy.L.Visible){dims.L += fProxy.L.W;}
+    if(Number.isInteger(fProxy.T.H) && fProxy.T.Visible){dims.T += fProxy.T.H;}
+    if(Number.isInteger(fProxy.R.W) && fProxy.R.Visible){dims.R += fProxy.R.W;}
+    if(Number.isInteger(fProxy.B.H) && fProxy.B.Visible){dims.B += fProxy.B.H;}
+    if(Number.isInteger(fProxy.C.W) && fProxy.C.Visible){dims.W = fProxy.C.W;}
+    if(Number.isInteger(fProxy.C.H) && fProxy.C.Visible){dims.H = fProxy.C.H;}
   }
 
   return dims;

@@ -60,7 +60,7 @@ bbbfly.map.tooltip.utils.AnchorProps = function(id,anchor,type,state){
   var iAnchor = iProxy.Anchor || {L:0,T:0};
   props.ImgProxy = iProxy;
 
-  if(!iProxy.W || !iProxy.H){return props;}
+  if(!iProxy.Visible || !iProxy.W || !iProxy.H){return props;}
 
   switch(type){
     case 'AL':
