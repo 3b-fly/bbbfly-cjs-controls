@@ -245,10 +245,8 @@ bbbfly.bar._doUpdateControls = function(node){
 /** @ignore */
 bbbfly.bar._doUpdateSlidePanel = function(){
   var sPanel = this.GetSlidePanel();
-  var sFrame = this.GetSlideFrame();
-  var dims = this.GetFrameDims.callParent();
+  var dims = this.GetFrameDims();
 
-  this.DoUpdateFrame(sPanel,sFrame);
   this.DoUpdatePanel(sPanel,dims);
 };
 
@@ -290,10 +288,20 @@ bbbfly.bar._isTrackedControlChanged = function(ctrl,options){
 };
 
 /** @ignore */
-bbbfly.bar._getFrameDims = function(){
+bbbfly.bar._getSlideFrame = function(){
+  return (Object.isObject(this.SlideFrame) ? this.SlideFrame : {});
+};
+
+/** @ignore */
+bbbfly.bar._getSlidePanel = function(){
+  return this.SlidePanel ? this.SlidePanel : null;
+};
+
+/** @ignore */
+bbbfly.bar._getSlideDims = function(){
   var sPanel = this.GetSlidePanel();
 
-  var fDims = this.GetFrameDims.callParent();
+  var fDims = this.GetFrameDims();
   if(!Object.isObject(sPanel)){return fDims;}
 
   var sDims = { L:0, T:0, R:0, B:0, W:undefined, H:undefined };
@@ -307,7 +315,7 @@ bbbfly.bar._getFrameDims = function(){
     if(Number.isInteger(sBounds.R)){sDims.R += sBounds.R;}
     if(Number.isInteger(sBounds.B)){sDims.B += sBounds.B;}
   }
-//TODO: apply hidden images
+
   if(Object.isObject(sProxy)){
     if(Number.isInteger(sProxy.L.W)){sDims.L += sProxy.L.W;}
     if(Number.isInteger(sProxy.T.H)){sDims.T += sProxy.T.H;}
@@ -325,16 +333,6 @@ bbbfly.bar._getFrameDims = function(){
     W: (sDims.W > fDims.W) ? sDims.W : fDims.W,
     H: (sDims.H > fDims.H) ? sDims.H : fDims.H
   };
-};
-
-/** @ignore */
-bbbfly.bar._getSlideFrame = function(){
-  return (Object.isObject(this.SlideFrame) ? this.SlideFrame : {});
-};
-
-/** @ignore */
-bbbfly.bar._getSlidePanel = function(){
-  return this.SlidePanel ? this.SlidePanel : null;
 };
 
 /** @ignore */
@@ -469,6 +467,20 @@ bbbfly.bar._getBoundNames = function(vars){
     default: return null;
   }
   return boundNames;
+};
+
+/** @ignore */
+bbbfly.bar._getFrameNames = function(vars){
+  return {
+    major: {
+      start: String.capitalize(vars.direction.major.start),
+      end: String.capitalize(vars.direction.major.end)
+    },
+    minor: {
+      start: String.capitalize(vars.direction.minor.start),
+      end: String.capitalize(vars.direction.minor.end)
+    }
+  };
 };
 
 /** @ignore */
@@ -620,7 +632,7 @@ bbbfly.bar._stretch = function(bar,vars){
   if(!stretchMajor && !stretchMinor){return false;}
 
   var boundNames = bbbfly.bar._getBoundNames(vars);
-  if(!Object.isObject(boundNames)){return false;}
+  if(!Object.isObject(boundNames)){return true;}
 
   var dims = {
     major: (vals.position.major + vals.margin.major),
@@ -645,11 +657,8 @@ bbbfly.bar._stretch = function(bar,vars){
   if(stretchMajor){bounds[boundNames.major.dim] = dims.major;}
   if(stretchMinor){bounds[boundNames.minor.dim] = dims.minor;}
 
-  if(bar.SetBounds(bounds)){
-    bar.Update(false);
-    return true;
-  }
-  return false;
+  if(bar.SetBounds(bounds)){bar.Update(false);}
+  return true;
 };
 
 /** @ignore */
@@ -660,15 +669,43 @@ bbbfly.bar._slide = function(bar,vars){
   var slideMinor = (vals.autosize.minor === bbbfly.Bar.autosize.slide);
   if(!slideMajor && !slideMinor){return false;}
 
+  var frameNames = bbbfly.bar._getFrameNames(vars);
+  if(!Object.isObject(frameNames)){return true;}
+
+  var sPanel = bar.GetSlidePanel();
+  if(!sPanel){return true;}
+
   var size = vals.size;
   var pos = vals.max.pos;
 
-  var slideMajor = (slideMajor && (size.major < pos.major));
-  var slideMinor = (slideMinor && (size.minor < pos.minor));
-  if(!slideMajor && !slideMinor){return false;}
+  if(slideMajor){slideMajor = (size.major < pos.major);}
+  if(slideMinor){slideMinor = (size.minor < pos.minor);}
 
-  //TODO: show/hide slide frame images
-  return false;
+  var sFrame = (slideMajor || slideMinor) ? bar.GetSlideFrame() : null;
+
+  if(Object.isObject(sFrame)){
+    sFrame = ng_CopyVar(sFrame);
+    
+    if(!slideMajor){
+      delete sFrame[frameNames.major.start];
+      delete sFrame[frameNames.major.end];
+    }
+
+    if(!slideMinor){
+      delete sFrame[frameNames.minor.start];
+      delete sFrame[frameNames.minor.end];
+    }
+  }
+
+  bar.DoUpdateFrame(sPanel,sFrame);
+
+  var cPanel = bar.GetControlsPanel();
+  if(!cPanel){return true;}
+
+  var dims = bar.GetSlideDims();
+  bar.DoUpdatePanel(cPanel,dims);
+  
+  return true;
 };
 
 /**
@@ -733,14 +770,6 @@ bbbfly.Bar = function(def,ref,parent){
       /** @private */
       IsTrackedControlChanged: bbbfly.bar._isTrackedControlChanged,
 
-    /**
-      * @function
-      * @name GetFrameDims
-      * @memberof bbbfly.Bar#
-      *
-      * @return {object} Frame dimensions
-      */
-      GetFrameDims: bbbfly.bar._getFrameDims,
       /**
        * @function
        * @name GetSlideFrame
@@ -750,17 +779,25 @@ bbbfly.Bar = function(def,ref,parent){
        */
       GetSlideFrame: bbbfly.bar._getSlideFrame,
       /**
-      * @function
-      * @name GetSlidePanel
-      * @memberof bbbfly.Bar#
-      *
-      * @return {object|null} FramePanel control
-      *
-      * @see {@link bbbfly.Frame#GetSlidePanel|GetControlsPanel()}
-      * @see {@link bbbfly.Frame#GetControlsPanel|GetControlsPanel()}
-      * @see {@link bbbfly.Frame#GetControlsHolder|GetControlsHolder()}
-      */
-      GetSlidePanel: bbbfly.bar._getSlidePanel
+       * @function
+       * @name GetSlidePanel
+       * @memberof bbbfly.Bar#
+       *
+       * @return {object|null} FramePanel control
+       *
+       * @see {@link bbbfly.Frame#GetSlidePanel|GetControlsPanel()}
+       * @see {@link bbbfly.Frame#GetControlsPanel|GetControlsPanel()}
+       * @see {@link bbbfly.Frame#GetControlsHolder|GetControlsHolder()}
+       */
+      GetSlidePanel: bbbfly.bar._getSlidePanel,
+      /**
+       * @function
+       * @name GetSlideDims
+       * @memberof bbbfly.Bar#
+       *
+       * @return {object} Frame dimensions
+       */
+      GetSlideDims: bbbfly.bar._getSlideDims
     }
   });
 

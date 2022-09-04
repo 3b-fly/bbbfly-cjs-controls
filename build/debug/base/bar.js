@@ -228,10 +228,8 @@ bbbfly.bar._doUpdateControls = function(node){
 };
 bbbfly.bar._doUpdateSlidePanel = function(){
   var sPanel = this.GetSlidePanel();
-  var sFrame = this.GetSlideFrame();
-  var dims = this.GetFrameDims.callParent();
+  var dims = this.GetFrameDims();
 
-  this.DoUpdateFrame(sPanel,sFrame);
   this.DoUpdatePanel(sPanel,dims);
 };
 bbbfly.bar._needsSlidePanel = function(){
@@ -265,10 +263,16 @@ bbbfly.bar._isTrackedControlChanged = function(ctrl,options){
 
   return false;
 };
-bbbfly.bar._getFrameDims = function(){
+bbbfly.bar._getSlideFrame = function(){
+  return (Object.isObject(this.SlideFrame) ? this.SlideFrame : {});
+};
+bbbfly.bar._getSlidePanel = function(){
+  return this.SlidePanel ? this.SlidePanel : null;
+};
+bbbfly.bar._getSlideDims = function(){
   var sPanel = this.GetSlidePanel();
 
-  var fDims = this.GetFrameDims.callParent();
+  var fDims = this.GetFrameDims();
   if(!Object.isObject(sPanel)){return fDims;}
 
   var sDims = { L:0, T:0, R:0, B:0, W:undefined, H:undefined };
@@ -282,6 +286,7 @@ bbbfly.bar._getFrameDims = function(){
     if(Number.isInteger(sBounds.R)){sDims.R += sBounds.R;}
     if(Number.isInteger(sBounds.B)){sDims.B += sBounds.B;}
   }
+
   if(Object.isObject(sProxy)){
     if(Number.isInteger(sProxy.L.W)){sDims.L += sProxy.L.W;}
     if(Number.isInteger(sProxy.T.H)){sDims.T += sProxy.T.H;}
@@ -299,12 +304,6 @@ bbbfly.bar._getFrameDims = function(){
     W: (sDims.W > fDims.W) ? sDims.W : fDims.W,
     H: (sDims.H > fDims.H) ? sDims.H : fDims.H
   };
-};
-bbbfly.bar._getSlideFrame = function(){
-  return (Object.isObject(this.SlideFrame) ? this.SlideFrame : {});
-};
-bbbfly.bar._getSlidePanel = function(){
-  return this.SlidePanel ? this.SlidePanel : null;
 };
 bbbfly.bar._getBarOptions = function(ctrl){
   var opts = ng_CopyVar(ctrl.BarOptions);
@@ -423,6 +422,18 @@ bbbfly.bar._getBoundNames = function(vars){
     default: return null;
   }
   return boundNames;
+};
+bbbfly.bar._getFrameNames = function(vars){
+  return {
+    major: {
+      start: String.capitalize(vars.direction.major.start),
+      end: String.capitalize(vars.direction.major.end)
+    },
+    minor: {
+      start: String.capitalize(vars.direction.minor.start),
+      end: String.capitalize(vars.direction.minor.end)
+    }
+  };
 };
 bbbfly.bar._positionCtrl = function(ctrl,vars,childOpts,majorLimit){
   var boundNames = bbbfly.bar._getBoundNames(vars);
@@ -562,7 +573,7 @@ bbbfly.bar._stretch = function(bar,vars){
   if(!stretchMajor && !stretchMinor){return false;}
 
   var boundNames = bbbfly.bar._getBoundNames(vars);
-  if(!Object.isObject(boundNames)){return false;}
+  if(!Object.isObject(boundNames)){return true;}
 
   var dims = {
     major: (vals.position.major + vals.margin.major),
@@ -587,11 +598,8 @@ bbbfly.bar._stretch = function(bar,vars){
   if(stretchMajor){bounds[boundNames.major.dim] = dims.major;}
   if(stretchMinor){bounds[boundNames.minor.dim] = dims.minor;}
 
-  if(bar.SetBounds(bounds)){
-    bar.Update(false);
-    return true;
-  }
-  return false;
+  if(bar.SetBounds(bounds)){bar.Update(false);}
+  return true;
 };
 bbbfly.bar._slide = function(bar,vars){
   var vals = vars.value;
@@ -600,13 +608,43 @@ bbbfly.bar._slide = function(bar,vars){
   var slideMinor = (vals.autosize.minor === bbbfly.Bar.autosize.slide);
   if(!slideMajor && !slideMinor){return false;}
 
+  var frameNames = bbbfly.bar._getFrameNames(vars);
+  if(!Object.isObject(frameNames)){return true;}
+
+  var sPanel = bar.GetSlidePanel();
+  if(!sPanel){return true;}
+
   var size = vals.size;
   var pos = vals.max.pos;
 
-  var slideMajor = (slideMajor && (size.major < pos.major));
-  var slideMinor = (slideMinor && (size.minor < pos.minor));
-  if(!slideMajor && !slideMinor){return false;}
-  return false;
+  if(slideMajor){slideMajor = (size.major < pos.major);}
+  if(slideMinor){slideMinor = (size.minor < pos.minor);}
+
+  var sFrame = (slideMajor || slideMinor) ? bar.GetSlideFrame() : null;
+
+  if(Object.isObject(sFrame)){
+    sFrame = ng_CopyVar(sFrame);
+
+    if(!slideMajor){
+      delete sFrame[frameNames.major.start];
+      delete sFrame[frameNames.major.end];
+    }
+
+    if(!slideMinor){
+      delete sFrame[frameNames.minor.start];
+      delete sFrame[frameNames.minor.end];
+    }
+  }
+
+  bar.DoUpdateFrame(sPanel,sFrame);
+
+  var cPanel = bar.GetControlsPanel();
+  if(!cPanel){return true;}
+
+  var dims = bar.GetSlideDims();
+  bar.DoUpdatePanel(cPanel,dims);
+
+  return true;
 };
 bbbfly.Bar = function(def,ref,parent){
   def = def || {};
@@ -632,9 +670,9 @@ bbbfly.Bar = function(def,ref,parent){
       NeedsSlidePanel: bbbfly.bar._needsSlidePanel,
       NeedsControlsPanel: bbbfly.bar._needsControlsPanel,
       IsTrackedControlChanged: bbbfly.bar._isTrackedControlChanged,
-      GetFrameDims: bbbfly.bar._getFrameDims,
       GetSlideFrame: bbbfly.bar._getSlideFrame,
-      GetSlidePanel: bbbfly.bar._getSlidePanel
+      GetSlidePanel: bbbfly.bar._getSlidePanel,
+      GetSlideDims: bbbfly.bar._getSlideDims
     }
   });
 
