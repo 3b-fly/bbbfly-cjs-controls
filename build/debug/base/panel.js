@@ -826,8 +826,8 @@ bbbfly.Panel = function(def,ref,parent){
       OnReadOnlyChanged: null,
       OnSetSelected: null,
       OnSelectedChanged: null,
-       OnSetOverflow: null,
-       OnOverflowChanged: null,
+      OnSetOverflow: null,
+      OnOverflowChanged: null,
       OnChildControlAdded: null,
       OnChildControlRemoved: null
     },
