@@ -1134,7 +1134,7 @@ bbbfly.Panel = function(def,ref,parent){
        * @see {@link bbbfly.Panel#SetOverflow|SetOverflow()}
        * @see {@link bbbfly.Panel#event:OnOverflowChanged|OnOverflowChanged}
        */
-       OnSetOverflow: null,
+      OnSetOverflow: null,
        /**
         * @event
         * @name OnOverflowChanged
@@ -1143,7 +1143,7 @@ bbbfly.Panel = function(def,ref,parent){
         * @see {@link bbbfly.Panel#SetOverflow|SetOverflow()}
         * @see {@link bbbfly.Panel#event:OnSetOverflow|OnSetOverflow}
         */
-       OnOverflowChanged: null,
+      OnOverflowChanged: null,
 
       /**
        * @event
