@@ -12,5 +12,5 @@
         "build": true,
         ".vscode": true
     },
-    "explorerExclude.backup": null
+    "explorerExclude.backup": {}
 }

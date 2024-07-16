@@ -70,7 +70,7 @@ bbbfly.fileuploader._createForm = function(){
   form.setAttribute('enctype','multipart/form-data');
   form.style.cssText = absolute+stretch
     +'filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);'
-    +'opacity:0;-moz-opacity:0;z-index:4;';
+    +'opacity:0;-moz-opacity:0;z-index:400;';
 
   var input = document.createElement('input');
   input.setAttribute('id',this.ID+'_FO_I');
