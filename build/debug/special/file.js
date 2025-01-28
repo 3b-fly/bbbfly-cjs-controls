@@ -7,6 +7,7 @@
 
 var bbbfly = bbbfly || {};
 bbbfly.fileuploader = {};
+bbbfly.fileloader = {};
 bbbfly.fileuploader._getRPC = function(){
   if(!this._RPC){this._RPC = this.CreateRPC();}
   return this._RPC;
@@ -36,7 +37,7 @@ bbbfly.fileuploader._updateForm = function(){
   }
 
   if(Number.isInteger(this.MaxFilesCount)){
-    multiple = (this.MaxFilesCount < 2);
+    multiple = !(this.MaxFilesCount < 2);
   }
 
   input.accept = accept;
@@ -135,7 +136,7 @@ bbbfly.fileuploader._reset = function(){
   if(list){list.Clear();}
 
   var hadFiles = (this._Files.length > 0);
-  this._Files = [];
+  this._Files = new Array();
 
   this.Update();
   this.HideProgress();
@@ -157,7 +158,7 @@ bbbfly.fileuploader._isValid = function(){
   return true;
 };
 bbbfly.fileuploader._getUploadedFiles = function(){
-  return Array.isArray(this._Files) ? this._Files : [];
+  return Array.isArray(this._Files) ? this._Files : new Array();
 };
 bbbfly.fileuploader._getSelectedFiles = function(){
   var curFiles = this.GetUploadedFiles();
@@ -189,27 +190,21 @@ bbbfly.fileuploader._onFormFilesChange = function(form,uploader){
   if(!form){form = uploader.GetForm();}
   if(!form){return;}
 
-  var files = [];
-  var input = form['files[]'];
-
-  if(Array.isArray(input.files)){
-    if(uploader.ValidateFiles(input.files)){
-      for(var i in input.files){
-        var file = input.files[i];
-        if(file.name){files.push(file.name);}
-      }
-    }
-  }
-  else{
-    var file = input.value;
-    var idx = file.lastIndexOf('\\')+1;
-    file = file.substring(idx,file.length);
-    if(file){files.push(file);}
-  }
-
+  var files = uploader.GetFormFiles(form);
   if(files.length > 0){
     uploader.UploadFiles(form);
   }
+  else{
+    var input = form['files[]'];
+
+    if(input){
+      var fileName = input.value;
+      var idx = fileName.lastIndexOf('\\')+1;
+      fileName = fileName.substring(idx,fileName.length);
+      if(fileName){uploader.UploadFiles(form);}
+    }
+  }
+
   form.reset();
 };
 bbbfly.fileuploader._uploadFiles = function(form){
@@ -319,13 +314,41 @@ bbbfly.fileuploader._onIframeLoad = function(iframe,uploader){
   uploader.AddUploadedFiles(data);
   uploader.HideProgress();
 };
+bbbfly.fileuploader._getFormFiles = function(form){
+  if(!form){form = uploader.GetForm();}
+  if(!form){return new Array();}
+
+  var input = form['files[]'];
+  if(!input){return new Array();}
+
+  var inputFiles = input.files;
+  var files = new Array();
+
+  if(Array.isArray(inputFiles)){
+    if(this.ValidateFiles(inputFiles)){
+      for(var i in inputFiles){
+        var file = inputFiles[i];
+        if(file.name){files.push(file);}
+      }
+    }
+  }
+  else if(inputFiles instanceof FileList){
+    var cnt = inputFiles.length;
+    if(cnt > 0){
+      for(var i=0;i<cnt;i++){
+        files.push(inputFiles.item(i));
+      }
+    }
+  }
+  return files;
+};
 bbbfly.fileuploader._validateFiles = function(files){
   var checkCount = Number.isInteger(this.MaxFilesCount);
   var checkFileSize = Number.isInteger(this.MaxFileSize);
   var checkBatchSize = Number.isInteger(this.MaxBatchSize);
   var checkExtensions = Array.isArray(this.AllowedExtensions);
 
-  var errors = [];
+  var errors = new Array();
 
   if(checkCount){
     var curFiles = this.GetUploadedFiles();
@@ -417,7 +440,7 @@ bbbfly.fileuploader._addUploadedFiles = function(data){
 
   var curFiles = this.GetUploadedFiles();
   var cnt = curFiles.length;
-  var errors = [];
+  var errors = new Array();
 
   for(var i in data){
 
@@ -445,24 +468,9 @@ bbbfly.fileuploader._addUploadedFiles = function(data){
       }
     }
 
-    var file = {
-      Id: fileData.Id,
-      Name: fileData.Name
-    };
-
-    this._Files.push(file);
-
-    var list = this.Controls.FilesList;
-    if(list){
-      var item = {
-        ID: fileData.Id,
-        File: file
-      };
-
-      list.Add(item,list);
+    if(this.AddFile(fileData)){
+      cnt += 1;
     }
-
-    cnt += 1;
   }
 
   if(errors.length > 0){this.ShowError(errors);}
@@ -471,6 +479,28 @@ bbbfly.fileuploader._addUploadedFiles = function(data){
     this.OnFilesChanged();
   }
   this.Update();
+};
+bbbfly.fileuploader._addFile = function(fileData){
+  if(!Object.isObject(fileData)){return false;}
+
+  var file = {
+    Id: fileData.Id,
+    Name: fileData.Name
+  };
+
+  this._Files.push(file);
+
+  var list = this.Controls.FilesList;
+  if(list){
+    var item = {
+      ID: fileData.Id,
+      File: file
+    };
+
+    list.Add(item,list);
+  }
+
+  return true;
 };
 bbbfly.fileuploader._setDragAndDrop = function(on){
   var cPanel = this.Controls.ContentPanel;
@@ -587,9 +617,9 @@ bbbfly.fileuploader._showError = function(errors){
         }
       }
 
-      for(var i in errs){
-        var filesCnt = (errs[i].length > 0) ? ''+errs[i].length+'x' : '';
-        switch(i){
+      for(var type in errs){
+        var filesCnt = (errs[type].length > 0) ? ''+errs[type].length+'x' : '';
+        switch(parseInt(type)){
           case bbbfly.FileUploader.errortype.main:
             var text = ngTxt('bbbfly_fileuploader_error_grp_main');
             message += text+'\n';
@@ -667,6 +697,7 @@ bbbfly.fileuploader._showError = function(errors){
       }
     break;
   }
+
   this.DoShowError(message);
 };
 bbbfly.fileuploader._fileNameExtsToString = function(fileNames){
@@ -822,6 +853,124 @@ bbbfly.fileuploader._getProgressText = function(){
     ? ngTxt('bbbfly_fileuploader_upload_one')
     : ngTxt('bbbfly_fileuploader_upload_more');
 };
+bbbfly.fileloader._addFile = function(fileData){
+  if(!Object.isObject(fileData)){return false;}
+
+  var fileId = this._ClientFileId++;
+  fileId = '__client_file_'+fileId+'__';
+
+  var file = {
+    Id: fileId,
+    Name: fileData.Name,
+    Data: fileData.Data,
+    DataType: fileData.DataType
+  };
+
+  this._Files.push(file);
+
+  var list = this.Controls.FilesList;
+  if(list){
+    var item = {
+      ID: fileId,
+      File: {
+        Id: fileId,
+        Name: fileData.Name
+      }
+    };
+
+    list.Add(item,list);
+  }
+
+  return true;
+};
+bbbfly.fileloader._reset = function(){
+  this._ClientFileId = 0;
+  this.Reset.callParent();
+};
+bbbfly.fileloader._uploadFiles = function(form){
+  if(!this.LoadFiles(form)){this.UploadFiles.callParent(form);}
+};
+bbbfly.fileloader._setLoadInfo = function(reader,loadInfo,progress,fileData){
+  var fileInfo = reader._fileInfo;
+
+  loadInfo.totalProgress += (progress - fileInfo.progress);
+  fileInfo.progress = progress;
+
+  if(fileData){
+    fileData.Name = fileInfo.name;
+    loadInfo.filesData.push(fileData);
+  }
+
+  if(loadInfo.filesData.length >= loadInfo.filesCnt){
+    loadInfo.loader.AddUploadedFiles(loadInfo.filesData);
+    loadInfo.loader.HideProgress();
+  }
+  else{
+    loadInfo.loader.UpdateProgress(
+      Math.floor((loadInfo.totalProgress / loadInfo.maxProgress) * 100)
+    );
+  }
+};
+bbbfly.fileloader._loadFiles = function(form){
+  if(!window.FileReader){return false;}
+
+  var files = this.GetFormFiles(form);
+  if(files.length < 1){return false;}
+
+  var loadInfo = {
+    maxProgress: (files.length * 100),
+    totalProgress: 0,
+
+    filesCnt: files.length,
+    filesData: new Array(),
+
+    loader: this
+  };
+
+  this.ShowProgress(false);
+
+  for(var i in files){
+    var file = files[i];
+
+    var reader = new FileReader();
+    reader._fileInfo = { name: file.name, progress: 0 };
+
+    reader.addEventListener('progress',function(e){
+      if(e.lengthComputable){
+        bbbfly.fileloader._setLoadInfo(
+          e.target,loadInfo,((e.loaded / e.total) * 100),null
+        );
+      }
+    });
+
+    reader.addEventListener('error',function(e){
+      var fileData = {
+        Error: {
+          Type: bbbfly.FileUploader.errortype.general,
+          Data: e.target.error.name
+        }
+      };
+
+      bbbfly.fileloader._setLoadInfo(
+        e.target,loadInfo,100,fileData
+      );
+    });
+
+    reader.addEventListener('load',function(e){
+      var fileData = {
+        Data: e.target.result,
+        DataType: bbbfly.FileLoader.datatype.buffer
+      };
+
+      bbbfly.fileloader._setLoadInfo(
+        e.target,loadInfo,100,fileData
+      );
+    });
+
+    reader.readAsArrayBuffer(file);
+  }
+  return true;
+};
 bbbfly.FileUploader = function(def,ref,parent){
   def = def || {};
 
@@ -840,7 +989,7 @@ bbbfly.FileUploader = function(def,ref,parent){
       MaxFilesCount: undefined,
       AllowedExtensions: undefined,
       ErrorLevel: bbbfly.FileUploader.errorlevel.grouped,
-      _Files: [],
+      _Files: new Array(),
       _RPC: null,
       _Form: null,
       _IFrame: null
@@ -935,8 +1084,10 @@ bbbfly.FileUploader = function(def,ref,parent){
       CreateRPC: bbbfly.fileuploader._createRPC,
       CreateForm: bbbfly.fileuploader._createForm,
       CreateIframe: bbbfly.fileuploader._createIframe,
+      GetFormFiles: bbbfly.fileuploader._getFormFiles,
       ValidateFiles: bbbfly.fileuploader._validateFiles,
       AddUploadedFiles: bbbfly.fileuploader._addUploadedFiles,
+      AddFile: bbbfly.fileuploader._addFile,
       SetDragAndDrop: bbbfly.fileuploader._setDragAndDrop,
       Reset: bbbfly.fileuploader._reset,
       IsValid: bbbfly.fileuploader._isValid,
@@ -969,22 +1120,44 @@ bbbfly.FileUploader.errorlevel = {
   grouped: 2,
   fulllog: 3
 };
+bbbfly.FileLoader = function(def,ref,parent){
+  def = def || {};
+
+  ng_MergeDef(def,{
+    Data: {
+      _ClientFileId: 0
+    },
+    Methods: {
+      AddFile: bbbfly.fileloader._addFile,
+      Reset: bbbfly.fileloader._reset,
+      UploadFiles: bbbfly.fileloader._uploadFiles,
+      LoadFiles: bbbfly.fileloader._loadFiles
+    }
+  });
+
+  return ngCreateControlAsType(def,'bbbfly.FileUploader',ref,parent);
+};
+bbbfly.FileLoader.datatype = {
+  binary: 0,
+  text: 1,
+  base64: 2,
+  buffer: 3
+};
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_file'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.FileUploader',bbbfly.FileUploader);
+    ngRegisterControlType('bbbfly.FileLoader',bbbfly.FileLoader);
   }
 };
 
 /**
- * @typedef {object} Error
- * @memberOf bbbfly.FileUploader
+ * @typedef {bbbfly.FileUploader.File} File
+ * @memberOf bbbfly.FileLoader
  *
  * @description
- *   Upload error data
+ *   Uploaded file data
  *
- * @property {string} Name - File name
- * @property {bbbfly.FileUploader.errortype|object} Error - Error type or object
- * @property {bbbfly.FileUploader.errortype} Error.Type - Error type
- * @property {mixed} Error.Data - Error data
+ * @property {bbbfly.FileLoader.datatype} DataType - File data type
+ * @property {void} Data - File data
  */
