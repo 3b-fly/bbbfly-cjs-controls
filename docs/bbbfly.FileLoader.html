@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: XEdit</title>
+    <title>Class: FileLoader</title>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -4272,6 +4272,9 @@
         <li data-name="BarOptions">
           <a href="bbbfly.MenuBar.html#property:BarOptions">BarOptions</a>
         </li>
+        <li data-name="BarOptions.TrackChanges">
+          <a href="bbbfly.MenuBar.html#property:BarOptions.TrackChanges">BarOptions.TrackChanges</a>
+        </li>
         <li data-name="ButtonDef">
           <a href="bbbfly.MenuBar.html#property:ButtonDef">ButtonDef</a>
         </li>
@@ -4911,6 +4914,9 @@
         <li data-name="HintMessages">
           <a href="bbbfly.SearchEdit.html#property:HintMessages">HintMessages</a>
         </li>
+        <li data-name="HintMessages.noresults">
+          <a href="bbbfly.SearchEdit.html#property:HintMessages.noresults">HintMessages.noresults</a>
+        </li>
         <li data-name="SearchImg">
           <a href="bbbfly.SearchEdit.html#property:SearchImg">SearchImg</a>
         </li>
@@ -5526,7 +5532,7 @@
 <header>
     <h1 class="name">
           <span class="ancestors"><a href="bbbfly.html">bbbfly</a>.</span>
-        XEdit
+        FileLoader
   <span class="types">
       <span class="type-signature class">
         class
@@ -5541,19 +5547,18 @@
     <div class="container-overview">
 <dt>
     <div class="nameContainer">
-        <h2 id="XEdit">
+        <h2 id="FileLoader">
           new 
-          bbbfly.XEdit
+          bbbfly.FileLoader
           <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L160">base/edit.js, line 160</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1401">special/file.js, line 1401</a>
         </div>
     </div>
 </dt>
 <dd>
-      <div class="description">Implements <a href="bbbfly.hint.Hintified.html">Hintified</a> interface
-  if <a href="packages.html#package:hint">hint</a> package is included.</div>
+      <div class="description">File loader which provides files content.</div>
         <h3>Parameters</h3>
 <table class="params">
     <thead>
@@ -5569,7 +5574,7 @@
                   <span class="param-name">def</span>
                 </td>
             <td class="type">
-<span class="param-type">ngControl.Definition</span>
+<span class="param-type"><a href="bbbfly.Frame.Definition.html">bbbfly.Frame.Definition</a></span>
             </td>
             <td class="description last">
                         <span class="optional">optional</span>
@@ -5599,253 +5604,39 @@
             </td>
             <td class="description last">
                         <span class="optional">optional</span>
-                Parent DIV element or it's ID
+                Parent DIV element or its ID
             </td>
         </tr>
 	</tbody>
 </table>
-<dl class="details">
-    <h3>Properties</h3>
-    <table class="props" my="test">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Default</th>
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr id="property:Alt">
-                    <td class="name">
-                      <span class="param-name">
-                        Alt
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type">string</span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        null
-                      </span>
-                    </td>
-                <td class="description last">
-                  Alt string
-                </td>
-            </tr>
-            <tr id="property:AltRes">
-                    <td class="name">
-                      <span class="param-name">
-                        AltRes
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type">string</span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        null
-                      </span>
-                    </td>
-                <td class="description last">
-                  Alt  resource ID
-                </td>
-            </tr>
-            <tr id="property:Text">
-                    <td class="name">
-                      <span class="param-name">
-                        Text
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type">string</span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        null
-                      </span>
-                    </td>
-                <td class="description last">
-                  Text string
-                </td>
-            </tr>
-            <tr id="property:TextRes">
-                    <td class="name">
-                      <span class="param-name">
-                        TextRes
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type">string</span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        null
-                      </span>
-                    </td>
-                <td class="description last">
-                  Text resource ID
-                </td>
-            </tr>
-            <tr id="property:TextAlign">
-                    <td class="name">
-                      <span class="param-name">
-                        TextAlign
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="bbbfly.XEdit.html#.textalign">bbbfly.XEdit.textalign</a></span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        left
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:Icon">
-                    <td class="name">
-                      <span class="param-name">
-                        Icon
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type">boolean</span>
-|
-<span class="param-type">bbbfly.Renderer.image</span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        null
-                      </span>
-                    </td>
-                <td class="description last">
-                  Icon definition
-  Define define or set it to true before edit creation to support icon
-                </td>
-            </tr>
-            <tr id="property:IconAlign">
-                    <td class="name">
-                      <span class="param-name">
-                        IconAlign
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="bbbfly.XEdit.html#.iconalign">bbbfly.XEdit.iconalign</a></span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        left
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:Indent">
-                    <td class="name">
-                      <span class="param-name">
-                        Indent
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="bbbfly.XEdit.html#.indent">bbbfly.XEdit.indent</a></span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        null
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:AutoSize">
-                    <td class="name">
-                      <span class="param-name">
-                        AutoSize
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="bbbfly.XEdit.html#.autosize">bbbfly.XEdit.autosize</a></span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        none
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:SelectType">
-                    <td class="name">
-                      <span class="param-name">
-                        SelectType
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="bbbfly.XEdit.html#.selecttype">bbbfly.XEdit.selecttype</a></span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        none
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:HTMLEncode">
-                    <td class="name">
-                      <span class="param-name">
-                        HTMLEncode
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type">boolean</span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        true
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</dl>
 <dl class="details">
 </dl>
 </dd>
     </div>
         <h3>Extends</h3>
         <ul>
-            <li><a href="bbbfly.Frame.html">bbbfly.Frame</a></li>
+            <li><a href="bbbfly.FileUploader.html">bbbfly.FileUploader</a></li>
         </ul>
-        <h3>Implements</h3>
-  <ul>
-      <li><a href="bbbfly.hint.Hintified.html">bbbfly.hint.Hintified</a></li>
-  </ul>
         <h3>In Packages</h3>
         <ul>
-              <li><a href="packages.html#package:edit">edit</a></li>
+              <li><a href="packages.html#package:file">file</a></li>
         </ul>
         <h3>Type Definitions</h3>
         <dl>
 <dt>
   <div class="nameContainer">
-    <h4 class="name" id=".indent">
-      indent
+    <h4 class="name" id=".File">
+      File
   <span class="types">
-      <span class="type-signature object">
-        object
+      <span class="type-signature bbbfly.fileuploader.file">
+        <a href="bbbfly.FileUploader.html#.File">bbbfly.FileUploader.File</a>
       </span>
   </span>
     </h4>
   </div>
 </dt>
 <dd class="member-content">
-    <div class="description">Possible values for <a href="bbbfly.XEdit.html">bbbfly.XEdit.Indent</a></div>
+    <div class="description">Uploaded file data</div>
 <dl class="details">
       <h5>Properties:</h5>
     <table class="props" my="test">
@@ -5857,74 +5648,30 @@
         </tr>
         </thead>
         <tbody>
-            <tr id="property:L">
+            <tr id="property:DataType">
                     <td class="name">
                       <span class="param-name">
-                        L
+                        DataType
                       </span>
                     </td>
                 <td class="type">
-<span class="param-type"><a href="global.html#px">px</a></span>
+<span class="param-type"><a href="bbbfly.FileLoader.html#.datatype">bbbfly.FileLoader.datatype</a></span>
                 </td>
                 <td class="description last">
-                        <span class="optional">optional</span>
-                  Gap between left frame and content
+                  File data type
                 </td>
             </tr>
-            <tr id="property:T">
+            <tr id="property:Data">
                     <td class="name">
                       <span class="param-name">
-                        T
+                        Data
                       </span>
                     </td>
                 <td class="type">
-<span class="param-type"><a href="global.html#px">px</a></span>
+<span class="param-type">void</span>
                 </td>
                 <td class="description last">
-                        <span class="optional">optional</span>
-                  Gap between top frame and content
-                </td>
-            </tr>
-            <tr id="property:R">
-                    <td class="name">
-                      <span class="param-name">
-                        R
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#px">px</a></span>
-                </td>
-                <td class="description last">
-                        <span class="optional">optional</span>
-                  Gap between right frame and content
-                </td>
-            </tr>
-            <tr id="property:B">
-                    <td class="name">
-                      <span class="param-name">
-                        B
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#px">px</a></span>
-                </td>
-                <td class="description last">
-                        <span class="optional">optional</span>
-                  Gap between bottom frame and content
-                </td>
-            </tr>
-            <tr id="property:I">
-                    <td class="name">
-                      <span class="param-name">
-                        I
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#px">px</a></span>
-                </td>
-                <td class="description last">
-                        <span class="optional">optional</span>
-                  Gap between icon and text
+                  File data
                 </td>
             </tr>
         </tbody>
@@ -5938,120 +5685,13 @@
         <dl>
 <dt>
   <div class="nameContainer">
-    <h4 class="name" id=".autosize">
+    <h4 class="name" id=".datatype">
   <span class="attribs">
       <span class="type-signature static">
         static
       </span>
   </span>
-      autosize
-  <span class="types">
-      <span class="type-signature enum">
-        enum
-      </span>
-      <span class="type-signature bitmask">
-        <a href="global.html#bitmask">bitmask</a>
-      </span>
-  </span>
-    </h4>
-  </div>
-</dt>
-<dd class="member-content">
-    <div class="description">Possible values for <a href="bbbfly.XEdit.html">bbbfly.XEdit.AutoSize</a></div>
-<dl class="details">
-    <table class="props" my="test">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Default</th>
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr id="property:none">
-                    <td class="name">
-                      <span class="param-name">
-                        none
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#bitmask">bitmask</a></span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        0
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:horizontal">
-                    <td class="name">
-                      <span class="param-name">
-                        horizontal
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#bitmask">bitmask</a></span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        1
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:vertical">
-                    <td class="name">
-                      <span class="param-name">
-                        vertical
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#bitmask">bitmask</a></span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        2
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:both">
-                    <td class="name">
-                      <span class="param-name">
-                        both
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#bitmask">bitmask</a></span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        3
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</dl>
-<dl class="details">
-</dl>
-</dd>
-<dt>
-  <div class="nameContainer">
-    <h4 class="name" id=".iconalign">
-  <span class="attribs">
-      <span class="type-signature static">
-        static
-      </span>
-  </span>
-      iconalign
+      datatype
   <span class="types">
       <span class="type-signature enum">
         enum
@@ -6064,7 +5704,6 @@
   </div>
 </dt>
 <dd class="member-content">
-    <div class="description">Possible values for <a href="bbbfly.XEdit.html">bbbfly.XEdit.IconAlign</a></div>
 <dl class="details">
     <table class="props" my="test">
         <thead>
@@ -6076,121 +5715,14 @@
         </tr>
         </thead>
         <tbody>
-            <tr id="property:left">
+            <tr id="property:binary">
                     <td class="name">
                       <span class="param-name">
-                        left
+                        binary
                       </span>
                     </td>
                 <td class="type">
 <span class="param-type">integer</span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        1
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:top">
-                    <td class="name">
-                      <span class="param-name">
-                        top
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type">integer</span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        2
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:right">
-                    <td class="name">
-                      <span class="param-name">
-                        right
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type">integer</span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        3
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:bottom">
-                    <td class="name">
-                      <span class="param-name">
-                        bottom
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type">integer</span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        4
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</dl>
-<dl class="details">
-</dl>
-</dd>
-<dt>
-  <div class="nameContainer">
-    <h4 class="name" id=".selecttype">
-  <span class="attribs">
-      <span class="type-signature static">
-        static
-      </span>
-  </span>
-      selecttype
-  <span class="types">
-      <span class="type-signature enum">
-        enum
-      </span>
-      <span class="type-signature bitmask">
-        <a href="global.html#bitmask">bitmask</a>
-      </span>
-  </span>
-    </h4>
-  </div>
-</dt>
-<dd class="member-content">
-    <div class="description">Possible values for <a href="bbbfly.XEdit.html">bbbfly.XEdit.SelectType</a></div>
-<dl class="details">
-    <table class="props" my="test">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Default</th>
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr id="property:none">
-                    <td class="name">
-                      <span class="param-name">
-                        none
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#bitmask">bitmask</a></span>
                 </td>
                     <td class="default">
                       <span class="param-default">
@@ -6200,100 +5732,10 @@
                 <td class="description last">
                 </td>
             </tr>
-            <tr id="property:click">
+            <tr id="property:text">
                     <td class="name">
                       <span class="param-name">
-                        click
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#bitmask">bitmask</a></span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        1
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:dblclick">
-                    <td class="name">
-                      <span class="param-name">
-                        dblclick
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#bitmask">bitmask</a></span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        2
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-            <tr id="property:both">
-                    <td class="name">
-                      <span class="param-name">
-                        both
-                      </span>
-                    </td>
-                <td class="type">
-<span class="param-type"><a href="global.html#bitmask">bitmask</a></span>
-                </td>
-                    <td class="default">
-                      <span class="param-default">
-                        3
-                      </span>
-                    </td>
-                <td class="description last">
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</dl>
-<dl class="details">
-</dl>
-</dd>
-<dt>
-  <div class="nameContainer">
-    <h4 class="name" id=".textalign">
-  <span class="attribs">
-      <span class="type-signature static">
-        static
-      </span>
-  </span>
-      textalign
-  <span class="types">
-      <span class="type-signature enum">
-        enum
-      </span>
-      <span class="type-signature integer">
-        integer
-      </span>
-  </span>
-    </h4>
-  </div>
-</dt>
-<dd class="member-content">
-    <div class="description">Possible values for <a href="bbbfly.XEdit.html">bbbfly.XEdit.TextAlign</a></div>
-<dl class="details">
-    <table class="props" my="test">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Default</th>
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr id="property:left">
-                    <td class="name">
-                      <span class="param-name">
-                        left
+                        text
                       </span>
                     </td>
                 <td class="type">
@@ -6307,10 +5749,10 @@
                 <td class="description last">
                 </td>
             </tr>
-            <tr id="property:center">
+            <tr id="property:base64">
                     <td class="name">
                       <span class="param-name">
-                        center
+                        base64
                       </span>
                     </td>
                 <td class="type">
@@ -6324,10 +5766,10 @@
                 <td class="description last">
                 </td>
             </tr>
-            <tr id="property:right">
+            <tr id="property:buffer">
                     <td class="name">
                       <span class="param-name">
-                        right
+                        buffer
                       </span>
                     </td>
                 <td class="type">
@@ -6401,6 +5843,80 @@
       </ul>
     </dd>
 </dl>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="CanAddFiles">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.FileUploader.html#CanAddFiles">inherited</a>
+      </span>
+  </span>
+          CanAddFiles
+          <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1329">special/file.js, line 1329</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last"></td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="CanRemoveFiles">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.FileUploader.html#CanRemoveFiles">inherited</a>
+      </span>
+  </span>
+          CanRemoveFiles
+          <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1337">special/file.js, line 1337</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last"></td>
+        </tr>
+    </tbody>
+</table>
 </dd>
 <dt>
     <div class="nameContainer inherited">
@@ -6480,6 +5996,53 @@
           <li><a href="bbbfly.Panel.html#CreateControl">CreateControl()</a></li>
       </ul>
     </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="DoShowError">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.FileUploader.html#DoShowError">inherited</a>
+      </span>
+      <span class="type-signature abstract">
+        abstract
+      </span>
+  </span>
+          DoShowError
+          <span class="signature">(text)</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1346">special/file.js, line 1346</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Use this method to show error message.</div>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">text</span>
+                </td>
+            <td class="type">
+<span class="param-type">string</span>
+            </td>
+            <td class="description last">
+                Message
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
 </dl>
 </dd>
 <dt>
@@ -6755,6 +6318,45 @@
 </dd>
 <dt>
     <div class="nameContainer inherited">
+        <h4 id="GetSelectedFiles">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.FileUploader.html#GetSelectedFiles">inherited</a>
+      </span>
+  </span>
+          GetSelectedFiles
+          <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{object|null}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1291">special/file.js, line 1291</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        object
+                         | 
+                        null
+            </td>
+            <td class="description last">- Files with ID as key</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
         <h4 id="GetState">
   <span class="attribs">
       <span class="type-signature inherited">
@@ -6786,6 +6388,100 @@
                         bbbfly.Renderer.state
             </td>
             <td class="description last">Control state</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer overrides">
+        <h4 id="GetUploadedFiles">
+  <span class="attribs">
+      <span class="type-signature overrides">
+        <a href="bbbfly.FileUploader.html#GetUploadedFiles">overrides</a>
+      </span>
+  </span>
+          GetUploadedFiles
+          <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{Array.&lt;<a href="bbbfly.FileLoader.html#.File">bbbfly.FileLoader.File</a>>}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1413">special/file.js, line 1413</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        Array.&lt;<a href="bbbfly.FileLoader.html#.File">bbbfly.FileLoader.File</a>>
+            </td>
+            <td class="description last">- Uploaded files</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="HideProgress">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.FileUploader.html#HideProgress">inherited</a>
+      </span>
+  </span>
+          HideProgress
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1323">special/file.js, line 1323</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="IsValid">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.FileUploader.html#IsValid">inherited</a>
+      </span>
+  </span>
+          IsValid
+          <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1269">special/file.js, line 1269</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">- If number of files is valid</td>
         </tr>
     </tbody>
 </table>
@@ -6840,6 +6536,26 @@
           <li><a href="bbbfly.Panel.html#event:OnChildControlRemoved">OnChildControlRemoved</a></li>
       </ul>
     </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer overrides">
+        <h4 id="Reset">
+  <span class="attribs">
+      <span class="type-signature overrides">
+        <a href="bbbfly.FileUploader.html#Reset">overrides</a>
+      </span>
+  </span>
+          Reset
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1421">special/file.js, line 1421</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
 </dl>
 </dd>
 <dt>
@@ -7294,6 +7010,93 @@
 </dd>
 <dt>
     <div class="nameContainer inherited">
+        <h4 id="ShowError">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.FileUploader.html#ShowError">inherited</a>
+      </span>
+  </span>
+          ShowError
+          <span class="signature">(errors)</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1299">special/file.js, line 1299</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">errors</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="bbbfly.FileUploader.html#.Error">bbbfly.FileUploader.Error</a></span>
+|
+<span class="param-type">Array.&lt;<a href="bbbfly.FileUploader.html#.Error">bbbfly.FileUploader.Error</a>></span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="ShowProgress">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.FileUploader.html#ShowProgress">inherited</a>
+      </span>
+  </span>
+          ShowProgress
+          <span class="signature">(process)</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1307">special/file.js, line 1307</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">process</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+            <td class="description last">
+                If show ifinite process
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
         <h4 id="TrackChildControls">
   <span class="attribs">
       <span class="type-signature inherited">
@@ -7373,6 +7176,111 @@
 </table>
 <dl class="details">
 </dl>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="UpdateProgress">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.FileUploader.html#UpdateProgress">inherited</a>
+      </span>
+  </span>
+          UpdateProgress
+          <span class="signature">(<span class="optional">progress</span>)</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1315">special/file.js, line 1315</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">progress</span>
+                </td>
+            <td class="type">
+<span class="param-type">number</span>
+            </td>
+                <td class="default">
+                    0
+                </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Percentual progress
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer overrides">
+        <h4 id="UploadFiles">
+  <span class="attribs">
+      <span class="type-signature overrides">
+        <a href="bbbfly.FileUploader.html#UploadFiles">overrides</a>
+      </span>
+  </span>
+          UploadFiles
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1427">special/file.js, line 1427</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer overrides">
+        <h4 id="UploadFiles">
+  <span class="attribs">
+      <span class="type-signature overrides">
+        <a href="bbbfly.FileUploader.html#UploadFiles">overrides</a>
+      </span>
+  </span>
+          UploadFiles
+          <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1433">special/file.js, line 1433</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">- If files load was handeled</td>
+        </tr>
+    </tbody>
+</table>
 </dd>
         </dl>
         <h3>Events</h3>
@@ -7562,6 +7470,68 @@
           <li><a href="bbbfly.Panel.html#event:OnSetEnabled">OnSetEnabled</a></li>
       </ul>
     </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="event:OnFilesChanged">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.FileUploader.html#event:OnFilesChanged">inherited</a>
+      </span>
+  </span>
+          OnFilesChanged
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1230">special/file.js, line 1230</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
+        <h4 id="event:OnGetRequestParams">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.FileUploader.html#event:OnGetRequestParams">inherited</a>
+      </span>
+  </span>
+          OnGetRequestParams
+          <span class="signature">(params)</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/special/file.js#L1222">special/file.js, line 1222</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">params</span>
+                </td>
+            <td class="type">
+<span class="param-type">object</span>
+            </td>
+            <td class="description last">
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
 </dl>
 </dd>
 <dt>
