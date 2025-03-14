@@ -699,13 +699,3 @@ ngUserControls['bbbfly_bar'] = {
     ngRegisterControlType('bbbfly.Bar',bbbfly.Bar);
   }
 };
-
-/**
- * @interface Definition
- * @memberOf bbbfly.Bar
- * @extends bbbfly.Frame.Definition
- *
- * @description Slide control definition
- *
- * @property {ngControl.Definition} [SlidePanel=undefined] - Control definition
- */

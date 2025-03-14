@@ -1150,14 +1150,3 @@ ngUserControls['bbbfly_file'] = {
     ngRegisterControlType('bbbfly.FileLoader',bbbfly.FileLoader);
   }
 };
-
-/**
- * @typedef {bbbfly.FileUploader.File} File
- * @memberOf bbbfly.FileLoader
- *
- * @description
- *   Uploaded file data
- *
- * @property {bbbfly.FileLoader.datatype} DataType - File data type
- * @property {void} Data - File data
- */

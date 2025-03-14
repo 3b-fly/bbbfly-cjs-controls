@@ -539,12 +539,3 @@ ngUserControls['bbbfly_search'] = {
     ngRegisterControlType('bbbfly.ListSearchBox',bbbfly.ListSearchBox);
   }
 };
-
-/**
- * @typedef {object} searchResults
- * @memberOf bbbfly.SearchEdit
- *
- * @property {integer} count - Number of result items
- * @property {object[]} results - Result items
- * @property {integer|null} current - Currently displayed result item index
- */

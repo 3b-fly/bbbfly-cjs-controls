@@ -205,16 +205,3 @@ ngUserControls['bbbfly_menu'] = {
     ngRegisterControlType('bbbfly.MenuBar',bbbfly.MenuBar);
   }
 };
-
-/**
- * @typedef {object} Item
- * @memberOf bbbfly.MenuBar
- *
- * @property {string} [Alt=undefined]
- * @property {string} [AltRes=undefined]
- * @property {string} [Text=undefined]
- * @property {string} [TextRes=undefined]
- * @property {boolean} [Visible=undefined]
- * @property {boolean} [Enabled=undefined]
- * @property {bbbfly.Renderer.image} [Icon=undefined]
- */

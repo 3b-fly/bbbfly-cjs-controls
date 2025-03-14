@@ -22,7 +22,7 @@ bbbfly.wrapper._onUpdate = function(){
   var cHolder = this.GetControlsHolder();
 
   if(cHolder && Function.isFunction(cHolder.SetOverflow)){
-    var opts = bbbfly.wrapper._getWrapperOptions(this);
+  var opts = bbbfly.wrapper._getWrapperOptions(this);
 
     var overflowX = bbbfly.Renderer.overflow.hidden;
     var overflowY = bbbfly.Renderer.overflow.hidden;
@@ -468,15 +468,3 @@ ngUserControls['bbbfly_wrapper'] = {
     ngRegisterControlType('bbbfly.Wrapper',bbbfly.Wrapper);
   }
 };
-
-/**
- * @interface ChildControl
- * @memberOf bbbfly.Wrapper
- *
- * @description
- *   {@link bbbfly.Wrapper|Wrapper} child controls can implement
- *   this to define their minimal distance from other child controls
- *   and their float direction.
- *
- * @property {bbbfly.Wrapper.wrapOptions} [WrapOptions=undefined]
- */
