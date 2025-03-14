@@ -105,7 +105,7 @@ bbbfly.map.control.copyrights._close = function(){
  *
  * @inpackage mapbox
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {bbbfly.MapCopyrights.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -192,3 +192,11 @@ ngUserControls['bbbfly_map_control_copyrights'] = {
     );
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.MapCopyrights
+ * @extends bbbfly.MapControl.Definition
+ *
+ * @description MapCopyrights control definition
+ */

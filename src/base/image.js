@@ -210,7 +210,7 @@ bbbfly.imagepreview._onCreated = function(ctrl){
  *
  * @inpackage image
  *
- * @param {bbbfly.Edit.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Image.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -298,7 +298,7 @@ bbbfly.Image = function(def,ref,parent){
  *
  * @inpackage image
  *
- * @param {bbbfly.Frame.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.ImagePreview.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *
@@ -344,3 +344,19 @@ ngUserControls['bbbfly_image'] = {
     ngRegisterControlType('bbbfly.ImagePreview',bbbfly.ImagePreview);
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.Image
+ * @extends bbbfly.Frame.Definition
+ *
+ * @description Image control definition
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.ImagePreview
+ * @extends bbbfly.Frame.Definition
+ *
+ * @description ImagePreview control definition
+ */

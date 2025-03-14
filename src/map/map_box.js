@@ -340,7 +340,7 @@ bbbfly.map.box._stopDrawControlActions = function(){
  * @property {boolean} [DrawSingleIcon=false] - If map can contain max one icon
  * @property {boolean} [DrawSingleGeometry=false] - If map can contain max one geometry
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {bbbfly.MapBox.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
@@ -655,3 +655,11 @@ ngUserControls['bbbfly_map_box'] = {
     );
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.MapBox
+ * @extends bbbfly.Map.Definition
+ *
+ * @description MapBox control definition
+ */

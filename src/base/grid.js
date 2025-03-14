@@ -153,7 +153,7 @@ bbbfly.grid._onUpdated = function(){
  *
  * @inpackage grid
  *
- * @param {bbbfly.Frame.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Grid.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *
@@ -199,3 +199,11 @@ ngUserControls['bbbfly_grid'] = {
     ngRegisterControlType('bbbfly.Grid',bbbfly.Grid);
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.Grid
+ * @extends bbbfly.Frame.Definition
+ *
+ * @description Grid control definition
+ */

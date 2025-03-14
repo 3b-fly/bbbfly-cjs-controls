@@ -176,7 +176,7 @@ bbbfly.map.control.zoomslider._onSliderSelected = function(ptrCatcher,event,ptrE
  *
  * @inpackage mapbox
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {bbbfly.MapZoomSlider.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -282,3 +282,11 @@ ngUserControls['bbbfly_map_control_zoomslider'] = {
     );
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.MapZoomSlider
+ * @extends bbbfly.MapControl.Definition
+ *
+ * @description MapZoomSlider control definition
+ */

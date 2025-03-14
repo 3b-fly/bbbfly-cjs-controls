@@ -21,7 +21,7 @@ var bbbfly = bbbfly || {};
  *
  * @inpackage calendar
  *
- * @param {bbbfly.Edit.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.EditDate.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
@@ -45,7 +45,7 @@ bbbfly.EditDate = function(def,ref,parent){
  *
  * @inpackage calendar
  *
- * @param {bbbfly.Edit.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.EditTime.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
@@ -65,3 +65,19 @@ ngUserControls['bbbfly_calendar'] = {
     ngRegisterControlType('bbbfly.EditTime',bbbfly.EditTime);
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.EditDate
+ * @extends bbbfly.Edit.Definition
+ *
+ * @description EditDate control definition
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.EditTime
+ * @extends bbbfly.Edit.Definition
+ *
+ * @description EditTime control definition
+ */

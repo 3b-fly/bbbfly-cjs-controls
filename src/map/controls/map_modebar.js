@@ -131,7 +131,7 @@ bbbfly.map.control.modebar._onButtonClick = function(){
  *
  * @inpackage mapbox
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {bbbfly.MapModeBar.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -209,3 +209,11 @@ ngUserControls['bbbfly_map_control_modebar'] = {
     );
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.MapModeBar
+ * @extends bbbfly.MapControl.Definition
+ *
+ * @description MapModeBar control definition
+ */

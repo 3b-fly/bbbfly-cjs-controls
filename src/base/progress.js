@@ -116,7 +116,7 @@ bbbfly.progressbar._onEnabledChanged = function(){
  *
  * @inpackage progress
  *
- * @param {bbbfly.Edit.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.ProgressRing.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
@@ -131,7 +131,7 @@ bbbfly.ProgressRing = function(def,ref,parent){
  *
  * @inpackage progress
  *
- * @param {ngControl.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.ProgressBar.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
@@ -205,3 +205,19 @@ ngUserControls['bbbfly_progress'] = {
     ngRegisterControlType('bbbfly.ProgressBar',bbbfly.ProgressBar);
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.ProgressRing
+ * @extends bbbfly.Image.Definition
+ *
+ * @description ProgressRing control definition
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.ProgressBar
+ * @extends bbbfly.Frame.Definition
+ *
+ * @description ProgressBar control definition
+ */

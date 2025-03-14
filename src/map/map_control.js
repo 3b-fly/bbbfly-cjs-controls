@@ -111,7 +111,7 @@ bbbfly.map.control._createListener = function(){
  *
  * @inpackage mapbox
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {bbbfly.MapControl.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -255,3 +255,11 @@ ngUserControls['bbbfly_map_control'] = {
     );
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.MapControl
+ * @extends bbbfly.Panel.Definition
+ *
+ * @description MapControl control definition
+ */

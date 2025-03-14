@@ -214,13 +214,13 @@ bbbfly.Menu = function(def,ref,parent){
  *
  * @inpackage menu
  *
- * @param {bbbfly.Frame.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.MenuBar.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
- * @property {object} BarOptions
+ * @property {bbbfly.Bar.barOptions} BarOptions
  * @property {boolean} BarOptions.TrackChanges=true
- * @property {object} [ButtonDef=null] - Definition shared by all buttons
+ * @property {bbbfly.Button.Definition} [ButtonDef=null] - Definition shared by all buttons
  * @property {bbbfly.MenuBar.Items} [Items=null]
  */
 bbbfly.MenuBar = function(def,ref,parent){
@@ -341,6 +341,14 @@ ngUserControls['bbbfly_menu'] = {
  * @memberOf bbbfly.Menu
  *
  * @property {boolean} CloseOnClick - If close Popup menu on item click
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.MenuBar
+ * @extends bbbfly.Bar.Definition
+ *
+ * @description MenuBar control definition
  */
 
 /**

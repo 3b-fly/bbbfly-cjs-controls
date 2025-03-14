@@ -520,7 +520,7 @@ bbbfly.button._ngGetState = function(){
  *
  * @inpackage button
  *
- * @param {ngControl.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Button.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -786,3 +786,11 @@ ngUserControls['bbbfly_button'] = {
     ngRegisterControlType('bbbfly.Button',bbbfly.Button);
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.Button
+ * @extends bbbfly.Frame.Definition
+ *
+ * @description Button control definition
+ */

@@ -1349,7 +1349,7 @@ bbbfly.Panel = function(def,ref,parent){
  *
  * @inpackage panel
  *
- * @param {bbbfly.Panel.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Envelope.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
@@ -1525,7 +1525,7 @@ bbbfly.Frame = function(def,ref,parent){
  *
  * @inpackage panel
  *
- * @param {bbbfly.Frame.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Line.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -1578,11 +1578,27 @@ ngUserControls['bbbfly_panel'] = {
 
 /**
  * @interface Definition
- * @memberOf bbbfly.Frame
+ * @memberOf bbbfly.Envelope
  * @extends bbbfly.Panel.Definition
+ *
+ * @description Envelope control definition
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.Frame
+ * @extends bbbfly.Envelope.Definition
  *
  * @description Frame control definition
  *
  * @property {ngControl.Definition} [FramePanel=undefined] - Control definition
  * @property {ngControl.Definition} [ControlsPanel=undefined] - Control definition
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.Line
+ * @extends bbbfly.Frame.Definition
+ *
+ * @description Line control definition
  */

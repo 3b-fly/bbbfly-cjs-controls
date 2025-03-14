@@ -130,7 +130,7 @@ bbbfly.map.control.layers._applyLayers = function(){
  *
  * @inpackage mapbox
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {bbbfly.MapLayers.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -244,3 +244,11 @@ ngUserControls['bbbfly_map_control_layers'] = {
     );
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.MapLayers
+ * @extends bbbfly.MapControl.Definition
+ *
+ * @description MapLayers control definition
+ */

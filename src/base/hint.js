@@ -267,7 +267,7 @@ bbbfly.hint.Hintify = function(def){
  *
  * @inpackage hint
  *
- * @param {ngControl.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.TextHint.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  */
@@ -291,3 +291,11 @@ ngUserControls['bbbfly_hint'] = {
     ngRegisterControlType('bbbfly.TextHint',bbbfly.TextHint);
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.TextHint
+ * @extends ngControl.Definition
+ *
+ * @description TextHint control definition
+ */

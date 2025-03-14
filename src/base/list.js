@@ -582,7 +582,7 @@ bbbfly.List = function(def,ref,parent){
  *
  * @inpackage list
  *
- * @param {ngControl.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.DropDownList.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -670,10 +670,18 @@ ngUserControls['bbbfly_list'] = {
  * @memberOf bbbfly.List
  * @extends ngControl.Definition
  *
- * @description Menu control definition
+ * @description List control definition
  *
  * @property {array|object} [Columns=null] - Define columns as object to allow their merging
  * @property {array|object} [Items=null] - Define items as object to allow their merging
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.DropDownList
+ * @extends ngControl.Definition
+ *
+ * @description DropDownList control definition
  */
 
 /**

@@ -74,7 +74,7 @@ bbbfly.appheader.auth._getText = function(){
  *
  * @inpackage app
  *
- * @param {ngControl.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.AppHeader.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *
@@ -185,3 +185,11 @@ ngUserControls['bbbfly_app'] = {
     ngRegisterControlType('bbbfly.AppHeader',bbbfly.AppHeader);
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.AppHeader
+ * @extends bbbfly.Wrapper.Definition
+ *
+ * @description AppHeader control definition
+ */

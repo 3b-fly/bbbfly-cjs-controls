@@ -1096,7 +1096,7 @@ bbbfly.fileloader._loadFiles = function(form){
  *
  * @inpackage file
  *
- * @param {bbbfly.Frame.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.FileUploader.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *
@@ -1394,7 +1394,7 @@ bbbfly.FileUploader.errorlevel = {
  *
  * @inpackage file
  *
- * @param {bbbfly.Frame.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.FileLoader.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  */
@@ -1464,6 +1464,14 @@ ngUserControls['bbbfly_file'] = {
 };
 
 /**
+ * @interface Definition
+ * @memberOf bbbfly.FileUploader
+ * @extends bbbfly.Frame.Definition
+ *
+ * @description FileUploader control definition
+ */
+
+/**
  * @typedef {object} File
  * @memberOf bbbfly.FileUploader
  *
@@ -1485,6 +1493,14 @@ ngUserControls['bbbfly_file'] = {
  * @property {bbbfly.FileUploader.errortype|object} Error - Error type or object
  * @property {bbbfly.FileUploader.errortype} Error.Type - Error type
  * @property {mixed} Error.Data - Error data
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.FileLoader
+ * @extends bbbfly.FileUploader.Definition
+ *
+ * @description FileLoader control definition
  */
 
 /**

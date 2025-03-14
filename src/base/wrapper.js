@@ -29,7 +29,7 @@ bbbfly.wrapper._onUpdate = function(){
   var cHolder = this.GetControlsHolder();
 
   if(cHolder && Function.isFunction(cHolder.SetOverflow)){
-    var opts = bbbfly.wrapper._getWrapperOptions(this);
+  var opts = bbbfly.wrapper._getWrapperOptions(this);
 
     var overflowX = bbbfly.Renderer.overflow.hidden;
     var overflowY = bbbfly.Renderer.overflow.hidden;
@@ -471,7 +471,7 @@ bbbfly.wrapper._autoSize = function(wrapper,vars,opts){
  *
  * @inpackage wrapper
  *
- * @param {bbbfly.Frame.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Wrapper.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or its ID
  *
@@ -544,6 +544,14 @@ ngUserControls['bbbfly_wrapper'] = {
     ngRegisterControlType('bbbfly.Wrapper',bbbfly.Wrapper);
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.Wrapper
+ * @extends bbbfly.Frame.Definition
+ *
+ * @description Wrapper control definition
+ */
 
 /**
  * @typedef {object} wrapperOptions

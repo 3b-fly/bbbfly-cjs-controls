@@ -138,7 +138,7 @@ bbbfly.memo._onGetClassName = function(memo,part){
  * @param {bbbfly.Edit.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
- * @param {string} [parentType='ngMemo'] - Ancestor type
+ * @param {string} [parentType='ngEdit'] - Ancestor type
  */
 bbbfly.Edit = function(def,ref,parent,parentType){
   def = def || {};
@@ -211,7 +211,7 @@ bbbfly.Edit = function(def,ref,parent,parentType){
  *
  * @inpackage edit
  *
- * @param {ngControl.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Memo.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -328,4 +328,12 @@ ngUserControls['bbbfly_edit'] = {
  * @description Edit control definition
  *
  * @property {array|object} [Buttons=null] - Define buttons as object to allow their merging
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.Memo
+ * @extends ngControl.Definition
+ *
+ * @description Memo control definition
  */

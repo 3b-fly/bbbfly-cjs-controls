@@ -114,7 +114,7 @@ bbbfly.map.control.sidebar._onBtnSelectedChanged = function(){
  *
  * @inpackage mapbox
  *
- * @param {object} [def=undefined] - Descendant definition
+ * @param {bbbfly.MapSideBar.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -259,3 +259,11 @@ ngUserControls['bbbfly_map_control_sidebar'] = {
     );
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.MapSideBar
+ * @extends bbbfly.MapControl.Definition
+ *
+ * @description MapSideBar control definition
+ */

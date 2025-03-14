@@ -196,7 +196,7 @@ bbbfly.text._doAutoSize = function(){
  *
  * @inpackage text
  *
- * @param {ngControl.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.Text.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -313,3 +313,11 @@ ngUserControls['bbbfly_text'] = {
     ngRegisterControlType('bbbfly.Text',bbbfly.Text);
   }
 };
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.Text
+ * @extends bbbfly.Frame.Definition
+ *
+ * @description Text control definition
+ */

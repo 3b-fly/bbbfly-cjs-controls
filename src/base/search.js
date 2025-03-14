@@ -450,7 +450,7 @@ bbbfly.listsearchbox._hideListItem = function(list){
  *
  * @inpackage search
  *
- * @param {ngControl.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.SearchEdit.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -596,7 +596,7 @@ bbbfly.SearchEdit = function(def,ref,parent){
  *
  * @inpackage search
  *
- * @param {bgControl.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.SearchBox.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -656,7 +656,7 @@ bbbfly.SearchBox = function(def,ref,parent){
  *
  * @inpackage search
  *
- * @param {ngControl.Definition} [def=undefined] - Descendant definition
+ * @param {bbbfly.ListSearchBox.Definition} [def=undefined] - Descendant definition
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
@@ -792,10 +792,34 @@ ngUserControls['bbbfly_search'] = {
 };
 
 /**
+ * @interface Definition
+ * @memberOf bbbfly.SearchEdit
+ * @extends bbbfly.Edit.Definition
+ *
+ * @description SearchEdit control definition
+ */
+
+/**
  * @typedef {object} searchResults
  * @memberOf bbbfly.SearchEdit
  *
  * @property {integer} count - Number of result items
  * @property {object[]} results - Result items
  * @property {integer|null} current - Currently displayed result item index
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.bbbfly.SearchBox
+ * @extends bbbfly.SearchEdit.Definition
+ *
+ * @description SearchBox control definition
+ */
+
+/**
+ * @interface Definition
+ * @memberOf bbbfly.bbbfly.ListSearchBox
+ * @extends bbbfly.SearchEdit.Definition
+ *
+ * @description ListSearchBox control definition
  */
