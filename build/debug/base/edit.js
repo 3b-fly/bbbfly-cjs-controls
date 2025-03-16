@@ -1,12 +1,13 @@
 /*!
  * @author Jan Nejedly support@3b-fly.eu
  * @copyright Jan Nejedly
- * @version 2.0.0
+ * @version 2.0.1
  * @license see license in 'LICENSE' file
 */
 
 var bbbfly = bbbfly || {};
 bbbfly.edit = {};
+bbbfly.editbox = {};
 bbbfly.memo = {};
 bbbfly.edit._setInvalid = function(invalid,update){
   var changed = this.SetInvalid.callParent(invalid,update);
@@ -147,10 +148,120 @@ bbbfly.Memo = function(def,ref,parent){
 
   return ngCreateControlAsType(def,'ngMemo',ref,parent);
 };
+bbbfly.editbox._setAlt = function(alt,update){
+  if(!String.isString(alt) && (alt !== null)){return;}
+
+  if(alt !== this.Alt){
+    this.Alt = alt;
+
+    if(!Boolean.isBoolean(update) || update){
+      this.Update();
+    }
+  }
+};
+bbbfly.editbox._setText = function(text,update){
+  if(!String.isString(text) && (text !== null)){return;}
+
+  if(text !== this.Text){
+    this.Text = text;
+
+    if(!Boolean.isBoolean(update) || update){
+      this.Update();
+    }
+  }
+};
+bbbfly.editbox._getAlt = function(){
+  if(String.isString(this.AltRes)){
+    return ngTxt(this.AltRes);
+  }
+  else if(String.isString(this.Alt)){
+    return this.Alt;
+  }
+  return null;
+};
+bbbfly.editbox._getText = function(){
+  if(String.isString(this.Text)){
+    return this.Text;
+  }
+  return null;
+};
+bbbfly.editbox._getButtons = function(){
+  return Object.isObject(this._Buttons) ? this._Buttons : {};
+};
+bbbfly.editbox._getButton = function(buttonId){
+  var btns = this.GetButtons();
+  var btn = btns[buttonId];
+
+  return Object.isObject(btn) ? btn : null;
+};
+bbbfly.editbox._doCreate = function(def,ref,node){
+  this.DoCreate.callParent(def,ref,node);
+  if(!Object.isObject(this._Buttons)){return;}
+
+  if(Object.isObject(def.Buttons)){
+    for(var btnId in def.Buttons){
+      var btnDef = def.Buttons[btnId];
+
+      if(Object.isObject(btnDef)){
+        if(Object.isObject(this.ButtonDef)){
+          ng_MergeDef(btnDef,this.ButtonDef);
+        }
+
+        this._Buttons[btnId] = this.CreateControl(btnDef);
+      }
+    }
+  }
+};
+bbbfly.EditBox = function(def,ref,parent){
+  def = def || {};
+
+  ng_MergeDef(def,{
+    Buttons: null,
+
+    Data: {
+      WrapperOptions: {
+        Orientation: bbbfly.Wrapper.orientation.horizontal,
+        TrackChanges: true
+      },
+
+      ButtonDef: {
+        Type: 'bbbfly.Button'
+      },
+
+      Alt: null,
+      AltRes: null,
+
+      Text: null,
+      TextAlign: bbbfly.EditBox.textalign.left,
+      _Buttons: {}
+    },
+    Events: {
+
+    },
+    Methods: {
+      DoCreate: bbbfly.editbox._doCreate,
+      SetAlt: bbbfly.editbox._setAlt,
+      SetText: bbbfly.editbox._setText,
+      GetAlt: bbbfly.editbox._getAlt,
+      GetText: bbbfly.editbox._getText,
+      GetButtons: bbbfly.editbox._getButtons,
+      GetButton: bbbfly.editbox._getButton,
+    }
+  });
+
+  if(bbbfly.hint){bbbfly.hint.Hintify(def);}
+  return ngCreateControlAsType(def,'bbbfly.Wrapper',ref,parent);
+};
+bbbfly.EditBox.textalign = {
+  left: 1,
+  center: 2,
+  right: 3
+};
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_edit'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.Edit',bbbfly.Edit);
+    ngRegisterControlType('bbbfly.EditBox',bbbfly.EditBox);
     ngRegisterControlType('bbbfly.Memo',bbbfly.Memo);
   }
 };
