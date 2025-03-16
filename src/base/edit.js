@@ -452,7 +452,10 @@ bbbfly.EditBox = function(def,ref,parent){
       },
 
       ButtonDef: {
-        Type: 'bbbfly.Button'
+        Type: 'bbbfly.Button',
+        Data: {
+          AutoSize: bbbfly.Button.autosize.both
+        }
       },
 
       Alt: null,
