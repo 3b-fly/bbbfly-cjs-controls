@@ -8,31 +8,31 @@
 /**
  * @package app
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:auth|bbbfly-cjs (2.0.1): auth}
- * @requires {@link package:wrapper|bbbfly-cjs-controls (2.0.0): wrapper}
- * @requires {@link package:button|bbbfly-cjs-controls (2.0.0): button}
- * @requires {@link package:menu|bbbfly-cjs-controls (2.0.0): menu}
+ * @requires {@link package:wrapper|bbbfly-cjs-controls (2.0.1): wrapper}
+ * @requires {@link package:button|bbbfly-cjs-controls (2.0.1): button}
+ * @requires {@link package:menu|bbbfly-cjs-controls (2.0.1): menu}
  */
 
 /**
  * @package bar
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:renderer|bbbfly-cjs (2.0.1): renderer}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
+ * @requires {@link package:panel|bbbfly-cjs-controls (2.0.1): panel}
  */
 
 /**
  * @package button
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
@@ -42,50 +42,52 @@
 /**
  * @package calendar
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
- * @requires {@link package:edit|bbbfly-cjs-controls (2.0.0): edit}
+ * @requires {@link package:edit|bbbfly-cjs-controls (2.0.1): edit}
  */
 
 /**
  * @package edit
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
+ * @requires {@link package:wrapper|bbbfly-cjs-controls (2.0.1): wrapper}
+ * @requires {@link package:button|bbbfly-cjs-controls (2.0.1): button}
  */
 
 /**
  * @package file
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
- * @requires {@link package:button|bbbfly-cjs-controls (2.0.0): button}
- * @requires {@link package:progress|bbbfly-cjs-controls (2.0.0): progress}
- * @requires {@link package:text|bbbfly-cjs-controls (2.0.0): text}
- * @requires {@link package:list|bbbfly-cjs-controls (2.0.0): list}
+ * @requires {@link package:panel|bbbfly-cjs-controls (2.0.1): panel}
+ * @requires {@link package:button|bbbfly-cjs-controls (2.0.1): button}
+ * @requires {@link package:progress|bbbfly-cjs-controls (2.0.1): progress}
+ * @requires {@link package:text|bbbfly-cjs-controls (2.0.1): text}
+ * @requires {@link package:list|bbbfly-cjs-controls (2.0.1): list}
  */
 
 /**
  * @package grid
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:renderer|bbbfly-cjs (2.0.1): renderer}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
+ * @requires {@link package:panel|bbbfly-cjs-controls (2.0.1): panel}
  */
 
 /**
  * @package hint
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
@@ -94,28 +96,28 @@
 /**
  * @package image
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:renderer|bbbfly-cjs (2.0.1): renderer}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
+ * @requires {@link package:panel|bbbfly-cjs-controls (2.0.1): panel}
  */
 
 /**
  * @package progress
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
- * @requires {@link package:image|bbbfly-cjs-controls (2.0.0): image}
+ * @requires {@link package:panel|bbbfly-cjs-controls (2.0.1): panel}
+ * @requires {@link package:image|bbbfly-cjs-controls (2.0.1): image}
  */
 
 /**
  * @package list
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
@@ -124,7 +126,7 @@
 /**
  * @package map
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @description
  *   Contains:
@@ -134,13 +136,13 @@
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
+ * @requires {@link package:panel|bbbfly-cjs-controls (2.0.1): panel}
  */
 
 /**
  * @package mapbox
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @description
  *   Contains:
@@ -152,28 +154,28 @@
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:object|bbbfly-cjs (2.0.1): object}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:renderer|bbbfly-cjs (2.0.1): renderer}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:listener|bbbfly-cjs (2.0.1): listener}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
- * @requires {@link package:button|bbbfly-cjs-controls (2.0.0): button}
- * @requires {@link package:text|bbbfly-cjs-controls (2.0.0): text}
- * @requires {@link package:list|bbbfly-cjs-controls (2.0.0): list}
- * @requires {@link package:map|bbbfly-cjs-controls (2.0.0): map}
+ * @requires {@link package:panel|bbbfly-cjs-controls (2.0.1): panel}
+ * @requires {@link package:button|bbbfly-cjs-controls (2.0.1): button}
+ * @requires {@link package:text|bbbfly-cjs-controls (2.0.1): text}
+ * @requires {@link package:list|bbbfly-cjs-controls (2.0.1): list}
+ * @requires {@link package:map|bbbfly-cjs-controls (2.0.1): map}
  */
 
 /**
  * @package menu
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
- * @requires {@link package:bar|bbbfly-cjs-controls (2.0.0): bar}
- * @requires {@link package:button|bbbfly-cjs-controls (2.0.0): button}
+ * @requires {@link package:bar|bbbfly-cjs-controls (2.0.1): bar}
+ * @requires {@link package:button|bbbfly-cjs-controls (2.0.1): button}
  */
 
 /**
  * @package panel
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:renderer|bbbfly-cjs (2.0.1): renderer}
@@ -182,31 +184,31 @@
 /**
  * @package search
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:locale|bbbfly-cjs (2.0.1): locale}
- * @requires {@link package:edit|bbbfly-cjs-controls (2.0.0): edit}
+ * @requires {@link package:edit|bbbfly-cjs-controls (2.0.1): edit}
  */
 
 /**
  * @package text
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
+ * @requires {@link package:panel|bbbfly-cjs-controls (2.0.1): panel}
  */
 
 /**
  * @package wrapper
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @requires {@link https://controlsjs.com/|controls.js (5.0.0)}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:crossbrowser|bbbfly-cjs (2.0.1): crossbrowser}
  * @requires {@link https://3b-fly.github.io/bbbfly-cjs/packages.html#package:renderer|bbbfly-cjs (2.0.1): renderer}
- * @requires {@link package:panel|bbbfly-cjs-controls (2.0.0): panel}
+ * @requires {@link package:panel|bbbfly-cjs-controls (2.0.1): panel}
  */
