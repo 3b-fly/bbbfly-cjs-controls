@@ -423,6 +423,7 @@ bbbfly.editbox._doCreate = function(def,ref,node){
       if(cHolderNode){
         var input = document.createElement('INPUT');
         input.id = this.ID+'_II';
+        input.className = 'Input';
     
         input.style.zIndex = 1;
         input.style.display = 'block';
@@ -435,9 +436,6 @@ bbbfly.editbox._doCreate = function(def,ref,node){
         input.style.padding = '0px';
         input.style.margin = '0px';
         input.style.whiteSpace = 'nowrap';
-
-        input.style.border = '0px';
-        input.style.outline = 'none';
 
         cHolderNode.appendChild(input);
       }
@@ -528,6 +526,17 @@ bbbfly.editbox._doUpdateInput = function(){
 
   var maxLength = Number.isInteger(this.MaxLength) ? this.MaxLength : -1;
   iNode.setAttribute('maxlength',maxLength);
+
+  var state = this.GetState();
+
+  if(state.disabled || state.readonly){
+    iNode.style.cursor = 'default';
+    iNode.setAttribute('readonly','readonly');
+  }
+  else{
+    iNode.style.cursor = 'text';
+    iNode.removeAttribute('readonly');
+  }
 };
 
 /**
