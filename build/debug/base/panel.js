@@ -385,8 +385,8 @@ bbbfly.panel._createControl = function(def){
   var ctrl = ngCreateControl(def,undefined,cHolder.ID);
   if(!Object.isObject(ctrl)){return null;}
 
+  if(!String.isString(def.id)){def.id = ctrl.ID;}
   def.parent = cHolder.ID;
-  def.id = ctrl.ID;
 
   if(Function.isFunction(cHolder.AddChildControl)){
     cHolder.AddChildControl(ctrl);
