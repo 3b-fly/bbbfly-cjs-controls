@@ -1317,6 +1317,7 @@ bbbfly.Panel = function(def,ref,parent){
        * @memberof bbbfly.Panel#
        *
        * @param {ngControl.Definition} [def] - Child control definition
+       * @return {object|null} Created control
        *
        * @see {@link bbbfly.Panel#AddChildControl|AddChildControl()}
        * @see {@link bbbfly.Panel#RemoveChildControl|RemoveChildControl()}

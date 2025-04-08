@@ -131,6 +131,7 @@
         },
         "bbbfly-cjs-controls": {
           "Packages": [
+            "panel",
             "wrapper",
             "button",
             "hint"

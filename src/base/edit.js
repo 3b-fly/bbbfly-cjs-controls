@@ -377,6 +377,11 @@ bbbfly.editbox._getText = function(){
 };
 
 /** @ignore */
+bbbfly.editbox._getInputPanel = function(){
+  return Object.isObject(this._InputPanel) ? this._InputPanel : null;
+};
+
+/** @ignore */
 bbbfly.editbox._getButtons = function(){
   return Object.isObject(this._Buttons) ? this._Buttons : {};
 };
@@ -393,8 +398,54 @@ bbbfly.editbox._getButton = function(buttonId){
 /** @ignore */
 bbbfly.editbox._doCreate = function(def,ref,node){
   this.DoCreate.callParent(def,ref,node);
-  if(!Object.isObject(this._Buttons)){return;}
 
+  if(def.InputPanel !== null){
+    var inputDef = Object.isObject(def.InputPanel)
+      ? def.InputPanel : {};
+    
+    ng_MergeDef(inputDef,{
+      Type: 'bbbfly.Frame',
+      id: this.ID + '_I',
+      className: 'InputPanel',
+      Data: {
+        WrapOptions: {
+          Float: bbbfly.Wrapper.float.stretch
+        }
+      }
+    });
+
+    var inputPanel = this.CreateControl(inputDef);
+
+    if(Object.isObject(inputPanel)){
+      var cHolder = inputPanel.GetControlsHolder();
+      var cHolderNode = cHolder.Elm();
+
+      if(cHolderNode){
+        var input = document.createElement('INPUT');
+        input.id = this.ID+'_II';
+    
+        input.style.zIndex = 1;
+        input.style.display = 'block';
+        input.style.position = 'absolute';
+
+        input.style.top = '0px';
+        input.style.right = '0px';
+        input.style.bottom = '0px';
+        input.style.left = '0px';
+        input.style.padding = '0px';
+        input.style.margin = '0px';
+        input.style.whiteSpace = 'nowrap';
+
+        input.style.border = '0px';
+        input.style.outline = 'none';
+
+        cHolderNode.appendChild(input);
+      }
+    }
+
+    this._InputPanel = inputPanel;
+   }
+  
   if(Object.isObject(def.Buttons)){
     for(var btnId in def.Buttons){
       var btnDef = def.Buttons[btnId];
@@ -404,10 +455,79 @@ bbbfly.editbox._doCreate = function(def,ref,node){
           ng_MergeDef(btnDef,this.ButtonDef);
         }
 
-        this._Buttons[btnId] = this.CreateControl(btnDef);
+        var btn = this.CreateControl(btnDef);
+
+        if(Object.isObject(btn)){
+          this._Buttons[btnId] = btn;
+        }
       }
     }
   }
+};
+
+/** @ignore */
+bbbfly.editbox._doUpdate = function(node){
+  this.DoUpdateInput(node);
+  return this.DoUpdate.callParent(node);
+};
+
+/** @ignore */
+bbbfly.editbox._doUpdateInput = function(){
+  var iNode = document.getElementById(this.ID+'_II');
+  if(!iNode){return;}
+
+  switch(this.TextAlign){
+    case bbbfly.EditBox.textalign.center:
+      iNode.style.textAlign = 'center';
+    break;
+    case bbbfly.EditBox.textalign.right:
+      iNode.style.textAlign = 'right';
+    break;
+    default:
+      iNode.style.textAlign = 'left';
+    break;
+  }
+
+  switch(this.InputType){
+    case bbbfly.EditBox.inputtype.password:
+      iNode.type = 'password';
+      iNode.inputMode = 'text';
+    break;
+    case bbbfly.EditBox.inputtype.decimal:
+      iNode.type = 'text';
+      iNode.inputMode = 'decimal';
+    break;
+    case bbbfly.EditBox.inputtype.email:
+      iNode.type = 'text';
+      iNode.inputMode = 'email';
+    break;
+    case bbbfly.EditBox.inputtype.numeric:
+      iNode.type = 'text';
+      iNode.inputMode = 'numeric';
+    break;
+    case bbbfly.EditBox.inputtype.search:
+      iNode.type = 'text';
+      iNode.inputMode = 'search';
+    break;
+    case bbbfly.EditBox.inputtype.phone:
+      iNode.type = 'text';
+      iNode.inputMode = 'tel';
+    break;
+    case bbbfly.EditBox.inputtype.url:
+      iNode.type = 'text';
+      iNode.inputMode = 'url';
+    break;
+    default:
+      iNode.type = 'text';
+      iNode.inputMode = 'text';
+    break;
+  }
+
+  var auto = String.isString(this.AutoComplete) ? this.AutoComplete : 'off';
+  iNode.autocomplete = auto;
+
+  var maxLength = Number.isInteger(this.MaxLength) ? this.MaxLength : -1;
+  iNode.setAttribute('maxlength',maxLength);
 };
 
 /**
@@ -435,16 +555,17 @@ bbbfly.editbox._doCreate = function(def,ref,node){
  *
  * @property {string} [Alt=null] - Alt string
  * @property {string} [AltRes=null] - Alt  resource ID
- *
  * @property {string} [Text=null] - Text string
  * @property {bbbfly.EditBox.textalign} [TextAlign=left]
+ *
+ * @property {bbbfly.EditBox.inputtype} [InputType=text]
+ * @property {string|null} [AutoComplete=null]
+ * @property {integer|null} [MaxLength=null]
  */
 bbbfly.EditBox = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
-    Buttons: null,
-    
     Data: {
       WrapperOptions: {
         Orientation: bbbfly.Wrapper.orientation.horizontal,
@@ -464,15 +585,27 @@ bbbfly.EditBox = function(def,ref,parent){
       Text: null,
       TextAlign: bbbfly.EditBox.textalign.left,
 
+      InputType: bbbfly.EditBox.inputtype.text,
+      AutoComplete: null,
+      MaxLength: null,
+
+      /** @private */
+      _InputPanel: {},
       /** @private */
       _Buttons: {}
     },
+    InputPanel: undefined,
+    Buttons: undefined,
     Events: {
-
+      //TODO
     },
     Methods: {
       /** @private */
       DoCreate: bbbfly.editbox._doCreate,
+      /** @private */
+      DoUpdate: bbbfly.editbox._doUpdate,
+      /** @private */
+      DoUpdateInput: bbbfly.editbox._doUpdateInput,
 
       /**
        * @function
@@ -481,6 +614,10 @@ bbbfly.EditBox = function(def,ref,parent){
        *
        * @param {string|null} alt
        * @param {boolean} [update=true]
+       *
+       * @see {@link bbbfly.EditBox#SetText|SetText()}
+       * @see {@link bbbfly.EditBox#GetAlt|GetAlt()}
+       * @see {@link bbbfly.EditBox#GetText|GetText()}
        */
       SetAlt: bbbfly.editbox._setAlt,
       /**
@@ -490,6 +627,10 @@ bbbfly.EditBox = function(def,ref,parent){
        *
        * @param {string|null} text
        * @param {boolean} [update=true]
+       *
+       * @see {@link bbbfly.EditBox#SetAlt|SetAlt()}
+       * @see {@link bbbfly.EditBox#GetAlt|GetAlt()}
+       * @see {@link bbbfly.EditBox#GetText|GetText()}
        */
       SetText: bbbfly.editbox._setText,
 
@@ -499,6 +640,10 @@ bbbfly.EditBox = function(def,ref,parent){
        * @memberof bbbfly.EditBox#
        *
        * @return {string|null}
+       *
+       * @see {@link bbbfly.EditBox#SetAlt|SetAlt()}
+       * @see {@link bbbfly.EditBox#SetText|SetText()}
+       * @see {@link bbbfly.EditBox#GetText|GetText()}
        */
       GetAlt: bbbfly.editbox._getAlt,
       /**
@@ -507,15 +652,33 @@ bbbfly.EditBox = function(def,ref,parent){
        * @memberof bbbfly.EditBox#
        *
        * @return {string|null}
+       *
+       * @see {@link bbbfly.EditBox#SetAlt|SetAlt()}
+       * @see {@link bbbfly.EditBox#SetText|SetText()}
+       * @see {@link bbbfly.EditBox#GetAlt|GetAlt()}
        */
       GetText: bbbfly.editbox._getText,
 
+      /**
+       * @function
+       * @name GetInputPanel
+       * @memberof bbbfly.EditBox#
+       *
+       * @return {object|null} Input panel control
+       *
+       * @see {@link bbbfly.EditBox#GetButtons|GetButtons()}
+       * @see {@link bbbfly.EditBox#GetButton|GetButton()}
+       */
+      GetInputPanel: bbbfly.editbox._getInputPanel,
       /**
        * @function
        * @name GetButtons
        * @memberof bbbfly.EditBox#
        *
        * @return {object}
+       *
+       * @see {@link bbbfly.EditBox#GetInputPanel|GetInputPanel()}
+       * @see {@link bbbfly.EditBox#GetButton|GetButton()}
        */
       GetButtons: bbbfly.editbox._getButtons,
       /**
@@ -525,6 +688,9 @@ bbbfly.EditBox = function(def,ref,parent){
        *
        * @param {string} buttonId - Required button's id
        * @return {bbbfly.Button|null} - Button with passes id
+       *
+       * @see {@link bbbfly.EditBox#GetInputPanel|GetInputPanel()}
+       * @see {@link bbbfly.EditBox#GetButtons|GetButtons()}
        */
       GetButton: bbbfly.editbox._getButton,
     }
@@ -532,6 +698,22 @@ bbbfly.EditBox = function(def,ref,parent){
 
   if(bbbfly.hint){bbbfly.hint.Hintify(def);}
   return ngCreateControlAsType(def,'bbbfly.Wrapper',ref,parent);
+};
+
+/**
+ * @enum {integer}
+ * @description
+ *   Possible values for {@link bbbfly.EditBox|bbbfly.EditBox.InputType}
+ */
+bbbfly.EditBox.inputtype = {
+  password: 0,
+  text: 1,
+  decimal: 2,
+  email: 3,
+  numeric: 4,
+  search: 5,
+  phone: 6,
+  url: 7
 };
 
 /**
@@ -562,5 +744,6 @@ ngUserControls['bbbfly_edit'] = {
  *
  * @description EditBox control definition
  *
- * @property {object} [Buttons=null] - Define editbox buttons
+ * @property {ngControl.Definition} [InputPanel=undefined] - Input panel control definition
+ * @property {object} [Buttons=undefined] - Define editbox buttons
  */

@@ -98,7 +98,7 @@
           "Packages": ["crossbrowser"]
         },
         "bbbfly-cjs-controls": {
-          "Packages": ["wrapper","button","hint"]
+          "Packages": ["panel","wrapper","button","hint"]
         }
       }
     },
