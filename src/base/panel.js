@@ -268,10 +268,10 @@ bbbfly.panel._doUpdateAlt = function(node){
 
     if(String.isString(alt) && alt){
       if(this.HTMLEncode){alt = ng_htmlEncode(alt,false);}
-      node.title = alt;
+      node.setAttribute('title',alt);
     }
     else{
-      node.title = '';
+      node.removeAttribute('title');
     }
   }
 };
