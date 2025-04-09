@@ -332,27 +332,6 @@ bbbfly.Memo = function(def,ref,parent){
  */
 
 /** @ignore */
-bbbfly.editbox._setAlt = function(alt,update){
-  if(!String.isString(alt) && (alt !== null)){return false;}
-  if(this.Alt === alt){return true;}
-
-  if(
-    Function.isFunction(this.OnSetAlt)
-    && !this.OnSetAlt(alt,update)
-  ){return false;}
-
-  this.Alt = alt;
-
-  if(Function.isFunction(this.OnAltChanged)){
-    this.OnAltChanged();
-  }
-
-  if(!Boolean.isBoolean(update) || update){
-    this.Update();
-  }
-};
-
-/** @ignore */
 bbbfly.editbox._setText = function(text,update){
   if(!String.isString(text) && (text !== null)){return false;}
   if(this.Text === text){return true;}
@@ -373,17 +352,6 @@ bbbfly.editbox._setText = function(text,update){
   }
 
   return true;
-};
-
-/** @ignore */
-bbbfly.editbox._getAlt = function(){
-  if(String.isString(this.AltRes)){
-    return ngTxt(this.AltRes);
-  }
-  else if(String.isString(this.Alt)){
-    return this.Alt;
-  }
-  return null;
 };
 
 /** @ignore */
@@ -455,7 +423,13 @@ bbbfly.editbox._doCreate = function(def,ref,node){
         input.style.margin = '0px';
         input.style.whiteSpace = 'nowrap';
 
+        var edit = this;
+        input.onchange = function(){
+          bbbfly.editbox._onInputChange(edit,input);
+        };
+
         cHolderNode.appendChild(input);
+        this.UpdateInputValue();
       }
     }
 
@@ -483,8 +457,10 @@ bbbfly.editbox._doCreate = function(def,ref,node){
 
 /** @ignore */
 bbbfly.editbox._doUpdate = function(node){
+  if(!this.DoUpdate.callParent(node)){return false;}
+
   this.DoUpdateInput(node);
-  return this.DoUpdate.callParent(node);
+  return true;
 };
 
 /** @ignore */
@@ -542,8 +518,12 @@ bbbfly.editbox._doUpdateInput = function(){
   var auto = String.isString(this.AutoComplete) ? this.AutoComplete : 'off';
   iNode.autocomplete = auto;
 
-  var maxLength = Number.isInteger(this.MaxLength) ? this.MaxLength : -1;
-  iNode.setAttribute('maxlength',maxLength);
+  if(Number.isInteger(this.MaxLength)){
+    iNode.setAttribute('maxlength',this.MaxLength);
+  }
+  else{
+    iNode.removeAttribute('maxlength');
+  }
 
   var state = this.GetState();
 
@@ -555,6 +535,31 @@ bbbfly.editbox._doUpdateInput = function(){
     iNode.style.cursor = 'text';
     iNode.removeAttribute('readonly');
   }
+};
+
+/** @ignore */
+bbbfly.editbox._updateInputValue = function(){
+  var iNode = document.getElementById(this.ID+'_II');
+  if(!iNode){return;}
+
+  var text = String.isString(this.Text) ? this.Text : '';
+  iNode.value = text;
+};
+
+/** @ignore */
+bbbfly.editbox._onAltChanged = function(){
+  this.UpdateInputValue();
+};
+
+/** @ignore */
+bbbfly.editbox._onTextChanged = function(){
+  this.UpdateInputValue();
+};
+
+/** @ignore */
+bbbfly.editbox._onInputChange = function(edit,input){
+  var text = String.isString(input.value) ? input.value : '';
+  edit.SetText(text);
 };
 
 /**
@@ -580,8 +585,6 @@ bbbfly.editbox._doUpdateInput = function(){
  *
  * @property {bbbfly.Button.Definition} ButtonDef - Definition shared by all buttons
  *
- * @property {string} [Alt=null] - Alt string
- * @property {string} [AltRes=null] - Alt  resource ID
  * @property {string} [Text=null] - Text string
  * @property {bbbfly.EditBox.textalign} [TextAlign=left]
  *
@@ -606,9 +609,6 @@ bbbfly.EditBox = function(def,ref,parent){
         }
       },
 
-      Alt: null,
-      AltRes: null,
-
       Text: null,
       TextAlign: bbbfly.EditBox.textalign.left,
 
@@ -624,28 +624,9 @@ bbbfly.EditBox = function(def,ref,parent){
     InputPanel: undefined,
     Buttons: undefined,
     Events: {
-      /**
-       * @event
-       * @name OnSetAlt
-       * @memberof bbbfly.EditBox#
-       *
-       * @param {boolean} alt - Value to set
-       * @param {boolean} [update=true] - If update control
-       * @return {boolean} Return false to deny value change
-       *
-       * @see {@link bbbfly.EditBox#SetAlt|SetAlt()}
-       * @see {@link bbbfly.EditBox#event:OnAltChanged|OnAltChanged}
-       */
-      OnSetAlt: null,
-      /**
-       * @event
-       * @name OnAltChanged
-       * @memberof bbbfly.EditBox#
-       *
-       * @see {@link bbbfly.EditBox#SetAlt|SetAlt()}
-       * @see {@link bbbfly.EditBox#event:OnSetAlt|OnSetAlt}
-       */
-      OnAltChanged: null,
+      /** @private */
+      OnAltChanged: bbbfly.editbox._onAltChanged,
+
       /**
        * @event
        * @name OnSetText
@@ -667,7 +648,7 @@ bbbfly.EditBox = function(def,ref,parent){
        * @see {@link bbbfly.EditBox#SetText|SetText()}
        * @see {@link bbbfly.EditBox#event:OnSetText|OnSetText}
        */
-      OnTextChanged: null
+      OnTextChanged: bbbfly.editbox._onTextChanged,
     },
     Methods: {
       /** @private */
@@ -676,20 +657,9 @@ bbbfly.EditBox = function(def,ref,parent){
       DoUpdate: bbbfly.editbox._doUpdate,
       /** @private */
       DoUpdateInput: bbbfly.editbox._doUpdateInput,
+      /** @private */
+      UpdateInputValue: bbbfly.editbox._updateInputValue,
 
-      /**
-       * @function
-       * @name SetAlt
-       * @memberof bbbfly.EditBox#
-       *
-       * @param {string|null} alt - Value to set
-       * @param {boolean} [update=true] - If update control
-       *
-       * @see {@link bbbfly.EditBox#GetAlt|GetAlt()}
-       * @see {@link bbbfly.EditBox#event:OnSetAlt|OnSetAlt}
-       * @see {@link bbbfly.EditBox#event:OnAltChanged|OnAltChanged}
-       */
-      SetAlt: bbbfly.editbox._setAlt,
       /**
        * @function
        * @name SetText
@@ -705,18 +675,6 @@ bbbfly.EditBox = function(def,ref,parent){
        */
       SetText: bbbfly.editbox._setText,
 
-      /**
-       * @function
-       * @name GetAlt
-       * @memberof bbbfly.EditBox#
-       *
-       * @return {string|null}
-       *
-       * @see {@link bbbfly.EditBox#SetAlt|SetAlt()}
-       * @see {@link bbbfly.EditBox#event:OnSetAlt|OnSetAlt}
-       * @see {@link bbbfly.EditBox#event:OnAltChanged|OnAltChanged}
-       */
-      GetAlt: bbbfly.editbox._getAlt,
       /**
        * @function
        * @name GetText

@@ -148,25 +148,6 @@ bbbfly.Memo = function(def,ref,parent){
 
   return ngCreateControlAsType(def,'ngMemo',ref,parent);
 };
-bbbfly.editbox._setAlt = function(alt,update){
-  if(!String.isString(alt) && (alt !== null)){return false;}
-  if(this.Alt === alt){return true;}
-
-  if(
-    Function.isFunction(this.OnSetAlt)
-    && !this.OnSetAlt(alt,update)
-  ){return false;}
-
-  this.Alt = alt;
-
-  if(Function.isFunction(this.OnAltChanged)){
-    this.OnAltChanged();
-  }
-
-  if(!Boolean.isBoolean(update) || update){
-    this.Update();
-  }
-};
 bbbfly.editbox._setText = function(text,update){
   if(!String.isString(text) && (text !== null)){return false;}
   if(this.Text === text){return true;}
@@ -187,15 +168,6 @@ bbbfly.editbox._setText = function(text,update){
   }
 
   return true;
-};
-bbbfly.editbox._getAlt = function(){
-  if(String.isString(this.AltRes)){
-    return ngTxt(this.AltRes);
-  }
-  else if(String.isString(this.Alt)){
-    return this.Alt;
-  }
-  return null;
 };
 bbbfly.editbox._getText = function(){
   if(String.isString(this.Text)){
@@ -256,7 +228,13 @@ bbbfly.editbox._doCreate = function(def,ref,node){
         input.style.margin = '0px';
         input.style.whiteSpace = 'nowrap';
 
+        var edit = this;
+        input.onchange = function(){
+          bbbfly.editbox._onInputChange(edit,input);
+        };
+
         cHolderNode.appendChild(input);
+        this.UpdateInputValue();
       }
     }
 
@@ -282,8 +260,10 @@ bbbfly.editbox._doCreate = function(def,ref,node){
   }
 };
 bbbfly.editbox._doUpdate = function(node){
+  if(!this.DoUpdate.callParent(node)){return false;}
+
   this.DoUpdateInput(node);
-  return this.DoUpdate.callParent(node);
+  return true;
 };
 bbbfly.editbox._doUpdateInput = function(){
   var iNode = document.getElementById(this.ID+'_II');
@@ -339,8 +319,12 @@ bbbfly.editbox._doUpdateInput = function(){
   var auto = String.isString(this.AutoComplete) ? this.AutoComplete : 'off';
   iNode.autocomplete = auto;
 
-  var maxLength = Number.isInteger(this.MaxLength) ? this.MaxLength : -1;
-  iNode.setAttribute('maxlength',maxLength);
+  if(Number.isInteger(this.MaxLength)){
+    iNode.setAttribute('maxlength',this.MaxLength);
+  }
+  else{
+    iNode.removeAttribute('maxlength');
+  }
 
   var state = this.GetState();
 
@@ -352,6 +336,23 @@ bbbfly.editbox._doUpdateInput = function(){
     iNode.style.cursor = 'text';
     iNode.removeAttribute('readonly');
   }
+};
+bbbfly.editbox._updateInputValue = function(){
+  var iNode = document.getElementById(this.ID+'_II');
+  if(!iNode){return;}
+
+  var text = String.isString(this.Text) ? this.Text : '';
+  iNode.value = text;
+};
+bbbfly.editbox._onAltChanged = function(){
+  this.UpdateInputValue();
+};
+bbbfly.editbox._onTextChanged = function(){
+  this.UpdateInputValue();
+};
+bbbfly.editbox._onInputChange = function(edit,input){
+  var text = String.isString(input.value) ? input.value : '';
+  edit.SetText(text);
 };
 bbbfly.EditBox = function(def,ref,parent){
   def = def || {};
@@ -370,9 +371,6 @@ bbbfly.EditBox = function(def,ref,parent){
         }
       },
 
-      Alt: null,
-      AltRes: null,
-
       Text: null,
       TextAlign: bbbfly.EditBox.textalign.left,
 
@@ -385,18 +383,16 @@ bbbfly.EditBox = function(def,ref,parent){
     InputPanel: undefined,
     Buttons: undefined,
     Events: {
-      OnSetAlt: null,
-      OnAltChanged: null,
+      OnAltChanged: bbbfly.editbox._onAltChanged,
       OnSetText: null,
-      OnTextChanged: null
+      OnTextChanged: bbbfly.editbox._onTextChanged,
     },
     Methods: {
       DoCreate: bbbfly.editbox._doCreate,
       DoUpdate: bbbfly.editbox._doUpdate,
       DoUpdateInput: bbbfly.editbox._doUpdateInput,
-      SetAlt: bbbfly.editbox._setAlt,
+      UpdateInputValue: bbbfly.editbox._updateInputValue,
       SetText: bbbfly.editbox._setText,
-      GetAlt: bbbfly.editbox._getAlt,
       GetText: bbbfly.editbox._getText,
       GetInputPanel: bbbfly.editbox._getInputPanel,
       GetButtons: bbbfly.editbox._getButtons,
