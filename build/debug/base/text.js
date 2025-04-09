@@ -8,18 +8,6 @@
 var bbbfly = bbbfly || {};
 bbbfly.text = {};
 
-bbbfly.text._setAlt = function(alt,update){
-  if(!String.isString(alt) && (alt !== null)){return;}
-
-  if(alt !== this.Alt){
-    this.Alt = alt;
-
-    if(!Boolean.isBoolean(update) || update){
-      this.Update();
-    }
-  }
-};
-
 bbbfly.text._setText = function(text,update){
   if(!String.isString(text) && (text !== null)){return;}
 
@@ -30,15 +18,6 @@ bbbfly.text._setText = function(text,update){
       this.Update();
     }
   }
-};
-bbbfly.text._getAlt = function(){
-  if(String.isString(this.AltRes)){
-    return ngTxt(this.AltRes);
-  }
-  else if(String.isString(this.Alt)){
-    return this.Alt;
-  }
-  return null;
 };
 bbbfly.text._getText = function(){
   if(String.isString(this.Text)){
@@ -62,23 +41,11 @@ bbbfly.text._doCreate = function(def,ref,node){
   node.appendChild(tNode);
 };
 bbbfly.text._doUpdate = function(node){
-  if(!node){return;}
-
-  this.DoUpdate.callParent(node);
-
-  var alt = this.GetAlt();
-  var hasAlt = !!(String.isString(alt) && alt);
-
-  if(hasAlt){
-    if(this.HTMLEncode){alt = ng_htmlEncode(alt,false);}
-    node.title = alt;
-  }
-  else{
-    node.title = '';
-  }
+  if(!this.DoUpdate.callParent(node)){return false;}
 
   this.DoUpdateText();
   this.DoAutoSize();
+  return true;
 };
 bbbfly.text._doUpdateText = function(){
   var tNode = document.getElementById(this.ID+'_T');
@@ -171,9 +138,6 @@ bbbfly.Text = function(def,ref,parent){
 
   ng_MergeDef(def,{
     Data: {
-      Alt: null,
-      AltRes: null,
-
       Text: null,
       TextRes: null,
       TextAlign: bbbfly.Text.textalign.left,
@@ -181,7 +145,6 @@ bbbfly.Text = function(def,ref,parent){
       AutoSize: bbbfly.Text.autosize.none,
 
       MultiLine: false,
-      HTMLEncode: true,
       Selectable: true
     },
     Methods: {
@@ -189,9 +152,7 @@ bbbfly.Text = function(def,ref,parent){
       DoUpdate: bbbfly.text._doUpdate,
       DoUpdateText: bbbfly.text._doUpdateText,
       DoAutoSize: bbbfly.text._doAutoSize,
-      SetAlt: bbbfly.text._setAlt,
       SetText: bbbfly.text._setText,
-      GetAlt: bbbfly.text._getAlt,
       GetText: bbbfly.text._getText
     }
   });

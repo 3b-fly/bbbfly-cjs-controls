@@ -26,19 +26,6 @@ bbbfly.image._doCreate = function(def,ref,node){
 };
 
 /** @ignore */
-bbbfly.image._setAlt = function(alt,update){
-  if(!String.isString(alt) && (alt !== null)){return;}
-
-  if(alt !== this.Alt){
-    this.Alt = alt;
-
-    if(!Boolean.isBoolean(update) || update){
-      this.Update();
-    }
-  }
-};
-
-/** @ignore */
 bbbfly.image._setImage = function(img,update){
   if(!Object.isObject(img) && (img !== null)){return;}
 
@@ -52,39 +39,16 @@ bbbfly.image._setImage = function(img,update){
 };
 
 /** @ignore */
-bbbfly.image._getAlt = function(){
-  if(String.isString(this.AltRes)){
-    return ngTxt(this.AltRes);
-  }
-  else if(String.isString(this.Alt)){
-    return this.Alt;
-  }
-  return null;
-};
-
-/** @ignore */
 bbbfly.image._getImage = function(){
   return (Object.isObject(this.Image) ? this.Image : null);
 };
 
 /** @ignore */
 bbbfly.image._doUpdate = function(node){
-  if(!node){return;}
-
-  this.DoUpdate.callParent(node);
-
-  var alt = this.GetAlt();
-  var hasAlt = !!(String.isString(alt) && alt);
-
-  if(hasAlt){
-    if(this.HTMLEncode){alt = ng_htmlEncode(alt,false);}
-    node.title = alt;
-  }
-  else{
-    node.title = '';
-  }
+  if(!this.DoUpdate.callParent(node)){return false;}
 
   this.DoUpdateImage();
+  return true;
 };
 
 /** @ignore */
@@ -214,22 +178,14 @@ bbbfly.imagepreview._onCreated = function(ctrl){
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
- * @property {string} [Alt=null] - Alt string
- * @property {string} [AltRes=null] - Alt  resource ID
- *
  * @property {bbbfly.Renderer.image} [Image=null] - Image definition
- * @property {boolean} [HTMLEncode=true]
  */
 bbbfly.Image = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
     Data: {
-      Alt: null,
-      AltRes: null,
-
       Image: null,
-      HTMLEncode: true,
 
       /** @private */
       _ImageProxy: null
@@ -248,15 +204,6 @@ bbbfly.Image = function(def,ref,parent){
 
       /**
        * @function
-       * @name SetAlt
-       * @memberof bbbfly.Image#
-       *
-       * @param {string|null} alt
-       * @param {boolean} [update=true]
-       */
-      SetAlt: bbbfly.image._setAlt,
-      /**
-       * @function
        * @name SetImage
        * @memberof bbbfly.Image#
        *
@@ -264,15 +211,6 @@ bbbfly.Image = function(def,ref,parent){
        * @param {boolean} [update=true]
        */
       SetImage: bbbfly.image._setImage,
-
-      /**
-       * @function
-       * @name GetAlt
-       * @memberof bbbfly.Image#
-       *
-       * @return {string|null}
-       */
-      GetAlt: bbbfly.image._getAlt,
 
       /**
        * @function

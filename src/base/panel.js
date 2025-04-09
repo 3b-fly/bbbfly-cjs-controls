@@ -213,6 +213,7 @@ bbbfly.panel._doUpdate = function(node){
   this.DoUpdateHtmlClass(node);
   this.DoUpdateHtmlState(node);
   this.DoUpdateHtmlOverflow(node);
+  this.DoUpdateAlt(node);
   return true;
 };
 
@@ -229,9 +230,7 @@ bbbfly.panel._doMouseLeave = function(event,options){
 /** @ignore */
 bbbfly.panel._doUpdateHtmlClass = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
-  if(!node){return;}
-
-  node.className = this.GetClassName();
+  if(node){node.className = this.GetClassName();}
 };
 
 /** @ignore */
@@ -258,6 +257,23 @@ bbbfly.panel._doUpdateHtmlOverflow = function(node){
     OverflowX: this.OverflowX,
     OverflowY: this.OverflowY
   };
+};
+
+/** @ignore */
+bbbfly.panel._doUpdateAlt = function(node){
+  if(typeof node === 'undefined'){node = this.Elm();}
+
+  if(node){
+    var alt = this.GetAlt();
+
+    if(String.isString(alt) && alt){
+      if(this.HTMLEncode){alt = ng_htmlEncode(alt,false);}
+      node.title = alt;
+    }
+    else{
+      node.title = '';
+    }
+  }
 };
 
 /** @ignore */
@@ -420,6 +436,38 @@ bbbfly.panel._setOverflow = function(overflowX,overflowY,update){
     this.OnOverflowChanged();
   }
   return true;
+};
+
+/** @ignore */
+bbbfly.panel._setAlt = function(alt,update){
+  if(!String.isString(alt) && (alt !== null)){return false;}
+  if(this.Alt === alt){return true;}
+
+  if(
+    Function.isFunction(this.OnSetAlt)
+    && !this.OnSetAlt(alt,update)
+  ){return false;}
+
+  this.Alt = alt;
+
+  if(Function.isFunction(this.OnAltChanged)){
+    this.OnAltChanged();
+  }
+
+  if(!Boolean.isBoolean(update) || update){
+    this.Update();
+  }
+};
+
+/** @ignore */
+bbbfly.panel._getAlt = function(){
+  if(String.isString(this.AltRes)){
+    return ngTxt(this.AltRes);
+  }
+  else if(String.isString(this.Alt)){
+    return this.Alt;
+  }
+  return null;
 };
 
 /** @ignore */
@@ -716,8 +764,10 @@ bbbfly.frame._setControlsRef = function(def,refs){
 
 /** @ignore */
 bbbfly.frame._doUpdate = function(node){
+  if(!this.DoUpdate.callParent(node)){return false;}
+  
   this.DoUpdateControls(node);
-  return this.DoUpdate.callParent(node);
+  return true;
 };
 
 /** @ignore */
@@ -1018,6 +1068,11 @@ bbbfly.PanelGroup.state = {
  * @property {bbbfly.Renderer.overflow} [OverflowX=hidden]
  * @property {bbbfly.Renderer.overflow} [OverflowY=hidden]
  *
+ * @property {string} [Alt=null] - Alt string
+ * @property {string} [AltRes=null] - Alt  resource ID
+ * @property {boolean} [HTMLEncode=true] - If encode texts
+ *
+ *
  * @property {bbbfly.PanelGroup.def} [Group=null]
  */
 bbbfly.Panel = function(def,ref,parent){
@@ -1032,6 +1087,10 @@ bbbfly.Panel = function(def,ref,parent){
 
       OverflowX: bbbfly.Renderer.overflow.hidden,
       OverflowY: bbbfly.Renderer.overflow.hidden,
+
+      Alt: null,
+      AltRes: null,
+      HTMLEncode: true,
 
       Group: null
     },
@@ -1135,15 +1194,38 @@ bbbfly.Panel = function(def,ref,parent){
        * @see {@link bbbfly.Panel#event:OnOverflowChanged|OnOverflowChanged}
        */
       OnSetOverflow: null,
-       /**
-        * @event
-        * @name OnOverflowChanged
-        * @memberof bbbfly.Panel#
-        *
-        * @see {@link bbbfly.Panel#SetOverflow|SetOverflow()}
-        * @see {@link bbbfly.Panel#event:OnSetOverflow|OnSetOverflow}
-        */
+      /**
+       * @event
+       * @name OnOverflowChanged
+       * @memberof bbbfly.Panel#
+       *
+       * @see {@link bbbfly.Panel#SetOverflow|SetOverflow()}
+       * @see {@link bbbfly.Panel#event:OnSetOverflow|OnSetOverflow}
+       */
       OnOverflowChanged: null,
+
+      /**
+       * @event
+       * @name OnSetAlt
+       * @memberof bbbfly.Panel#
+       *
+       * @param {boolean} alt - Value to set
+       * @param {boolean} [update=true] - If update control
+       * @return {boolean} Return false to deny value change
+       *
+       * @see {@link bbbfly.Panel#SetAlt|SetAlt()}
+       * @see {@link bbbfly.Panel#event:OnAltChanged|OnAltChanged}
+       */
+      OnSetAlt: null,
+      /**
+       * @event
+       * @name OnAltChanged
+       * @memberof bbbfly.Panel#
+       *
+       * @see {@link bbbfly.Panel#SetAlt|SetAlt()}
+       * @see {@link bbbfly.Panel#event:OnSetAlt|OnSetAlt}
+       */
+      OnAltChanged: null,
 
       /**
        * @event
@@ -1191,6 +1273,8 @@ bbbfly.Panel = function(def,ref,parent){
       DoUpdateHtmlState: bbbfly.panel._doUpdateHtmlState,
       /** @private */
       DoUpdateHtmlOverflow: bbbfly.panel._doUpdateHtmlOverflow,
+      /** @private */
+      DoUpdateAlt: bbbfly.panel._doUpdateAlt,
 
       /**
        * @function
@@ -1285,6 +1369,32 @@ bbbfly.Panel = function(def,ref,parent){
        * @see {@link bbbfly.Panel#event:OnOverflowChanged|OnOverflowChanged}
        */
       SetOverflow: bbbfly.panel._setOverflow,
+
+      /**
+       * @function
+       * @name SetAlt
+       * @memberof bbbfly.Panel#
+       *
+       * @param {string|null} alt - Value to set
+       * @param {boolean} [update=true] - If update control
+       *
+       * @see {@link bbbfly.Panel#GetAlt|GetAlt()}
+       * @see {@link bbbfly.Panel#event:OnSetAlt|OnSetAlt}
+       * @see {@link bbbfly.Panel#event:OnAltChanged|OnAltChanged}
+       */
+      SetAlt: bbbfly.panel._setAlt,
+      /**
+       * @function
+       * @name GetAlt
+       * @memberof bbbfly.Panel#
+       *
+       * @return {string|null}
+       *
+       * @see {@link bbbfly.Panel#SetAlt|SetAlt()}
+       * @see {@link bbbfly.Panel#event:OnSetAlt|OnSetAlt}
+       * @see {@link bbbfly.Panel#event:OnAltChanged|OnAltChanged}
+       */
+      GetAlt: bbbfly.panel._getAlt,
 
       /**
        * @function

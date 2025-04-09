@@ -12,19 +12,6 @@ var bbbfly = bbbfly || {};
 bbbfly.button = {};
 
 /** @ignore */
-bbbfly.button._setAlt = function(alt,update){
-  if(!String.isString(alt) && (alt !== null)){return;}
-
-  if(alt !== this.Alt){
-    this.Alt = alt;
-
-    if(!Boolean.isBoolean(update) || update){
-      this.Update();
-    }
-  }
-};
-
-/** @ignore */
 bbbfly.button._setText = function(text,update){
   if(!String.isString(text) && (text !== null)){return;}
 
@@ -35,17 +22,6 @@ bbbfly.button._setText = function(text,update){
       this.Update();
     }
   }
-};
-
-/** @ignore */
-bbbfly.button._getAlt = function(){
-  if(String.isString(this.AltRes)){
-    return ngTxt(this.AltRes);
-  }
-  else if(String.isString(this.Alt)){
-    return this.Alt;
-  }
-  return null;
 };
 
 /** @ignore */
@@ -139,26 +115,16 @@ bbbfly.button._doCreate = function(def,ref,node){
 
 /** @ignore */
 bbbfly.button._doUpdate = function(node){
-  if(!node){return;}
+  if(!this.DoUpdate.callParent(node)){return false;}
 
-  this.DoUpdate.callParent(node);
-
-  var alt = this.GetAlt();
-  var hasAlt = !!(String.isString(alt) && alt);
-
-  if(hasAlt){
-    if(this.HTMLEncode){alt = ng_htmlEncode(alt,false);}
-    node.title = alt;
+  if(node){
+    node.style.cursor = (this.HasClick() || this.HasDblClick())
+      ? 'pointer' : 'default';
   }
-  else{
-    node.title = '';
-  }
-
-  node.style.cursor = (this.HasClick() || this.HasDblClick())
-    ? 'pointer' : 'default';
 
   this.DoUpdateHolder();
   this.DoAutoSize();
+  return true;
 };
 
 /** @ignore */
@@ -488,9 +454,6 @@ bbbfly.button._onDblClick = function(){
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
- * @property {string} [Alt=null] - Alt string
- * @property {string} [AltRes=null] - Alt  resource ID
- *
  * @property {string} [Text=null] - Text string
  * @property {string} [TextRes=null] - Text resource ID
  * @property {bbbfly.Button.textalign} [TextAlign=left]
@@ -505,16 +468,12 @@ bbbfly.button._onDblClick = function(){
  * @property {bbbfly.Button.selecttype} [SelectType=none]
  *
  * @property {boolean} [MultiLine=false]
- * @property {boolean} [HTMLEncode=true]
  */
 bbbfly.Button = function(def,ref,parent){
   def = def || {};
 
   ng_MergeDef(def,{
     Data: {
-      Alt: null,
-      AltRes: null,
-
       Text: null,
       TextRes: null,
       TextAlign: bbbfly.Button.textalign.left,
@@ -528,7 +487,6 @@ bbbfly.Button = function(def,ref,parent){
       SelectType: bbbfly.Button.selecttype.none,
 
       MultiLine: false,
-      HTMLEncode: true,
 
       /** @private */
       _IconProxy: null,
@@ -590,15 +548,6 @@ bbbfly.Button = function(def,ref,parent){
 
       /**
        * @function
-       * @name SetAlt
-       * @memberof bbbfly.Button#
-       *
-       * @param {string|null} alt
-       * @param {boolean} [update=true]
-       */
-      SetAlt: bbbfly.button._setAlt,
-      /**
-       * @function
        * @name SetText
        * @memberof bbbfly.Button#
        *
@@ -607,14 +556,6 @@ bbbfly.Button = function(def,ref,parent){
        */
       SetText: bbbfly.button._setText,
 
-      /**
-       * @function
-       * @name GetAlt
-       * @memberof bbbfly.Button#
-       *
-       * @return {string|null}
-       */
-      GetAlt: bbbfly.button._getAlt,
       /**
        * @function
        * @name GetText

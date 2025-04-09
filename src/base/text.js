@@ -11,18 +11,6 @@ var bbbfly = bbbfly || {};
 /** @ignore */
 bbbfly.text = {};
 
-bbbfly.text._setAlt = function(alt,update){
-  if(!String.isString(alt) && (alt !== null)){return;}
-
-  if(alt !== this.Alt){
-    this.Alt = alt;
-
-    if(!Boolean.isBoolean(update) || update){
-      this.Update();
-    }
-  }
-};
-
 bbbfly.text._setText = function(text,update){
   if(!String.isString(text) && (text !== null)){return;}
 
@@ -33,17 +21,6 @@ bbbfly.text._setText = function(text,update){
       this.Update();
     }
   }
-};
-
-/** @ignore */
-bbbfly.text._getAlt = function(){
-  if(String.isString(this.AltRes)){
-    return ngTxt(this.AltRes);
-  }
-  else if(String.isString(this.Alt)){
-    return this.Alt;
-  }
-  return null;
 };
 
 /** @ignore */
@@ -73,23 +50,11 @@ bbbfly.text._doCreate = function(def,ref,node){
 
 /** @ignore */
 bbbfly.text._doUpdate = function(node){
-  if(!node){return;}
-
-  this.DoUpdate.callParent(node);
-
-  var alt = this.GetAlt();
-  var hasAlt = !!(String.isString(alt) && alt);
-
-  if(hasAlt){
-    if(this.HTMLEncode){alt = ng_htmlEncode(alt,false);}
-    node.title = alt;
-  }
-  else{
-    node.title = '';
-  }
+  if(!this.DoUpdate.callParent(node)){return false;}
 
   this.DoUpdateText();
   this.DoAutoSize();
+  return true;
 };
 
 /** @ignore */
@@ -200,9 +165,6 @@ bbbfly.text._doAutoSize = function(){
  * @param {object} [ref=undefined] - Reference owner
  * @param {object|string} [parent=undefined] - Parent DIV element or it's ID
  *
- * @property {string} [Alt=null] - Alt string
- * @property {string} [AltRes=null] - Alt  resource ID
- *
  * @property {string} [Text=null] - Text string
  * @property {string} [TextRes=null] - Text resource ID
  * @property {bbbfly.Text.textalign} [TextAlign=left]
@@ -210,7 +172,6 @@ bbbfly.text._doAutoSize = function(){
  * @property {bbbfly.Text.autosize} [AutoSize=none]
  *
  * @property {boolean} [MultiLine=false]
- * @property {boolean} [HTMLEncode=true]
  * @property {boolean} [Selectable=true]
  */
 bbbfly.Text = function(def,ref,parent){
@@ -218,9 +179,6 @@ bbbfly.Text = function(def,ref,parent){
 
   ng_MergeDef(def,{
     Data: {
-      Alt: null,
-      AltRes: null,
-
       Text: null,
       TextRes: null,
       TextAlign: bbbfly.Text.textalign.left,
@@ -228,7 +186,6 @@ bbbfly.Text = function(def,ref,parent){
       AutoSize: bbbfly.Text.autosize.none,
 
       MultiLine: false,
-      HTMLEncode: true,
       Selectable: true
     },
     Methods: {
@@ -243,15 +200,6 @@ bbbfly.Text = function(def,ref,parent){
 
       /**
        * @function
-       * @name SetAlt
-       * @memberof bbbfly.Text#
-       *
-       * @param {string|null} alt
-       * @param {boolean} [update=true]
-       */
-      SetAlt: bbbfly.text._setAlt,
-      /**
-       * @function
        * @name SetText
        * @memberof bbbfly.Text#
        *
@@ -260,14 +208,6 @@ bbbfly.Text = function(def,ref,parent){
        */
       SetText: bbbfly.text._setText,
 
-      /**
-       * @function
-       * @name GetAlt
-       * @memberof bbbfly.Text#
-       *
-       * @return {string|null}
-       */
-      GetAlt: bbbfly.text._getAlt,
       /**
        * @function
        * @name GetText

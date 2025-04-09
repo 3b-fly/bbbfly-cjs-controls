@@ -186,6 +186,7 @@ bbbfly.panel._doUpdate = function(node){
   this.DoUpdateHtmlClass(node);
   this.DoUpdateHtmlState(node);
   this.DoUpdateHtmlOverflow(node);
+  this.DoUpdateAlt(node);
   return true;
 };
 bbbfly.panel._doMouseEnter = function(event,options){
@@ -196,9 +197,7 @@ bbbfly.panel._doMouseLeave = function(event,options){
 };
 bbbfly.panel._doUpdateHtmlClass = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
-  if(!node){return;}
-
-  node.className = this.GetClassName();
+  if(node){node.className = this.GetClassName();}
 };
 bbbfly.panel._doUpdateHtmlState = function(node){
   if(typeof node === 'undefined'){node = this.Elm();}
@@ -221,6 +220,21 @@ bbbfly.panel._doUpdateHtmlOverflow = function(node){
     OverflowX: this.OverflowX,
     OverflowY: this.OverflowY
   };
+};
+bbbfly.panel._doUpdateAlt = function(node){
+  if(typeof node === 'undefined'){node = this.Elm();}
+
+  if(node){
+    var alt = this.GetAlt();
+
+    if(String.isString(alt) && alt){
+      if(this.HTMLEncode){alt = ng_htmlEncode(alt,false);}
+      node.title = alt;
+    }
+    else{
+      node.title = '';
+    }
+  }
 };
 bbbfly.panel._getState = function(){
   return {
@@ -363,6 +377,34 @@ bbbfly.panel._setOverflow = function(overflowX,overflowY,update){
     this.OnOverflowChanged();
   }
   return true;
+};
+bbbfly.panel._setAlt = function(alt,update){
+  if(!String.isString(alt) && (alt !== null)){return false;}
+  if(this.Alt === alt){return true;}
+
+  if(
+    Function.isFunction(this.OnSetAlt)
+    && !this.OnSetAlt(alt,update)
+  ){return false;}
+
+  this.Alt = alt;
+
+  if(Function.isFunction(this.OnAltChanged)){
+    this.OnAltChanged();
+  }
+
+  if(!Boolean.isBoolean(update) || update){
+    this.Update();
+  }
+};
+bbbfly.panel._getAlt = function(){
+  if(String.isString(this.AltRes)){
+    return ngTxt(this.AltRes);
+  }
+  else if(String.isString(this.Alt)){
+    return this.Alt;
+  }
+  return null;
 };
 bbbfly.panel._addChildControl = function(ctrl){
   this.AddChildControl.callParent(ctrl);
@@ -627,8 +669,10 @@ bbbfly.frame._setControlsRef = function(def,refs){
   return changed;
 };
 bbbfly.frame._doUpdate = function(node){
+  if(!this.DoUpdate.callParent(node)){return false;}
+
   this.DoUpdateControls(node);
-  return this.DoUpdate.callParent(node);
+  return true;
 };
 bbbfly.frame._doUpdateControls = function(node){
   this.DoUpdateFramePanel(node);
@@ -814,6 +858,10 @@ bbbfly.Panel = function(def,ref,parent){
       OverflowX: bbbfly.Renderer.overflow.hidden,
       OverflowY: bbbfly.Renderer.overflow.hidden,
 
+      Alt: null,
+      AltRes: null,
+      HTMLEncode: true,
+
       Group: null
     },
     ParentReferences: true,
@@ -828,6 +876,8 @@ bbbfly.Panel = function(def,ref,parent){
       OnSelectedChanged: null,
       OnSetOverflow: null,
       OnOverflowChanged: null,
+      OnSetAlt: null,
+      OnAltChanged: null,
       OnChildControlAdded: null,
       OnChildControlRemoved: null
     },
@@ -842,6 +892,7 @@ bbbfly.Panel = function(def,ref,parent){
       DoUpdateHtmlClass: bbbfly.panel._doUpdateHtmlClass,
       DoUpdateHtmlState: bbbfly.panel._doUpdateHtmlState,
       DoUpdateHtmlOverflow: bbbfly.panel._doUpdateHtmlOverflow,
+      DoUpdateAlt: bbbfly.panel._doUpdateAlt,
       GetState: bbbfly.panel._getState,
       GetClassName: bbbfly.panel._getClassName,
       GetControlsHolder: bbbfly.panel._getControlsHolder,
@@ -850,6 +901,8 @@ bbbfly.Panel = function(def,ref,parent){
       SetReadOnly: bbbfly.panel._setReadOnly,
       SetSelected: bbbfly.panel._setSelected,
       SetOverflow: bbbfly.panel._setOverflow,
+      SetAlt: bbbfly.panel._setAlt,
+      GetAlt: bbbfly.panel._getAlt,
       AddChildControl: bbbfly.panel._addChildControl,
       RemoveChildControl: bbbfly.panel._removeChildControl,
       CreateControl: bbbfly.panel._createControl,
