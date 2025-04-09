@@ -149,26 +149,44 @@ bbbfly.Memo = function(def,ref,parent){
   return ngCreateControlAsType(def,'ngMemo',ref,parent);
 };
 bbbfly.editbox._setAlt = function(alt,update){
-  if(!String.isString(alt) && (alt !== null)){return;}
+  if(!String.isString(alt) && (alt !== null)){return false;}
+  if(this.Alt === alt){return true;}
 
-  if(alt !== this.Alt){
-    this.Alt = alt;
+  if(
+    Function.isFunction(this.OnSetAlt)
+    && !this.OnSetAlt(alt,update)
+  ){return false;}
 
-    if(!Boolean.isBoolean(update) || update){
-      this.Update();
-    }
+  this.Alt = alt;
+
+  if(Function.isFunction(this.OnAltChanged)){
+    this.OnAltChanged();
+  }
+
+  if(!Boolean.isBoolean(update) || update){
+    this.Update();
   }
 };
 bbbfly.editbox._setText = function(text,update){
-  if(!String.isString(text) && (text !== null)){return;}
+  if(!String.isString(text) && (text !== null)){return false;}
+  if(this.Text === text){return true;}
 
-  if(text !== this.Text){
-    this.Text = text;
+  if(
+    Function.isFunction(this.OnSetText)
+    && !this.OnSetText(text,update)
+  ){return false;}
 
-    if(!Boolean.isBoolean(update) || update){
-      this.Update();
-    }
+  this.Text = text;
+
+  if(Function.isFunction(this.OnTextChanged)){
+    this.OnTextChanged();
   }
+
+  if(!Boolean.isBoolean(update) || update){
+    this.Update();
+  }
+
+  return true;
 };
 bbbfly.editbox._getAlt = function(){
   if(String.isString(this.AltRes)){
@@ -367,6 +385,10 @@ bbbfly.EditBox = function(def,ref,parent){
     InputPanel: undefined,
     Buttons: undefined,
     Events: {
+      OnSetAlt: null,
+      OnAltChanged: null,
+      OnSetText: null,
+      OnTextChanged: null
     },
     Methods: {
       DoCreate: bbbfly.editbox._doCreate,

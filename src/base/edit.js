@@ -333,28 +333,46 @@ bbbfly.Memo = function(def,ref,parent){
 
 /** @ignore */
 bbbfly.editbox._setAlt = function(alt,update){
-  if(!String.isString(alt) && (alt !== null)){return;}
+  if(!String.isString(alt) && (alt !== null)){return false;}
+  if(this.Alt === alt){return true;}
 
-  if(alt !== this.Alt){
-    this.Alt = alt;
+  if(
+    Function.isFunction(this.OnSetAlt)
+    && !this.OnSetAlt(alt,update)
+  ){return false;}
 
-    if(!Boolean.isBoolean(update) || update){
-      this.Update();
-    }
+  this.Alt = alt;
+
+  if(Function.isFunction(this.OnAltChanged)){
+    this.OnAltChanged();
+  }
+
+  if(!Boolean.isBoolean(update) || update){
+    this.Update();
   }
 };
 
 /** @ignore */
 bbbfly.editbox._setText = function(text,update){
-  if(!String.isString(text) && (text !== null)){return;}
+  if(!String.isString(text) && (text !== null)){return false;}
+  if(this.Text === text){return true;}
 
-  if(text !== this.Text){
-    this.Text = text;
+  if(
+    Function.isFunction(this.OnSetText)
+    && !this.OnSetText(text,update)
+  ){return false;}
 
-    if(!Boolean.isBoolean(update) || update){
-      this.Update();
-    }
+  this.Text = text;
+
+  if(Function.isFunction(this.OnTextChanged)){
+    this.OnTextChanged();
   }
+
+  if(!Boolean.isBoolean(update) || update){
+    this.Update();
+  }
+
+  return true;
 };
 
 /** @ignore */
@@ -606,7 +624,50 @@ bbbfly.EditBox = function(def,ref,parent){
     InputPanel: undefined,
     Buttons: undefined,
     Events: {
-      //TODO
+      /**
+       * @event
+       * @name OnSetAlt
+       * @memberof bbbfly.EditBox#
+       *
+       * @param {boolean} alt - Value to set
+       * @param {boolean} [update=true] - If update control
+       * @return {boolean} Return false to deny value change
+       *
+       * @see {@link bbbfly.EditBox#SetAlt|SetAlt()}
+       * @see {@link bbbfly.EditBox#event:OnAltChanged|OnAltChanged}
+       */
+      OnSetAlt: null,
+      /**
+       * @event
+       * @name OnAltChanged
+       * @memberof bbbfly.EditBox#
+       *
+       * @see {@link bbbfly.EditBox#SetAlt|SetAlt()}
+       * @see {@link bbbfly.EditBox#event:OnSetAlt|OnSetAlt}
+       */
+      OnAltChanged: null,
+      /**
+       * @event
+       * @name OnSetText
+       * @memberof bbbfly.EditBox#
+       *
+       * @param {boolean} text - Value to set
+       * @param {boolean} [update=true] - If update control
+       * @return {boolean} Return false to deny value change
+       *
+       * @see {@link bbbfly.EditBox#SetText|SetText()}
+       * @see {@link bbbfly.EditBox#event:OnTextChanged|OnTextChanged}
+       */
+      OnSetText: null,
+      /**
+       * @event
+       * @name OnTextChanged
+       * @memberof bbbfly.EditBox#
+       *
+       * @see {@link bbbfly.EditBox#SetText|SetText()}
+       * @see {@link bbbfly.EditBox#event:OnSetText|OnSetText}
+       */
+      OnTextChanged: null
     },
     Methods: {
       /** @private */
@@ -621,12 +682,12 @@ bbbfly.EditBox = function(def,ref,parent){
        * @name SetAlt
        * @memberof bbbfly.EditBox#
        *
-       * @param {string|null} alt
-       * @param {boolean} [update=true]
+       * @param {string|null} alt - Value to set
+       * @param {boolean} [update=true] - If update control
        *
-       * @see {@link bbbfly.EditBox#SetText|SetText()}
        * @see {@link bbbfly.EditBox#GetAlt|GetAlt()}
-       * @see {@link bbbfly.EditBox#GetText|GetText()}
+       * @see {@link bbbfly.EditBox#event:OnSetAlt|OnSetAlt}
+       * @see {@link bbbfly.EditBox#event:OnAltChanged|OnAltChanged}
        */
       SetAlt: bbbfly.editbox._setAlt,
       /**
@@ -634,12 +695,13 @@ bbbfly.EditBox = function(def,ref,parent){
        * @name SetText
        * @memberof bbbfly.EditBox#
        *
-       * @param {string|null} text
-       * @param {boolean} [update=true]
+       * @param {string|null} text - Value to set
+       * @param {boolean} [update=true] - If update control
+       * @return {boolean} False if change was denied
        *
-       * @see {@link bbbfly.EditBox#SetAlt|SetAlt()}
-       * @see {@link bbbfly.EditBox#GetAlt|GetAlt()}
        * @see {@link bbbfly.EditBox#GetText|GetText()}
+       * @see {@link bbbfly.EditBox#event:OnSetText|OnSetText}
+       * @see {@link bbbfly.EditBox#event:OnTextChanged|OnTextChanged}
        */
       SetText: bbbfly.editbox._setText,
 
@@ -651,8 +713,8 @@ bbbfly.EditBox = function(def,ref,parent){
        * @return {string|null}
        *
        * @see {@link bbbfly.EditBox#SetAlt|SetAlt()}
-       * @see {@link bbbfly.EditBox#SetText|SetText()}
-       * @see {@link bbbfly.EditBox#GetText|GetText()}
+       * @see {@link bbbfly.EditBox#event:OnSetAlt|OnSetAlt}
+       * @see {@link bbbfly.EditBox#event:OnAltChanged|OnAltChanged}
        */
       GetAlt: bbbfly.editbox._getAlt,
       /**
@@ -662,9 +724,9 @@ bbbfly.EditBox = function(def,ref,parent){
        *
        * @return {string|null}
        *
-       * @see {@link bbbfly.EditBox#SetAlt|SetAlt()}
        * @see {@link bbbfly.EditBox#SetText|SetText()}
-       * @see {@link bbbfly.EditBox#GetAlt|GetAlt()}
+       * @see {@link bbbfly.EditBox#event:OnSetText|OnSetText}
+       * @see {@link bbbfly.EditBox#event:OnTextChanged|OnTextChanged}
        */
       GetText: bbbfly.editbox._getText,
 
