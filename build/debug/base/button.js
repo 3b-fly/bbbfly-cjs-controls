@@ -420,36 +420,6 @@ bbbfly.button._onDblClick = function(){
     this.SetSelected(!this.Selected);
   }
 };
-bbbfly.button.NormalizeDef = function(def){
-  def = def || {};
-
-  ng_MergeDef(def,{
-    Methods: {
-      GetState: bbbfly.button._ngGetState,
-      DoUpdate: bbbfly.button._ngDoUpdate
-    }
-  });
-  return def;
-};
-bbbfly.button._ngDoUpdate = function(node){
-  this.DoUpdate.callParent(node);
-
-  var textNode = document.getElementById(this.ID+'_T');
-  bbbfly.Renderer.UpdateHTMLState(textNode,this.GetState());
-  return true;
-};
-bbbfly.button._ngGetState = function(){
-  return {
-    disabled: !this.Enabled,
-    readonly: !!this.ReadOnly,
-    invalid: !!this.Invalid,
-
-    mouseover: !!(
-      this.Enabled && !this.ReadOnly
-      && ngMouseInControls[this.ID]
-    )
-  };
-};
 bbbfly.Button = function(def,ref,parent){
   def = def || {};
 
