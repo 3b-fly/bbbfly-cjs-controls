@@ -821,6 +821,8 @@ bbbfly.fileuploader._onFilesListSelectChanged = function(){
   if(buttons){buttons.Update();}
 };
 bbbfly.fileuploader._doUpdateAddBtn = function(node){
+  if(!this.DoUpdate.callParent(node)){return false;}
+
   var uploader = this.ParentControl.ParentControl;
   var form = uploader.GetForm();
 
@@ -833,7 +835,7 @@ bbbfly.fileuploader._doUpdateAddBtn = function(node){
     form.style.display = (this.Enabled) ? 'block' : 'none';
   }
 
-  this.DoUpdate.callParent(node);
+  return true;
 };
 bbbfly.fileuploader._getAddBtnText = function(){
   var uploader = this.ParentControl.ParentControl;

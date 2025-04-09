@@ -917,6 +917,8 @@ bbbfly.fileuploader._onFilesListSelectChanged = function(){
 
 /** @ignore */
 bbbfly.fileuploader._doUpdateAddBtn = function(node){
+  if(!this.DoUpdate.callParent(node)){return false;}
+
   var uploader = this.ParentControl.ParentControl;
   var form = uploader.GetForm();
 
@@ -929,7 +931,7 @@ bbbfly.fileuploader._doUpdateAddBtn = function(node){
     form.style.display = (this.Enabled) ? 'block' : 'none';
   }
 
-  this.DoUpdate.callParent(node);
+  return true;
 };
 
 /** @ignore */
