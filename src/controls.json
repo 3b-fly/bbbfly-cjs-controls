@@ -95,7 +95,7 @@
           "Packages": ["Controls.js","Controls.js UI"]
         },
         "bbbfly-cjs": {
-          "Packages": ["crossbrowser"]
+          "Packages": ["crossbrowser","dom"]
         },
         "bbbfly-cjs-controls": {
           "Packages": ["panel","wrapper","button","hint"]
@@ -118,7 +118,7 @@
           "Packages": ["Controls.js"]
         },
         "bbbfly-cjs": {
-          "Packages": ["crossbrowser"]
+          "Packages": ["crossbrowser","dom"]
         },
         "bbbfly-cjs-controls": {
           "Packages": ["panel","button","progress","text","list"]

@@ -84,9 +84,11 @@ bbbfly.fileuploader._createForm = function(){
     +'font-size:10000px;cursor:pointer !important;';
 
   var uploader = this;
-  input.onchange = function(){
+
+  bbbfly.DOM.AddEvent(input,'onchange',function(){
     bbbfly.fileuploader._onFormFilesChange(form,uploader);
-  };
+  });
+
   form.appendChild(input);
 
   if(useLabel){
@@ -510,35 +512,16 @@ bbbfly.fileuploader._setDragAndDrop = function(on){
   if(node && Boolean.isBoolean(node.draggable)){
 
     var fnc = on
-      ? bbbfly.fileuploader._addEvent
-      : bbbfly.fileuploader._removeEvent;
+      ? bbbfly.DOM.AddEvent
+      : bbbfly.DOM.RemoveEvent;
 
     fnc(node,'drop',bbbfly.fileuploader._onDrop);
     fnc(node,'dragover',bbbfly.fileuploader._onDragOver);
     fnc(node,'dragleave',bbbfly.fileuploader._onDragLeave);
   }
 };
-bbbfly.fileuploader._addEvent = function(node,name,fnc){
-  if(node.addEventListener){node.addEventListener(name,fnc,false);}
-  else if(node.attachEvent){node.attachEvent(name,fnc);}
-};
-bbbfly.fileuploader._removeEvent = function(node,name,fnc){
-  if(node.removeEventListener){node.removeEventListener(name,fnc,false);}
-  else if(node.detachEvent){node.detachEvent(name,fnc);}
-};
-bbbfly.fileuploader._stopEvent = function(event){
-  if(!event){event = window.event;}
-
-  if(event instanceof window.Event){
-    if(event.stopPropagation){event.stopPropagation();}
-    else{event.cancelBubble = true;}
-
-    if(event.preventDefault){event.preventDefault();}
-    else{event.returnValue = false;}
-  }
-};
 bbbfly.fileuploader._onDrop = function(event){
-  bbbfly.fileuploader._stopEvent(event);
+  bbbfly.DOM.StopEvent(event);
 
   var content = ngGetControlByElement(this);
   var files = event.target.files || event.dataTransfer.files;
@@ -549,7 +532,7 @@ bbbfly.fileuploader._onDrop = function(event){
   return false;
 };
 bbbfly.fileuploader._onDragOver = function(event){
-  bbbfly.fileuploader._stopEvent(event);
+  bbbfly.DOM.StopEvent(event);
 
   var content = ngGetControlByElement(this);
   if(Function.isFunction(content.OnFilesDragOver)){
@@ -558,7 +541,7 @@ bbbfly.fileuploader._onDragOver = function(event){
   return false;
 };
 bbbfly.fileuploader._onDragLeave = function(event){
-  bbbfly.fileuploader._stopEvent(event);
+  bbbfly.DOM.StopEvent(event);
 
   var content = ngGetControlByElement(this);
   if(Function.isFunction(content.OnFilesDragLeave)){
