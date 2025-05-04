@@ -117,5 +117,7 @@
 >| ------- | ------------------------------------------------------------------------- | ------- | ------------------ |
 >| map     | [Leaflet](https://github.com/Leaflet/Leaflet)                             | 1.4.0   | custom             |
 >| map     | [Esri Leaflet](https://github.com/Esri/esri-leaflet)                      | 2.2.3   | Apache License 2.0 |
+>| map     | [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster) | 1.4.1   | MIT                |
+>| map     | [Proj4js](https://github.com/proj4js/proj4js)                             | 2.15.0  | custom             |
+>| map     | [Proj4Leaflet](https://github.com/kartena/Proj4Leaflet)                   | 1.0.1   | BSD-2              |
 >| mapbox  | [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw)                   | 0.4.14  | MIT                |
->| mapbox  | [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster) | 1.4.1   | MIT                |

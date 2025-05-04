@@ -291,6 +291,8 @@
         "debug/map/libs/leaflet_1.4.0/leaflet.css",
         "debug/map/libs/esri-leaflet_2.2.3/esri-leaflet.js",
         "debug/map/libs/leaflet-markercluster_1.4.1/leaflet.markercluster.js",
+        "debug/map/libs/proj4js_2.15.0/proj4.js",
+        "debug/map/libs/proj4leaflet_1.0.1/proj4leaflet.js",
         "debug/map/plugins/leaflet-colorlayer.js"
       ],
       "ReleaseFiles": [
@@ -299,6 +301,8 @@
         "release/map/libs/leaflet_1.4.0/leaflet.css",
         "release/map/libs/esri-leaflet_2.2.3/esri-leaflet.js",
         "release/map/libs/leaflet-markercluster_1.4.1/leaflet.markercluster.js",
+        "release/map/libs/proj4js_2.15.0/proj4.js",
+        "release/map/libs/proj4leaflet_1.0.1/proj4leaflet.js",
         "release/map/plugins/leaflet-colorlayer.js"
       ],
       "Libraries": {
