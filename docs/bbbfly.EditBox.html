@@ -932,6 +932,12 @@
         <li data-name="SelectText">
           <a href="bbbfly.EditBox.html#property:SelectText">SelectText</a>
         </li>
+        <li data-name="SubmitButton">
+          <a href="bbbfly.EditBox.html#property:SubmitButton">SubmitButton</a>
+        </li>
+        <li data-name="CancelButton">
+          <a href="bbbfly.EditBox.html#property:CancelButton">CancelButton</a>
+        </li>
     </ul>
     <ul class="members itemMembers">
       <span class="subtitle">Members</span>
@@ -953,11 +959,23 @@
         <li data-name="bbbfly.EditBox#AddChildControl">
           <a href="bbbfly.EditBox.html#AddChildControl">AddChildControl</a>
         </li>
+        <li data-name="bbbfly.EditBox#Blur">
+          <a href="bbbfly.EditBox.html#Blur">Blur</a>
+        </li>
         <li data-name="bbbfly.EditBox#CreateControl">
           <a href="bbbfly.EditBox.html#CreateControl">CreateControl</a>
         </li>
         <li data-name="bbbfly.EditBox#DisposeControls">
           <a href="bbbfly.EditBox.html#DisposeControls">DisposeControls</a>
+        </li>
+        <li data-name="bbbfly.EditBox#Focus">
+          <a href="bbbfly.EditBox.html#Focus">Focus</a>
+        </li>
+        <li data-name="bbbfly.EditBox#FocusEnd">
+          <a href="bbbfly.EditBox.html#FocusEnd">FocusEnd</a>
+        </li>
+        <li data-name="bbbfly.EditBox#FocusStart">
+          <a href="bbbfly.EditBox.html#FocusStart">FocusStart</a>
         </li>
         <li data-name="bbbfly.EditBox#GetAlt">
           <a href="bbbfly.EditBox.html#GetAlt">GetAlt</a>
@@ -970,9 +988,6 @@
         </li>
         <li data-name="bbbfly.EditBox#GetButtons">
           <a href="bbbfly.EditBox.html#GetButtons">GetButtons</a>
-        </li>
-        <li data-name="bbbfly.EditBox#GetCaretPos">
-          <a href="bbbfly.EditBox.html#GetCaretPos">GetCaretPos</a>
         </li>
         <li data-name="bbbfly.EditBox#GetCaretPos">
           <a href="bbbfly.EditBox.html#GetCaretPos">GetCaretPos</a>
@@ -1012,6 +1027,9 @@
         </li>
         <li data-name="bbbfly.EditBox#SetAltText">
           <a href="bbbfly.EditBox.html#SetAltText">SetAltText</a>
+        </li>
+        <li data-name="bbbfly.EditBox#SetCaretPos">
+          <a href="bbbfly.EditBox.html#SetCaretPos">SetCaretPos</a>
         </li>
         <li data-name="bbbfly.EditBox#SetEnabled">
           <a href="bbbfly.EditBox.html#SetEnabled">SetEnabled</a>
@@ -1069,6 +1087,12 @@
         </li>
         <li data-name="OnInvalidChanged">
           <a href="bbbfly.EditBox.html#event:OnInvalidChanged">OnInvalidChanged</a>
+        </li>
+        <li data-name="OnKeyDown">
+          <a href="bbbfly.EditBox.html#event:OnKeyDown">OnKeyDown</a>
+        </li>
+        <li data-name="OnKeyUp">
+          <a href="bbbfly.EditBox.html#event:OnKeyUp">OnKeyUp</a>
         </li>
         <li data-name="OnOverflowChanged">
           <a href="bbbfly.EditBox.html#event:OnOverflowChanged">OnOverflowChanged</a>
@@ -6030,7 +6054,7 @@
           <span class="signature">(<span class="optional">def</span>, <span class="optional">ref</span>, <span class="optional">parent</span>)</span>
         </h2>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L950">base/edit.js, line 950</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L924">base/edit.js, line 924</a>
         </div>
     </div>
 </dt>
@@ -6299,6 +6323,42 @@
                     </td>
                 <td class="description last">
                   If select text on focus
+                </td>
+            </tr>
+            <tr id="property:SubmitButton">
+                    <td class="name">
+                      <span class="param-name">
+                        SubmitButton
+                      </span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                    <td class="default">
+                      <span class="param-default">
+                        null
+                      </span>
+                    </td>
+                <td class="description last">
+                  Submit button ID
+                </td>
+            </tr>
+            <tr id="property:CancelButton">
+                    <td class="name">
+                      <span class="param-name">
+                        CancelButton
+                      </span>
+                    </td>
+                <td class="type">
+<span class="param-type">string</span>
+                </td>
+                    <td class="default">
+                      <span class="param-default">
+                        null
+                      </span>
+                    </td>
+                <td class="description last">
+                  Cancel button ID
                 </td>
             </tr>
         </tbody>
@@ -6647,6 +6707,29 @@
 </dl>
 </dd>
 <dt>
+    <div class="nameContainer">
+        <h4 id="Blur">
+          Blur
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1206">base/edit.js, line 1206</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.EditBox.html#Focus">Focus()</a></li>
+          <li><a href="bbbfly.EditBox.html#FocusStart">FocusStart()</a></li>
+          <li><a href="bbbfly.EditBox.html#FocusEnd">FocusEnd()</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
     <div class="nameContainer inherited">
         <h4 id="CreateControl">
   <span class="attribs">
@@ -6746,6 +6829,75 @@
 </dl>
 </dd>
 <dt>
+    <div class="nameContainer">
+        <h4 id="Focus">
+          Focus
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1196">base/edit.js, line 1196</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.EditBox.html#FocusStart">FocusStart()</a></li>
+          <li><a href="bbbfly.EditBox.html#FocusEnd">FocusEnd()</a></li>
+          <li><a href="bbbfly.EditBox.html#Blur">Blur()</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="FocusEnd">
+          FocusEnd
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1226">base/edit.js, line 1226</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.EditBox.html#Focus">Focus()</a></li>
+          <li><a href="bbbfly.EditBox.html#FocusStart">FocusStart()</a></li>
+          <li><a href="bbbfly.EditBox.html#Blur">Blur()</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="FocusStart">
+          FocusStart
+          <span class="signature">()</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1216">base/edit.js, line 1216</a>
+        </div>
+    </div>
+</dt>
+<dd>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.EditBox.html#Focus">Focus()</a></li>
+          <li><a href="bbbfly.EditBox.html#FocusEnd">FocusEnd()</a></li>
+          <li><a href="bbbfly.EditBox.html#Blur">Blur()</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
     <div class="nameContainer inherited">
         <h4 id="GetAlt">
   <span class="attribs">
@@ -6799,7 +6951,7 @@
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{string|null}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1120">base/edit.js, line 1120</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1127">base/edit.js, line 1127</a>
         </div>
     </div>
 </dt>
@@ -6841,7 +6993,7 @@
           <span class="signature">(buttonId)</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="bbbfly.Button.html">bbbfly.Button</a>|null}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1155">base/edit.js, line 1155</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1162">base/edit.js, line 1162</a>
         </div>
     </div>
 </dt>
@@ -6905,7 +7057,7 @@
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{object}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1144">base/edit.js, line 1144</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1151">base/edit.js, line 1151</a>
         </div>
     </div>
 </dt>
@@ -6941,54 +7093,10 @@
     <div class="nameContainer">
         <h4 id="GetCaretPos">
           GetCaretPos
-          <span class="signature">(pos)</span>
-        </h4>
-        <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1168">base/edit.js, line 1168</a>
-        </div>
-    </div>
-</dt>
-<dd>
-        <h5>Parameters:</h5>
-<table class="params">
-    <thead>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	<tbody>
-        <tr>
-                <td class="name">
-                  <span class="param-name">pos</span>
-                </td>
-            <td class="type">
-<span class="param-type">integer</span>
-            </td>
-            <td class="description last">
-                Caret position
-            </td>
-        </tr>
-	</tbody>
-</table>
-<dl class="details">
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-      <ul class="dummy">
-          <li><a href="bbbfly.EditBox.html#GetCaretPos">GetCaretPos()</a></li>
-      </ul>
-    </dd>
-</dl>
-</dd>
-<dt>
-    <div class="nameContainer">
-        <h4 id="GetCaretPos">
-          GetCaretPos
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{integer}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1179">base/edit.js, line 1179</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1185">base/edit.js, line 1185</a>
         </div>
     </div>
 </dt>
@@ -6997,7 +7105,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
       <ul class="dummy">
-          <li>SetCaretPos()</li>
+          <li><a href="bbbfly.EditBox.html#SetCaretPos">SetCaretPos()</a></li>
       </ul>
     </dd>
 </dl>
@@ -7297,7 +7405,7 @@
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{object|null}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1133">base/edit.js, line 1133</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1140">base/edit.js, line 1140</a>
         </div>
     </div>
 </dt>
@@ -7375,7 +7483,7 @@
           <span class="signature">()</span><span class="arrow-right"></span><span class="type-signature returnType">{string|null}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1094">base/edit.js, line 1094</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1100">base/edit.js, line 1100</a>
         </div>
     </div>
 </dt>
@@ -7537,10 +7645,10 @@
     <div class="nameContainer">
         <h4 id="SetAltText">
           SetAltText
-          <span class="signature">(text, <span class="optional">update</span>)</span>
+          <span class="signature">(text, <span class="optional">update</span>, <span class="optional">forceChange</span>)</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1107">base/edit.js, line 1107</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1113">base/edit.js, line 1113</a>
         </div>
     </div>
 </dt>
@@ -7586,6 +7694,21 @@
                 If update control
             </td>
         </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">forceChange</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+                <td class="default">
+                    false
+                </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Force to act like value has changed
+            </td>
+        </tr>
 	</tbody>
 </table>
 <dl class="details">
@@ -7595,6 +7718,50 @@
           <li><a href="bbbfly.EditBox.html#GetAltText">GetAltText()</a></li>
           <li><a href="bbbfly.EditBox.html#event:OnSetAltText">OnSetAltText</a></li>
           <li><a href="bbbfly.EditBox.html#event:OnAltTextChanged">OnAltTextChanged</a></li>
+      </ul>
+    </dd>
+</dl>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="SetCaretPos">
+          SetCaretPos
+          <span class="signature">(pos)</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1175">base/edit.js, line 1175</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">pos</span>
+                </td>
+            <td class="type">
+<span class="param-type">integer</span>
+            </td>
+            <td class="description last">
+                Caret position
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.EditBox.html#GetCaretPos">GetCaretPos()</a></li>
       </ul>
     </dd>
 </dl>
@@ -8053,10 +8220,10 @@
     <div class="nameContainer">
         <h4 id="SetText">
           SetText
-          <span class="signature">(text, <span class="optional">update</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+          <span class="signature">(text, <span class="optional">update</span>, <span class="optional">forceChange</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1080">base/edit.js, line 1080</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1084">base/edit.js, line 1084</a>
         </div>
     </div>
 </dt>
@@ -8100,6 +8267,21 @@
             <td class="description last">
                         <span class="optional">optional</span>
                 If update control
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">forceChange</span>
+                </td>
+            <td class="type">
+<span class="param-type">boolean</span>
+            </td>
+                <td class="default">
+                    false
+                </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Force to act like value has changed
             </td>
         </tr>
 	</tbody>
@@ -8307,7 +8489,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1026">base/edit.js, line 1026</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1002">base/edit.js, line 1002</a>
         </div>
     </div>
 </dt>
@@ -8349,7 +8531,7 @@
           <span class="signature">(input)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1048">base/edit.js, line 1048</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1024">base/edit.js, line 1024</a>
         </div>
     </div>
 </dt>
@@ -8541,7 +8723,7 @@
           <span class="signature">(input)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1036">base/edit.js, line 1036</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1012">base/edit.js, line 1012</a>
         </div>
     </div>
 </dt>
@@ -8621,6 +8803,150 @@
       </ul>
     </dd>
 </dl>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="event:OnKeyDown">
+          OnKeyDown
+          <span class="signature">(code, input)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1036">base/edit.js, line 1036</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">code</span>
+                </td>
+            <td class="type">
+<span class="param-type">integer</span>
+            </td>
+            <td class="description last">
+                Pressed key code
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">input</span>
+                </td>
+            <td class="type">
+<span class="param-type">HTMLInputElement</span>
+            </td>
+            <td class="description last">
+                Input element
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.EditBox.html#event:OnKeyUp">OnKeyUp</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">Return false to deny any hanges</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer">
+        <h4 id="event:OnKeyUp">
+          OnKeyUp
+          <span class="signature">(code, input)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1049">base/edit.js, line 1049</a>
+        </div>
+    </div>
+</dt>
+<dd>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">code</span>
+                </td>
+            <td class="type">
+<span class="param-type">integer</span>
+            </td>
+            <td class="description last">
+                Pressed key code
+            </td>
+        </tr>
+        <tr>
+                <td class="name">
+                  <span class="param-name">input</span>
+                </td>
+            <td class="type">
+<span class="param-type">HTMLInputElement</span>
+            </td>
+            <td class="description last">
+                Input element
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.EditBox.html#event:OnKeyDown">OnKeyDown</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        boolean
+            </td>
+            <td class="description last">Return false to deny any changes</td>
+        </tr>
+    </tbody>
+</table>
 </dd>
 <dt>
     <div class="nameContainer inherited">
@@ -8795,7 +9121,7 @@
           <span class="signature">(text, <span class="optional">update</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1013">base/edit.js, line 1013</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L989">base/edit.js, line 989</a>
         </div>
     </div>
 </dt>
@@ -9223,7 +9549,7 @@
           <span class="signature">(text, <span class="optional">update</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L990">base/edit.js, line 990</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L966">base/edit.js, line 966</a>
         </div>
     </div>
 </dt>
@@ -9303,7 +9629,7 @@
           <span class="signature">()</span>
         </h4>
         <div class="tag-source">
-          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L1003">base/edit.js, line 1003</a>
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/base/edit.js#L979">base/edit.js, line 979</a>
         </div>
     </div>
 </dt>
