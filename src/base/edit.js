@@ -332,16 +332,19 @@ bbbfly.Memo = function(def,ref,parent){
  */
 
 /** @ignore */
-bbbfly.editbox._setText = function(text,update){
+bbbfly.editbox._setText = function(text,update,forceChange){
   if(!String.isString(text) && (text !== null)){return false;}
-  if(this.Text === text){return true;}
 
   if(
     Function.isFunction(this.OnSetText)
     && !this.OnSetText(text,update)
   ){return false;}
 
+  if(text === ''){text = null;}
+  var changed = ((this.Text !== text) || forceChange);
+  
   this.Text = text;
+  if(!changed){return true;}
 
   if(Function.isFunction(this.OnTextChanged)){
     this.OnTextChanged();
@@ -358,6 +361,41 @@ bbbfly.editbox._setText = function(text,update){
 bbbfly.editbox._getText = function(){
   if(String.isString(this.Text)){
     return this.Text;
+  }
+  return null;
+};
+
+/** @ignore */
+bbbfly.editbox._setAltText = function(text,update,forceChange){
+  if(!String.isString(text) && (text !== null)){return false;}
+
+  if(
+    Function.isFunction(this.OnSetAltText)
+    && !this.OnSetAltText(text,update)
+  ){return false;}
+
+  if(text === ''){text = null;}
+  var changed = ((this.AltText !== text) || forceChange);
+
+  this.AltText = text;
+  if(!changed){return true;}
+
+  if(Function.isFunction(this.OnAltTextChanged)){
+    this.OnAltTextChanged();
+  }
+
+  if(!Boolean.isBoolean(update) || update){
+    this.Update();
+  }
+};
+
+/** @ignore */
+bbbfly.editbox._getAltText = function(){
+  if(String.isString(this.AltTextRes)){
+    return ngTxt(this.AltTextRes);
+  }
+  else if(String.isString(this.AltText)){
+    return this.AltText;
   }
   return null;
 };
@@ -380,6 +418,76 @@ bbbfly.editbox._getButton = function(buttonId){
   return Object.isObject(btn) ? btn : null;
 };
 
+/** @ignore */
+bbbfly.editbox._setCaretPos = function(pos){
+  var iNode = document.getElementById(this.ID+'_II');
+  if(!iNode){return;}
+
+  if(Function.isFunction(iNode.setSelectionRange)){
+    iNode.focus();
+    iNode.setSelectionRange(pos,pos);
+  }
+  else if(Function.isFunction(iNode.createTextRange)){
+    var range = iNode.createTextRange();
+    range.collapse(true);
+    range.moveEnd('character',pos);
+    range.moveStart('character',pos);
+    range.select();
+  }
+};
+
+/** @ignore */
+bbbfly.editbox._getCaretPos = function(){
+  var iNode = document.getElementById(this.ID+'_II');
+  if(!iNode){return 0;}
+
+  if(Number.isInteger(iNode.selectionStart)){
+    return iNode.selectionStart;
+  }
+  else if(document.selection){
+    iNode.focus();
+
+    var selection = document.selection.createRange();
+    selection.moveStart('character',-iNode.value.length);
+    return selection.text.length;
+  }
+
+  return 0;
+};
+
+/** @ignore */
+bbbfly.editbox._focus = function(){
+  if(this.Selected){return;}
+
+  var iNode = document.getElementById(this.ID+'_II');
+  if(!iNode){return;}
+
+  iNode.focus();
+};
+
+/** @ignore */
+bbbfly.editbox._blur = function(){
+  if(!this.Selected){return;}
+
+  var iNode = document.getElementById(this.ID+'_II');
+  if(!iNode){return;}
+
+  iNode.blur();
+};
+
+/** @ignore */
+bbbfly.editbox._focusStart = function(){
+  this.Focus(true);
+  this.SetCaretPos(0);
+};
+
+/** @ignore */
+bbbfly.editbox._focusEnd = function(){
+  var text = this.GetText();
+
+  this.Focus(true);
+  this.SetCaretPos(String.isString(text) ? text.length : 0);
+};
 
 /** @ignore */
 bbbfly.editbox._doCreate = function(def,ref,node){
@@ -410,6 +518,8 @@ bbbfly.editbox._doCreate = function(def,ref,node){
         var input = document.createElement('INPUT');
         input.id = this.ID+'_II';
         input.className = 'Input';
+
+        input.spellcheck = false;
     
         input.style.zIndex = 1;
         input.style.display = 'block';
@@ -424,9 +534,28 @@ bbbfly.editbox._doCreate = function(def,ref,node){
         input.style.whiteSpace = 'nowrap';
 
         var edit = this;
-        input.onchange = function(){
-          bbbfly.editbox._onInputChange(edit,input);
-        };
+
+        bbbfly.DOM.AddEvent(input,'focus',function(event){
+          edit.DoFocus(input,(event ? event : window.event));
+        });
+        bbbfly.DOM.AddEvent(input,'blur',function(event){
+          edit.DoBlur(input,(event ? event : window.event));
+        });
+
+        bbbfly.DOM.AddEvent(input,'keydown',function(event){
+          edit.DoKeyDown(input,(event ? event : window.event));
+        });
+        bbbfly.DOM.AddEvent(input,'keyup',function(event){
+          edit.DoKeyUp(input,(event ? event : window.event));
+        });
+
+        bbbfly.DOM.AddEvent(input,'mousedown',function(event){
+          edit.DoMouseDown(input,(event ? event : window.event));
+        });
+
+        bbbfly.DOM.AddEvent(input,'change',function(event){
+          edit.DoInputChange(input,(event ? event : window.event));
+        });
 
         cHolderNode.appendChild(input);
         this.UpdateInputValue();
@@ -482,7 +611,7 @@ bbbfly.editbox._doUpdateInput = function(){
 
   switch(this.InputType){
     case bbbfly.EditBox.inputtype.password:
-      iNode.type = 'password';
+      iNode.type = this._AltTextMode ? 'text' : 'password';
       iNode.inputMode = 'text';
     break;
     case bbbfly.EditBox.inputtype.decimal:
@@ -515,25 +644,30 @@ bbbfly.editbox._doUpdateInput = function(){
     break;
   }
 
-  var auto = String.isString(this.AutoComplete) ? this.AutoComplete : 'off';
-  iNode.autocomplete = auto;
-
-  if(Number.isInteger(this.MaxLength)){
+  if(Number.isInteger(this.MaxLength) && !this._AltTextMode){
     iNode.setAttribute('maxlength',this.MaxLength);
   }
   else{
     iNode.removeAttribute('maxlength');
   }
 
-  var state = this.GetState();
+  var auto = String.isString(this.AutoComplete) ? this.AutoComplete : 'off';
+  iNode.autocomplete = auto;
 
-  if(state.disabled || state.readonly){
+  if(this.Enabled && !this.ReadOnly){
+    iNode.style.cursor = 'text';
+    iNode.removeAttribute('readonly');
+  }
+  else{
     iNode.style.cursor = 'default';
     iNode.setAttribute('readonly','readonly');
   }
+
+  if(this._AltTextMode){
+    iNode.setAttribute('alttext','1');
+  }
   else{
-    iNode.style.cursor = 'text';
-    iNode.removeAttribute('readonly');
+    iNode.removeAttribute('alttext');
   }
 };
 
@@ -542,13 +676,20 @@ bbbfly.editbox._updateInputValue = function(){
   var iNode = document.getElementById(this.ID+'_II');
   if(!iNode){return;}
 
-  var text = String.isString(this.Text) ? this.Text : '';
-  iNode.value = text;
-};
+  var text = this.GetText();
+  var altText = this.GetAltText();
+  
+  if(String.isString(text) && text){
+    this._AltTextMode = false;
+    iNode.value = text;
+  }
+  else{
+    text = String.isString(altText) ? altText : '';
+    this._AltTextMode = true;
+    iNode.value = text;
 
-/** @ignore */
-bbbfly.editbox._onAltChanged = function(){
-  this.UpdateInputValue();
+    this.SetCaretPos(0);
+  }
 };
 
 /** @ignore */
@@ -557,9 +698,190 @@ bbbfly.editbox._onTextChanged = function(){
 };
 
 /** @ignore */
-bbbfly.editbox._onInputChange = function(edit,input){
-  var text = String.isString(input.value) ? input.value : '';
-  edit.SetText(text);
+bbbfly.editbox._onAltTextChanged = function(){
+  this.UpdateInputValue();
+};
+
+/** @ignore */
+bbbfly.editbox._doFocus = function(input){
+  if(this.Selected){return;}
+
+  if(
+    Function.isFunction(this.OnFocus)
+    && !this.OnFocus(input)
+  ){return;}
+
+  this.SetSelected(true,false);
+
+  if(this._AltTextMode){
+    this.SetCaretPos(0);
+  }
+  
+  if(
+    this.SelectText && !this._AltTextMode
+    && this.Enabled && !this.ReadOnly
+  ){
+    if(Function.isFunction(input.select)){
+      input.select();
+    }
+    else if(Function.isFunction(input.setSelectionRange)){
+      input.setSelectionRange(0,99999);
+    }
+  }
+};
+
+/** @ignore */
+bbbfly.editbox._doBlur = function(input){
+  if(!this.Selected){return;}
+
+  if(
+    Function.isFunction(this.OnBlur)
+    && !this.OnBlur(input)
+  ){return;}
+
+  this.SetSelected(false,false);
+};
+
+/** @ignore */
+bbbfly.editbox._doKeyDown = function(input,event){
+  if(!this.Enabled || this.ReadOnly){return;}
+
+  var target = event.target || event.srcElement || event.originalTarget;
+  if(!target || (target !== input)){return;}
+
+  if(
+    Function.isFunction(this.OnKeyDown)
+    && !this.OnKeyDown(event.keyCode,input)
+  ){return;}
+
+  if(this._AltTextMode){
+    switch(event.keyCode){
+      case 35: // End
+      case 36: // Home
+      case 37: // Left
+      case 39: // Right
+      case 38: // Up
+      case 40: // Down
+      case 33: // PgUp
+      case 34: // PgDown
+      case 8:  // Backspace
+      case 46: // Delete
+        if(event.preventDefault){event.preventDefault();}
+        event.returnValue = false;
+      break;
+    }
+  }
+};
+
+/** @ignore */
+bbbfly.editbox._doKeyUp = function(input,event){
+  if(!this.Enabled || this.ReadOnly){return;}
+
+  var target = event.target || event.srcElement || event.originalTarget;
+  if(!target || (target !== input)){return;}
+
+  if(
+    Function.isFunction(this.OnKeyUp)
+    && !this.OnKeyUp(event.keyCode,input)
+  ){return;}
+
+  switch(event.keyCode){
+    case 13: // Enter
+      var btn = String.isString(this.SubmitButton)
+        ? this.GetButton(this.SubmitButton)
+        : null;
+
+      if(
+        Object.isObject(btn)
+        && Function.isFunction(btn.Click)
+      ){
+        var timer = setTimeout(function(){
+          clearTimeout(timer);
+          btn.Click(event);
+        },10);
+
+        this.Blur();
+        if(event.stopPropagation){event.stopPropagation();}
+        else{event.cancelBubble = true;}
+      }
+    break;
+    case 27: // Escape
+      var btn = String.isString(this.CancelButton)
+        ? this.GetButton(this.CancelButton)
+        : null;
+
+      if(
+        Object.isObject(btn)
+        && Function.isFunction(btn.Click)
+      ){
+        var timer = setTimeout(function(){
+          clearTimeout(timer);
+          btn.Click(event);
+        },10);
+
+        this.Blur();
+        if(event.stopPropagation){event.stopPropagation();}
+        else{event.cancelBubble = true;}
+      }
+    break;
+    default:
+      var text = input.value;
+
+      if(this._AltTextMode){
+        var altText = this.GetAltText();
+        if(!String.isString(altText)){altText = '';}
+
+        if(text === altText){return;}
+
+        if(altText){
+          var pos = this.GetCaretPos();
+
+          var trail = text.substring(pos);
+          var trailLng = trail.length;
+
+          var altLng = altText.length;
+          var rootLng = (altLng - trailLng);
+          
+          if(trailLng && (altText.substring(rootLng) === trail)){
+            altText = altText.substring(0,rootLng);
+            text = text.substring(0,pos);
+          }
+
+          altLng = altText.length;
+
+          if(altLng && (text.substring(0,altLng) === altText)){
+            text = text.substring(altLng);
+          }
+        }
+      }
+
+      this.SetText(text);
+    break;
+  }
+};
+
+/** @ignore */
+bbbfly.editbox._doMouseDown = function(input,event){
+  if(this._AltTextMode){
+    if(event.preventDefault){event.preventDefault();}
+    event.returnValue = false;
+
+    if(
+      this.Enabled && !this.ReadOnly
+      && (input !== document.activeElement)
+    ){this.SetCaretPos(0);}
+  }
+};
+
+/** @ignore */
+bbbfly.editbox._doInputChange = function(input){
+  if(!this._AltTextMode){
+    if(String.isString(input.value) && input.value){
+      this.SetText(input.value);
+      return;
+    }
+  }
+  this.SetText(null);
 };
 
 /**
@@ -586,11 +908,18 @@ bbbfly.editbox._onInputChange = function(edit,input){
  * @property {bbbfly.Button.Definition} ButtonDef - Definition shared by all buttons
  *
  * @property {string} [Text=null] - Text string
- * @property {bbbfly.EditBox.textalign} [TextAlign=left]
+ * @property {bbbfly.EditBox.textalign} [TextAlign=left] - Text horizontal align
+ *
+ * @property {string} [AltText=null] - Alternative text string
+ * @property {string} [AltTextRes=null] - Alternative text resource ID
  *
  * @property {bbbfly.EditBox.inputtype} [InputType=text]
  * @property {string|null} [AutoComplete=null]
- * @property {integer|null} [MaxLength=null]
+ * @property {integer|null} [MaxLength=null] - Max number of characters
+ *
+ * @property {boolean} [SelectText=false] - If select text on focus
+ * @property {string} [SubmitButton=null] - Submit button ID
+ * @property {string} [CancelButton=null] - Cancel button ID
  */
 bbbfly.EditBox = function(def,ref,parent){
   def = def || {};
@@ -612,9 +941,19 @@ bbbfly.EditBox = function(def,ref,parent){
       Text: null,
       TextAlign: bbbfly.EditBox.textalign.left,
 
+      AltText: null,
+      AltTextRes: null,
+
       InputType: bbbfly.EditBox.inputtype.text,
       AutoComplete: null,
       MaxLength: null,
+
+      SelectText: false,
+      SubmitButton: null,
+      CancelButton: null,
+
+      /** @private */
+      _AltTextMode: false,
 
       /** @private */
       _InputPanel: {},
@@ -624,9 +963,6 @@ bbbfly.EditBox = function(def,ref,parent){
     InputPanel: undefined,
     Buttons: undefined,
     Events: {
-      /** @private */
-      OnAltChanged: bbbfly.editbox._onAltChanged,
-
       /**
        * @event
        * @name OnSetText
@@ -649,6 +985,79 @@ bbbfly.EditBox = function(def,ref,parent){
        * @see {@link bbbfly.EditBox#event:OnSetText|OnSetText}
        */
       OnTextChanged: bbbfly.editbox._onTextChanged,
+
+      /**
+       * @event
+       * @name OnSetAltText
+       * @memberof bbbfly.EditBox#
+       *
+       * @param {boolean} text - Value to set
+       * @param {boolean} [update=true] - If update control
+       * @return {boolean} Return false to deny value change
+       *
+       * @see {@link bbbfly.EditBox#SetAltText|SetAltText()}
+       * @see {@link bbbfly.EditBox#event:OnAltTextChanged|OnAltTextChanged}
+       */
+      OnSetAltText: null,
+      /**
+       * @event
+       * @name OnAltTextChanged
+       * @memberof bbbfly.EditBox#
+       *
+       * @see {@link bbbfly.EditBox#SetAltText|SetAltText()}
+       * @see {@link bbbfly.EditBox#event:OnSetAltText|OnSetAltText}
+       */
+      OnAltTextChanged: bbbfly.editbox._onAltTextChanged,
+
+      /**
+       * @event
+       * @name OnFocus
+       * @memberof bbbfly.EditBox#
+       *
+       * @param {HTMLInputElement} input - Input element
+       * @return {boolean} Return false to deny any hanges
+       *
+       * @see {@link bbbfly.EditBox#event:OnBlur|OnBlur}
+       */
+      OnFocus: null,
+
+      /**
+       * @event
+       * @name OnBlur
+       * @memberof bbbfly.EditBox#
+       *
+       * @param {HTMLInputElement} input - Input element
+       * @return {boolean} Return false to deny any changes
+       *
+       * @see {@link bbbfly.EditBox#event:OnFocus|OnFocus}
+       */
+      OnBlur: null,
+
+      /**
+       * @event
+       * @name OnKeyDown
+       * @memberof bbbfly.EditBox#
+       *
+       * @param {integer} code - Pressed key code
+       * @param {HTMLInputElement} input - Input element
+       * @return {boolean} Return false to deny any hanges
+       *
+       * @see {@link bbbfly.EditBox#event:OnKeyUp|OnKeyUp}
+       */
+      OnKeyDown: null,
+
+      /**
+       * @event
+       * @name OnKeyUp
+       * @memberof bbbfly.EditBox#
+       *
+       * @param {integer} code - Pressed key code
+       * @param {HTMLInputElement} input - Input element
+       * @return {boolean} Return false to deny any changes
+       *
+       * @see {@link bbbfly.EditBox#event:OnKeyDown|OnKeyDown}
+       */
+      OnKeyUp: null
     },
     Methods: {
       /** @private */
@@ -659,6 +1068,18 @@ bbbfly.EditBox = function(def,ref,parent){
       DoUpdateInput: bbbfly.editbox._doUpdateInput,
       /** @private */
       UpdateInputValue: bbbfly.editbox._updateInputValue,
+      /** @private */
+      DoFocus: bbbfly.editbox._doFocus,
+      /** @private */
+      DoBlur: bbbfly.editbox._doBlur,
+      /** @private */
+      DoKeyDown: bbbfly.editbox._doKeyDown,
+      /** @private */
+      DoKeyUp: bbbfly.editbox._doKeyUp,
+      /** @private */
+      DoMouseDown: bbbfly.editbox._doMouseDown,
+      /** @private */
+      DoInputChange: bbbfly.editbox._doInputChange,
 
       /**
        * @function
@@ -667,6 +1088,8 @@ bbbfly.EditBox = function(def,ref,parent){
        *
        * @param {string|null} text - Value to set
        * @param {boolean} [update=true] - If update control
+       * @param {boolean} [forceChange=false] - Force to act like value has changed
+       * 
        * @return {boolean} False if change was denied
        *
        * @see {@link bbbfly.EditBox#GetText|GetText()}
@@ -674,7 +1097,6 @@ bbbfly.EditBox = function(def,ref,parent){
        * @see {@link bbbfly.EditBox#event:OnTextChanged|OnTextChanged}
        */
       SetText: bbbfly.editbox._setText,
-
       /**
        * @function
        * @name GetText
@@ -687,6 +1109,33 @@ bbbfly.EditBox = function(def,ref,parent){
        * @see {@link bbbfly.EditBox#event:OnTextChanged|OnTextChanged}
        */
       GetText: bbbfly.editbox._getText,
+
+      /**
+       * @function
+       * @name SetAltText
+       * @memberof bbbfly.EditBox#
+       *
+       * @param {string|null} text - Value to set
+       * @param {boolean} [update=true] - If update control
+       * @param {boolean} [forceChange=false] - Force to act like value has changed
+       *
+       * @see {@link bbbfly.EditBox#GetAltText|GetAltText()}
+       * @see {@link bbbfly.EditBox#event:OnSetAltText|OnSetAltText}
+       * @see {@link bbbfly.EditBox#event:OnAltTextChanged|OnAltTextChanged}
+       */
+      SetAltText: bbbfly.editbox._setAltText,
+      /**
+       * @function
+       * @name GetAltText
+       * @memberof bbbfly.EditBox#
+       *
+       * @return {string|null}
+       *
+       * @see {@link bbbfly.EditBox#SetAltText|SetAltText()}
+       * @see {@link bbbfly.EditBox#event:OnSetAltText|OnSetAltText}
+       * @see {@link bbbfly.EditBox#event:OnAltTextChanged|OnAltTextChanged}
+       */
+      GetAltText: bbbfly.editbox._getAltText,
 
       /**
        * @function
@@ -716,12 +1165,74 @@ bbbfly.EditBox = function(def,ref,parent){
        * @memberof bbbfly.EditBox#
        *
        * @param {string} buttonId - Required button's id
-       * @return {bbbfly.Button|null} - Button with passes id
+       * @return {bbbfly.Button|null} Button with passes id
        *
        * @see {@link bbbfly.EditBox#GetInputPanel|GetInputPanel()}
        * @see {@link bbbfly.EditBox#GetButtons|GetButtons()}
        */
       GetButton: bbbfly.editbox._getButton,
+
+      /**
+       * @function
+       * @name SetCaretPos
+       * @memberof bbbfly.EditBox#
+       *
+       * @param {integer} pos - Caret position
+       *
+       * @see {@link bbbfly.EditBox#GetCaretPos|GetCaretPos()}
+       */
+      SetCaretPos: bbbfly.editbox._setCaretPos,
+      /**
+       * @function
+       * @name GetCaretPos
+       * @memberof bbbfly.EditBox#
+       *
+       * @return {integer} Caret position
+       *
+       * @see {@link bbbfly.EditBox#SetCaretPos|SetCaretPos()}
+       */
+      GetCaretPos: bbbfly.editbox._getCaretPos,
+
+      /**
+       * @function
+       * @name Focus
+       * @memberof bbbfly.EditBox#
+       *
+       * @see {@link bbbfly.EditBox#FocusStart|FocusStart()}
+       * @see {@link bbbfly.EditBox#FocusEnd|FocusEnd()}
+       * @see {@link bbbfly.EditBox#Blur|Blur()}
+       */
+      Focus: bbbfly.editbox._focus,
+      /**
+       * @function
+       * @name Blur
+       * @memberof bbbfly.EditBox#
+       *
+       * @see {@link bbbfly.EditBox#Focus|Focus()}
+       * @see {@link bbbfly.EditBox#FocusStart|FocusStart()}
+       * @see {@link bbbfly.EditBox#FocusEnd|FocusEnd()}
+       */
+      Blur: bbbfly.editbox._blur,
+      /**
+       * @function
+       * @name FocusStart
+       * @memberof bbbfly.EditBox#
+       *
+       * @see {@link bbbfly.EditBox#Focus|Focus()}
+       * @see {@link bbbfly.EditBox#FocusEnd|FocusEnd()}
+       * @see {@link bbbfly.EditBox#Blur|Blur()}
+       */
+      FocusStart: bbbfly.editbox._focusStart,
+      /**
+       * @function
+       * @name FocusEnd
+       * @memberof bbbfly.EditBox#
+       *
+       * @see {@link bbbfly.EditBox#Focus|Focus()}
+       * @see {@link bbbfly.EditBox#FocusStart|FocusStart()}
+       * @see {@link bbbfly.EditBox#Blur|Blur()}
+       */
+      FocusEnd: bbbfly.editbox._focusEnd
     }
   });
 
