@@ -33,7 +33,7 @@ bbbfly.map.map._createMap = function(){
   if(this.GetMap()){return true;}
   var options = {
     center: [0,0],
-	zoom: 0,
+	  zoom: 0,
 
     fadeAnimation: true,
     zoomAnimation: true,

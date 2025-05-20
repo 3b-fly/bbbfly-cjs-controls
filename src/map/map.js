@@ -50,7 +50,7 @@ bbbfly.map.map._createMap = function(){
   //create map
   var options = {
     center: [0,0],
-	zoom: 0,
+	  zoom: 0,
 
     fadeAnimation: true,
     zoomAnimation: true,

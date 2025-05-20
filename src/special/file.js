@@ -101,7 +101,7 @@ bbbfly.fileuploader._createForm = function(){
 
   var uploader = this;
 
-  bbbfly.DOM.AddEvent(input,'onchange',function(){
+  bbbfly.DOM.AddEvent(input,'change',function(){
     bbbfly.fileuploader._onFormFilesChange(form,uploader);
   });
 
