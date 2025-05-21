@@ -231,10 +231,14 @@ bbbfly.editbox._setCaretPos = function(pos){
   }
   else if(Function.isFunction(iNode.createTextRange)){
     var range = iNode.createTextRange();
+
     range.collapse(true);
     range.moveEnd('character',pos);
     range.moveStart('character',pos);
     range.select();
+  }
+  else{
+    iNode.focus();
   }
 };
 bbbfly.editbox._getCaretPos = function(){
@@ -271,13 +275,13 @@ bbbfly.editbox._blur = function(){
   iNode.blur();
 };
 bbbfly.editbox._focusStart = function(){
-  this.Focus(true);
+  this.Focus();
   this.SetCaretPos(0);
 };
 bbbfly.editbox._focusEnd = function(){
   var text = this.GetText();
 
-  this.Focus(true);
+  this.Focus();
   this.SetCaretPos(String.isString(text) ? text.length : 0);
 };
 bbbfly.editbox._doCreate = function(def,ref,node){
@@ -337,10 +341,6 @@ bbbfly.editbox._doCreate = function(def,ref,node){
         });
         bbbfly.DOM.AddEvent(input,'keyup',function(event){
           edit.DoKeyUp(input,(event ? event : window.event));
-        });
-
-        bbbfly.DOM.AddEvent(input,'mousedown',function(event){
-          edit.DoMouseDown(input,(event ? event : window.event));
         });
 
         bbbfly.DOM.AddEvent(input,'change',function(event){
@@ -481,7 +481,7 @@ bbbfly.editbox._onTextChanged = function(){
 bbbfly.editbox._onAltTextChanged = function(){
   this.UpdateInputValue();
 };
-bbbfly.editbox._doFocus = function(input){
+bbbfly.editbox._doFocus = function(input,event){
   if(this.Selected){return;}
 
   if(
@@ -490,10 +490,6 @@ bbbfly.editbox._doFocus = function(input){
   ){return;}
 
   this.SetSelected(true,false);
-
-  if(this._AltTextMode){
-    this.SetCaretPos(0);
-  }
 
   if(
     this.SelectText && !this._AltTextMode
@@ -631,17 +627,6 @@ bbbfly.editbox._doKeyUp = function(input,event){
     break;
   }
 };
-bbbfly.editbox._doMouseDown = function(input,event){
-  if(this._AltTextMode){
-    if(event.preventDefault){event.preventDefault();}
-    event.returnValue = false;
-
-    if(
-      this.Enabled && !this.ReadOnly
-      && (input !== document.activeElement)
-    ){this.SetCaretPos(0);}
-  }
-};
 bbbfly.editbox._doInputChange = function(input){
   if(!this._AltTextMode){
     if(String.isString(input.value) && input.value){
@@ -706,7 +691,6 @@ bbbfly.EditBox = function(def,ref,parent){
       DoBlur: bbbfly.editbox._doBlur,
       DoKeyDown: bbbfly.editbox._doKeyDown,
       DoKeyUp: bbbfly.editbox._doKeyUp,
-      DoMouseDown: bbbfly.editbox._doMouseDown,
       DoInputChange: bbbfly.editbox._doInputChange,
       SetText: bbbfly.editbox._setText,
       GetText: bbbfly.editbox._getText,
