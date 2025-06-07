@@ -505,7 +505,6 @@ bbbfly.Button = function(def,ref,parent){
        * @memberof bbbfly.Button#
        *
        * @param {MouseEvent} event
-       * @return {boolean} Return false to suppress event
        *
        * @see {@link bbbfly.Button#Click|Click()}
        * @see {@link bbbfly.Button#event:OnDblClick|OnDblClick}
@@ -517,7 +516,6 @@ bbbfly.Button = function(def,ref,parent){
        * @memberof bbbfly.Button#
        *
        * @param {MouseEvent} event
-       * @return {boolean} Return false to suppress event
        *
        * @see {@link bbbfly.Button#DblClick|DblClick()}
        * @see {@link bbbfly.Button#event:OnClick|OnClick}
