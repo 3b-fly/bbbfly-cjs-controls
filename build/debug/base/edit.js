@@ -8,6 +8,7 @@
 var bbbfly = bbbfly || {};
 bbbfly.edit = {};
 bbbfly.editbox = {};
+bbbfly.dropdbox = {};
 bbbfly.memo = {};
 bbbfly.edit._setInvalid = function(invalid,update){
   var changed = this.SetInvalid.callParent(invalid,update);
@@ -210,10 +211,10 @@ bbbfly.editbox._getAltText = function(){
   return null;
 };
 bbbfly.editbox._getInputPanel = function(){
-  return Object.isObject(this._InputPanel) ? this._InputPanel : null;
+  return Object.isObject(this.InputPanel) ? this.InputPanel : null;
 };
 bbbfly.editbox._getButtons = function(){
-  return Object.isObject(this._Buttons) ? this._Buttons : {};
+  return Object.isObject(this.Buttons) ? this.Buttons : {};
 };
 bbbfly.editbox._getButton = function(buttonId){
   var btns = this.GetButtons();
@@ -352,10 +353,12 @@ bbbfly.editbox._doCreate = function(def,ref,node){
       }
     }
 
-    this._InputPanel = inputPanel;
-   }
+    this.InputPanel = inputPanel;
+  }
 
   if(Object.isObject(def.Buttons)){
+    this.Buttons = {};
+
     for(var btnId in def.Buttons){
       var btnDef = def.Buttons[btnId];
 
@@ -367,7 +370,8 @@ bbbfly.editbox._doCreate = function(def,ref,node){
         var btn = this.CreateControl(btnDef);
 
         if(Object.isObject(btn)){
-          this._Buttons[btnId] = btn;
+          btn.Owner = this;
+          this.Buttons[btnId] = btn;
         }
       }
     }
@@ -559,10 +563,7 @@ bbbfly.editbox._doKeyUp = function(input,event){
         ? this.GetButton(this.SubmitButton)
         : null;
 
-      if(
-        Object.isObject(btn)
-        && Function.isFunction(btn.Click)
-      ){
+      if(btn && Function.isFunction(btn.Click)){
         var timer = setTimeout(function(){
           clearTimeout(timer);
           btn.Click(event);
@@ -578,10 +579,7 @@ bbbfly.editbox._doKeyUp = function(input,event){
         ? this.GetButton(this.CancelButton)
         : null;
 
-      if(
-        Object.isObject(btn)
-        && Function.isFunction(btn.Click)
-      ){
+      if(btn && Function.isFunction(btn.Click)){
         var timer = setTimeout(function(){
           clearTimeout(timer);
           btn.Click(event);
@@ -636,6 +634,297 @@ bbbfly.editbox._doInputChange = function(input){
   }
   this.SetText(null);
 };
+bbbfly.dropdbox._doDispose = function(){
+  var ddCtrl = this.GetDropDown();
+  if(ddCtrl){ddCtrl.Dispose();}
+
+  var ddHolder = document.getElementById(this.ID+'_H');
+  if(ddHolder){ddHolder.remove();}
+
+  return true;
+};
+bbbfly.dropdbox._createControls = function(def,ref,node){
+  this.CreateControls.callParent(def,ref,node);
+  if(def.DropDown === null){return;}
+
+  var appNode = ngApp.TopElm();
+  if(!appNode){return;}
+
+  var ddHolder = document.createElement('DIV');
+  ddHolder.id = this.ID+'_H';
+
+  ddHolder.style.zIndex = 100000;
+  ddHolder.style.display = 'vsible';
+  ddHolder.style.position = 'absolute';
+  ddHolder.style.overflow = 'visible';
+  ddHolder.style.top = '-1px';
+  ddHolder.style.left = '-1px';
+  ddHolder.style.width = '0px';
+  ddHolder.style.height = '0px';
+
+  appNode.appendChild(ddHolder);
+
+  var refDef = {};
+
+  if(Object.isObject(def.DropDown)){
+    refDef.DropDown = ng_CopyVar(def.DropDown);
+  }
+
+  ng_MergeDef(refDef,{
+    DropDown: {
+      Type: 'bbbfly.Frame',
+      id: this.ID + '_D',
+      Data: {
+        IsPopup: true,
+        Visible: false
+      }
+    }
+  });
+
+  var refs = ngCreateControls(refDef,undefined,ddHolder);
+
+  if(refs.DropDown){
+    this.DropDown = refs.DropDown;
+    this.DropDown.Owner = this;
+  }
+  else{
+    ddHolder.remove();
+  }
+};
+bbbfly.dropdbox._storeDropDownBounds = function(ddCtrl){
+  if(!Object.isObject(ddCtrl)){ddCtrl = this.GetDropDown();}
+  if(!ddCtrl){return false;}
+
+  this._OrigDropDownBounds = ng_CopyVar(ddCtrl.Bounds);
+};
+bbbfly.dropdbox._restoreDropDownBounds = function(ddCtrl){
+  if(!Object.isObject(ddCtrl)){ddCtrl = this.GetDropDown();}
+  if(!ddCtrl){return false;}
+
+  var oBounds = this._OrigDropDownBounds;
+
+  if(Object.isObject(oBounds)){
+    ddCtrl.Bounds = undefined;
+    ddCtrl.SetBounds(oBounds);
+  }
+};
+bbbfly.dropdbox._getDropDown = function(){
+  return Object.isObject(this.DropDown) ? this.DropDown : null;
+};
+bbbfly.dropdbox._showDropDown = function(ddCtrl){
+  if(!Object.isObject(ddCtrl)){ddCtrl = this.GetDropDown();}
+  if(!ddCtrl){return false;}
+
+  if(!ddCtrl.Visible){
+    this.StoreDropDownBounds(ddCtrl);
+    this.UpdateDropDownPosition(ddCtrl);
+    ddCtrl.SetVisible(true);
+  }
+  return true;
+};
+bbbfly.dropdbox._hideDropDown = function(ddCtrl){
+  if(!Object.isObject(ddCtrl)){ddCtrl = this.GetDropDown();}
+  if(!ddCtrl){return false;}
+
+  if(ddCtrl.Visible){
+    ddCtrl.SetVisible(false);
+    this.RestoreDropDownBounds(ddCtrl);
+  }
+  return true;
+};
+bbbfly.dropdbox._toggleDropDown = function(ddCtrl){
+  if(!Object.isObject(ddCtrl)){ddCtrl = this.GetDropDown();}
+  if(!ddCtrl){return false;}
+
+  return ddCtrl.Visible
+    ? this.HideDropDown(ddCtrl)
+    : this.ShowDropDown(ddCtrl);
+};
+bbbfly.dropdbox._updateDropDownPosition = function(ddCtrl){
+  if(!Object.isObject(ddCtrl)){ddCtrl = this.GetDropDown();}
+  if(!ddCtrl){return;}
+
+  var editNode = this.Elm();
+  var ddNode = ddCtrl.Elm();
+  if(!editNode || !ddNode){return;}
+
+  var hBounds = {
+    L:-1,T:-1,
+    W:0,H:0
+  };
+
+  var dBounds = {
+    L:undefined,R:undefined,
+    T:undefined,B:undefined,
+    W:undefined,H:undefined
+  };
+
+  var oBounds = this._OrigDropDownBounds;
+  if(Object.isObject(oBounds)){
+    dBounds.W = oBounds.W;
+    dBounds.H = oBounds.H;
+  }
+
+  if(this.Visible){
+    ng_BeginMeasureElement(editNode);
+    var editW = ng_OuterWidth(editNode);
+    var editH = ng_OuterHeight(editNode);
+    ng_EndMeasureElement(editNode);
+
+    var parentNode = ddNode.parentNode;
+
+    ng_BeginMeasureElement(parentNode);
+    var parentW = ng_ClientWidthEx(parentNode);
+    var parentH = ng_ClientHeightEx(parentNode);
+    ng_EndMeasureElement(parentNode);
+
+    var editPos = ng_ParentPosition(
+      editNode,parentNode,true
+    );
+
+    var scrollX = ng_ScrollX(parentNode);
+    var scrollY = ng_ScrollY(parentNode);
+
+    var boundVals = {
+      L: Math.round(scrollX+editPos.x),
+      R: Math.round(scrollX+editPos.x+editW),
+      T: Math.round(scrollY+editPos.y),
+      B: Math.round(scrollY+editPos.y+editH),
+      H: Math.round(editH),
+      W: Math.round(editW)
+    };
+
+    switch(this.DropDownAlign){
+      case bbbfly.DropDownBox.ddalign.left:
+      case bbbfly.DropDownBox.ddalign.left_top:
+      case bbbfly.DropDownBox.ddalign.left_bottom:
+        hBounds.L = boundVals.L;
+        dBounds.R = 0;
+      break;
+      case bbbfly.DropDownBox.ddalign.right:
+      case bbbfly.DropDownBox.ddalign.right_top:
+      case bbbfly.DropDownBox.ddalign.right_bottom:
+        hBounds.L = boundVals.R;
+        dBounds.L = 0;
+      break;
+      case bbbfly.DropDownBox.ddalign.top:
+      case bbbfly.DropDownBox.ddalign.top_left:
+      case bbbfly.DropDownBox.ddalign.top_right:
+        hBounds.T = boundVals.T;
+        dBounds.B = 0;
+      break;
+      case bbbfly.DropDownBox.ddalign.bottom:
+      case bbbfly.DropDownBox.ddalign.bottom_left:
+      case bbbfly.DropDownBox.ddalign.bottom_right:
+        hBounds.T = boundVals.B;
+        dBounds.T = 0;
+      break;
+    }
+
+    switch(this.DropDownAlign){
+      case bbbfly.DropDownBox.ddalign.left:
+      case bbbfly.DropDownBox.ddalign.right:
+        hBounds.T = boundVals.T;
+        dBounds.T = 0;
+        dBounds.H = boundVals.H;
+      break;
+      case bbbfly.DropDownBox.ddalign.left_top:
+      case bbbfly.DropDownBox.ddalign.right_top:
+        hBounds.T = boundVals.T;
+        dBounds.T = 0;
+      break;
+      case bbbfly.DropDownBox.ddalign.left_bottom:
+      case bbbfly.DropDownBox.ddalign.right_bottom:
+        hBounds.T = boundVals.B;
+        dBounds.B = 0;
+      break;
+      case bbbfly.DropDownBox.ddalign.top:
+      case bbbfly.DropDownBox.ddalign.bottom:
+        hBounds.L = boundVals.L;
+        dBounds.L = 0;
+        dBounds.W = boundVals.W;
+      break;
+      case bbbfly.DropDownBox.ddalign.top_left:
+      case bbbfly.DropDownBox.ddalign.bottom_left:
+        hBounds.L = boundVals.L;
+        dBounds.L = 0;
+      break;
+      case bbbfly.DropDownBox.ddalign.top_right:
+      case bbbfly.DropDownBox.ddalign.bottom_right:
+        hBounds.L = boundVals.R;
+        dBounds.R = 0;
+      break;
+    }
+  }
+
+  var ddHolder = document.getElementById(this.ID+'_H');
+  if(ddHolder){ng_SetBounds(ddHolder,hBounds);}
+
+  if(ddCtrl.SetBounds(dBounds)){
+    ddCtrl.Update();
+  }
+};
+bbbfly.dropdbox._onFocus = function(input){
+  this.HideDropDown();
+  return true;
+};
+bbbfly.dropdbox._onDropDownVisibleChanged = function(){
+  if(Function.isFunction(this.Owner.OnDropDownChanged)){
+    this.Owner.OnDropDownChanged(this);
+  }
+};
+bbbfly.dropdbox._getDropDownClassName =function(suffix){
+  var cn = '_DropDown';
+
+  if(String.isString(suffix)){cn += suffix;}
+  return this.Owner.GetClassName(cn);
+};
+bbbfly.dropdbox._isInsideDropDown = function(target,type){
+  return (
+    bbbfly.DOM.ElementContains(this.Elm(),target)
+    || ((type !== 1) && bbbfly.DOM.ElementContains(this.Owner.Elm(),target))
+  );
+};
+bbbfly.dropdbox._onDropDownChanged = function(ddCtrl){
+  var btn = this.GetButton('DropDown');
+
+  if(btn && Function.isFunction(btn.SetSelected)){
+    btn.SetSelected(ddCtrl ? ddCtrl.Visible : false);
+  }
+};
+bbbfly.dropdbox._onDropDownBtnClick = function(){
+  var ddCtrl = this.Owner.GetDropDown();
+  this.Owner.ToggleDropDown(ddCtrl);
+};
+bbbfly.dropdbox._onKeyUp = function(code,input){
+  var ddCtrl = this.GetDropDown();
+  if(!ddCtrl){return true;}
+
+  switch(code){
+    case 33: // PgUp
+    case 38: // Up
+    case 27: // Escape
+      if(ddCtrl.Visible){
+        this.HideDropDown(ddCtrl);
+        return false;
+      }
+    break;
+    case 34: // PgDown
+    case 40: // Down
+      if(!ddCtrl.Visible){
+        this.ShowDropDown(ddCtrl);
+        return false;
+      }
+    break;
+  }
+  return true;
+};
+bbbfly.dropdbox._onUpdated = function(){
+  var ddCtrl = this.GetDropDown();
+  if(!ddCtrl || !ddCtrl.Visible){return;}
+
+  this.UpdateDropDownPosition(ddCtrl);
+};
 bbbfly.EditBox = function(def,ref,parent){
   def = def || {};
 
@@ -666,9 +955,7 @@ bbbfly.EditBox = function(def,ref,parent){
       SelectText: false,
       SubmitButton: null,
       CancelButton: null,
-      _AltTextMode: false,
-      _InputPanel: {},
-      _Buttons: {}
+      _AltTextMode: false
     },
     InputPanel: undefined,
     Buttons: undefined,
@@ -726,11 +1013,72 @@ bbbfly.EditBox.textalign = {
   center: 2,
   right: 3
 };
+bbbfly.DropDownBox = function(def,ref,parent){
+  def = def || {};
+
+  ng_MergeDef(def,{
+    Data: {
+      DropDownAlign: bbbfly.DropDownBox.ddalign.bottom,
+      _OrigDropDownBounds: null
+    },
+    DropDown: {
+      Events: {
+        OnVisibleChanged: bbbfly.dropdbox._onDropDownVisibleChanged
+      },
+      Methods: {
+        GetClassName: bbbfly.dropdbox._getDropDownClassName,
+        IsInsidePopup: bbbfly.dropdbox._isInsideDropDown
+      }
+    },
+    Buttons: {
+      DropDown: {
+        Events: {
+          OnClick: bbbfly.dropdbox._onDropDownBtnClick
+        }
+      }
+    },
+    Events: {
+      OnFocus: bbbfly.dropdbox._onFocus,
+      OnKeyUp: bbbfly.dropdbox._onKeyUp,
+      OnUpdated: bbbfly.dropdbox._onUpdated,
+      OnDropDownChanged: bbbfly.dropdbox._onDropDownChanged
+    },
+    Methods: {
+      DoDispose: bbbfly.dropdbox._doDispose,
+      CreateControls: bbbfly.dropdbox._createControls,
+      StoreDropDownBounds: bbbfly.dropdbox._storeDropDownBounds,
+      RestoreDropDownBounds: bbbfly.dropdbox._restoreDropDownBounds,
+      GetDropDown: bbbfly.dropdbox._getDropDown,
+      ShowDropDown: bbbfly.dropdbox._showDropDown,
+      HideDropDown: bbbfly.dropdbox._hideDropDown,
+      ToggleDropDown: bbbfly.dropdbox._toggleDropDown,
+      UpdateDropDownPosition: bbbfly.dropdbox._updateDropDownPosition
+    }
+  });
+
+  return ngCreateControlAsType(def,'bbbfly.EditBox',ref,parent);
+};
+bbbfly.DropDownBox.ddalign = {
+  left: 1,
+  left_top: 2,
+  left_bottom: 3,
+  right: 4,
+  right_top: 5,
+  right_bottom: 6,
+  top: 7,
+  top_left: 8,
+  top_right: 9,
+  bottom: 10,
+  bottom_left: 11,
+  bottom_right: 12
+};
 ngUserControls = ngUserControls || new Array();
 ngUserControls['bbbfly_edit'] = {
   OnInit: function(){
     ngRegisterControlType('bbbfly.Edit',bbbfly.Edit);
-    ngRegisterControlType('bbbfly.EditBox',bbbfly.EditBox);
     ngRegisterControlType('bbbfly.Memo',bbbfly.Memo);
+
+    ngRegisterControlType('bbbfly.EditBox',bbbfly.EditBox);
+    ngRegisterControlType('bbbfly.DropDownBox',bbbfly.DropDownBox);
   }
 };
