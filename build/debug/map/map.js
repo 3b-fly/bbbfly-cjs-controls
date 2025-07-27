@@ -134,13 +134,13 @@ bbbfly.map.map._fitBounds = function(bounds,padding){
   if(!bounds.isValid()){return false;}
 
   padding = this.GetBoundsPadding(padding);
-
-  map.fitBounds(bounds,{
+  var opts = {
     paddingTopLeft: new L.Point(padding.L,padding.T),
     paddingBottomRight: new L.Point(padding.R,padding.B),
     animate: !!this.Animate
-  });
+  };
 
+  map.fitBounds(bounds,opts);
   return true;
 };
 bbbfly.map.map._fitCoords = function(coords,padding){
