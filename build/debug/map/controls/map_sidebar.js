@@ -62,6 +62,8 @@ bbbfly.map.control.sidebar._onBtnCreated = function(ctrl){
       Function.isFunction(parent.CtrlInheritsFrom)
       && parent.CtrlInheritsFrom('bbbfly.MapSideBar')
     ){
+      self.SetMap(parent.GetMap());
+
       var stack = parent._Buttons;
       if(Array.isArray(stack)){stack.push(self);}
       return;
