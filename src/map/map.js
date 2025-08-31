@@ -862,7 +862,7 @@ bbbfly.Map = function(def,ref,parent){
       SetBoundsPadding: bbbfly.map.map._setBoundsPadding,
       /**
        * @function
-       * @name SetBoundsPadding
+       * @name GetBoundsPadding
        * @memberof bbbfly.Map#
        *
        * @description Get {@link bbbfly.Map#BoundsPadding|map bounds padding}.
