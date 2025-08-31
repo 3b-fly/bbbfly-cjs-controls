@@ -2961,6 +2961,9 @@
         <li data-name="bbbfly.Map#GetAttributions">
           <a href="bbbfly.Map.html#GetAttributions">GetAttributions</a>
         </li>
+        <li data-name="bbbfly.Map#GetBoundsPadding">
+          <a href="bbbfly.Map.html#GetBoundsPadding">GetBoundsPadding</a>
+        </li>
         <li data-name="bbbfly.Map#GetCenter">
           <a href="bbbfly.Map.html#GetCenter">GetCenter</a>
         </li>
@@ -3020,9 +3023,6 @@
         </li>
         <li data-name="bbbfly.Map#SetAlt">
           <a href="bbbfly.Map.html#SetAlt">SetAlt</a>
-        </li>
-        <li data-name="bbbfly.Map#SetBoundsPadding">
-          <a href="bbbfly.Map.html#SetBoundsPadding">SetBoundsPadding</a>
         </li>
         <li data-name="bbbfly.Map#SetBoundsPadding">
           <a href="bbbfly.Map.html#SetBoundsPadding">SetBoundsPadding</a>
@@ -3223,6 +3223,9 @@
         </li>
         <li data-name="bbbfly.MapBox#GetAttributions">
           <a href="bbbfly.MapBox.html#GetAttributions">GetAttributions</a>
+        </li>
+        <li data-name="bbbfly.MapBox#GetBoundsPadding">
+          <a href="bbbfly.MapBox.html#GetBoundsPadding">GetBoundsPadding</a>
         </li>
         <li data-name="bbbfly.MapBox#GetCenter">
           <a href="bbbfly.MapBox.html#GetCenter">GetCenter</a>
@@ -7634,6 +7637,75 @@
 </dd>
 <dt>
     <div class="nameContainer inherited">
+        <h4 id="GetBoundsPadding">
+  <span class="attribs">
+      <span class="type-signature inherited">
+        <a href="bbbfly.Map.html#GetBoundsPadding">inherited</a>
+      </span>
+  </span>
+          GetBoundsPadding
+          <span class="signature">(<span class="optional">padding</span>)</span><span class="arrow-right"></span><span class="type-signature returnType">{<a href="global.html#padding">padding</a>}</span>
+        </h4>
+        <div class="tag-source">
+          <a target="_blank" href="https://github.com/3b-fly/bbbfly-cjs-controls/blob/master/src/map/map.js#L863">map/map.js, line 863</a>
+        </div>
+    </div>
+</dt>
+<dd>
+      <div class="description">Get map bounds padding.</div>
+        <h5>Parameters:</h5>
+<table class="params">
+    <thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+        <tr>
+                <td class="name">
+                  <span class="param-name">padding</span>
+                </td>
+            <td class="type">
+<span class="param-type"><a href="global.html#padding">padding</a></span>
+            </td>
+            <td class="description last">
+                        <span class="optional">optional</span>
+                Bounds padding
+            </td>
+        </tr>
+	</tbody>
+</table>
+<dl class="details">
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+      <ul class="dummy">
+          <li><a href="bbbfly.Map.html#SetBoundsPadding">SetBoundsPadding()</a></li>
+          <li><a href="bbbfly.Map.html#FitBounds">FitBounds()</a></li>
+      </ul>
+    </dd>
+</dl>
+    <h5>Returns:</h5>
+<table class="params">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="type">
+                        <a href="global.html#padding">padding</a>
+            </td>
+            <td class="description last">Bounds padding</td>
+        </tr>
+    </tbody>
+</table>
+</dd>
+<dt>
+    <div class="nameContainer inherited">
         <h4 id="GetCenter">
   <span class="attribs">
       <span class="type-signature inherited">
@@ -8935,11 +9007,11 @@
 </dl>
 </dd>
 <dt>
-    <div class="nameContainer overrides">
+    <div class="nameContainer inherited">
         <h4 id="SetBoundsPadding">
   <span class="attribs">
-      <span class="type-signature overrides">
-        <a href="bbbfly.Map.html#SetBoundsPadding">overrides</a>
+      <span class="type-signature inherited">
+        <a href="bbbfly.Map.html#SetBoundsPadding">inherited</a>
       </span>
   </span>
           SetBoundsPadding
@@ -8981,7 +9053,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
       <ul class="dummy">
-          <li>GetBoundsPadding()</li>
+          <li><a href="bbbfly.Map.html#GetBoundsPadding">GetBoundsPadding()</a></li>
           <li><a href="bbbfly.Map.html#FitBounds">FitBounds()</a></li>
       </ul>
     </dd>
