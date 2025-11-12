@@ -367,10 +367,10 @@ bbbfly.button._doPtrDblClick = function(ptrInfo){
   this.DblClick(ptrInfo.Event);
 };
 bbbfly.button._click = function(event){
-  if(this.HasClick){this.OnClick(event);}
+  if(this.HasClick()){this.OnClick(event);}
 };
 bbbfly.button._dblClick = function(event){
-  if(this.HasDblClick){this.OnDblClick(event);}
+  if(this.HasDblClick()){this.OnDblClick(event);}
 };
 bbbfly.button._hasClick = function(){
   if(!this.Enabled || this.ReadOnly){return false;}

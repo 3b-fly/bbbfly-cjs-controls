@@ -403,12 +403,12 @@ bbbfly.button._doPtrDblClick = function(ptrInfo){
 
 /** @ignore */
 bbbfly.button._click = function(event){
-  if(this.HasClick){this.OnClick(event);}
+  if(this.HasClick()){this.OnClick(event);}
 };
 
 /** @ignore */
 bbbfly.button._dblClick = function(event){
-  if(this.HasDblClick){this.OnDblClick(event);}
+  if(this.HasDblClick()){this.OnDblClick(event);}
 };
 
 /** @ignore */
