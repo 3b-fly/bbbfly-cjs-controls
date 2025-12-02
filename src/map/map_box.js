@@ -438,7 +438,7 @@ bbbfly.MapBox = function(def,ref,parent){
        * @memberof bbbfly.MapBox#
        * @description Get passed type linked map controls.
        *
-       * @param {string} [type=undeUnlinkMapControlfined]
+       * @param {string} [type=undefined]
        * @return {bbbfly.MapControl[]}
        *
        * @see {@link bbbfly.MapBox#LinkMapControl|LinkMapControl()}
