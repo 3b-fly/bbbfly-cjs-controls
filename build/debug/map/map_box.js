@@ -173,7 +173,7 @@ bbbfly.map.box._getMapControls = function(type){
   for(var tp in this._MapControls){
     if(String.isString(type) && (tp !== type)){continue;}
 
-    var stack = this._MapControls[type];
+    var stack = this._MapControls[tp];
     if(!Array.isArray(stack)){continue;}
 
     for(var i in stack){
