@@ -83,15 +83,23 @@ bbbfly.map.control.layers._applyLayers = function(){
 
   if(!list || !map){return;}
 
+  var changed = false;
   this._Applying = true;
 
   list.Scan(function(list,item){
-    map.SetLayerVisible(item.ID,!!item.Checked);
+    var layer = map.GetLayer(item.ID);
+    var visible = !!item.Checked;
+
+    if(layer.Visible !== visible){
+      map.SetLayerVisible(item.ID,visible);
+      changed = true;
+    }
+
     return true;
   });
 
   this._Applying = false;
-  this.FillList();
+  if(changed){this.FillList();}
 };
 bbbfly.MapLayers = function(def,ref,parent){
   def = def || {};
